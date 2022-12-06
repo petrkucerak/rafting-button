@@ -92,37 +92,14 @@ void setup() {
 void loop() {
   //  USBSerial.printf("This is a test\r\n");
 
-  led_init();
-  led_test();
+  // led_init();
+  // led_test();
 
   lcd_dev.lcd_init();
   lcd_dev.lcd_test();
-
-  USBSerial.printf("scan start\r\n");
-
-  // WiFi.scanNetworks will return the number of networks found
-  int n = WiFi.scanNetworks();
-  USBSerial.printf("scan done\r\n");
-  if (n == 0) {
-    USBSerial.printf("no networks found\r\n");
-  } else {
-    USBSerial.printf("%d", n);
-    USBSerial.printf(" networks found\r\n");
-    for (int i = 0; i < n; ++i) {
-      // Print SSID and RSSI for each network found
-      USBSerial.printf("%d", i + 1);
-      USBSerial.printf(": ");
-      USBSerial.printf("%s", WiFi.SSID(i));
-      USBSerial.printf(" (");
-      USBSerial.printf("%d", WiFi.RSSI(i));
-      USBSerial.printf(")\r\n");
-      delay(10);
-    }
-  }
-  USBSerial.printf("\r\n");
-
-  // Wait a bit before scanning again
-  delay(3000);
+  delay(1000);
+  lcd_dev.lcd_reset();
+  delay(1000);
 }
 
 void led_init() {
