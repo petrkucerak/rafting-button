@@ -36,4 +36,4 @@ upload_protocol = esptool
 board_build.f_cpu = 240000000L ; change MCU frequency
 board_build.flash_mode = dio ; this option is important for ESP32-S2
 ```
-- a nakonfigurovat `usbEventCallback` viz 
+- a nakonfigurovat `usbEventCallback` (*viz [3.0.1](https://github.com/petrkucerak/rafting-button/releases/tag/3.0.1)*)
