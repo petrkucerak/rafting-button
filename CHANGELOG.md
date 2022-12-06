@@ -15,7 +15,7 @@
 
 ## Etapa 2. - volba modulu
 
-- viz: [./docs/volba-modulu.md](volba-modulu.md)
+- viz: [/docs/volba-modulu.md](volba-modulu.md)
 - vitezem je ESP32-S2
 
 ## Etapa 3. - otestovani infrastruktury
