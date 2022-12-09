@@ -4,7 +4,7 @@
 #include "WiFi.h"
 #include "board.h"
 #include "utils.h"
-#include "16bitColors.h"
+#include "16bit-colors.h"
 #include <Arduino.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
