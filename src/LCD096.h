@@ -24,6 +24,7 @@ typedef struct {
                          uint16_t y_end);
   void (*lcd_test)(void);
   void (*lcd_border_check)(void);
+  void (*lcd_set_color)(uint16_t color);
 } lcd_s;
 
 extern lcd_s lcd_dev;

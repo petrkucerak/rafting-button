@@ -18,6 +18,13 @@ void lcd_set_window(uint16_t x_start, uint16_t y_start, uint16_t x_end,
 void lcd_test(void);
 void lcd_border_check(void);
 
+/**
+ * @brief This function fills all display current color.
+ *
+ * @param color 16-bit color code
+ */
+void lcd_set_color(uint16_t color);
+
 void lcd_init(void) {
   vspi = new SPIClass(VSPI);
   vspi->begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS); // SCLK, MISO, MOSI, SS
@@ -260,5 +267,18 @@ void lcd_border_check(void) {
   delay(1500);
 }
 
-lcd_s lcd_dev = {lcd_init,       lcd_reset, lcd_write_cmd,   lcd_write_data,
-                 lcd_set_window, lcd_test,  lcd_border_check};
+void lcd_set_color(uint16_t color) {
+  lcd_set_window(0, 0, LCD_WIDTH, 0);
+  digitalWrite(LCD_DC_IO, HIGH);
+  digitalWrite(LCD_CS_IO, LOW);
+  vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+  for (unsigned long i = 0; i < LCD_WIDTH; i++) {
+    vspi->transfer16(color);
+  }
+  vspi->endTransaction();
+  digitalWrite(LCD_CS_IO, HIGH);
+  delay(1500);
+}
+
+lcd_s lcd_dev = {lcd_init,       lcd_reset, lcd_write_cmd,    lcd_write_data,
+                 lcd_set_window, lcd_test,  lcd_border_check, lcd_set_color};
