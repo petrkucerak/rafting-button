@@ -3,6 +3,8 @@
 #include "USB.h"
 #include "WiFi.h"
 #include "board.h"
+#include "utils.h"
+#include "16bitColors.h"
 #include <Arduino.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
@@ -12,6 +14,8 @@
 #define HWSerial Serial
 USBCDC USBSerial;
 #endif
+
+uint16_t color;
 
 static void usbEventCallback(void *arg, esp_event_base_t event_base,
                              int32_t event_id, void *event_data) {
@@ -72,7 +76,7 @@ static void usbEventCallback(void *arg, esp_event_base_t event_base,
 }
 
 void setup() {
-  led_init();
+  all_pins_init();
   HWSerial.begin(115200);
   HWSerial.setDebugOutput(true);
 
@@ -87,14 +91,26 @@ void setup() {
   delay(100);
 
   USBSerial.printf("Setup done");
+
+  lcd_dev.lcd_init();
 }
 
 void loop() {
-  //  USBSerial.printf("This is a test\r\n");
 
-  lcd_dev.lcd_init();
-  lcd_dev.lcd_test();
+  lcd_dev.lcd_set_color(COLOR_WHITE);
   delay(1000);
-  lcd_dev.lcd_reset();
+  lcd_dev.lcd_set_color(COLOR_BLACK);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_GREEN);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_BLUE);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_RED);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_YELLOW);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_CYAN);
+  delay(1000);
+  lcd_dev.lcd_set_color(COLOR_MAGENTA);
   delay(1000);
 }

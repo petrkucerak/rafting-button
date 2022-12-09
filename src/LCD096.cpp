@@ -268,16 +268,16 @@ void lcd_border_check(void) {
 }
 
 void lcd_set_color(uint16_t color) {
-  lcd_set_window(0, 0, LCD_WIDTH, 0);
+  lcd_set_window(0, 0, LCD_WIDTH, LCD_HEIGHT);
   digitalWrite(LCD_DC_IO, HIGH);
   digitalWrite(LCD_CS_IO, LOW);
   vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
-  for (unsigned long i = 0; i < LCD_WIDTH; i++) {
+  for (unsigned long i = 0; i < LCD_WIDTH * LCD_HEIGHT; i++) {
     vspi->transfer16(color);
   }
   vspi->endTransaction();
   digitalWrite(LCD_CS_IO, HIGH);
-  delay(1500);
+  // delay(1);
 }
 
 lcd_s lcd_dev = {lcd_init,       lcd_reset, lcd_write_cmd,    lcd_write_data,
