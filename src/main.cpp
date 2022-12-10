@@ -1,11 +1,14 @@
 #include "main.h"
+#include "16bit-colors.h"
 #include "LCD096.h"
 #include "USB.h"
 #include "WiFi.h"
 #include "board.h"
 #include "utils.h"
-#include "16bit-colors.h"
 #include <Arduino.h>
+
+#include <User_Setup_Select.h>
+#include <User_Setups/Setup43_ST7735.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
 #define HWSerial Serial0
