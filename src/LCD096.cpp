@@ -1,4 +1,5 @@
 #include "LCD096.h"
+#include "letters.h"
 
 #define VSPI_MISO LCD_MISO_IO
 #define VSPI_MOSI LCD_MOSI_IO
@@ -17,6 +18,19 @@ void lcd_set_window(uint16_t x_start, uint16_t y_start, uint16_t x_end,
                     uint16_t y_end);
 void lcd_test(void);
 void lcd_border_check(void);
+
+/**
+ * @brief Set letter to the current location
+ *
+ * @param letter list of letters is in the letters.h file
+ * @param x start x coord
+ * @param y start y coord
+ * @param color 16-bit color code for font
+ * @param bg_color 16-bit color code for background
+ * @param font_size TODO: select a font size
+ */
+void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
+                      uint16_t bg_color, uint8_t font_size);
 
 /**
  * @brief This function fills all display current color.
@@ -280,5 +294,27 @@ void lcd_set_color(uint16_t color) {
   // delay(1);
 }
 
-lcd_s lcd_dev = {lcd_init,       lcd_reset, lcd_write_cmd,    lcd_write_data,
-                 lcd_set_window, lcd_test,  lcd_border_check, lcd_set_color};
+void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
+                      uint16_t bg_color, uint8_t font_size) {
+  lcd_set_window(x, y, x + 23, y + 23);
+  digitalWrite(LCD_DC_IO, HIGH);
+  digitalWrite(LCD_CS_IO, LOW);
+  vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+
+  for (int i = 0; i < 3 * 24; ++i) {
+    for (int j = 0; j < 8; ++j) {
+      if ((letters24[letter + i] & (1 << (8 - j - 1))) !=
+          0) // lettersx are in letters.h
+        vspi->transfer16(color);
+      else
+        vspi->transfer16(bg_color);
+    }
+  }
+
+  vspi->endTransaction();
+  digitalWrite(LCD_CS_IO, HIGH);
+}
+
+lcd_s lcd_dev = {lcd_init,         lcd_reset,      lcd_write_cmd,
+                 lcd_write_data,   lcd_set_window, lcd_test,
+                 lcd_border_check, lcd_set_color,  lcd_write_letter};

@@ -7,9 +7,6 @@
 #include "utils.h"
 #include <Arduino.h>
 
-#include <User_Setup_Select.h>
-#include <User_Setups/Setup43_ST7735.h>
-
 #if ARDUINO_USB_CDC_ON_BOOT
 #define HWSerial Serial0
 #define USBSerial Serial
@@ -96,24 +93,21 @@ void setup() {
   USBSerial.printf("Setup done");
 
   lcd_dev.lcd_init();
+  lcd_dev.lcd_set_color(COLOR_YELLOW);
+  lcd_dev.lcd_write_letter(216, 20 + (17 * 0), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(2376, 20 + (17 * 1), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(5184, 20 + (17 * 2), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(5688, 20 + (17 * 3), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(5328, 20 + (17 * 4), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
 }
 
 void loop() {
 
-  lcd_dev.lcd_set_color(COLOR_WHITE);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_BLACK);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_GREEN);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_BLUE);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_RED);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_YELLOW);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_CYAN);
-  delay(1000);
-  lcd_dev.lcd_set_color(COLOR_MAGENTA);
+  // lcd_dev.lcd_set_color(COLOR_WHITE);
   delay(1000);
 }
