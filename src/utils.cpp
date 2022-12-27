@@ -1,7 +1,11 @@
-
 #include "utils.h"
 #include "Arduino.h"
+#include "WiFi.h"
 #include "board.h"
+#include "display/16bit-colors.h"
+#include "display/LCD096.h"
+#include "display/letters.h"
+#include "esp_wifi.h"
 
 void all_pins_init() {
   pinMode(TEST_GPIO2, OUTPUT);
@@ -96,4 +100,24 @@ void all_pins_test() {
   digitalWrite(TEST_GPIO44, LOW);
 
   delay(2000);
+}
+
+void mac_on_display() {
+
+  // get the mac address
+  WiFi.mode(WIFI_STA);
+  uint8_t mac[6];
+  char macAddress[18] = {0};
+  esp_wifi_get_mac((wifi_interface_t)ESP_IF_WIFI_STA, mac);
+  sprintf(macAddress, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2],
+          mac[3], mac[4], mac[5]);
+
+  // init LCD display
+  lcd_dev.lcd_init();
+  lcd_dev.lcd_set_color(COLOR_BLUE);
+  for (uint8_t i = 0; i < 17; ++i) {
+    lcd_dev.lcd_write_letter(ASCII2LETTERS24((uint8_t)macAddress[i]), i * 17,
+                             24, COLOR_WHITE, COLOR_BLUE, 24);
+  }
+  // lcd_dev.lcd_write_letter()
 }

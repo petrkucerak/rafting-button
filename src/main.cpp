@@ -1,9 +1,11 @@
 #include "main.h"
-#include "display/16bit-colors.h"
-#include "display/LCD096.h"
 #include "USB.h"
 #include "WiFi.h"
 #include "board.h"
+#include "display/16bit-colors.h"
+#include "display/LCD096.h"
+#include "display/letters.h"
+#include "esp_wifi.h"
 #include "utils.h"
 #include <Arduino.h>
 
@@ -15,6 +17,7 @@
 USBCDC USBSerial;
 #endif
 
+// variables
 uint16_t color;
 
 static void usbEventCallback(void *arg, esp_event_base_t event_base,
@@ -86,28 +89,12 @@ void setup() {
   USBSerial.begin();
   USB.begin();
 
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(100);
-
   USBSerial.printf("Setup done");
 
-  lcd_dev.lcd_init();
-  lcd_dev.lcd_set_color(COLOR_YELLOW);
-  lcd_dev.lcd_write_letter(216, 20 + (17 * 0), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1368, 20 + (17 * 1), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1584, 20 + (17 * 2), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1224, 20 + (17 * 3), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1800, 20 + (17 * 4), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
+  mac_on_display();
 }
-
 void loop() {
 
   // lcd_dev.lcd_set_color(COLOR_WHITE);
-  delay(1000);
+  delay(2000);
 }
