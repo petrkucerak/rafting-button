@@ -1,8 +1,10 @@
 #include "main.h"
-#include "LCD096.h"
+#include "display/16bit-colors.h"
+#include "display/LCD096.h"
 #include "USB.h"
 #include "WiFi.h"
 #include "board.h"
+#include "utils.h"
 #include <Arduino.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
@@ -12,6 +14,8 @@
 #define HWSerial Serial
 USBCDC USBSerial;
 #endif
+
+uint16_t color;
 
 static void usbEventCallback(void *arg, esp_event_base_t event_base,
                              int32_t event_id, void *event_data) {
@@ -72,7 +76,7 @@ static void usbEventCallback(void *arg, esp_event_base_t event_base,
 }
 
 void setup() {
-  led_init();
+  all_pins_init();
   HWSerial.begin(115200);
   HWSerial.setDebugOutput(true);
 
@@ -87,135 +91,23 @@ void setup() {
   delay(100);
 
   USBSerial.printf("Setup done");
+
+  lcd_dev.lcd_init();
+  lcd_dev.lcd_set_color(COLOR_YELLOW);
+  lcd_dev.lcd_write_letter(216, 20 + (17 * 0), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(1368, 20 + (17 * 1), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(1584, 20 + (17 * 2), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(1224, 20 + (17 * 3), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
+  lcd_dev.lcd_write_letter(1800, 20 + (17 * 4), 26, COLOR_BLACK, COLOR_YELLOW,
+                           24);
 }
 
 void loop() {
-  //  USBSerial.printf("This is a test\r\n");
 
-  led_init();
-  led_test();
-
-  lcd_dev.lcd_init();
-  lcd_dev.lcd_test();
-
-  USBSerial.printf("scan start\r\n");
-
-  // WiFi.scanNetworks will return the number of networks found
-  int n = WiFi.scanNetworks();
-  USBSerial.printf("scan done\r\n");
-  if (n == 0) {
-    USBSerial.printf("no networks found\r\n");
-  } else {
-    USBSerial.printf("%d", n);
-    USBSerial.printf(" networks found\r\n");
-    for (int i = 0; i < n; ++i) {
-      // Print SSID and RSSI for each network found
-      USBSerial.printf("%d", i + 1);
-      USBSerial.printf(": ");
-      USBSerial.printf("%s", WiFi.SSID(i));
-      USBSerial.printf(" (");
-      USBSerial.printf("%d", WiFi.RSSI(i));
-      USBSerial.printf(")\r\n");
-      delay(10);
-    }
-  }
-  USBSerial.printf("\r\n");
-
-  // Wait a bit before scanning again
-  delay(3000);
-}
-
-void led_init() {
-  pinMode(TEST_GPIO2, OUTPUT);
-  pinMode(TEST_GPIO3, OUTPUT);
-  pinMode(TEST_GPIO4, OUTPUT);
-  pinMode(TEST_GPIO5, OUTPUT);
-  pinMode(TEST_GPIO6, OUTPUT);
-  pinMode(TEST_GPIO7, OUTPUT);
-  pinMode(TEST_GPIO8, OUTPUT);
-
-  pinMode(TEST_GPIO10, OUTPUT);
-  pinMode(TEST_GPIO11, OUTPUT);
-  pinMode(TEST_GPIO12, OUTPUT);
-  pinMode(TEST_GPIO13, OUTPUT);
-  pinMode(TEST_GPIO14, OUTPUT);
-  pinMode(TEST_GPIO15, OUTPUT);
-  pinMode(TEST_GPIO16, OUTPUT);
-  pinMode(TEST_GPIO17, OUTPUT);
-
-  pinMode(TEST_GPIO34, OUTPUT);
-  pinMode(TEST_GPIO35, OUTPUT);
-  pinMode(TEST_GPIO36, OUTPUT);
-  pinMode(TEST_GPIO37, OUTPUT);
-  pinMode(TEST_GPIO38, OUTPUT);
-  pinMode(TEST_GPIO39, OUTPUT);
-  pinMode(TEST_GPIO40, OUTPUT);
-  pinMode(TEST_GPIO41, OUTPUT);
-  pinMode(TEST_GPIO42, OUTPUT);
-  pinMode(TEST_GPIO43, OUTPUT);
-  pinMode(TEST_GPIO44, OUTPUT);
-}
-
-void led_test() {
-  digitalWrite(TEST_GPIO2, HIGH);
-  digitalWrite(TEST_GPIO3, HIGH);
-  digitalWrite(TEST_GPIO4, HIGH);
-  digitalWrite(TEST_GPIO5, HIGH);
-  digitalWrite(TEST_GPIO6, HIGH);
-  digitalWrite(TEST_GPIO7, HIGH);
-  digitalWrite(TEST_GPIO8, HIGH);
-
-  digitalWrite(TEST_GPIO10, HIGH);
-  digitalWrite(TEST_GPIO11, HIGH);
-  digitalWrite(TEST_GPIO12, HIGH);
-  digitalWrite(TEST_GPIO13, HIGH);
-  digitalWrite(TEST_GPIO14, HIGH);
-  digitalWrite(TEST_GPIO15, HIGH);
-  digitalWrite(TEST_GPIO16, HIGH);
-  digitalWrite(TEST_GPIO17, HIGH);
-
-  digitalWrite(TEST_GPIO34, HIGH);
-  digitalWrite(TEST_GPIO35, HIGH);
-  digitalWrite(TEST_GPIO36, HIGH);
-  digitalWrite(TEST_GPIO37, HIGH);
-  digitalWrite(TEST_GPIO38, HIGH);
-  digitalWrite(TEST_GPIO39, HIGH);
-  digitalWrite(TEST_GPIO40, HIGH);
-  digitalWrite(TEST_GPIO41, HIGH);
-  digitalWrite(TEST_GPIO42, HIGH);
-  digitalWrite(TEST_GPIO43, HIGH);
-  digitalWrite(TEST_GPIO44, HIGH);
-
+  // lcd_dev.lcd_set_color(COLOR_WHITE);
   delay(1000);
-
-  digitalWrite(TEST_GPIO2, LOW);
-  digitalWrite(TEST_GPIO3, LOW);
-  digitalWrite(TEST_GPIO4, LOW);
-  digitalWrite(TEST_GPIO5, LOW);
-  digitalWrite(TEST_GPIO6, LOW);
-  digitalWrite(TEST_GPIO7, LOW);
-  digitalWrite(TEST_GPIO8, LOW);
-
-  digitalWrite(TEST_GPIO10, LOW);
-  digitalWrite(TEST_GPIO11, LOW);
-  digitalWrite(TEST_GPIO12, LOW);
-  digitalWrite(TEST_GPIO13, LOW);
-  digitalWrite(TEST_GPIO14, LOW);
-  digitalWrite(TEST_GPIO15, LOW);
-  digitalWrite(TEST_GPIO16, LOW);
-  digitalWrite(TEST_GPIO17, LOW);
-
-  digitalWrite(TEST_GPIO34, LOW);
-  digitalWrite(TEST_GPIO35, LOW);
-  digitalWrite(TEST_GPIO36, LOW);
-  digitalWrite(TEST_GPIO37, LOW);
-  digitalWrite(TEST_GPIO38, LOW);
-  digitalWrite(TEST_GPIO39, LOW);
-  digitalWrite(TEST_GPIO40, LOW);
-  digitalWrite(TEST_GPIO41, LOW);
-  digitalWrite(TEST_GPIO42, LOW);
-  digitalWrite(TEST_GPIO43, LOW);
-  digitalWrite(TEST_GPIO44, LOW);
-
-  delay(2000);
 }
