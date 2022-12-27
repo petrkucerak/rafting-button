@@ -10,13 +10,54 @@
 static const int spiClk = 10000000; // 10 MHz
 SPIClass *vspi = NULL;
 
+/**
+ * @brief The function initializes the built-in display.
+ *
+ */
 void lcd_init(void);
+
+/**
+ * @brief The function resets the built-in display.
+ *
+ */
 void lcd_reset(void);
+
+/**
+ * @brief The function sets up command at the built-in display.
+ *
+ * @param cmd [uint8]
+ */
 void lcd_write_cmd(uint8_t cmd);
+
+/**
+ * @brief The function sets up data at the built-in display.
+ *
+ * @param dat [uint8]
+ */
 void lcd_write_data(uint8_t dat);
+
+/**
+ * @brief The function sets up the writing frame size at the built-in display.
+ * Limits for display are: WIDTH - 160, HEIGHT - 80.
+ *
+ * @param x_start [uint16]
+ * @param y_start [uint16]
+ * @param x_end [uint16]
+ * @param y_end [uint16]
+ */
 void lcd_set_window(uint16_t x_start, uint16_t y_start, uint16_t x_end,
                     uint16_t y_end);
+
+/**
+ * @brief The function sets up testing colors on the built-in display.
+ * 
+ */
 void lcd_test(void);
+
+/**
+ * @brief The function tests the status of the built-in display.
+ * 
+ */
 void lcd_border_check(void);
 
 /**
