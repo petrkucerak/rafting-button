@@ -1,11 +1,11 @@
 #include "utils.h"
-#include "Arduino.h"
-#include "WiFi.h"
 #include "board.h"
 #include "display/16bit-colors.h"
 #include "display/LCD096.h"
 #include "display/letters.h"
-#include "esp_wifi.h"
+#include <Arduino.h>
+#include <WiFi.h>
+#include <esp_wifi.h>
 
 void all_pins_init() {
   pinMode(TEST_GPIO2, OUTPUT);

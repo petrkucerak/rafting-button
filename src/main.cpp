@@ -1,13 +1,9 @@
 #include "main.h"
-#include "USB.h"
-#include "WiFi.h"
 #include "board.h"
-#include "display/16bit-colors.h"
-#include "display/LCD096.h"
-#include "display/letters.h"
-#include "esp_wifi.h"
 #include "utils.h"
 #include <Arduino.h>
+#include <USB.h>
+#include <WiFi.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
 #define HWSerial Serial0
