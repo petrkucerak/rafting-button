@@ -1,6 +1,6 @@
 #include "main.h"
-#include "16bit-colors.h"
-#include "LCD096.h"
+#include "display/16bit-colors.h"
+#include "display/LCD096.h"
 #include "USB.h"
 #include "WiFi.h"
 #include "board.h"
