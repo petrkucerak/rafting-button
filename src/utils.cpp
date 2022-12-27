@@ -114,10 +114,10 @@ void mac_on_display() {
 
   // init LCD display
   lcd_dev.lcd_init();
-  lcd_dev.lcd_set_color(COLOR_BLUE);
+  lcd_dev.lcd_set_color(COLOR_BLACK);
   for (uint8_t i = 0; i < 17; ++i) {
-    lcd_dev.lcd_write_letter(ASCII2LETTERS24((uint8_t)macAddress[i]), i * 17,
-                             24, COLOR_WHITE, COLOR_BLUE, 24);
+    lcd_dev.lcd_write_letter((uint8_t)macAddress[i], 1 + i * 7, 24,
+                             COLOR_YELLOW, COLOR_BLACK, 12);
   }
   // lcd_dev.lcd_write_letter()
 }
