@@ -50,25 +50,25 @@ void lcd_set_window(uint16_t x_start, uint16_t y_start, uint16_t x_end,
 
 /**
  * @brief The function sets up testing colors on the built-in display.
- * 
+ *
  */
 void lcd_test(void);
 
 /**
  * @brief The function tests the status of the built-in display.
- * 
+ *
  */
 void lcd_border_check(void);
 
 /**
  * @brief Set letter to the current location
  *
- * @param letter list of letters is in the letters.h file
+ * @param letter letter in ascii code
  * @param x start x coord
  * @param y start y coord
  * @param color 16-bit color code for font
  * @param bg_color 16-bit color code for background
- * @param font_size TODO: select a font size
+ * @param font_size select a font size (8, 12, 16, 20, 24)
  */
 void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
                       uint16_t bg_color, uint8_t font_size);
@@ -337,21 +337,86 @@ void lcd_set_color(uint16_t color) {
 
 void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
                       uint16_t bg_color, uint8_t font_size) {
-  lcd_set_window(x, y, x + 23, y + 23);
-  digitalWrite(LCD_DC_IO, HIGH);
-  digitalWrite(LCD_CS_IO, LOW);
-  vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
 
-  for (int i = 0; i < 3 * 24; ++i) {
-    for (int j = 0; j < 8; ++j) {
-      if ((letters24[letter + i] & (1 << (8 - j - 1))) !=
-          0) // lettersx are in letters.h
-        vspi->transfer16(color);
-      else
-        vspi->transfer16(bg_color);
+  if (font_size == 24) {
+    lcd_set_window(x, y, x + 23, y + 23);
+    digitalWrite(LCD_DC_IO, HIGH);
+    digitalWrite(LCD_CS_IO, LOW);
+    vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+
+    for (int i = 0; i < 3 * 24; ++i) {
+      for (int j = 0; j < 8; ++j) {
+        if ((letters24[ASCII2LETTERS24(letter) + i] & (1 << (8 - j - 1))) !=
+            0) // lettersx are in letters.h
+          vspi->transfer16(color);
+        else
+          vspi->transfer16(bg_color);
+      }
     }
-  }
+  } else if (font_size == 20) {
+    lcd_set_window(x, y, x + 15, y + 19);
+    digitalWrite(LCD_DC_IO, HIGH);
+    digitalWrite(LCD_CS_IO, LOW);
+    vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
 
+    for (int i = 0; i < 2 * 20; ++i) {
+      for (int j = 0; j < 8; ++j) {
+        if ((letters20[ASCII2LETTERS20(letter) + i] & (1 << (8 - j - 1))) !=
+            0) // lettersx are in letters.h
+          vspi->transfer16(color);
+        else
+          vspi->transfer16(bg_color);
+      }
+    }
+  } else if (font_size == 16) {
+    lcd_set_window(x, y, x + 15, y + 15);
+    digitalWrite(LCD_DC_IO, HIGH);
+    digitalWrite(LCD_CS_IO, LOW);
+    vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+
+    for (int i = 0; i < 2 * 16; ++i) {
+      for (int j = 0; j < 8; ++j) {
+        if ((letters16[ASCII2LETTERS16(letter) + i] & (1 << (8 - j - 1))) !=
+            0) // lettersx are in letters.h
+          vspi->transfer16(color);
+        else
+          vspi->transfer16(bg_color);
+      }
+    }
+  } else if (font_size == 12) {
+    lcd_set_window(x, y, x + 7, y + 11);
+    digitalWrite(LCD_DC_IO, HIGH);
+    digitalWrite(LCD_CS_IO, LOW);
+    vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+
+    for (int i = 0; i < 1 * 12; ++i) {
+      for (int j = 0; j < 8; ++j) {
+        if ((letters12[ASCII2LETTERS12(letter) + i] & (1 << (8 - j - 1))) !=
+            0) // lettersx are in letters.h
+          vspi->transfer16(color);
+        else
+          vspi->transfer16(bg_color);
+      }
+    }
+  } else if (font_size == 8) {
+    lcd_set_window(x, y, x + 7, y + 7);
+    digitalWrite(LCD_DC_IO, HIGH);
+    digitalWrite(LCD_CS_IO, LOW);
+    vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+
+    for (int i = 0; i < 1 * 8; ++i) {
+      for (int j = 0; j < 8; ++j) {
+        if ((letters8[ASCII2LETTERS8(letter) + i] & (1 << (8 - j - 1))) !=
+            0) // lettersx are in letters.h
+          vspi->transfer16(color);
+        else
+          vspi->transfer16(bg_color);
+      }
+    }
+  } else {
+    fprintf(stderr, "ERROR: unknown font size!\n");
+    exit(1);
+  }
   vspi->endTransaction();
   digitalWrite(LCD_CS_IO, HIGH);
 }
