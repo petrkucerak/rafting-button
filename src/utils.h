@@ -13,4 +13,10 @@ void all_pins_init();
  */
 void all_pins_test();
 
+/**
+ * @brief The function displays the mac address on the build-in display.
+ *
+ */
+void mac_on_display();
+
 #endif
