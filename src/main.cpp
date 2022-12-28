@@ -9,16 +9,8 @@
 // variables
 uint16_t color;
 
-void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen) {
-  // Only allow a maximum of 250 characters in the message + a null terminating
-  // byte
-  char buffer[ESP_NOW_MAX_DATA_LEN + 1];
-  int msg_len = min(ESP_NOW_MAX_DATA_LEN, dataLen);
-  strncpy(buffer, (const char *)data, msg_len);
-
-  // Make sure we are null terminated
-  buffer[msg_len] = 0;
-}
+void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
+                      int data_len) {}
 
 void setup() {
 
@@ -27,8 +19,8 @@ void setup() {
   HWSerial.begin(115200);
   HWSerial.setDebugOutput(true);
 
-  USB.onEvent(usbEventCallback);
-  USBSerial.onEvent(usbEventCallback);
+  USB.onEvent(usb_event_callback);
+  USBSerial.onEvent(usb_event_callback);
 
   USBSerial.begin();
   USB.begin();
@@ -37,17 +29,17 @@ void setup() {
   mac_on_display();
 
   // config ESP NOW broadcast
-  // WiFi.mode(WIFI_STA);
-  // WiFi.disconnect();
-  // if (esp_now_init() == ESP_OK) {
-  //   USBSerial.printf("Initialization ESP NOW has been success!\n");
-  //   esp_now_register_recv_cb(receiveCallback);
-  //   esp_now_register_send_cb(sentCallback);
-  // } else {
-  //   USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
-  //   delay(3000);
-  //   ESP.restart();
-  // }
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  if (esp_now_init() == ESP_OK) {
+    USBSerial.printf("Initialization ESP NOW has been success!\n");
+    esp_now_register_recv_cb(receive_callback);
+    esp_now_register_send_cb(sentCallback);
+  } else {
+    USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
+    delay(3000);
+    ESP.restart();
+  }
 }
 void loop() {
 
