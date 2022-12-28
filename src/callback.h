@@ -4,6 +4,7 @@
 // ~~~ The start of USB Callback ~~~
 #include <Arduino.h>
 #include <USB.h>
+#include <esp_now.h>
 
 #if ARDUINO_USB_CDC_ON_BOOT
 #define HWSerial Serial0
@@ -14,7 +15,7 @@ static USBCDC USBSerial;
 #endif
 
 static void usb_event_callback(void *arg, esp_event_base_t event_base,
-                             int32_t event_id, void *event_data) {
+                               int32_t event_id, void *event_data) {
   if (event_base == ARDUINO_USB_EVENTS) {
     arduino_usb_event_data_t *data = (arduino_usb_event_data_t *)event_data;
     switch (event_id) {
@@ -71,8 +72,14 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base,
   }
 }
 // ~~~ The end of USB Callback ~~~
-
-// ~~~ The start of ESP NOW Callbacks ~~~
-
+static void sent_callback(const uint8_t *mac_addr,
+                          esp_now_send_status_t status) {
+  USBSerial.printf("Sent callback!\n");
+}
+static void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
+                             int data_len) {
+  USBSerial.printf("Receive callback!\n");
+};
+  // ~~~ The start of ESP NOW Callbacks ~~~
 
 #endif // __CALLBACK_H
