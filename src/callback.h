@@ -13,7 +13,7 @@
 static USBCDC USBSerial;
 #endif
 
-static void usbEventCallback(void *arg, esp_event_base_t event_base,
+static void usb_event_callback(void *arg, esp_event_base_t event_base,
                              int32_t event_id, void *event_data) {
   if (event_base == ARDUINO_USB_EVENTS) {
     arduino_usb_event_data_t *data = (arduino_usb_event_data_t *)event_data;
@@ -71,4 +71,8 @@ static void usbEventCallback(void *arg, esp_event_base_t event_base,
   }
 }
 // ~~~ The end of USB Callback ~~~
+
+// ~~~ The start of ESP NOW Callbacks ~~~
+
+
 #endif // __CALLBACK_H
