@@ -1,82 +1,29 @@
 #include "main.h"
 #include "board.h"
+#include "callback.h"
 #include "utils.h"
 #include <Arduino.h>
-#include <USB.h>
 #include <WiFi.h>
 #include <esp_now.h>
-
-#if ARDUINO_USB_CDC_ON_BOOT
-#define HWSerial Serial0
-#define USBSerial Serial
-#else
-#define HWSerial Serial
-USBCDC USBSerial;
-#endif
 
 // variables
 uint16_t color;
 
-static void usbEventCallback(void *arg, esp_event_base_t event_base,
-                             int32_t event_id, void *event_data) {
-  if (event_base == ARDUINO_USB_EVENTS) {
-    arduino_usb_event_data_t *data = (arduino_usb_event_data_t *)event_data;
-    switch (event_id) {
-    case ARDUINO_USB_STARTED_EVENT:
-      HWSerial.println("USB PLUGGED");
-      break;
-    case ARDUINO_USB_STOPPED_EVENT:
-      HWSerial.println("USB UNPLUGGED");
-      break;
-    case ARDUINO_USB_SUSPEND_EVENT:
-      HWSerial.printf("USB SUSPENDED: remote_wakeup_en: %u\n",
-                      data->suspend.remote_wakeup_en);
-      break;
-    case ARDUINO_USB_RESUME_EVENT:
-      HWSerial.println("USB RESUMED");
-      break;
+void receiveCallback(const uint8_t *macAddr, const uint8_t *data, int dataLen) {
+  // Only allow a maximum of 250 characters in the message + a null terminating
+  // byte
+  char buffer[ESP_NOW_MAX_DATA_LEN + 1];
+  int msg_len = min(ESP_NOW_MAX_DATA_LEN, dataLen);
+  strncpy(buffer, (const char *)data, msg_len);
 
-    default:
-      break;
-    }
-  } else if (event_base == ARDUINO_USB_CDC_EVENTS) {
-    arduino_usb_cdc_event_data_t *data =
-        (arduino_usb_cdc_event_data_t *)event_data;
-    switch (event_id) {
-    case ARDUINO_USB_CDC_CONNECTED_EVENT:
-      HWSerial.println("CDC CONNECTED");
-      break;
-    case ARDUINO_USB_CDC_DISCONNECTED_EVENT:
-      HWSerial.println("CDC DISCONNECTED");
-      break;
-    case ARDUINO_USB_CDC_LINE_STATE_EVENT:
-      HWSerial.printf("CDC LINE STATE: dtr: %u, rts: %u\n",
-                      data->line_state.dtr, data->line_state.rts);
-      break;
-    case ARDUINO_USB_CDC_LINE_CODING_EVENT:
-      HWSerial.printf("CDC LINE CODING: bit_rate: %u, data_bits: %u, "
-                      "stop_bits: %u, parity: %u\n",
-                      data->line_coding.bit_rate, data->line_coding.data_bits,
-                      data->line_coding.stop_bits, data->line_coding.parity);
-      break;
-    case ARDUINO_USB_CDC_RX_EVENT:
-      HWSerial.printf("CDC RX [%u]:", data->rx.len);
-      {
-        uint8_t buf[data->rx.len];
-        size_t len = USBSerial.read(buf, data->rx.len);
-        HWSerial.write(buf, len);
-      }
-      HWSerial.println();
-      break;
-
-    default:
-      break;
-    }
-  }
+  // Make sure we are null terminated
+  buffer[msg_len] = 0;
 }
 
 void setup() {
+
   all_pins_init();
+
   HWSerial.begin(115200);
   HWSerial.setDebugOutput(true);
 
@@ -86,14 +33,25 @@ void setup() {
   USBSerial.begin();
   USB.begin();
 
-  USBSerial.printf("Setup done");
-
+  // init_usb();
   mac_on_display();
+
+  // config ESP NOW broadcast
+  // WiFi.mode(WIFI_STA);
+  // WiFi.disconnect();
+  // if (esp_now_init() == ESP_OK) {
+  //   USBSerial.printf("Initialization ESP NOW has been success!\n");
+  //   esp_now_register_recv_cb(receiveCallback);
+  //   esp_now_register_send_cb(sentCallback);
+  // } else {
+  //   USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
+  //   delay(3000);
+  //   ESP.restart();
+  // }
 }
 void loop() {
 
   // lcd_dev.lcd_set_color(COLOR_WHITE);
   delay(2000);
+  USBSerial.printf("HELLO!\n");
 }
-
-// TODO: https://dronebotworkshop.com/esp-now/
