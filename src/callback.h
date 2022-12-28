@@ -2,6 +2,7 @@
 #define __CALLBACK_H
 
 // ~~~ The start of USB Callback ~~~
+#include "ESP-NOW/esp-now.h"
 #include <Arduino.h>
 #include <USB.h>
 #include <esp_now.h>
@@ -74,11 +75,15 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base,
 // ~~~ The end of USB Callback ~~~
 static void sent_callback(const uint8_t *mac_addr,
                           esp_now_send_status_t status) {
-  USBSerial.printf("Sent callback!\n");
+  char mac_addr_string[18];
+  format_mac_address(mac_addr, mac_addr_string, 18);
+  USBSerial.printf("Sent callback to: %s\n", mac_addr_string);
 }
 static void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
                              int data_len) {
-  USBSerial.printf("Receive callback!\n");
+  char mac_addr_string[18];
+  format_mac_address(mac_addr, mac_addr_string, 18);
+  USBSerial.printf("Receive callback from: %s\n", mac_addr_string);
 };
   // ~~~ The start of ESP NOW Callbacks ~~~
 
