@@ -75,9 +75,10 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base, int32_t e
 // ~~~ The end of USB Callback ~~~
 
 typedef struct ESP_NOW_HANDLER_S {
-   char mac_addr[18];
+   uint8_t sender_mac_addr[6];
    uint8_t isEmpty;
    char data[250];
+   uint8_t data_len;
 } ESP_NOW_HANDLER;
 
 static ESP_NOW_HANDLER esp_now_handler;
@@ -92,12 +93,28 @@ static void sent_callback(const uint8_t *mac_addr, esp_now_send_status_t status)
    else
       USBSerial.printf(" failure\n");
 }
+
+/**
+ * @brief The function is called when device receive a new ESP NOW message.
+ * The function stores information into a special structure called
+ * `ESP_NOW HANDLER` and sets variable with status in this function into zero.
+ *
+ * @param mac_addr
+ * @param data
+ * @param data_len
+ */
 static void receive_callback(const uint8_t *mac_addr, const uint8_t *data, int data_len)
 {
-   char mac_addr_string[18];
-   // esp_now_handler.data
-   format_mac_address(mac_addr, mac_addr_string, 18);
-   USBSerial.printf("Receive callback from: %s\n", mac_addr_string);
+   // copy mac address
+   for (uint8_t i = 0; i < 6; ++i) {
+      esp_now_handler.data[i] = mac_addr[i];
+   }
+   // copy data
+   for (uint8_t i = 0; i < (uint8_t)data_len; ++i) {
+      esp_now_handler.data[i] = data[i];
+   }
+   esp_now_handler.data_len = (uint8_t)data_len;
+   esp_now_handler.isEmpty = 0;
 };
    // ~~~ The start of ESP NOW Callbacks ~~~
 
