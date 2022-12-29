@@ -20,6 +20,4 @@ void format_mac_address(const uint8_t *mac_address, char *buffer, int max_size);
 
 void test_esp_now(uint8_t count_of_neighbours);
 
-void esp_now_echo();
-
 #endif

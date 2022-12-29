@@ -43,70 +43,35 @@ void broadcast(const String &message)
 
 void esp_now_echo()
 {
-   USBSerial.printf("Start ECHO program\n");
-
    if (!esp_now_handler.isEmpty) {
       // init peer
       esp_now_peer_info_t peer_info = {};
-      
       memcpy(peer_info.peer_addr, esp_now_handler.sender_mac_addr, 6);
-      delay(100);
 
-      char mc[18];
-      format_mac_address(peer_info.peer_addr, mc, 18);
-      USBSerial.printf("Target mac address is: %s\n", mc);
-
-      uint8_t status = esp_now_add_peer(&peer_info);
-      USBSerial.printf("The output is %d\n", status);
-
-      if (status == ESP_OK) {
-         USBSerial.printf("Peer connection has been succes created\n");
-      } else if (status == ESP_ERR_ESPNOW_NOT_INIT) {
-         USBSerial.printf("ERROR: ESPNOW is not initialized\n");
-         delay(2000);
-         ESP.restart();
-      } else if (status == ESP_ERR_ESPNOW_ARG) {
-         USBSerial.printf("ERROR:  invalid argument\n");
-         delay(2000);
-         ESP.restart();
-      } else if (status == ESP_ERR_ESPNOW_NOT_FOUND) {
-         USBSerial.printf("ERROR: peer is not found\n");
-         delay(2000);
-         ESP.restart();
-      } else if (status == ESP_ERR_ESPNOW_NO_MEM) {
-         USBSerial.printf("ERROR: out of memory\n");
-         delay(2000);
-         ESP.restart();
-      } else if (status == ESP_ERR_ESPNOW_EXIST) {
-         USBSerial.printf("ERROR: peer has existed\n");
-         delay(2000);
-         ESP.restart();
+      if (!esp_now_is_peer_exist(peer_info.peer_addr)) {
+         esp_err_t status = esp_now_add_peer(&peer_info);
+         if (status != ESP_OK) {
+            USBSerial.printf("ERROR: Can't create a peer connection!\n");
+            // if (status == ESP_ERR_ESPNOW_NOT_INIT)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_NOT_INIT\n");
+            // if (status == ESP_ERR_ESPNOW_ARG)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_ARG\n");
+            // if (status == ESP_ERR_ESPNOW_FULL)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_FULL\n");
+            // if (status == ESP_ERR_ESPNOW_NO_MEM)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_NO_MEM\n");
+            // if (status == ESP_ERR_ESPNOW_EXIST)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_EXIST\n");
+         }
       }
 
       // sent a message
-      esp_err_t res = esp_now_send(esp_now_handler.sender_mac_addr,
-                                   (uint8_t *)&esp_now_handler.data,
-                                   esp_now_handler.data_len);
-
-      // handler an error
-      if (res == ESP_OK) {
-         USBSerial.printf("Succes sent a message!\n");
-      } else if (res == ESP_ERR_ESPNOW_NOT_INIT) {
-         USBSerial.println("ESP-NOW not Init.");
-      } else if (res == ESP_ERR_ESPNOW_ARG) {
-         USBSerial.println("Invalid Argument");
-      } else if (res == ESP_ERR_ESPNOW_INTERNAL) {
-         USBSerial.println("Internal Error");
-      } else if (res == ESP_ERR_ESPNOW_NO_MEM) {
-         USBSerial.println("ESP_ERR_ESPNOW_NO_MEM");
-      } else if (res == ESP_ERR_ESPNOW_NOT_FOUND) {
-         USBSerial.println("Peer not found.");
-      } else {
-         USBSerial.println("Unknown error");
+      if (esp_now_send(esp_now_handler.sender_mac_addr,
+                       (uint8_t *)&esp_now_handler.data,
+                       esp_now_handler.data_len) != ESP_OK) {
+         USBSerial.printf("ERROR: Can't sent a message!\n");
       }
-
       esp_now_handler.isEmpty = TRUE;
-      USBSerial.printf("\n\n");
    }
 }
 
@@ -140,7 +105,6 @@ void setup()
       delay(3000);
       ESP.restart();
    }
-
    pinMode(LED_RED_BUILDIN, OUTPUT);
 }
 
@@ -148,10 +112,10 @@ void loop()
 {
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
-
-   delay(10000);
-   esp_now_echo();
-   // broadcast("HELLO!");
+   // esp_now_echo();
+   broadcast("HELLO!");
+   delay(5000);
+   USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
    // USBSerial.printf("Time since start: %d\n", time);
 }

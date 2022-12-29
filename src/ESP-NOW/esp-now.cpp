@@ -1,6 +1,8 @@
 #include "esp-now.h"
 
 #include "callback.h"
+#include "display/16bit-colors.h"
+#include "display/LCD096.h"
 
 extern USBCDC USBSerial;
 
