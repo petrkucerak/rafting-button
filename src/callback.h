@@ -73,15 +73,29 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base, int32_t e
    }
 }
 // ~~~ The end of USB Callback ~~~
+
+typedef struct ESP_NOW_HANDLER_S {
+   char mac_addr[18];
+   uint8_t isEmpty;
+   char data[250];
+} ESP_NOW_HANDLER;
+
+static ESP_NOW_HANDLER esp_now_handler;
+
 static void sent_callback(const uint8_t *mac_addr, esp_now_send_status_t status)
 {
    char mac_addr_string[18];
    format_mac_address(mac_addr, mac_addr_string, 18);
-   USBSerial.printf("Sent callback to: %s\n", mac_addr_string);
+   USBSerial.printf("Sent callback to: %s", mac_addr_string);
+   if (status == ESP_NOW_SEND_SUCCESS)
+      USBSerial.printf(" success\n");
+   else
+      USBSerial.printf(" failure\n");
 }
 static void receive_callback(const uint8_t *mac_addr, const uint8_t *data, int data_len)
 {
    char mac_addr_string[18];
+   // esp_now_handler.data
    format_mac_address(mac_addr, mac_addr_string, 18);
    USBSerial.printf("Receive callback from: %s\n", mac_addr_string);
 };

@@ -18,3 +18,6 @@ void test_esp_now(uint8_t count_of_neighbours)
       ESP.restart();
    }
 }
+void esp_now_echo(){
+   
+}

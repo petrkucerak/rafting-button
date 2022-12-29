@@ -64,6 +64,7 @@ void setup()
       USBSerial.printf("Initialization ESP NOW has been success!\n");
       esp_now_register_recv_cb(receive_callback);
       esp_now_register_send_cb(sent_callback);
+      esp_now_handler.isEmpty = 1;
    } else {
       USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
       delay(3000);
@@ -76,5 +77,7 @@ void loop()
    // lcd_dev.lcd_set_color(COLOR_WHITE);
    delay(2000);
    broadcast("Ahoj!");
-   USBSerial.printf("HELLO!\n");
+   // USBSerial.printf("HELLO!\n");
+   int64_t time = esp_timer_get_time();
+   USBSerial.printf("Time since start: %d\n", time);
 }
