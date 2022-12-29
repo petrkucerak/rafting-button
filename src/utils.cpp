@@ -111,15 +111,22 @@ void mac_on_display()
    uint8_t mac[6];
    char macAddress[18] = {0};
    esp_wifi_get_mac((wifi_interface_t)ESP_IF_WIFI_STA, mac);
-   sprintf(macAddress, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2], mac[3], mac[4],
-           mac[5]);
+   sprintf(macAddress, "%02X:%02X:%02X:%02X:%02X:%02X", mac[0], mac[1], mac[2],
+           mac[3], mac[4], mac[5]);
 
    // init LCD display
    lcd_dev.lcd_init();
    lcd_dev.lcd_set_color(COLOR_BLACK);
    for (uint8_t i = 0; i < 17; ++i) {
-      lcd_dev.lcd_write_letter((uint8_t)macAddress[i], 1 + i * 7, 24, COLOR_YELLOW, COLOR_BLACK,
-                               12);
+      lcd_dev.lcd_write_letter((uint8_t)macAddress[i], 1 + i * 7, 24,
+                               COLOR_YELLOW, COLOR_BLACK, 12);
    }
    // lcd_dev.lcd_write_letter()
+}
+
+void red_blick(uint16_t time)
+{
+   digitalWrite(LED_RED_BUILDIN, LOW);
+   delay(time);
+   digitalWrite(LED_RED_BUILDIN, HIGH);
 }

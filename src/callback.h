@@ -18,8 +18,8 @@
 static USBCDC USBSerial;
 #endif
 
-static void usb_event_callback(void *arg, esp_event_base_t event_base, int32_t event_id,
-                               void *event_data)
+static void usb_event_callback(void *arg, esp_event_base_t event_base,
+                               int32_t event_id, void *event_data)
 {
    if (event_base == ARDUINO_USB_EVENTS) {
       arduino_usb_event_data_t *data = (arduino_usb_event_data_t *)event_data;
@@ -42,7 +42,8 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base, int32_t e
          break;
       }
    } else if (event_base == ARDUINO_USB_CDC_EVENTS) {
-      arduino_usb_cdc_event_data_t *data = (arduino_usb_cdc_event_data_t *)event_data;
+      arduino_usb_cdc_event_data_t *data =
+          (arduino_usb_cdc_event_data_t *)event_data;
       switch (event_id) {
       case ARDUINO_USB_CDC_CONNECTED_EVENT:
          HWSerial.println("CDC CONNECTED");
@@ -51,13 +52,14 @@ static void usb_event_callback(void *arg, esp_event_base_t event_base, int32_t e
          HWSerial.println("CDC DISCONNECTED");
          break;
       case ARDUINO_USB_CDC_LINE_STATE_EVENT:
-         HWSerial.printf("CDC LINE STATE: dtr: %u, rts: %u\n", data->line_state.dtr,
-                         data->line_state.rts);
+         HWSerial.printf("CDC LINE STATE: dtr: %u, rts: %u\n",
+                         data->line_state.dtr, data->line_state.rts);
          break;
       case ARDUINO_USB_CDC_LINE_CODING_EVENT:
          HWSerial.printf("CDC LINE CODING: bit_rate: %u, data_bits: %u, "
                          "stop_bits: %u, parity: %u\n",
-                         data->line_coding.bit_rate, data->line_coding.data_bits,
+                         data->line_coding.bit_rate,
+                         data->line_coding.data_bits,
                          data->line_coding.stop_bits, data->line_coding.parity);
          break;
       case ARDUINO_USB_CDC_RX_EVENT:
@@ -106,7 +108,8 @@ static void sent_callback(const uint8_t *mac_addr, esp_now_send_status_t status)
  * @param data
  * @param data_len
  */
-static void receive_callback(const uint8_t *mac_addr, const uint8_t *data, int data_len)
+static void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
+                             int data_len)
 {
    // copy mac address
    for (uint8_t i = 0; i < 6; ++i) {
@@ -118,7 +121,11 @@ static void receive_callback(const uint8_t *mac_addr, const uint8_t *data, int d
    }
    esp_now_handler.data_len = (uint8_t)data_len;
    esp_now_handler.isEmpty = FALSE;
-};
-   // ~~~ The start of ESP NOW Callbacks ~~~
+
+   char mac_addr_string[18];
+   format_mac_address(mac_addr, mac_addr_string, 18);
+   USBSerial.printf("Recieve callback: %s", mac_addr_string);
+}
+// ~~~ The start of ESP NOW Callbacks ~~~
 
 #endif // __CALLBACK_H
