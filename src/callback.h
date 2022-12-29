@@ -7,6 +7,9 @@
 #include <USB.h>
 #include <esp_now.h>
 
+#define TRUE 1
+#define FALSE 0
+
 #if ARDUINO_USB_CDC_ON_BOOT
 #define HWSerial Serial0
 #define USBSerial Serial
@@ -107,14 +110,14 @@ static void receive_callback(const uint8_t *mac_addr, const uint8_t *data, int d
 {
    // copy mac address
    for (uint8_t i = 0; i < 6; ++i) {
-      esp_now_handler.data[i] = mac_addr[i];
+      esp_now_handler.sender_mac_addr[i] = mac_addr[i];
    }
    // copy data
    for (uint8_t i = 0; i < (uint8_t)data_len; ++i) {
       esp_now_handler.data[i] = data[i];
    }
    esp_now_handler.data_len = (uint8_t)data_len;
-   esp_now_handler.isEmpty = 0;
+   esp_now_handler.isEmpty = FALSE;
 };
    // ~~~ The start of ESP NOW Callbacks ~~~
 

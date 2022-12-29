@@ -64,7 +64,7 @@ void setup()
       USBSerial.printf("Initialization ESP NOW has been success!\n");
       esp_now_register_recv_cb(receive_callback);
       esp_now_register_send_cb(sent_callback);
-      esp_now_handler.isEmpty = 1;
+      esp_now_handler.isEmpty = TRUE;
    } else {
       USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
       delay(3000);
@@ -75,9 +75,18 @@ void loop()
 {
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
-   delay(2000);
-   broadcast("Ahoj!");
-   // USBSerial.printf("HELLO!\n");
+   delay(100);
+   if (esp_now_handler.isEmpty) {
+      USBSerial.printf("\nThe ESP NOW HANDLER is empty!\n");
+      delay(1000);
+   } else {
+      USBSerial.printf("\nThe ESP NOW HANDLER is not empty!\n");
+
+      char mac_addr_string[18];
+      format_mac_address(esp_now_handler.sender_mac_addr, mac_addr_string, 18);
+      USBSerial.printf("The source mac address is: %s\n", mac_addr_string);
+      esp_now_handler.isEmpty = TRUE;
+   }
    int64_t time = esp_timer_get_time();
    USBSerial.printf("Time since start: %d\n", time);
 }
