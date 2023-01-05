@@ -151,7 +151,7 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
 
       // wait for echo message
       while (esp_now_handler.isEmpty) {
-         delay(1);
+         vTaskDelay(1);
       }
 
       // save end time
@@ -161,7 +161,8 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
       esp_now_handler.isEmpty = TRUE;
 
       // save delay
-      ++latency[end - start];
+      if (end - start < LATENCY_ARR_SIZE)
+         ++latency[end - start];
 
       --message_count;
    }
@@ -177,7 +178,6 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
          USBSerial.printf("%lld,", latency[i]);
    }
    USBSerial.printf("]\n");
-
 
    free(latency);
    latency = NULL;
@@ -224,13 +224,12 @@ void loop()
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
    // esp_now_echo();
-   delay(1000);
+   delay(5000);
    // broadcast("HELLO!");
 
    USBSerial.printf("START\n");
-   esp_now_test_latency(5000, 25, NULL);
+   esp_now_test_latency(10000, 25, NULL);
    USBSerial.printf("END\n");
-   delay(5000);
 
    // USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
