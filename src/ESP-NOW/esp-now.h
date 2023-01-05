@@ -18,8 +18,6 @@ typedef struct testing_message_s {
  */
 void format_mac_address(const uint8_t *mac_address, char *buffer, int max_size);
 
-void test_esp_now(uint8_t count_of_neighbours);
-
 /**
  * @brief The goal of this function is send back receive message.
  * The detail description of this function:
@@ -39,7 +37,7 @@ void esp_now_echo();
  * format to the USB serial output.
  *
  */
-void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
+void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
                           uint8_t *mac_address);
 
 #endif

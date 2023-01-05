@@ -77,7 +77,7 @@ void esp_now_echo()
    }
 }
 
-void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
+void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
                           uint8_t *mac_address)
 {
    // Check parametrs
@@ -109,7 +109,14 @@ void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
    // Create memory for message
    uint8_t data[message_size];
    // Create memory for results
-   uint8_t latency[LATENCY_ARR_SIZE];
+   int64_t *latency = NULL;
+   latency = (int64_t *)malloc(LATENCY_ARR_SIZE * sizeof(int64_t));
+   if (latency == NULL) {
+      USBSerial.printf("ERROR: Can't allocate memmory!\n");
+      delay(5000);
+      return;
+   }
+
    int64_t start, end;
    esp_err_t status;
 
@@ -123,41 +130,47 @@ void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
    // Start a measurement
    USBSerial.printf("===================\n");
    USBSerial.printf("START A MEASUREMENT\n");
-   USBSerial.printf("Payload: %d\n Measurements count: %d\n\n", message_size,
+   USBSerial.printf("Payload: %d\nMeasurements count: %d\n\n", message_size,
                     message_count);
    while (message_count > 0) {
       // save start time
       start = esp_timer_get_time();
 
-      // send a message
-      status = esp_now_send(peer_info.peer_addr, data, message_size);
+      //    // send a message
+      //    status = esp_now_send(peer_info.peer_addr, data, message_size);
 
-      // handler sending error
-      if (status != ESP_OK) {
-         USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
-         delay(5000);
-         return;
-      }
+      //    // handler sending error
+      //    if (status != ESP_OK) {
+      //       USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
+      //       delay(5000);
+      //       return;
+      //    }
 
-      // wait for echo message
-      while (esp_now_handler.isEmpty) {
-      }
+      //    // wait for echo message
+      //    while (esp_now_handler.isEmpty) {
+      //    }
 
       // save end time
       end = esp_timer_get_time();
 
-      // set esp handler as an empty
-      esp_now_handler.isEmpty = TRUE;
+      //    // set esp handler as an empty
+      //    esp_now_handler.isEmpty = TRUE;
 
-      // save delay
+      // USBSerial.printf("Start: %lld\nEnd: %lld\nDifference: %lld\n\n", start,
+      // end,
+      //                  end - start);
+      //    // save delay
       ++latency[end - start];
 
       --message_count;
    }
 
    for (uint64_t i = 0; i < LATENCY_ARR_SIZE; ++i) {
-      USBSerial.printf("%d ", latency[i]);
+      if (latency[i] != 0)
+         USBSerial.printf("%lld\n", latency[i]);
    }
+   free(latency);
+   latency = NULL;
    USBSerial.printf("\n");
 }
 
@@ -188,7 +201,7 @@ void setup()
       esp_now_handler.isEmpty = TRUE;
    } else {
       USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
-      delay(3000);
+      delay(10000);
       ESP.restart();
    }
    pinMode(LED_RED_BUILDIN, OUTPUT);
@@ -198,9 +211,13 @@ void loop()
 {
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
-   esp_now_echo();
+   // esp_now_echo();
    // broadcast("HELLO!");
-   // delay(5000);
+   USBSerial.printf("START\n");
+   esp_now_test_latency(10, 25, NULL);
+   USBSerial.printf("END\n");
+   delay(5000);
+
    // USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
    // USBSerial.printf("Time since start: %d\n", time);
