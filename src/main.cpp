@@ -127,48 +127,58 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    // Clean the handler status
    esp_now_handler.isEmpty = TRUE;
 
+   char mac_addr_string[18];
+   format_mac_address(peer_info.peer_addr, mac_addr_string, 18);
+
    // Start a measurement
    USBSerial.printf("===================\n");
    USBSerial.printf("START A MEASUREMENT\n");
-   USBSerial.printf("Payload: %d\nMeasurements count: %d\n\n", message_size,
-                    message_count);
+   USBSerial.printf("Payload: %d\nMeasurements count: %d\nTarget IP: %s\n",
+                    message_size, message_count, mac_addr_string);
    while (message_count > 0) {
       // save start time
       start = esp_timer_get_time();
 
-      //    // send a message
-      //    status = esp_now_send(peer_info.peer_addr, data, message_size);
+      // send a message
+      status = esp_now_send(peer_info.peer_addr, data, message_size);
 
-      //    // handler sending error
-      //    if (status != ESP_OK) {
-      //       USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
-      //       delay(5000);
-      //       return;
-      //    }
+      // handler sending error
+      if (status != ESP_OK) {
+         USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
+         delay(5000);
+         return;
+      }
 
-      //    // wait for echo message
-      //    while (esp_now_handler.isEmpty) {
-      //    }
+      // wait for echo message
+      while (esp_now_handler.isEmpty) {
+         delay(1);
+      }
 
       // save end time
       end = esp_timer_get_time();
 
-      //    // set esp handler as an empty
-      //    esp_now_handler.isEmpty = TRUE;
+      // set esp handler as an empty
+      esp_now_handler.isEmpty = TRUE;
 
-      // USBSerial.printf("Start: %lld\nEnd: %lld\nDifference: %lld\n\n", start,
-      // end,
-      //                  end - start);
-      //    // save delay
+      // save delay
       ++latency[end - start];
 
       --message_count;
    }
 
-   for (uint64_t i = 0; i < LATENCY_ARR_SIZE; ++i) {
+   USBSerial.printf("\ntime=[");
+   for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
       if (latency[i] != 0)
-         USBSerial.printf("%lld\n", latency[i]);
+         USBSerial.printf("%d,", i);
    }
+   USBSerial.printf("]\nvalue=[");
+   for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      if (latency[i] != 0)
+         USBSerial.printf("%lld,", latency[i]);
+   }
+   USBSerial.printf("]\n");
+
+
    free(latency);
    latency = NULL;
    USBSerial.printf("\n");
@@ -179,6 +189,9 @@ void setup()
 
    all_pins_init();
 
+   pinMode(LED_RED_BUILDIN, OUTPUT);
+   digitalWrite(LED_RED_BUILDIN, HIGH);
+
    HWSerial.begin(115200);
    HWSerial.setDebugOutput(true);
 
@@ -188,7 +201,6 @@ void setup()
    USBSerial.begin();
    USB.begin();
 
-   // init_usb();
    mac_on_display();
 
    // config ESP NOW broadcast
@@ -204,7 +216,7 @@ void setup()
       delay(10000);
       ESP.restart();
    }
-   pinMode(LED_RED_BUILDIN, OUTPUT);
+   digitalWrite(LED_RED_BUILDIN, HIGH);
 }
 
 void loop()
@@ -212,9 +224,11 @@ void loop()
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
    // esp_now_echo();
+   delay(1000);
    // broadcast("HELLO!");
+
    USBSerial.printf("START\n");
-   esp_now_test_latency(10, 25, NULL);
+   esp_now_test_latency(5000, 25, NULL);
    USBSerial.printf("END\n");
    delay(5000);
 

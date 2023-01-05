@@ -115,11 +115,12 @@ static void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
                              int data_len)
 {
 
-   // char mac_addr_string[18];
    // copy mac address
    for (uint8_t i = 0; i < 6; ++i) {
       esp_now_handler.sender_mac_addr[i] = mac_addr[i];
    }
+
+   // char mac_addr_string[18];
    // format_mac_address(mac_addr, mac_addr_string, 18);
    // USBSerial.printf("Recieve callback: %s ", mac_addr_string);
 
@@ -132,7 +133,7 @@ static void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
    esp_now_handler.data_len = (uint8_t)data_len;
    esp_now_handler.isEmpty = FALSE;
 
-   // red_blick(1);
+   red_blick(1);
 }
 // ~~~ The start of ESP NOW Callbacks ~~~
 
