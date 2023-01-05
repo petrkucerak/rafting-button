@@ -34,4 +34,12 @@ void test_esp_now(uint8_t count_of_neighbours);
  */
 void esp_now_echo();
 
+/**
+ * @brief The goal of this function is measure latency and print it in specific
+ * format to the USB serial output.
+ *
+ */
+void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
+                          uint8_t *mac_address);
+
 #endif

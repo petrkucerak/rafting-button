@@ -7,6 +7,8 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
+#define LATENCY_ARR_SIZE 10000
+
 // variables
 uint16_t color;
 
@@ -75,6 +77,90 @@ void esp_now_echo()
    }
 }
 
+void esp_now_test_latency(uint64_t message_count, uint8_t message_size,
+                          uint8_t *mac_address)
+{
+   // Check parametrs
+   if (message_size <= 0 || message_size > 250) {
+      USBSerial.printf(
+          "ERROR: The message size must be between 0 and 250 bytes!\n");
+      delay(5000);
+      return;
+   }
+   if (message_count <= 0) {
+      USBSerial.printf("ERROR: The message count must be upper than 0!\n");
+      delay(5000);
+      return;
+   }
+
+   // Init the ESP NOW structure
+   esp_now_peer_info_t peer_info = {};
+   // If mac address target is NULL, send broadcast
+   if (mac_address == NULL) {
+      uint8_t broadcast_address[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+      memcpy(&peer_info.peer_addr, broadcast_address, 6);
+   } else {
+      memcpy(&peer_info.peer_addr, mac_address, 6);
+   }
+   if (!esp_now_is_peer_exist(peer_info.peer_addr)) {
+      esp_now_add_peer(&peer_info);
+   }
+
+   // Create memory for message
+   uint8_t data[message_size];
+   // Create memory for results
+   uint8_t latency[LATENCY_ARR_SIZE];
+   int64_t start, end;
+   esp_err_t status;
+
+   for (uint64_t i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      latency[i] = 0;
+   }
+
+   // Clean the handler status
+   esp_now_handler.isEmpty = TRUE;
+
+   // Start a measurement
+   USBSerial.printf("===================\n");
+   USBSerial.printf("START A MEASUREMENT\n");
+   USBSerial.printf("Payload: %d\n Measurements count: %d\n\n", message_size,
+                    message_count);
+   while (message_count > 0) {
+      // save start time
+      start = esp_timer_get_time();
+
+      // send a message
+      status = esp_now_send(peer_info.peer_addr, data, message_size);
+
+      // handler sending error
+      if (status != ESP_OK) {
+         USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
+         delay(5000);
+         return;
+      }
+
+      // wait for echo message
+      while (esp_now_handler.isEmpty) {
+      }
+
+      // save end time
+      end = esp_timer_get_time();
+
+      // set esp handler as an empty
+      esp_now_handler.isEmpty = TRUE;
+
+      // save delay
+      ++latency[end - start];
+
+      --message_count;
+   }
+
+   for (uint64_t i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      USBSerial.printf("%d ", latency[i]);
+   }
+   USBSerial.printf("\n");
+}
+
 void setup()
 {
 
@@ -112,10 +198,10 @@ void loop()
 {
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
-   // esp_now_echo();
-   broadcast("HELLO!");
-   delay(5000);
-   USBSerial.printf("\n");
+   esp_now_echo();
+   // broadcast("HELLO!");
+   // delay(5000);
+   // USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
    // USBSerial.printf("Time since start: %d\n", time);
 }
