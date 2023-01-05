@@ -81,6 +81,18 @@ void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
  */
 void lcd_set_color(uint16_t color);
 
+/**
+ * @brief Set color to current windows TODO: Descritpion!!!
+ *
+ * @param color
+ * @param x_start
+ * @param y_start
+ * @param x_end
+ * @param y_end
+ */
+void lcd_draw_square(uint16_t color, uint8_t x_start, uint8_t y_start,
+                     uint8_t x_end, uint8_t y_end);
+
 void lcd_init(void)
 {
    vspi = new SPIClass(VSPI);
@@ -345,6 +357,20 @@ void lcd_set_color(uint16_t color)
    // delay(1);
 }
 
+void lcd_draw_square(uint16_t color, uint8_t x_start, uint8_t y_start,
+                     uint8_t x_end, uint8_t y_end)
+{
+   lcd_set_window(x_start, y_start, x_end, y_end);
+   digitalWrite(LCD_DC_IO, HIGH);
+   digitalWrite(LCD_CS_IO, LOW);
+   vspi->beginTransaction(SPISettings(spiClk, MSBFIRST, SPI_MODE0));
+   for (unsigned long i = 0; i < (x_end - x_start) * (y_end - y_start); i++) {
+      vspi->transfer16(color);
+   }
+   vspi->endTransaction();
+   digitalWrite(LCD_CS_IO, HIGH);
+}
+
 void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
                       uint16_t bg_color, uint8_t font_size)
 {
@@ -431,6 +457,7 @@ void lcd_write_letter(uint32_t letter, uint8_t x, uint8_t y, uint16_t color,
    digitalWrite(LCD_CS_IO, HIGH);
 }
 
-lcd_s lcd_dev = {lcd_init, lcd_reset, lcd_write_cmd,
-                 lcd_write_data, lcd_set_window, lcd_test,
-                 lcd_border_check, lcd_set_color, lcd_write_letter};
+lcd_s lcd_dev = {lcd_init,         lcd_reset,      lcd_write_cmd,
+                 lcd_write_data,   lcd_set_window, lcd_test,
+                 lcd_border_check, lcd_set_color,  lcd_write_letter,
+                 lcd_draw_square};

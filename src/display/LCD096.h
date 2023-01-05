@@ -15,8 +15,7 @@
 #define LCD_WIDTH 160
 #define LCD_HEIGHT 80
 
-typedef struct
-{
+typedef struct {
    void (*lcd_init)(void);
    void (*lcd_reset)(void);
    void (*lcd_write_cmd)(uint8_t cmd);
@@ -29,6 +28,8 @@ typedef struct
    void (*lcd_write_letter)(uint32_t letter, uint8_t x, uint8_t y,
                             uint16_t color, uint16_t bg_color,
                             uint8_t font_size);
+   void (*lcd_draw_square)(uint16_t color, uint8_t x_start, uint8_t y_start,
+                           uint8_t x_end, uint8_t y_end);
 } lcd_s;
 
 extern lcd_s lcd_dev;
