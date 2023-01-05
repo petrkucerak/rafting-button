@@ -117,11 +117,37 @@ void mac_on_display()
    // init LCD display
    lcd_dev.lcd_init();
    lcd_dev.lcd_set_color(COLOR_BLACK);
+   lcd_dev.lcd_write_letter((uint8_t)'M', 1, 1, COLOR_YELLOW, COLOR_BLACK, 12);
+   lcd_dev.lcd_write_letter((uint8_t)'A', 1 + 7, 1, COLOR_YELLOW, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)'C', 1 + 14, 1, COLOR_YELLOW, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)':', 1 + 21, 1, COLOR_YELLOW, COLOR_BLACK,
+                            12);
    for (uint8_t i = 0; i < 17; ++i) {
-      lcd_dev.lcd_write_letter((uint8_t)macAddress[i], 1 + i * 7, 24,
+      lcd_dev.lcd_write_letter((uint8_t)macAddress[i], 1 + (i + 5) * 7, 1,
                                COLOR_YELLOW, COLOR_BLACK, 12);
    }
-   // lcd_dev.lcd_write_letter()
+}
+
+void progress_on_display(uint8_t percent)
+{
+   lcd_dev.lcd_write_letter((uint8_t)'0', 1, 24, COLOR_GREEN, COLOR_BLACK, 12);
+   lcd_dev.lcd_write_letter((uint8_t)'%', 1 + 7, 24, COLOR_GREEN, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)'1', 152 - 21, 24, COLOR_RED, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)'0', 152 - 14, 24, COLOR_RED, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)'0', 152 - 7, 24, COLOR_RED, COLOR_BLACK,
+                            12);
+   lcd_dev.lcd_write_letter((uint8_t)'%', 152, 24, COLOR_RED, COLOR_BLACK, 12);
+
+   uint8_t progress = percent * 0.15;
+   for (uint8_t i = 0; i < 15 && i < progress; ++i) {
+      lcd_dev.lcd_write_letter((uint8_t)'=', 20 + (i * 7), 24, COLOR_WHITE,
+                               COLOR_BLACK, 12);
+   }
 }
 
 void red_blick(uint16_t time)

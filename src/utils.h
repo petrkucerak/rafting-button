@@ -21,6 +21,12 @@ void all_pins_test();
  */
 void mac_on_display();
 
+/**
+ * @brief The function displays on the LCD display progress bar.
+ * 
+ * @param percent value in range between 0 to 100
+ */
+void progress_on_display(uint8_t percent);
 
 void red_blick(uint16_t time);
 

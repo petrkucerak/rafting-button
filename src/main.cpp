@@ -135,7 +135,11 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    USBSerial.printf("START A MEASUREMENT\n");
    USBSerial.printf("Payload: %d\nMeasurements count: %d\nTarget IP: %s\n",
                     message_size, message_count, mac_addr_string);
+   uint16_t origin = message_count;
    while (message_count > 0) {
+
+      progress_on_display((origin - message_count) * 100 / origin);
+
       // save start time
       start = esp_timer_get_time();
 
