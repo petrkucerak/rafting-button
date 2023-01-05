@@ -138,7 +138,7 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    uint16_t origin = message_count;
    while (message_count > 0) {
 
-      progress_on_display((origin - message_count) * 100 / origin);
+      progress_bar_on_display((origin - message_count) * 100 / origin);
 
       // save start time
       start = esp_timer_get_time();
@@ -170,6 +170,8 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
 
       --message_count;
    }
+
+   remove_progress_bar_from_display();
 
    USBSerial.printf("\ntime=[");
    for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
