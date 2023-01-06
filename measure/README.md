@@ -33,7 +33,7 @@ Měření byly sledovány následující paramtery:
 ## Skripty
 
 ```pw
-C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/scenarios/log.txt
+C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/logs/log-<A1>.txt
 ```
 
 *Skripty nejsou univerzální, záleží na místě instalace PlatformIO.*
