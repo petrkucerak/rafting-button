@@ -160,7 +160,7 @@ void saving_data_on_display()
    char text[] = {'S', 'a', 'v', 'i', 'n', 'g', ' ', 'd', 'a', 't', 'a', '\0'};
    uint8_t i = 0;
    while (text[i] != '\0') {
-      lcd_dev.lcd_write_letter((uint8_t)text[i], 1 + (i * 7), 36, COLOR_CYAN,
+      lcd_dev.lcd_write_letter((uint8_t)text[i], 1 + (i * 7), 40, COLOR_CYAN,
                                COLOR_BLACK, 12);
       ++i;
    }
@@ -168,7 +168,7 @@ void saving_data_on_display()
 
 void remove_saving_data_from_display()
 {
-   lcd_dev.lcd_draw_square(COLOR_BLACK, 0, 36, LCD_WIDTH, 36 + 12);
+   lcd_dev.lcd_draw_square(COLOR_BLACK, 0, 40, LCD_WIDTH, 40 + 12);
 }
 
 void red_blick(uint16_t time)
