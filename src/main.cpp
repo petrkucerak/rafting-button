@@ -1,113 +1,243 @@
 #include "main.h"
-#include "display/16bit-colors.h"
-#include "display/LCD096.h"
-#include "USB.h"
-#include "WiFi.h"
+#include "ESP-NOW/esp-now.h"
+#include "USB-C/USB-C.h"
 #include "board.h"
 #include "utils.h"
 #include <Arduino.h>
+#include <WiFi.h>
+#include <esp_now.h>
 
-#if ARDUINO_USB_CDC_ON_BOOT
-#define HWSerial Serial0
-#define USBSerial Serial
-#else
-#define HWSerial Serial
-USBCDC USBSerial;
-#endif
+#define LATENCY_ARR_SIZE 10000
 
+// variables
 uint16_t color;
 
-static void usbEventCallback(void *arg, esp_event_base_t event_base,
-                             int32_t event_id, void *event_data) {
-  if (event_base == ARDUINO_USB_EVENTS) {
-    arduino_usb_event_data_t *data = (arduino_usb_event_data_t *)event_data;
-    switch (event_id) {
-    case ARDUINO_USB_STARTED_EVENT:
-      HWSerial.println("USB PLUGGED");
-      break;
-    case ARDUINO_USB_STOPPED_EVENT:
-      HWSerial.println("USB UNPLUGGED");
-      break;
-    case ARDUINO_USB_SUSPEND_EVENT:
-      HWSerial.printf("USB SUSPENDED: remote_wakeup_en: %u\n",
-                      data->suspend.remote_wakeup_en);
-      break;
-    case ARDUINO_USB_RESUME_EVENT:
-      HWSerial.println("USB RESUMED");
-      break;
+void broadcast(const String &message)
+{
+   // Broadcast a message to every device in range
+   uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+   esp_now_peer_info_t peerInfo = {};
+   memcpy(&peerInfo.peer_addr, broadcastAddress, 6);
+   if (!esp_now_is_peer_exist(broadcastAddress)) {
+      esp_now_add_peer(&peerInfo);
+   }
+   // Send message
+   esp_err_t result = esp_now_send(
+       broadcastAddress, (const uint8_t *)message.c_str(), message.length());
 
-    default:
-      break;
-    }
-  } else if (event_base == ARDUINO_USB_CDC_EVENTS) {
-    arduino_usb_cdc_event_data_t *data =
-        (arduino_usb_cdc_event_data_t *)event_data;
-    switch (event_id) {
-    case ARDUINO_USB_CDC_CONNECTED_EVENT:
-      HWSerial.println("CDC CONNECTED");
-      break;
-    case ARDUINO_USB_CDC_DISCONNECTED_EVENT:
-      HWSerial.println("CDC DISCONNECTED");
-      break;
-    case ARDUINO_USB_CDC_LINE_STATE_EVENT:
-      HWSerial.printf("CDC LINE STATE: dtr: %u, rts: %u\n",
-                      data->line_state.dtr, data->line_state.rts);
-      break;
-    case ARDUINO_USB_CDC_LINE_CODING_EVENT:
-      HWSerial.printf("CDC LINE CODING: bit_rate: %u, data_bits: %u, "
-                      "stop_bits: %u, parity: %u\n",
-                      data->line_coding.bit_rate, data->line_coding.data_bits,
-                      data->line_coding.stop_bits, data->line_coding.parity);
-      break;
-    case ARDUINO_USB_CDC_RX_EVENT:
-      HWSerial.printf("CDC RX [%u]:", data->rx.len);
-      {
-        uint8_t buf[data->rx.len];
-        size_t len = USBSerial.read(buf, data->rx.len);
-        HWSerial.write(buf, len);
+   // Print results to serial monitor
+   if (result == ESP_OK) {
+      Serial.println("Broadcast message success");
+   } else if (result == ESP_ERR_ESPNOW_NOT_INIT) {
+      Serial.println("ESP-NOW not Init.");
+   } else if (result == ESP_ERR_ESPNOW_ARG) {
+      Serial.println("Invalid Argument");
+   } else if (result == ESP_ERR_ESPNOW_INTERNAL) {
+      Serial.println("Internal Error");
+   } else if (result == ESP_ERR_ESPNOW_NO_MEM) {
+      Serial.println("ESP_ERR_ESPNOW_NO_MEM");
+   } else if (result == ESP_ERR_ESPNOW_NOT_FOUND) {
+      Serial.println("Peer not found.");
+   } else {
+      Serial.println("Unknown error");
+   }
+}
+
+void esp_now_echo()
+{
+   if (!esp_now_handler.isEmpty) {
+      // init peer
+      esp_now_peer_info_t peer_info = {};
+      memcpy(peer_info.peer_addr, esp_now_handler.sender_mac_addr, 6);
+
+      if (!esp_now_is_peer_exist(peer_info.peer_addr)) {
+         esp_err_t status = esp_now_add_peer(&peer_info);
+         if (status != ESP_OK) {
+            USBSerial.printf("ERROR: Can't create a peer connection!\n");
+            // if (status == ESP_ERR_ESPNOW_NOT_INIT)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_NOT_INIT\n");
+            // if (status == ESP_ERR_ESPNOW_ARG)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_ARG\n");
+            // if (status == ESP_ERR_ESPNOW_FULL)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_FULL\n");
+            // if (status == ESP_ERR_ESPNOW_NO_MEM)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_NO_MEM\n");
+            // if (status == ESP_ERR_ESPNOW_EXIST)
+            //    USBSerial.printf("ESP_ERR_ESPNOW_EXIST\n");
+         }
       }
-      HWSerial.println();
-      break;
 
-    default:
-      break;
-    }
-  }
+      // sent a message
+      if (esp_now_send(esp_now_handler.sender_mac_addr,
+                       (uint8_t *)&esp_now_handler.data,
+                       esp_now_handler.data_len) != ESP_OK) {
+         USBSerial.printf("ERROR: Can't sent a message!\n");
+      }
+      esp_now_handler.isEmpty = TRUE;
+   }
 }
 
-void setup() {
-  all_pins_init();
-  HWSerial.begin(115200);
-  HWSerial.setDebugOutput(true);
+void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
+                          uint8_t *mac_address)
+{
+   // Check parametrs
+   if (message_size <= 0 || message_size > 250) {
+      USBSerial.printf(
+          "ERROR: The message size must be between 0 and 250 bytes!\n");
+      delay(5000);
+      return;
+   }
+   if (message_count <= 0) {
+      USBSerial.printf("ERROR: The message count must be upper than 0!\n");
+      delay(5000);
+      return;
+   }
 
-  USB.onEvent(usbEventCallback);
-  USBSerial.onEvent(usbEventCallback);
+   // Init the ESP NOW structure
+   esp_now_peer_info_t peer_info = {};
+   // If mac address target is NULL, send broadcast
+   if (mac_address == NULL) {
+      uint8_t broadcast_address[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+      memcpy(&peer_info.peer_addr, broadcast_address, 6);
+   } else {
+      memcpy(&peer_info.peer_addr, mac_address, 6);
+   }
+   if (!esp_now_is_peer_exist(peer_info.peer_addr)) {
+      esp_now_add_peer(&peer_info);
+   }
 
-  USBSerial.begin();
-  USB.begin();
+   // Create memory for message
+   uint8_t data[message_size];
+   // Create memory for results
+   int64_t *latency = NULL;
+   latency = (int64_t *)malloc(LATENCY_ARR_SIZE * sizeof(int64_t));
+   if (latency == NULL) {
+      USBSerial.printf("ERROR: Can't allocate memmory!\n");
+      delay(5000);
+      return;
+   }
 
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(100);
+   int64_t start, end;
+   esp_err_t status;
 
-  USBSerial.printf("Setup done");
+   for (uint64_t i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      latency[i] = 0;
+   }
 
-  lcd_dev.lcd_init();
-  lcd_dev.lcd_set_color(COLOR_YELLOW);
-  lcd_dev.lcd_write_letter(216, 20 + (17 * 0), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1368, 20 + (17 * 1), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1584, 20 + (17 * 2), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1224, 20 + (17 * 3), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
-  lcd_dev.lcd_write_letter(1800, 20 + (17 * 4), 26, COLOR_BLACK, COLOR_YELLOW,
-                           24);
+   // Clean the handler status
+   esp_now_handler.isEmpty = TRUE;
+
+   char mac_addr_string[18];
+   format_mac_address(peer_info.peer_addr, mac_addr_string, 18);
+
+   // Start a measurement
+   USBSerial.printf("===================\n");
+   USBSerial.printf("START A MEASUREMENT\n");
+   USBSerial.printf("Payload: %d\nMeasurements count: %d\nTarget IP: %s\n",
+                    message_size, message_count, mac_addr_string);
+   uint16_t origin = message_count;
+   while (message_count > 0) {
+
+      progress_bar_on_display((origin - message_count) * 100 / origin);
+
+      // save start time
+      start = esp_timer_get_time();
+
+      // send a message
+      status = esp_now_send(peer_info.peer_addr, data, message_size);
+
+      // handler sending error
+      if (status != ESP_OK) {
+         USBSerial.printf("ERROR: Error ESP NOW code: %d\n", status);
+         delay(5000);
+         return;
+      }
+
+      // wait for echo message
+      while (esp_now_handler.isEmpty) {
+         vTaskDelay(1);
+      }
+
+      // save end time
+      end = esp_timer_get_time();
+
+      // set esp handler as an empty
+      esp_now_handler.isEmpty = TRUE;
+
+      // save delay
+      if (end - start < LATENCY_ARR_SIZE)
+         ++latency[end - start];
+
+      --message_count;
+   }
+
+   remove_progress_bar_from_display();
+
+   USBSerial.printf("\ntime=[");
+   for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      if (latency[i] != 0)
+         USBSerial.printf("%d,", i);
+   }
+   USBSerial.printf("]\nvalue=[");
+   for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
+      if (latency[i] != 0)
+         USBSerial.printf("%lld,", latency[i]);
+   }
+   USBSerial.printf("]\n");
+
+   free(latency);
+   latency = NULL;
+   USBSerial.printf("\n");
 }
 
-void loop() {
+void setup()
+{
 
-  // lcd_dev.lcd_set_color(COLOR_WHITE);
-  delay(1000);
+   all_pins_init();
+
+   pinMode(LED_RED_BUILDIN, OUTPUT);
+   digitalWrite(LED_RED_BUILDIN, HIGH);
+
+   HWSerial.begin(115200);
+   HWSerial.setDebugOutput(true);
+
+   USB.onEvent(usbc_dev.usb_event_callback);
+   USBSerial.onEvent(usbc_dev.usb_event_callback);
+
+   USBSerial.begin();
+   USB.begin();
+
+   mac_on_display();
+
+   // config ESP NOW broadcast
+   WiFi.mode(WIFI_STA);
+   WiFi.disconnect();
+   if (esp_now_init() == ESP_OK) {
+      USBSerial.printf("Initialization ESP NOW has been success!\n");
+      esp_now_register_recv_cb(esp_now_dev.receive_callback);
+      esp_now_register_send_cb(esp_now_dev.sent_callback);
+      esp_now_handler.isEmpty = TRUE;
+   } else {
+      USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
+      delay(10000);
+      ESP.restart();
+   }
+   digitalWrite(LED_RED_BUILDIN, HIGH);
+}
+
+void loop()
+{
+
+   // lcd_dev.lcd_set_color(COLOR_WHITE);
+   // esp_now_echo();
+   delay(5000);
+   // broadcast("HELLO!");
+
+   USBSerial.printf("START\n");
+   esp_now_test_latency(10000, 25, NULL);
+   USBSerial.printf("END\n");
+
+   // USBSerial.printf("\n");
+   // int64_t time = esp_timer_get_time();
+   // USBSerial.printf("Time since start: %d\n", time);
 }

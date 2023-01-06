@@ -9,6 +9,8 @@
 #define TEST_GPIO7 7
 #define TEST_GPIO8 8
 
+#define LED_RED_BUILDIN 9 // for esp32-s2-pico
+
 #define TEST_GPIO10 10
 #define TEST_GPIO11 11
 #define TEST_GPIO12 12
