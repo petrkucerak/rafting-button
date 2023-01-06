@@ -1,9 +1,9 @@
 #ifndef __ESPNOW_H
 #define __ESPNOW_H
 
+#include "USB-C/USB-C.h"
 #include <esp_now.h>
 #include <stdio.h>
-#include "USB-C/USB-C.h"
 
 #define TRUE 1
 #define FALSE 0

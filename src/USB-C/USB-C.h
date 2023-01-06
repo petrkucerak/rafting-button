@@ -19,5 +19,4 @@ typedef struct {
 
 extern usbc_s usbc_dev;
 
-
 #endif // __USBC_H
