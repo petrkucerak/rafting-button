@@ -1,13 +1,25 @@
 #ifndef __ESPNOW_H
 #define __ESPNOW_H
 
+#include <esp_now.h>
 #include <stdio.h>
+#include "USB-C/USB-C.h"
 
-typedef struct testing_message_s {
-   uint8_t id;
-   int64_t time;
-   char mac_address[18];
-} Testing_message;
+#define TRUE 1
+#define FALSE 0
+
+typedef struct ESP_NOW_HANDLER_S {
+   uint8_t sender_mac_addr[6];
+   uint8_t isEmpty;
+   char data[250];
+   uint8_t data_len;
+} ESP_NOW_HANDLER;
+
+typedef struct {
+   void (*sent_callback)(const uint8_t *mac_addr, esp_now_send_status_t status);
+   void (*receive_callback)(const uint8_t *mac_addr, const uint8_t *data,
+                            int data_len);
+} esp_now_s;
 
 /**
  * @brief Function for formating MAC Address to classical hexa form.
@@ -40,4 +52,7 @@ void esp_now_echo();
 void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
                           uint8_t *mac_address);
 
-#endif
+extern esp_now_s esp_now_dev;
+extern ESP_NOW_HANDLER esp_now_handler;
+
+#endif // __ESPNOW_H

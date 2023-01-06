@@ -2,7 +2,6 @@
 #include "ESP-NOW/esp-now.h"
 #include "USB-C/USB-C.h"
 #include "board.h"
-#include "callback.h"
 #include "utils.h"
 #include <Arduino.h>
 #include <WiFi.h>
@@ -215,8 +214,8 @@ void setup()
    WiFi.disconnect();
    if (esp_now_init() == ESP_OK) {
       USBSerial.printf("Initialization ESP NOW has been success!\n");
-      esp_now_register_recv_cb(receive_callback);
-      esp_now_register_send_cb(sent_callback);
+      esp_now_register_recv_cb(esp_now_dev.receive_callback);
+      esp_now_register_send_cb(esp_now_dev.sent_callback);
       esp_now_handler.isEmpty = TRUE;
    } else {
       USBSerial.printf("ERROR: Can't initialize ESP NOW!\n");
