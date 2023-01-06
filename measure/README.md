@@ -11,7 +11,7 @@ Měření je prováděno mezi 2 zařízeními, konkrétně `ESP32-S2-LCD` a `ESP
 Na obou dvou zařízení běží program, který se snaží simulovat v budoucnu žádaný provoz.
 
 Konkrétně:
-1. odeslat data pomocí *broadcastu* `(device 1)`
+1. odeslat data pomocí *broadcastu/unicastu* `(device 1)`
 2. počkat na data `(device 2)`
 3. uložit data pomoci *handleru* `(device 2)`
 4. odeslat odpověď `(device 2)`
@@ -28,6 +28,15 @@ Měření byly sledovány následující paramtery:
 - vzdálenost mezi zařízeními
 - velikost zprávy *(payload)* - maximální veliksot zprávy je 255 bajtů
 - počet odeslaných zpráv
+- typ odesílání: ***broadcast*** / ***unicast***
+
+## Skripty
+
+```pw
+C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/scenarios/log.txt
+```
+
+*Skripty nejsou univerzální, záleží na místě instalace PlatformIO.*
 
 ### Scénář A1
 
@@ -35,7 +44,8 @@ Měření byly sledovány následující paramtery:
 | -------------- | ----------------------------------------------- |
 | **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
 | **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 50 cm                                           |
-| **velikost**   | 25 bajtů                                        |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 1 bajt                                          |
 | **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
 
