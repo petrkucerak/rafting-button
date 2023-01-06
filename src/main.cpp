@@ -172,6 +172,7 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    }
 
    remove_progress_bar_from_display();
+   saving_data_on_display();
 
    USBSerial.printf("\ntime=[");
    for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
@@ -188,6 +189,8 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    free(latency);
    latency = NULL;
    USBSerial.printf("\n");
+
+   remove_saving_data_from_display();
 }
 
 void setup()
@@ -233,9 +236,10 @@ void loop()
    delay(5000);
    // broadcast("HELLO!");
 
-   USBSerial.printf("START\n");
-   esp_now_test_latency(10000, 25, NULL);
-   USBSerial.printf("END\n");
+   uint8_t current_target[] = {0x84, 0xF7, 0x03, 0xDC, 0xF6, 0x60};
+   // USBSerial.printf("START\n");
+   esp_now_test_latency(10000, 1, current_target);
+   // USBSerial.printf("END\n");
 
    // USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
