@@ -162,6 +162,7 @@ void saving_data_on_display()
    while (text[i] != '\0') {
       lcd_dev.lcd_write_letter((uint8_t)text[i], 1 + (i * 7), 36, COLOR_CYAN,
                                COLOR_BLACK, 12);
+      ++i;
    }
 }
 

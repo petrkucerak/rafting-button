@@ -172,7 +172,9 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    }
 
    remove_progress_bar_from_display();
+   delay(1000);
    saving_data_on_display();
+   delay(1000);
 
    USBSerial.printf("\ntime=[");
    for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
@@ -191,6 +193,7 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
    USBSerial.printf("\n");
 
    remove_saving_data_from_display();
+   delay(1000);
 }
 
 void setup()
