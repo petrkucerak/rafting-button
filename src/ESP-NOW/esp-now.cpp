@@ -6,9 +6,9 @@
 #include "utils.h"
 
 /**
- * @brief The function is called when device receive a new ESP NOW message.
- * The function stores information into a special structure called
- * `ESP_NOW HANDLER` and sets variable with status in this function into zero.
+ * @brief The function is called when the device receives a new ESP NOW
+ * message.The function stores information in the structure `ESP_NOW HANDLER`
+ * and sets the variable with status in this function to zero.
  *
  * @param mac_addr
  * @param data
@@ -18,7 +18,8 @@ void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
                       int data_len);
 
 /**
- * @brief TODO: description
+ * @brief The function is called when the device sends a new ESP NOW message.
+ * The function just right now does nothing.
  *
  * @param mac_addr
  * @param status
@@ -70,5 +71,15 @@ void receive_callback(const uint8_t *mac_addr, const uint8_t *data,
    red_blick(1);
 }
 
+/**
+ * @brief This structure contains both ESP NOW callbacks.
+ *
+ */
 esp_now_s esp_now_dev = {sent_callback, receive_callback};
+
+/**
+ * @brief This structure creates the structure for the ESP NOW HANDLER, which
+ * serves incoming messages.
+ *
+ */
 ESP_NOW_HANDLER esp_now_handler;

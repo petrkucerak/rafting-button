@@ -16,7 +16,25 @@ typedef struct ESP_NOW_HANDLER_S {
 } ESP_NOW_HANDLER;
 
 typedef struct {
+
+   /**
+    * @brief The function is called when the device sends a new ESP NOW message.
+    * The function just right now does nothing.
+    *
+    * @param mac_addr
+    * @param status
+    */
    void (*sent_callback)(const uint8_t *mac_addr, esp_now_send_status_t status);
+
+   /**
+    * @brief The function is called when the device receives a new ESP NOW
+    * message.The function stores information in the structure `ESP_NOW HANDLER`
+    * and sets the variable with status in this function to zero.
+    *
+    * @param mac_addr
+    * @param data
+    * @param data_len
+    */
    void (*receive_callback)(const uint8_t *mac_addr, const uint8_t *data,
                             int data_len);
 } esp_now_s;
