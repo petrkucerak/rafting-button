@@ -1,5 +1,6 @@
 #include "main.h"
 #include "ESP-NOW/esp-now.h"
+#include "USB-C/USB-C.h"
 #include "board.h"
 #include "callback.h"
 #include "utils.h"
@@ -201,8 +202,8 @@ void setup()
    HWSerial.begin(115200);
    HWSerial.setDebugOutput(true);
 
-   USB.onEvent(usb_event_callback);
-   USBSerial.onEvent(usb_event_callback);
+   USB.onEvent(usbc_dev.usb_event_callback);
+   USBSerial.onEvent(usbc_dev.usb_event_callback);
 
    USBSerial.begin();
    USB.begin();
