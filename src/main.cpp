@@ -242,6 +242,44 @@ void loop()
    uint8_t current_target[] = {0x84, 0xF7, 0x03, 0xDC, 0xF6, 0x60};
    // USBSerial.printf("START\n");
    esp_now_test_latency(10000, 1, current_target);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 10, current_target);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 50, current_target);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 120, current_target);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 250, current_target);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 1, NULL);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 10, NULL);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 50, NULL);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 120, NULL);
+
+   delay(5000);
+
+   esp_now_test_latency(10000, 250, NULL);
+
+   delay(5000);
    // USBSerial.printf("END\n");
 
    // USBSerial.printf("\n");

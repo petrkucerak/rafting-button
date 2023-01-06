@@ -37,8 +37,12 @@ C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/logs/log-<A1
 ```
 
 *Skripty nejsou univerzální, záleží na místě instalace PlatformIO.*
+### A scénaře
 
-### Scénář A1
+Scénáře typu A se snažím zmapovat vliv velikosti zprávy na zpoždění odeslání.
+
+
+#### Scénář A1
 
 | PARAMETR       | HODNOTA                                         |
 | -------------- | ----------------------------------------------- |
@@ -49,3 +53,46 @@ C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/logs/log-<A1
 | **počet**      | 10 000 zpráv                                    |
 | **typ**        | unicast                                         |
 
+#### Scénář A2
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 10 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A3
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 50 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A4
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 120 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A5
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 250 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
