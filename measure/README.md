@@ -1,0 +1,98 @@
+# Meření
+
+Tato složka obsahuje výsledky měření vlastností protokolu ESP NOW na zařízeních ESP32-S2.
+
+## Infrastruktura
+
+Měření je prováděno mezi 2 zařízeními, konkrétně `ESP32-S2-LCD` a `ESP32-S2-pico`.
+
+## Software
+
+Na obou dvou zařízení běží program, který se snaží simulovat v budoucnu žádaný provoz.
+
+Konkrétně:
+1. odeslat data pomocí *broadcastu/unicastu* `(device 1)`
+2. počkat na data `(device 2)`
+3. uložit data pomoci *handleru* `(device 2)`
+4. odeslat odpověď `(device 2)`
+5. počkat na odpověď `(device 1)`
+6. změřit dobu celého procesu `(device 1)`
+
+*Přesná implementace viz: [3.0.2](https://github.com/petrkucerak/rafting-button/tree/3.0.2).*
+
+## Scénáře
+
+Měření byly sledovány následující paramtery:
+- prostředí, v němž bylo měření prováděno
+- překážka mezi zařízeními
+- vzdálenost mezi zařízeními
+- velikost zprávy *(payload)* - maximální veliksot zprávy je 255 bajtů
+- počet odeslaných zpráv
+- typ odesílání: ***broadcast*** / ***unicast***
+
+## Skripty
+
+```pw
+C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/logs/log-<A1>.txt
+```
+
+*Skripty nejsou univerzální, záleží na místě instalace PlatformIO.*
+### A scénaře
+
+Scénáře typu A se snažím zmapovat vliv velikosti zprávy na zpoždění odeslání.
+
+
+#### Scénář A1
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 1 bajt                                          |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A2
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 10 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A3
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 50 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A4
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 120 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |
+
+#### Scénář A5
+
+| PARAMETR       | HODNOTA                                         |
+| -------------- | ----------------------------------------------- |
+| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
+| **překážka**   | volný vzduch                                    |
+| **vzdálenost** | 5 cm                                            |
+| **velikost**   | 250 bajtů                                        |
+| **počet**      | 10 000 zpráv                                    |
+| **typ**        | unicast                                         |

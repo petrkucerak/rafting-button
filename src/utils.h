@@ -35,6 +35,18 @@ void progress_bar_on_display(uint8_t percent);
 void remove_progress_bar_from_display();
 
 /**
+ * @brief The funcion displays text "Saving data"
+ * 
+ */
+void saving_data_on_display();
+
+/**
+ * @brief The funcion removes text "Saving data"
+ * 
+ */
+void remove_saving_data_from_display();
+
+/**
  * @brief The function does a red led light blink on ESP-S2-PICO without LCD
  * built-in display.
  *
