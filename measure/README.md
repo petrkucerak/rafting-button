@@ -29,6 +29,7 @@ Měření byly sledovány následující paramtery:
 - velikost zprávy *(payload)* - maximální veliksot zprávy je 255 bajtů
 - počet odeslaných zpráv
 - typ odesílání: ***broadcast*** / ***unicast***
+- počet chybných zpráv (až u pozdějších měření)
 
 ## Skripty
 
@@ -39,60 +40,66 @@ C:\.platformio\penv\Scripts\platformio.exe device monitor > measure/logs/log-<A1
 *Skripty nejsou univerzální, záleží na místě instalace PlatformIO.*
 ### A scénaře
 
-Scénáře typu A se snažím zmapovat vliv velikosti zprávy na zpoždění odeslání.
+Scénáře typu A se snaží zmapovat vliv velikosti zprávy na zpoždění odeslání a typu odesílání (*broadcastu/uniscastu*).
 
+#### Broadcast
 
-#### Scénář A1
+| SCÉNÁŘ         | A11                 | A12                 | A13                 | A14                 | A15                 |
+| -------------- | ------------------- | ------------------- | ------------------- | ------------------- | ------------------- |
+| **prostředí**  | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) |
+| **překážka**   | volný vzduch        | volný vzduch        | volný vzduch        | volný vzduch        | volný vzduch        |
+| **vzdálenost** | 50 cm               | 50 cm               | 50 cm               | 50 cm               | 50 cm               |
+| **velikost**   | **1 bajt**          | **10 bajt**         | **50 bajt**         | **120 bajt**        | **250 bajt**        |
+| **počet**      | **10 000 zpráv**    | **10 000 zpráv**    | **10 000 zpráv**    | **1 000 zpráv**     | **5 000 zpráv**     |
+| **typ**        | **broadcast**       | **broadcast**       | **broadcast**       | **broadcast**       | **broadcast**       |
 
-| PARAMETR       | HODNOTA                                         |
-| -------------- | ----------------------------------------------- |
-| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
-| **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 5 cm                                            |
-| **velikost**   | 1 bajt                                          |
-| **počet**      | 10 000 zpráv                                    |
-| **typ**        | unicast                                         |
+#### Unicast
 
-#### Scénář A2
+| SCÉNÁŘ         | A21                 | A22                 | A23                 | A24                 | A25                 |
+| -------------- | ------------------- | ------------------- | ------------------- | ------------------- | ------------------- |
+| **prostředí**  | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) | byt (s WiFi sítěmi) |
+| **překážka**   | volný vzduch        | volný vzduch        | volný vzduch        | volný vzduch        | volný vzduch        |
+| **vzdálenost** | 50 cm               | 50 cm               | 50 cm               | 50 cm               | 50 cm               |
+| **velikost**   | **1 bajt**          | **10 bajt**         | **50 bajt**         | **120 bajt**        | **250 bajt**        |
+| **počet**      | 10 000 zpráv        | 10 000 zpráv        | 10 000 zpráv        | 10 000 zpráv        | 10 000 zpráv        |
+| **typ**        | **unicast**         | **unicast**         | **unicast**         | **unicast**         | **unicast**         |
 
-| PARAMETR       | HODNOTA                                         |
-| -------------- | ----------------------------------------------- |
-| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
-| **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 5 cm                                            |
-| **velikost**   | 10 bajtů                                        |
-| **počet**      | 10 000 zpráv                                    |
-| **typ**        | unicast                                         |
+### B scénaře
+Scénáře typu **B** se snaží analyzovat dobou odeslání v závislosti na překážce v cestě 2 modulů.
 
-#### Scénář A3
-
-| PARAMETR       | HODNOTA                                         |
-| -------------- | ----------------------------------------------- |
-| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
-| **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 5 cm                                            |
-| **velikost**   | 50 bajtů                                        |
-| **počet**      | 10 000 zpráv                                    |
-| **typ**        | unicast                                         |
-
-#### Scénář A4
+#### Scénář B1
 
 | PARAMETR       | HODNOTA                                         |
 | -------------- | ----------------------------------------------- |
 | **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
-| **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 5 cm                                            |
-| **velikost**   | 120 bajtů                                        |
+| **překážka**   | zeď se skříní                                   |
+| **vzdálenost** | cca 6 m                                         |
+| **velikost**   | 120 bajtů                                       |
 | **počet**      | 10 000 zpráv                                    |
 | **typ**        | unicast                                         |
 
-#### Scénář A5
+### C scénaře
+Scénáře typu **C** se snaží analyzovat dobou odeslání v závislosti na vzdálenosti 2 modulů v čistém prostředí v obou typech odesílání (*unicast/brodcast*).
 
-| PARAMETR       | HODNOTA                                         |
-| -------------- | ----------------------------------------------- |
-| **prostředí**  | byt, v kterém se je rušení několika WiFi sítěmi |
-| **překážka**   | volný vzduch                                    |
-| **vzdálenost** | 5 cm                                            |
-| **velikost**   | 250 bajtů                                        |
-| **počet**      | 10 000 zpráv                                    |
-| **typ**        | unicast                                         |
+| SCÉNÁŘ                   | C1                | C2                | C3                | C4                | C5                | C6                |
+| ------------------------ | ----------------- | ----------------- | ----------------- | ----------------- | ----------------- | ----------------- |
+| **prostředí**            | les (bez 2.4 GHz) | les (bez 2.4 GHz) | les (bez 2.4 GHz) | les (bez 2.4 GHz) | les (bez 2.4 GHz) | les (bez 2.4 GHz) |
+| **překážka**             | vzduch            | vzduch            | vzduch            | vzduch            | vzduch            | vzduch            |
+| **vzdálenost**           | **0,5 m**         | **25 m**          | **50 m**          | **100 m**         | **100 m**         | **50 m**          |
+| **velikost**             | 125 bajtů         | 125 bajtů         | 125 bajtů         | 125 bajtů         | 125 bajtů         | 125 bajtů         |
+| **počet**                | 5 000 zpráv       | 5 000 zpráv       | 5 000 zpráv       | 5 000 zpráv       | 5 000 zpráv       | 5 000 zpráv       |
+| **počet chybných zpráv** | 0 zpráv           | 3 zpráv           | 15 zpráv          | 35 zpráv          | 15 zpráv          | 6 zpráv           |
+| **typ**                  | **unicast**       | **unicast**       | **unicast**       | **unicast**       | **brodcast**      | **brodcast**      |
+
+### D scénář
+V rámci scénáře typu D jsem se snažil otestovat technologii při maximální vzdálenosti a poměřit úspěch úspěšně odeslaných a neodeslaných zpráv.
+
+| SCÉNÁŘ                   | D1               |
+| ------------------------ | ---------------- |
+| **prostředí**            | pole (s 2.4 GHz) |
+| **překážka**             | vzduch           |
+| **vzdálenost**           | **577 m**        |
+| **velikost**             | 125 bajtů        |
+| **počet**                | 1 000 zpráv      |
+| **počet chybných zpráv** | 50 zpráv         |
+| **typ**                  | **unicast**      |
