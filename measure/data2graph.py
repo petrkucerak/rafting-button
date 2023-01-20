@@ -64,4 +64,3 @@ for folder in dir_list:
     plt.title("Round-trip time with ESP NOW in different scenarios")
 
     plt.show()
-    exit()
