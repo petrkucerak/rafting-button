@@ -28,28 +28,28 @@ for folder in dir_list:
         y = list(map(int, y.split(",")))
 
         # simple filter
-        for i in range(0, len(x) - 7):
-            index = x[i]
-            if (x[i + 1] == index + 1):
-                y[i] += (y[i + 1])/2
+        # for i in range(0, len(x) - 7):
+        #     index = x[i]
+        #     if (x[i + 1] == index + 1):
+        #         y[i] += (y[i + 1])/2
 
-            if (x[i + 2] == index + 2):
-                y[i] += (y[i + 2])/4
+        #     if (x[i + 2] == index + 2):
+        #         y[i] += (y[i + 2])/4
 
-            if (x[i + 3] == index + 3):
-                y[i] += (y[i + 3])/6
+        #     if (x[i + 3] == index + 3):
+        #         y[i] += (y[i + 3])/6
 
-            if (x[i + 4] == index + 4):
-                y[i] += (y[i + 4])/8
+        #     if (x[i + 4] == index + 4):
+        #         y[i] += (y[i + 4])/8
 
-            if (x[i + 5] == index + 5):
-                y[i] += (y[i + 5])/8
+        #     if (x[i + 5] == index + 5):
+        #         y[i] += (y[i + 5])/8
 
-            if (x[i + 6] == index + 6):
-                y[i] += (y[i + 6])/8
+        #     if (x[i + 6] == index + 6):
+        #         y[i] += (y[i + 6])/8
 
-            if (x[i + 7] == index + 7):
-                y[i] += (y[i + 7])/8
+        #     if (x[i + 7] == index + 7):
+        #         y[i] += (y[i + 7])/8
         # bins = 10000
 
         # plt.hist(y, bins=bins, density=True, histtype='step', cumulative=-1, label = label)
