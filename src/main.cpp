@@ -8,6 +8,7 @@
 #include <esp_now.h>
 
 #define LATENCY_ARR_SIZE 10000
+#define ERROR_TIME 500
 
 // variables
 uint16_t color;
@@ -117,6 +118,9 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
       return;
    }
 
+   // The bit transmition error
+   int64_t ber = 0;
+
    int64_t start, end;
    esp_err_t status;
 
@@ -140,6 +144,11 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
 
       progress_bar_on_display((origin - message_count) * 100 / origin);
 
+      uint64_t error_time = ERROR_TIME;
+
+      // set esp handler as an empty to prevent error by ignored message
+      esp_now_handler.isEmpty = TRUE;
+
       // save start time
       start = esp_timer_get_time();
 
@@ -154,8 +163,9 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
       }
 
       // wait for echo message
-      while (esp_now_handler.isEmpty) {
+      while (esp_now_handler.isEmpty && error_time != 0) {
          vTaskDelay(1);
+         --error_time;
       }
 
       // save end time
@@ -164,14 +174,21 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
       // set esp handler as an empty
       esp_now_handler.isEmpty = TRUE;
 
-      // save delay
-      if (end - start < LATENCY_ARR_SIZE)
-         ++latency[end - start];
-
+      if (!error_time) {
+         // save error
+         ++ber;
+      } else {
+         // save delay
+         if (end - start < LATENCY_ARR_SIZE)
+            ++latency[end - start];
+      }
       --message_count;
    }
 
    remove_progress_bar_from_display();
+   delay(1000);
+   saving_data_on_display();
+   delay(1000);
 
    USBSerial.printf("\ntime=[");
    for (int i = 0; i < LATENCY_ARR_SIZE; ++i) {
@@ -184,10 +201,14 @@ void esp_now_test_latency(uint16_t message_count, uint8_t message_size,
          USBSerial.printf("%lld,", latency[i]);
    }
    USBSerial.printf("]\n");
+   USBSerial.printf("Ber: %lld\n", ber);
 
    free(latency);
    latency = NULL;
    USBSerial.printf("\n");
+
+   remove_saving_data_from_display();
+   delay(1000);
 }
 
 void setup()
@@ -230,12 +251,13 @@ void loop()
 
    // lcd_dev.lcd_set_color(COLOR_WHITE);
    // esp_now_echo();
-   delay(5000);
+   delay(10000);
    // broadcast("HELLO!");
 
-   USBSerial.printf("START\n");
-   esp_now_test_latency(10000, 25, NULL);
-   USBSerial.printf("END\n");
+   // uint8_t current_target[] = {0x84, 0xF7, 0x03, 0xDC, 0xF6, 0x60};
+   uint8_t current_target[] = {0x84, 0xF7, 0x03, 0xDC, 0xF5, 0xC0};
+   // // USBSerial.printf("START\n");
+   esp_now_test_latency(5000, 125, current_target);
 
    // USBSerial.printf("\n");
    // int64_t time = esp_timer_get_time();
