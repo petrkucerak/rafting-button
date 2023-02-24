@@ -1,6 +1,8 @@
 # Changelog
 
-## Etapa 1. - studium problematiky
+## Samostatný projekt
+
+### Etapa 1. - studium problematiky
 
 - studium problematiky WiFi a IoT
   - typicke problemy: spotreba energie, vyuziti jiz postavene site, lze se spolehnout na rychlost (napr u MQTT)
@@ -13,15 +15,15 @@
   - jake specialni moznosti nabizi IEEE 802.11 pro IoT?
   - 
 
-## Etapa 2. - volba modulu
+### Etapa 2. - volba modulu
 
 - viz: [./docs/volba-modulu.md](./docs/volba-modulu.md)
 - vitezem je ESP32-S2
 
-## Etapa 3. - otestovani infrastruktury
-### Zprovozneni modulu
+### Etapa 3. - otestovani infrastruktury
+#### Zprovozneni modulu
 
-#### 3.0.1 Bootovani a spusteni mikrontroleru
+##### 3.0.1 Bootovani a spusteni mikrontroleru
 
 - treba pouzit nasledujici konfiguraci pro PlatformIO
 ```ini
@@ -37,3 +39,14 @@ board_build.f_cpu = 240000000L ; change MCU frequency
 board_build.flash_mode = dio ; this option is important for ESP32-S2
 ```
 - a nakonfigurovat `usbEventCallback` (*viz [3.0.1](https://github.com/petrkucerak/rafting-button/releases/tag/3.0.1)*)
+
+
+### Etapa 4. - závěrečný report
+
+Závěrečný report k samostatnému proejtku je možný ke stažení v Issues [#9](https://github.com/petrkucerak/rafting-button/issues/9) na odkaze: https://github.com/petrkucerak/rafting-button/files/10468332/kucerp28_samostatny-projekt.zip
+
+---
+
+## Bakalářská práce
+
+### Etapa 5. - 1. Definujte funkcní a dalsí pozadavky na systém
