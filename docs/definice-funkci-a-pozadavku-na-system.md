@@ -19,7 +19,7 @@ Cílem je vytvořit hlasovací zařízení pro aplikace jako je například hosp
 - zvládnout komunikovat s 1 až 10 zařízeními
 - řešit problematiku konseznu v distribuovaném systému pomocí vhodného algoritmu
 
-### Hardwarové komponenty
+## Hardwarové požadavky
 
 Zařízení by mělo obsahovat:
 
@@ -30,3 +30,17 @@ Zařízení by mělo obsahovat:
   - přejití do/z prezentačního módu pro zobrazení výsledků (dlouhý stisk),
 - **LED diodu** indikující stav daného zařízení,
 - **ochrané pouzdro** pro uchranu před pádem či jiným poškozením.
+
+### MCU
+
+- Espressif architektura - využití protokolu ESP-NOW
+
+### baterie
+
+### hlasovací tlačítko
+
+- odolné mechanickému
+
+### LED dioda
+
+### ochranné pouzdro
