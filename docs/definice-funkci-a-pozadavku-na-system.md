@@ -1,6 +1,6 @@
 # Definice funkcí a požadavků na systém
 
-Tento dokument popisuje funkce a dílčí požadavky na systém z pohledu: uživatele, softwaru, hardwaru a snaží se popsat základní koncepty k splnění jednotlivých požadavků.
+*Tento dokument popisuje funkce a dílčí požadavky na systém z pohledu: uživatele, softwaru, hardwaru a snaží se popsat základní koncepty k splnění jednotlivých požadavků.*
 
 ## Úvod
 
@@ -34,13 +34,35 @@ Zařízení by mělo obsahovat:
 ### MCU
 
 - Espressif architektura - využití protokolu ESP-NOW
+- požadavky na PINs
+  - *pro jednoduchý vývoj USB*
+  - napájení přes baterii
+  - digital IN - tlačítko
+  - out (ideálně PWM) pro ovládání EGB LED sloužící pro signalizaci
 
 ### baterie
 
+- fungování při rozmezí teplot teplotě 0-25˚C -> pokojová teplota i venekovní prostředí
+- výdrž min. 3h plného fungování
+
 ### hlasovací tlačítko
 
-- odolné mechanickému
+- odolné mechanickému poškození
+- *otestování - vyrobit prototyp (malý x velý - dát lidem do ruky)*
 
-### LED dioda
+### RGB LED
+
+- schopnost měnit barvy
+- ovládání dle možností MCU (I2C, SPI, PWM)
+- minimální schopnost 2 barev dle módu (lépe ale více i na ukázku fáze konfgurace a připojení)
+- examples: [KY-016 RGB LED modul pro Arduino AVR, PIC, Raspberry - 3 barvy](https://dratek.cz/arduino/1403-ky-016-rgb-led-modul-3-barvy-pro-arduino-avr-pic-raspberry.html) - spíše nevhodné *(požadováno 5V)*
 
 ### ochranné pouzdro
+
+- umožňuje stabilně položit na stůl či pařez stromu
+- odolný vůči pádu
+- odolný vůči dešti či střiku z vodní pistole
+- snadno vyměnitelné bateri
+
+## Softwarové požadavky
+
