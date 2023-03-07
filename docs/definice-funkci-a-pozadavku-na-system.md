@@ -66,3 +66,39 @@ Zařízení by mělo obsahovat:
 
 ## Softwarové požadavky
 
+### Náčrt fungování
+
+1. incializace zařízení
+    - zařízení po zapnutí přejde do módu ***SENDER***
+    - rozsvítít RGB LED, aby informovalo o svém stavu
+    - pomocí *algoritmu pro spojení* se připojí se všemi ostatními zařízeními v okolí do distribuovaného systému
+2. fungování v módu ***SENDER***
+    - na zařízení běží *aloritmus pro řešení konsezu*
+    - zařízení čeká na stisknutí tlačítka
+      - při krátkém stisku počítá stisk jako hlasování
+      - při dlouhém stisku přechází do módu ***PRESENTER***
+      - trojklikem se resetuje hlasování
+    - pomocí RGB LED ukazuje svůj stav
+    - přecházení do módu spánku?
+3. fungování v módu ***PRESNTER***
+    - zařízení funguje jako ***SENDER***, navíc přidává tyto funkce
+    - aktivuje lokální wifi síť, která při HTTP requestu vrátí stránku s průběžně aktualizovanými výsledky hlasování
+    - mód se spouštít a deaktivuje pomocí dlouhého stisknutí tlačítka
+
+### Multi mode
+
+*Jak již bylo specifikování v rychlém popisu softwarových požadavků, rád bych, aby mohlo zařízení fungovat zároveň v 2 módech:*
+
+1. ***SENDER*** *- stanartní fungování a běh technologie ESP-NOW,*
+2. ***PRESENTER*** *- spuštění webového serveru, který bude sloužit k zobrazvání výsledků.*
+
+### Algorimy
+
+#### Algoritmus pro vytvoření infrastruktury
+
+*Tento algoritmus musí být schopen zajistit vhodné propojení veškeré dostupné infrastruktury a připravit struktury pro určitou abstrakci a efektivní fungování **alogritmu pro konsezus***.
+
+#### Algoritmus pro konsenzus
+
+*Alogritmus, který si klade za cíl rozhodovat o tom, kdo v logickém čase stikl tlačítko první.*
+
