@@ -50,3 +50,52 @@ Závěrečný report k samostatnému proejtku je možný ke stažení v Issues [
 ## Bakalářská práce
 
 ### Etapa 5. - 1. Definujte funkcní a dalsí pozadavky na systém
+
+#### jaký hardware
+
+#### multi modes
+
+- ESP může fungovat 2 módech: AP (Access Point), STA (Station Mode)
+- [Článek, jak aktivovat ESP-NOW a Wifi zároveň](https://www.electrosoftcloud.com/en/esp32-wifi-and-esp-now-simultaneously/)
+  - v módu STA pravděpodobně nefungovalo, protože při neaktivitě modul přecházel do spánku
+- [Diskuze na Arudion Foru](https://forum.arduino.cc/t/use-esp-now-and-wifi-simultaneously-on-esp32/1034555/16)
+- Jednoduse ano: tento mod by mel fungovat, otazka vypocetni sily MC -> třeba provést testy
+
+#### protokol
+
+##### Algoritmus pro vytvoření infrastruktury
+
+- bude třeba nějaký implementovat nebo jednoduše spojím všechny zařízení mezi sebou? v specifikaci limit 10 zařízení, bude stačit?
+- pokud ne, bylo by třeba hledat alogritmus pro vytvoření clusterů
+
+##### Algoritmus pro konsenzus
+
+- Z předmětu PDV známo několik algoritmů a způsobů, které by šlo aplikovat
+- Idea ukládat pořadí jako pole, které bude replikované na všechny *nodes*
+
+| řešení                              | zjednodušený model     | garance             | algritmy                    |
+| ----------------------------------- | ---------------------- | ------------------- | --------------------------- |
+| zavedení logického času             | asynchronost           | bezpečnost a živost | Lamportovy vektorové hodiny |
+| globální spatshot                   | asynchronost           | bezpečnost a živost | Chandy-Lamport              |
+| propracovaný alogritmus na konsezus | asynchronost a selhání | bezpečnost          | RAFT                        |
+
+- PTP? -> spíše ne, nevidím výhodu v ladění přesné časové značky, stačí logický čas -> synchronizace na zaklade logickych casovych znacek
+
+###### Lamportovy vektorové hodiny
+
+- každé zařízení má své logické hodiny
+- při události inkemetuje lokální vektorové hodiny a každá odeslaná zpráva jedny své hodiny má, při přijetí zvyšuje hodnotu na vyšší
+- vektorové, aby determinovali souběžnost
+- mohu pomocí tohto alogoritmu vůbec garantovat?
+
+###### Chandy Lamport - globální snapshot
+
+- není řešení problému, spíše se možné inspirovat při navržení vlastního alogritmu
+
+###### RAFT
+
+- možná až moc komplikovaný
+- na druhou stranu zajišťuje i detekci chyby (toto ale možná lepší řešit na úrovni algorimu pro propojení)
+
+### Otázky k diskuzi
+- pro ovládání: display nebo RGB LED?
