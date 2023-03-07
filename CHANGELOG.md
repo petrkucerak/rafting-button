@@ -111,3 +111,6 @@ Závěrečný report k samostatnému proejtku je možný ke stažení v Issues [
 
 ### Otázky k diskuzi
 - pro ovládání: display nebo RGB LED?
+- display i na zobrazování výsledků
+- joystik - pro masivnejsi ovladani
+- baterie vs akumuator (nabijeni z USB)
