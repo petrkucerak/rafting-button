@@ -96,6 +96,7 @@ Závěrečný report k samostatnému proejtku je možný ke stažení v Issues [
 
 - možná až moc komplikovaný
 - na druhou stranu zajišťuje i detekci chyby (toto ale možná lepší řešit na úrovni algorimu pro propojení)
+- absence živosti - to by mohl byt problem
 
 ### Otázky k diskuzi
 - pro ovládání: display nebo RGB LED?
