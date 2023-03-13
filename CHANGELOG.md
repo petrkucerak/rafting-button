@@ -53,16 +53,7 @@ Závěrečný report k samostatnému proejtku je možný ke stažení v Issues [
 
 #### jaký hardware
 
-- z rodiny ESP32 nebo ESP8266
-- preferencie ESP32 - výkonejší
-- výherce klasická ESP32S - nove naskladněná oproti času před Vánocemi
-- dostupná na Eshops:
-  - https://rpishop.cz/esp32-a-esp8266/1500-esp32-vyvojova-deska.html
-  - https://www.briv.cz/p/5349/esp-wroom-32-esp32-esp-32s-2-4ghz-vyvojarska-deska-s-wifi-bt
-  - https://e-shop.prokyber.cz/esp32/esp32-devkitv1/ (200)
-- porovnani verzi
-  - https://docs.espressif.com/projects/esp-idf/en/v4.3.1/esp32/hw-reference/chip-series-comparison.html
-  - https://gist.githubusercontent.com/sekcompsci/2bf39e715d5fe47579fa184fa819f421/raw/df6314887307e656470fbcf072ff4c516dd4afff/Comparison%2520Espressif%2520ESP%2520MCUs.md
+[Volba modulu 2.0](docs/volba-modulu.md)
 
 #### multi modes
 
