@@ -7,9 +7,11 @@
 \def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
 
 \label[SpecifikacePozadavku]
-\chap Specifikace požadavků
+\chap Specifikace požadavků na síťovou infrastrukturu
 
-Třetí kapitola specifikuje a zdůvodňuje jednotlivé parametry, které jsou požadovány při budování síťové infrastruktury.
+Následující tři kapitoly se věnují testování síťové infrastruktury, na které je následně implementován algoritmus.
+
+Třetí kapitola je konkrétně zaměřená na specifikaci parametrů, které jsou požadovány od síťové infrastruktury.
 
 \sec Uživatelské požadavky
 
@@ -18,11 +20,8 @@ Zařízení by mělo:
 \begitems
 * být jednoduše ovladatelné,
 * být odolné vůči úhozů a pádu na zem,
-* řešit, kdo první stiskl tlačítko,
-* mít dobře přístupné spouštěcí tlačítko,
-* být identické s ostatními,
 * být možné napájet pomocí baterií,
-* být možné přepnout do módu {\em PREZENTÉR}, v kterém bude ukazovat výsledky,
+* být možné přepnout do módu {\em PRESENTER}, v kterém bude ukazovat výsledky,
 * fungovat v hospodě ale i v přírodě.
 \enditems
 
@@ -32,7 +31,7 @@ Software by měl:
 \begitems
 * fungovat jako distribuovaná síť, která bude řešit volbu konsenzu,
 * umět vytvořit síť,
-* umět přenášet informace do velikosti 200 bajtů s nízkou latencí,
+* umět přenášet informace o malé velikosti\fnote{V řádech desítek Bajtů.} s nízkou latencí,
 * být zdokumentovaný,
 * fungovat bez chyb,
 * být testován.
