@@ -1,0 +1,38 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\chap Úvod
+
+V první kapitole bych chtěl vysvětlit motivace, které mne vedli k volbě tohoto téma. Rád bych popsal téma bakalářské práce, k níž tato práce směřuje. V poslední části úvodní kapitoly popíšu plány, jak bych rád v práci postupoval a jakých výsledků dosáhl.
+
+\sec Motivace
+
+Už od útlých dětských let jezdím na letní tábory a přes rok organizuji různé mládežnické akce. Na jedné z akcí, Hudebním týdnu, vždy hráváme hru, v které jsou různé týmy, jenž mezi sebou soutěží. Mají za úkol uhádnout nějakou otázku nebo např. poznat film dle hudby. Nikdy jsme nevymysleli efektivní způsob, jak poznat, kdo se o slovo přihlásil jako první. Vždy to skončí na zvonečku. V situaci, kdy se současně o slovo přihlásí více týmů, nejsme schopni určit pořadí. 
+
+\sec Popis cíle bakalářské práce
+
+Rád bych vytvořil hlasovací zařízení (tlačítko), které by fungovalo jako autonomní systém, který by společně s dalšími tlačítky tvořil distribuovanou síť. Síť by následně řešila problematiku konsenzu. Respektive pomocí vhodně navrženého a implementovaného algoritmu by bylo možné s určitostí tvrdit, jaké z tlačítek bylo stištěno první. 
+
+Představa uživatelského zážitku je taková, že uživatel zapne hlasovací zařízení, zařízení se spojí s dalšími zařízeními v distribuované síti, uživatel má na tlačítku možnost aktivovat lokální server pro zobrazení pořadí stisknutí. 
+
+\sec Samostatný projekt
+
+Před navrhnutím samotného algoritmu pro řešení konsenzu je ale třeba specifikovat klíčové parametry, které bude muset síť zvládat. Proto jsem se v tomto samostatném projektu rozhodl vybudovat síťovou infrastrukturu pro následnou aplikaci při samotné bakalářské práci. 
+
+
+\sec Stanovení cílů a plánů
+
+Jelikož se jedná o komplexní problém, který čítá mnoho oblastí problematik, rozhodli jsme se, po diskuzi s vedoucím práce, práci rozdělit na několik fází.
+
+
+\begitems
+* Proveďte rešerši využití Wifi technologie pro IoT aplikace.
+* Definujte kritické vlastností Wifi sítě (spolehlivost, odezva, propustnost sítě, …).
+* Zvolte vhodný Wifi modul pro implementaci.
+* Experimentálně ověřte dosažení výše definovaných kritických parametrů.
+\enditems

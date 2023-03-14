@@ -1,0 +1,121 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\chap Realizace
+
+Čtvrtá kapitola popisuje průběh samotné praktické práce na samostatném projektu. Mapuje celý proces od volby modulu přes základní konfiguraci vývojového prostředí až po užité knihovny a tvorbu softwaru.
+
+Veškerý proces vývoje je zaznamenán v repozitáři na GitHubu\fnote{\url{https://github.com/petrkucerak/rafting-button}}.
+
+\sec Architektura projektu
+
+Přesnou podobu projektu jsem vytváře agilně při vývoji. Vycházel jsem ovšem z požadavků sepsaných v kapitole \ref[SpecifikacePozadavku].
+
+\secc Komunikační protokol
+
+Při studiu možností IEEE 802.11 pro IoT zařízení, jsem se setkal pouze s hierarchickou síťovou strukturou. Rozhodl jsme se pro distribuovanou síť, kde si budou všechna zapojená zařízení na počátku rovna.
+
+Při tvorbě rešerše jsem objevil nemalé množství protokolů, s nimiž by mohla zařízení mezi sebou komunikovat. Nejvhodnější pro mou aplikaci byly MQTT protokol či klasický TCP/IP. Po diskuzi s vedoucím práce jsem se rozhodl pro experimentálnější způsob. Nepoužiji žádný ze zmiňovaných protokolů, nýbrž se pokusím implementovat vlastní protokol, který by dle definice IEEE 802.11,\fnote{konkretně 2 úrovně síťového modelu OSI (linkové)} posílal MAC frames. Celá síť by byla adresovaná na úrovní MAC adres.\fnote{Nepovedlo se mi totiž žádný takový existující protokol vyhledat. Ani po diskuzi s odborníky na telekomunikační technologie z řad učitelů, jsem se nedozvěděl o jakémkoliv již funkčním způsobu posílání dat pouze na 2 úrovni síťového OSI modelu.}
+
+Při pozdějším řešení implementace pro konkrétní typ modulu jsme objevil řešení, protokol EPS-NOW, který splňuje všechny mé požadavky.
+
+\sec Volba vhodného modulu
+
+Prvním reálným krokem v práci bylo vybrat konkrétní typ modulu. Z požadavků specifikovaných v kapitole \ref[SpecifikacePozadavku] jsem sestavil kritéria, které by měl modul splňovat:
+
+\begitems
+* podpora standardů IEEE 802.11 (b/g/n)
+* mít možnost pracovat s MAC frames
+* pin pro zapojení tlačítek
+* možnost napájení z baterie
+\enditems
+
+Po rychlém průzkumu trhu jsem vybral prvně 5 následně 3 zařízení, které splňovali moje požadavky.
+
+\begitems
+* ESP32
+* ESP8266
+* PI Pico
+* {\em CC3200}
+* {\em ATSAMW25}
+\enditems
+
+Velice rychle jsem ale zavrhnu poslední dva jmenované a vybíral mezi třemi výše zmiňovanými. Nakonec jsem se rozhodl pro architekturu ESP32. To především z důvodů dostupnosti zařízení na trhu.
+
+Objednal jsem si moduly z rodiny ESP32 od firmy Espressif,\fnote{\url{https://www.espressif.com/}} konkrétně 2x {\em ESP32-S2-pico} a 1x {\em ESP32-S2-LCD-0.96inch} s displejem pro účely debugování.
+
+Jedná se o Wifi vývojové desky s základními periferiemi jako je ADC převodník, I2C a SPI komunikace či UART. Deska integruje {\em low-power Wifi} {\em System on Chip} (SoC). Oproti od ESP32, které má 2 jádra procesoru, ESP32-S2 má pouze jeden Xtensa single-core 32-bit procesor, označován jako ESP32-S2FH4, který podporuje frekvenci hodin až do 240 MHz.
+
+Další specifikace je možné najít na stránkách dodavatele.\fnote{\url{https://www.waveshare.com/wiki/ESP32-S2-Pico}} Do přílohy \ref[SchemaModulu] přikládám relevantní schémata.
+
+
+\sec Vývojové prostředí a konfigurace
+
+MCU z rodiny ESP32 a EPS8266 lze programovat v podstatě 2 způsoby, respektive 2 frameworky. Já se rozhodl postavit základ na Arduino frameworku, který je pro počáteční konfiguraci méně náročný a používat knihovny z ESP-IDF frameworku.
+
+Jako vývojové prostředí jsem si vybral VS Code s PlatformIO. Dle mého se jedná o uživatelsky přívětivé prostředí. Navíc má vysokou podporu komunity a disponuje již spoustou připravených balíčků a konfigurací pro vývojové desky.
+
+Založil jsem repozititář, pro celý projekt. Nakolonoval si složku do PC a vytvořil nový PlatformIO projekt s konfigurací.\fnote{
+"[env:esp32dev]"; podmínka prostředí, lze využít v budoucnu
+
+"platform = espressif32"
+
+"board = esp32-s2-saola-1"; vývojový bord se sejným procesorem
+
+"framework = arduino"; volba framweorku
+
+"board_build.mcu = esp32s2"; volba typu procesoru
+
+"upload_protocol = esptool"; nástroj pro stahování softwaru do zařízení
+
+"board_build.f_cpu = 240000000L"; definování frekvence
+
+"board_build.flash_mode = dio"; rychlostní mód nahrávaní do paměti
+}
+
+\sec Konfigurace komunikace pomocí USB-C
+
+Pro otestování toho, zdali zařízení správně funguje, bylo třeba prvně nakonfigurovat komunikaci skrze USB zařízení. Při této implementaci jsem vycházel z ukázky kódu, které poskytuje dodavatel.\fnote{Adresa pro stažení demo kódů: \url{https://www.waveshare.com/wiki/ESP32-S2-Pico\#Examples_2}}
+
+Projekt s konfiguraci pouze USB-C lze najít v release verzi {\em 3.0.1}.\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/3.0.1}}
+
+\sec Konfigurace display a tvorba základních funkcí
+
+Při prozkoumávání možnostech modulů jsem chtěl zprovoznit LCD displej, který by mohl sloužit k debugování a zobrazování dat nezávisle na terminálu. Opět jsme vyšel z ukázkového kódu na stránkách dodavatele.\fnote{Adresa pro stažení demo kódů: \url{https://www.waveshare.com/wiki/ESP32-S2-Pico\#Examples_2}} Tentokráte bylo ale třeba implementovat více funkcí. Přidal jsme metody pro vykreslování barev, čtverečků a textu v pěti velikostech.
+
+Veškeré zdrojové kódy k ovládání displeje jsou ve složce "src/display".\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/main/src/display}}
+
+\sec Implementace ESP-NOW
+
+Během práce a seznamování s moduly od Espresifu jsem objevil protokol EPS-NOW, který implementuje odesílání informací na 2 úrovni.\fnote{síťového modelu ISO/OSI} Jedná se o univerzální protokol, který je možný upravit pro svoje konkrétní potřeby. Umí odesílat informace o maximální velikosti 250 bajtů (dáno vlastnostní framů). Má šifrovanou i nezabezpečenou verzi. Adresuje se na úrovni MAC adres.
+
+Protokol není nikterak robustní. Je poměrně jednoduchý. Tato skutečnost podmiňuje, že pro komplexnost je třeba implementovat více funkcí sám. Rozhodl jsem se, že, pro užívání tohoto protokolu ve svém projektu, zvolím následující pravidla:
+
+\begitems
+* před spuštěním protokolu, je třeba registrovat {\em callback} funkce,
+* informace z {\em callback} funkcí budou ukládány do pomocné struktury "ESP_NOW_HANDLER",
+* struktura bude kromě informací ukládat MAC adresu příjemce.
+\enditems
+
+Díky přidání takto jednoduché struktury jsem docílil toho, že jsem schopen efektivně měřit a zpracovávat data.
+
+Projekt v této fázi si je možné prohlédnout ve verzi {\em 3.0.2}\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/3.0.2}}.
+
+\sec Poškození čipů
+
+Během tvorby programu pro testování round-time trip, se začal jeden z modulu přehřívat. I přes to Modul fungoval dál. Pravděpodobně došlo k poškození části procesoru a proudová spotřeba stoupla o řád výš.
+
+Později při vylaďování uživatelského zážitku z měření s modulem, který má displejem, se začal přehřívat i čip druhý. Nejednalo se o stejnou chybu. Zařízení přestalo úplně odpovídat. Došlo k poškození, které jsme nebyli schopni s vedoucím práce, ani po dlouhé investigaci, přesně rozklíčovat či napravit.
+
+Tato skutečnost do jisté míry ovlivnila moji následující práci. Naštěstí jen tím, že u měření nešlo sledovat progress bar na displeji, který jsem implementoval a také tím, že jsme nemohl měřit komunikace mezi více zařízeními ve stejný čas.
+
+\sec Program pro testování round-time trip
+
+V závěrečné části jsem navrhnu a implementoval program pro měření round-time tripu. Fungování je detailněji popsáno v kapitole \ref[UvodKMereni].
+
+Kód pro měření včetně Python skriptu pro vizualizaci výsledků je dostupný ve~verzi~{\em 3.0.3}\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/3.0.3}}.

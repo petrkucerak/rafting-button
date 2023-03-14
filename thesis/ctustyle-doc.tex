@@ -1,0 +1,84 @@
+
+% !TEX root = ctustyle-doc.tex
+
+% The documentation of the usage of CTUstyle -- the template for
+% typessetting thesis by plain\TeX at CTU in Prague
+% ---------------------------------------------------------------------
+% Petr Olsak  Jan. 2013
+
+% You can copy this file to your own file and do some changes.
+% Then you can run:  optex your-file
+
+\input ctustyle3  % The template (in version 3, for OpTeX) is included here.
+
+\worktype [O/CZ] % Type: B = bachelor, M = master, D = Ph.D., O = other
+                 % / the language: CZ = Czech, SK = Slovak, EN = English
+
+\faculty    {F3}  % Type your faculty F1, F2, F3, etc. or MUVS
+            % use main language of your document here:
+\department {Katedra měření}
+\title      {Využití Wifi v IoT aplikacích\nl a testování specifických vlastností}
+\subtitle   {}
+            % \subtitle is optional
+\author     {Petr Kučera}
+\authorinfo {}
+\date       {Září 2022, leden 2023}
+\supervisor {doc. Ing. Jiří Novák, Ph.D.}  % One or more supervisors
+\studyinfo  {Otevřená informatika}  % Study programme etc.
+\workname   {Samostatný projekt} % Used only if \worktype [O/*] (Other)
+            % optional more information about the document:
+\workinfo   {\url{https://github.com/petrkucerak/rafting-button}}
+            % Title / Subtitle in minor language:
+\titleEN    {Utilization of Wifi in IoT applications and testing specific properties}
+\subtitleEN {}
+            % If minor language is other than English
+            % use \titleCZ, \subtitleCZ or \titleSK, \subtitleSK instead it.
+\pagetwo    {}  % The text printed on the page 2 at the bottom.
+
+\abstractEN {
+   The goal of the individual project is to familiarize oneself with the possibilities of Wifi technology for IoT applications. Then, to specify critical parameters for application in a subsequent bachelor thesis, to select the appropriate device and test the required properties.
+}
+\abstractCZ {
+   Cílem samostatného projektu je se seznámit s možnostmi Wifi technologie pro IoT aplikace. Následně vyspecifikovat kritické parametry pro aplikaci v navazující bakalářské práci, zvolit správné zařízení a otestovat požadované vlastnosti.
+}           % If your language is Slovak use \abstractSK instead \abstractCZ
+
+\keywordsEN {%
+   IoT; Wifi; embedded; microcontroller; individual project; wireless communication; distributed system.
+}
+\keywordsCZ {%
+   IoT; Wifi; embedded; mikrokontroler; samostatný projekt; bezdrátová komunikace; distribuovaný systém.
+}
+\thanks {           % Use main language here
+    Chtěl bych poděkovat svému vedoucímu práce doc. Ing. Jiřímu Novákovi, Ph.D. za trpělivost při hledání důvodů poškození modulů a pomoc se směřováním projektu. Svému bratrovi Jakubovi za pomoci při měření vlastností protokolu ESP-NOW v prostředí divoké přírody a parádní fotografie. Mým kamarádům, spolubydlícím a tátovi za dlouhé noční diskuze, které mne vždy v projektu nasměrovali dalším směrem.
+}
+\declaration {      % Use main language here
+   Prohlašuji, že jsem předloženou práci vypracoval
+   samostatně a že jsem uvedl veškeré použité informační zdroje v~souladu
+   s~Metodickým pokynem o~dodržování etických principů při přípravě
+   vysokoškolských závěrečných prací.
+
+   Ve Spojil dne 20. 1. 2023 % !!! Attention, you have to change this item.
+   \signature % makes dots
+}
+
+%%%%% <--   % The place for your own macros is here.
+
+%\draft     % Uncomment this if the version of your document is working only.
+%\linespacing=1.7  % uncomment this if you need more spaces between lines
+                   % Warning: this works only when \draft is activated!
+%\savetoner        % Turns off the lightBlue backround of tables and
+                   % verbatims, only for \draft version.
+%\blackwhite       % Use this if you need really Black+White thesis.
+%\onesideprinting  % Use this if you really don't use duplex printing. 
+
+\makefront  % Mandatory command. Makes title page, acknowledgment, contents etc.
+
+\input chaps/introduce
+\input chaps/reserse
+\input chaps/pozadavky
+\input chaps/realizace
+\input chaps/mereni
+\input chaps/zaver
+\input prilohy
+
+\bye
