@@ -1,23 +1,10 @@
 # Rafting button
 
-Cílem tohoto projektu je otestovat a vybudovat síťovou infrastrukturu pro téma mojí bakalářské práce - *Distribuovaná wifi sít řešící konsenzu stisknutí tlačítka*.
+Repozitář s veškerou prací na samostatném a bakalářském projektu, který si klade za cíl vytvořit hlasovací zařízení, které bude řešit problematiku konsenzu v distribuované síti.
 
-A následně realizovat samotnou bakalářskou práci.
+## Struktura
 
-## Etapy samostatného projektu
+- [samostatny-projekt](/samostatny-projekt/) - složka obsahující veškeré soubory týkající se samostatného projektu
+- [thesis](/thesis/) - složka s bakalářskou prací
+- [code](/code/) - složka s seftwarovými implementacemi
 
-1. studium problematiky wifi technologi (IEEE 802.11 - `2L`)
-2. volba vhodneho mikrokontroleru
-3. otestovani infrastruktury
-   - UDP protokol
-   - vlastni protokol na `2L`
-4. tvorba zaverecneho reportu
-
-## Úkoly bakalářské práce
-
-1. Definujte funkcní a dalsí pozadavky na systém
-2. Navrhnete mozná algoritmická resení, diskutujte jejich prednosti a nedostatky
-3. Zvolte optimální variantu a volbu zduvodnete
-4. Na základe predchozího kroku zvolte vhodnétechnické resení, systém navrhnete a realizujte
-5. Implementujte programové vybavení
-6. Otestujte funkce komponent i celého systému
