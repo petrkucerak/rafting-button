@@ -11,11 +11,11 @@
 %	mainlanguage = english,
 	titlelanguage = czech,
 	mainlanguage = czech,
-	otherlanguages = {slovak,english},
+	otherlanguages = {english},
 	title-czech = {Distribuovaný systém IoT zařízení řešící problém koncenzu},
 	title-english = {A distributed system of IoT devices solving the consensus problem},
-	subtitle-czech = {Podnazev ToDo},
-	subtitle-english = {Subtitle ToDo},
+	subtitle-czech = {TODO: Podnazev},
+	subtitle-english = {TODO: Subtitle},
 	doctype = B,
 	faculty = F3,
 	department-czech = {Katedra měření},
@@ -23,20 +23,20 @@
 	author = {Petr Kučera},
 	supervisor = {doc. Ing. Jiří Novák, Ph.D.},
 	supervisor-address = {T2:B3-458, Technická 1902/2, Praha},
-	supervisor-specialist = {John Doe},
-	fieldofstudy-english = {Mathematical Engineering},
-	subfieldofstudy-english = {Mathematical Modelling},
-	fieldofstudy-czech = {Matematcké inženýrství},
-	subfieldofstudy-czech = {Matematické modelování},
+%	supervisor-specialist = {John Doe},
+	fieldofstudy-english = {Open infromatics},
+	subfieldofstudy-english = {Internet of Things},
+	fieldofstudy-czech = {Otevřená infromatika},
+	subfieldofstudy-czech = {Internet věci},
 	keywords-czech = {slovo, klíč},
 	keywords-english = {word, key},
-	day = 10,
+	day = 10, % TODO: specification
 	month = 2,
-	year = 2017,
-	specification-file = {ctuthesis-zadani.pdf},
-%	front-specification = true,
-%	front-list-of-figures = false,
-%	front-list-of-tables = false,
+	year = 2023,
+	specification-file = {ctuthesis-zadani.pdf}, % TODO: specification
+%	front-specification = true, % TODO: Eneable
+	front-list-of-figures = true,
+	front-list-of-tables = true,
 %	monochrome = true,
 %	layout-short = true,
 }
@@ -80,32 +80,32 @@
 
 % Abstract in Czech
 \begin{abstract-czech}
-Tys honí až nevrlí komise omylem kontor město sbírku a koutě, pán nu lež, slzy, nemají zasvé šťasten. Tetě veselá. Vem lépe ty jí cíp vrhá. Novinám prachy kabát. Býti čaj via pakujte přeli, dyť do chuť kroutí kolínský bába odkrouhnul. Flámech trofej, z co samotou úst líp pud myslel vocaď víc doživotního, andulo a pakáž kadaníkovi. Čímž protiva v žába vězí duní.
-
-Jé ní ticho vzoru. Lepší zburcují učil nepořádku zboží ní mučedník obdivem! Bas nemožné postele bys cítíte ať února. Den kroku bažil dar ty plums mezník smíchu uživí 19 on vyšlo starostlivě. Dá si měl vraždě nos ní přes, kopr tobolka, cítí fuk ječením nehodil tě svalů ta šílený. Uf teď jaké 19 divným.
+	TODO: Toto je český abstrakt, který je třeba doplnit.
 \end{abstract-czech}
 
 % Abstract in English
 \begin{abstract-english}
- Let us suppose we are given a modulus $d$.  In \cite{cite:10}, the main result was the extension of Newton random variables.  We show that ${\Gamma_{\mathfrak{{r}},b}} ( {Z_{\beta,f}} ) \sim \bar{E}$.  The work in \cite{cite:20} did not consider the infinite, hyper-reversible, local case. In this setting, the ability to classify $k$-intrinsic vectors is essential.
- 
-Let us suppose $\mathfrak{{a}} > \mathfrak{{c}}''$.  Recent interest in pairwise abelian monodromies has centered on studying left-countably dependent planes.  We show that $\Delta \ge 0$.  It was Brouwer who first asked whether classes can be described. B. Artin \cite{cite:30} improved upon the results of M. Bernoulli by deriving nonnegative classes.
-
-x\par x\par x\par x\par x\par x\par x\par x\par x\par x\par x\par x\par x
-
-
+	TODO: This is the abstract in the inglish.
 \end{abstract-english}
 
 % Acknowledgements / Podekovani
 \begin{thanks}
-Děkuji ČVUT, že mi je tak dobrou \emph{alma mater}.
+	TODO: Chtěl bych poděkovat svému vedoucímu práce doc. Ing. Jiřímu Novákovi, Ph.D.
+	za trpělivost při hledání důvodů poškození modulů a pomoc se směřováním
+	projektu. Svému bratrovi Jakubovi za pomoci při měření vlastností protokolu
+	ESP-NOW v prostředí divoké přírody a parádní fotografie. Mým kamarádům,
+	spolubydlícím a tátovi za dlouhé noční diskuze, které mne vždy v projektu
+	nasměrovali dalším směrem.
 \end{thanks}
 
 % Declaration / Prohlaseni
 \begin{declaration}
-Prohlašuji, že jsem předloženou práci vypracoval samostatně, a že jsem uvedl veškerou použitou literaturu.
-
-V Praze, \ctufield{day}.~\monthinlanguage{title}~\ctufield{year}
+   Prohlašuji, že jsem předloženou práci vypracoval
+   samostatně a že jsem uvedl veškeré použité informační zdroje v~souladu
+   s~Metodickým pokynem o~dodržování etických principů při přípravě
+   vysokoškolských závěrečných prací.
+	
+	V Praze, \ctufield{day}.~\monthinlanguage{title}~\ctufield{year}
 \end{declaration}
 
 % Only for testing purposes
@@ -118,74 +118,18 @@ V Praze, \ctufield{day}.~\monthinlanguage{title}~\ctufield{year}
 
 \maketitle
 
-\chapter{Introduction}
-
-This thesis shows that \ldots
-
-\begin{figure}[!h]
-	\rule{3cm}{3cm}
-	\caption{Test}
-\end{figure}
-
-\part{My Party}
-
-\input{ctuthesis-1}
-
-\input{ctuthesis-2}
+\input{chaps/introduce.tex}
 
 
-\part{Your Party}
+% \appendix
 
-\blindmathtrue
+% \printindex
 
-\blinddocument
+% \appendix
 
-\begin{table}
-	\begin{ctucolortab}
-		\begin{tabular}{cc}
-			\bfseries Foo & \bfseries Bar \\\Midrule
-			foo1          & bar1          \\
-			foo2          & bar2
-		\end{tabular}
-	\end{ctucolortab}
-	\caption{Foobar.}
-	\label{tab:foobar}
-\end{table}
+% \bibliographystyle{amsalpha}
+% \bibliography{ctuthesis}
 
-\begin{figure}
-	\includegraphics[width=0.4\textwidth]{ctu_logo_black}
-	\caption{Black logo of the CTU in Pragueueue.}
-\end{figure}
-
-\begin{figure}[!t]
-	\includegraphics[width=0.4\textwidth]{ctu_logo_blue}
-	\caption{Blue logo of the CTU in Pragueueue.}
-\end{figure}
-
-\chapter{Conclusions}
-
-\section{Test --- this is just a little test of something in the table of contents}
-
-\subsection{Yes, table of contents}
-
-\begin{theorem}\begin{enumerate} \item Bla \item Blo \end{enumerate} \end{theorem}
-
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis interdum facilisis urna, at tincidunt leo consectetur non. Maecenas bibendum mi vitae libero pharetra, ac ullamcorper nulla pellentesque. Sed sit amet massa nunc. Aenean placerat a est sodales sagittis. Quisque purus nibh, auctor ut consectetur at, suscipit non erat. Donec condimentum porttitor risus, vitae fringilla lectus tincidunt nec. Nulla leo quam, commodo eu ornare non, iaculis sed nulla. Duis gravida lacus quis purus sodales, vitae malesuada justo ultricies. Vestibulum nisl nulla, commodo non pellentesque a, fringilla a risus. Ut quis magna nulla. Mauris vitae ultricies ante, in consectetur justo.
-
-\medskip
-
-\begin{proof}\begin{enumerate} \item[8] Bla \item Blo \end{enumerate} \end{proof}
-
-\appendix
-
-\printindex
-
-\appendix
-
-\bibliographystyle{amsalpha}
-\bibliography{ctuthesis}
-
-\ctutemplate{specification.as.chapter}
+% \ctutemplate{specification.as.chapter}
 
 \end{document}

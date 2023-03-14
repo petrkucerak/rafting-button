@@ -1,0 +1,49 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\label[SpecifikacePozadavku]
+\chap Specifikace požadavků
+
+Třetí kapitola specifikuje a zdůvodňuje jednotlivé parametry, které jsou požadovány při budování síťové infrastruktury.
+
+\sec Uživatelské požadavky
+
+Zařízení by mělo:
+
+\begitems
+* být jednoduše ovladatelné,
+* být odolné vůči úhozů a pádu na zem,
+* řešit, kdo první stiskl tlačítko,
+* mít dobře přístupné spouštěcí tlačítko,
+* být identické s ostatními,
+* být možné napájet pomocí baterií,
+* být možné přepnout do módu {\em PREZENTÉR}, v kterém bude ukazovat výsledky,
+* fungovat v hospodě ale i v přírodě.
+\enditems
+
+\sec Softwarové požadavky
+
+Software by měl:
+\begitems
+* fungovat jako distribuovaná síť, která bude řešit volbu konsenzu,
+* umět vytvořit síť,
+* umět přenášet informace do velikosti 200 bajtů s nízkou latencí,
+* být zdokumentovaný,
+* fungovat bez chyb,
+* být testován.
+\enditems
+
+\sec Požadavky na hardware
+Hardware by měl:
+\begitems
+* být optimalizovaný pro minimální spotřebu energie,
+* být napájen z baterií, které lze měnit,
+* mít modul pro komunikaci pomocí Wifi,
+* být dokumentován,
+* být odolný pádu ze stolu.
+\enditems

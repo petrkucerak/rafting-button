@@ -1,0 +1,181 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\chap Měření
+
+Kapitola popisuje prostředí, v kterých byla měřena data a způsob jejich měření. Vykresluje jednotlivé scénáře a interpretuje naměřená data v souvislostech.
+
+\label[UvodKMereni]
+\sec Úvod k měření
+
+Abych byl schopen zajistit plynulé fungování distribuované sítě, je třeba otestovat vlastnosti protokolu ESP-NOW. Proto jsem v závěru samostatného projektu vytvořil jednoduchý program pro testování. Funguje tak, že:
+
+1. zaregistruje USB callback a spustí sériovou komunikaci,
+
+2. inicializuje struktury nutné pro správné fungování protokolu ESP-NOW\fnote{Jako je například `ESP_NOW_HANDLER`} a zaregistruje callback pro příchozí a odchozí komunikaci.
+
+3. V případě veze MCU s displejem,\fnote{ESP32-S2-pico-LCD} inicializuje displej a vypíše na něj vlastni MAC adresu.
+
+4. Ukončí inicializační metodu. V případě MCU bez displaje\fnote{ESP32-S2-pico} ohlásí konec konfigurace bliknutím červené LED diody, která je vestavěné na desce.
+
+5. Spustí měření, které má za úkol simulovat reálný provoz. Zde je možné konfigurovat základní parametry\fnote{Více je specifikováno v sekci \ref[ScenareMereni].}. Program měří {\em round-time trip}. Respektive dobu, poslání informace ze zařízení A, jejího uložení do patřičné struktury v zařízení B, odeslání zpět do zařízení A a uložení do patřičné struktury v zařízení A. Pokud se informace nevrátí ze zařízení B do určitého deadlinu, zařízení A registruje zprávu jako chybovou a odesílá rovnou další. V případě použití MCU s displejem, je proces měření zobrazován ve formě {\em progress baru}.
+
+
+
+6. Po ukončení měření, se data vypíšou do konzole pro následné zpracování.
+
+
+\label[ScenareMereni]
+\sec Scénáře měření
+
+Aby bylo možné otestovat různé parametry v různých prostředích, rozhrnul jsem měření na několik scénářů.
+
+Při měření byly sledovány následující parametry:
+
+\begitems
+* prostředí, v němž bylo měření prováděno,
+* překážka mezi zařízeními,
+* vzdálenost mezi zařízeními,
+* velikost zprávy,\fnote{Někdy označováno také jako {\em payload}.} \fnote{Maximální velikost zprávy je 250 bajtů.}
+* počet odeslaných zpráv,
+* typ odesílání ({\em broadcast}/{\em unicast}),
+* počet chybných zpráv.\fnote{Měření tohoto parametru bylo přidáno od scénáře A, kde ovšem k žádné ztrátě nedocházelo.}
+\enditems
+
+\secc Scénář A
+
+\medskip
+\clabel[ScenarioA-img]{Vizualizace parametrů pro měření scénářů A}
+\picw=14cm \cinspic img/ScenarioA.png
+\caption/f Vizualizace parametrů pro měření scénářů A.
+\medskip
+
+V scénářích typu A se snažím otestovat to, jak změna parametru typu odesílání, tj. přepínání mezi {\em brodacastem} a {\em unicastem}, ovlivní {\em round-time trip} v závislosti na velikosti zprávy. Měření se odehrává v prostředí bytu v činžovním domě, kde dochází k rušení několika okolními Wifi sítěmi.
+
+\midinsert \clabel[ScenariosA1-tab]{Přehled parametrů pro A1x scénáře}
+\ctable{lrrrrr}{
+\hfil {\sbf SCÉNÁŘE} & {\sbf A11} & {\sbf A12} & {\sbf A13} & {\sbf A14} & {\sbf A15}\crl
+{\sbf prostředí} & byt & byt & byt & byt & byt\cr
+{\sbf překážka} & vzduch & vzduch & vzduch & vzduch & vzduch\cr
+{\sbf vzdálenost} & 50 cm & 50 cm & 50 cm & 50 cm & 50 cm\cr
+{\sbf velikost} & 1 B & 10 B & 50 B & 120 B & 250 B\cr
+{\sbf počet zpráv} & 10 000 & 10 000 & 10 000 & 1 000 & 5 000\cr
+{\sbf typ vysílání} & brodcast & brodcast & brodcast & brodcast & brodcast\cr
+}
+\caption/t Přehled parametrů pro A1x scénáře.
+\endinsert
+
+\midinsert \clabel[ScenariosA2-tab]{Přehled parametrů pro A2x scénáře}
+\ctable{lrrrrr}{
+\hfil {\sbf SCÉNÁŘE} & {\sbf A21} & {\sbf A22} & {\sbf A23} & {\sbf A24} & {\sbf A25}\crl
+{\sbf prostředí} & byt & byt & byt & byt & byt\cr
+{\sbf překážka} & vzduch & vzduch & vzduch & vzduch & vzduch\cr
+{\sbf vzdálenost} & 50 cm & 50 cm & 50 cm & 50 cm & 50 cm\cr
+{\sbf velikost} & 1 B & 10 B & 50 B & 120 B & 250 B\cr
+{\sbf počet zpráv} & 10 000 & 10 000 & 10 000 & 10 000 & 10 000\cr
+{\sbf typ vysílání} & unicast & unicast & unicast & unicast & unicast\cr
+}
+\caption/t Přehled parametrů pro A2x scénáře.
+\endinsert
+
+Výsledky měření těchto scénářů si je možné prohlédnout v grafech \ref[ScenarioA1-graph] a \ref[ScenarioA2-graph]. Odesílání se chová dle očekávání. Zprávy větší velikosti trvají déle než zprávy té menší. Zajímavé je srovnání {\em broadcastu} a {\em unicastu}. {\em Broadcast} je nepatrně pomalejší.
+
+Také je zajímavé si povšimnout nakumulovaných odpovědí v jeden čas. Tuto skutečnost si vysvětluji implementací {\em broadcastu} v protokolu ESP-NOW.
+
+%\secc Scénář B
+
+%\medskip
+%\clabel[ScenarioB-img]{Vizualizace parametrů pro měření scénářů B}
+%\picw=14cm \cinspic img/ScenarioB.png
+%\caption/f Vizualizace parametrů pro měření scénářů B.
+%\medskip
+
+\secc Scénář C
+
+\medskip
+\clabel[ScenarioC-img]{Vizualizace parametrů pro měření scénářů C}
+\picw=14cm \cinspic img/ScenarioC.png
+\caption/f Vizualizace parametrů pro měření scénářů C.
+\medskip
+
+Sadou scénářů Cx se snažím pozorovat vlastnosti v signálově čistém prostředí\fnote{Nejedná se o laboratorně čisté prostředí. Měření bylo prováděno v prostředí lesa, který je od nejbližší obce vzdálen asi 5 km a v okolí mého bydliště nejvíce čisté od 2,4 GHz rušení.} v závislosti na vzdálenosti a typu vysílání.
+
+\midinsert \clabel[ScenariosC-tab]{Přehled parametrů pro Cx scénáře}
+\ctable{lrrrrrr}{
+\hfil {\sbf SCÉNÁŘE} & {\sbf C1} & {\sbf C2} & {\sbf C3} & {\sbf C4} & {\sbf C5} & {\sbf C6}\crl
+{\sbf prostředí} & les & les  & les  & les  & les  & les\cr
+{\sbf překážka} & vzduch & vzduch & vzduch & vzduch & vzduch\cr
+{\sbf vzdálenost} & 0,5 m & 25 m & 50 m & 100 m & 100 m & 50 m\cr
+{\sbf velikost} & 125 B & 125 B & 125 B & 125 B & 125 B & 125 B\cr
+{\sbf počet zpráv} & 5 000 & 5 000 & 5 000 & 5 000 & 5 000 & 5 000\cr
+{\sbf počet chybných zpráv} & 0 & 3 & 15 & 35 & 15 & 6\cr
+{\sbf typ vysílání} & unicast & unicast & unicast & unicast & brodcast & brodcast\cr
+}
+\caption/t Přehled parametrů pro Cx scénáře.
+\endinsert
+
+Výsledky měření těchto scénáře si je možné prohlédnout v grafu \ref[ScenarioC-graph]. Zde se opět prokol chová dle očekávání. Nedochází k takovému zpoždění, jako například při měření scénářů typu A. Také si je možné povšimnou toho, že se jednou za čas nějaká zpráva opozdí.
+
+Při tomto měření jsem zaznamenával také chybovost počet chybných zpráv.\fnote{Chybnou zprávou se myslí taková zpráva, která nedorazí do specifikovaného deadlinu, tedy mimo graf.} Jejich četnost si ji možné prohlédnout v tabulce \ref[ScenariosC-tab].
+
+Během tohoto měření jsem zjistil, že je důležité, aby na větší vzdálenosti,\fnote{25 m a více} nestála signálu v cestě žádná překážka.
+
+Zajímavé je také srovnání scénáře A a C. Můžeme pozorovat, že {\sbf vliv vzdálenosti ovlivňuje především ztrátovost paketů. Naopak velikost ovlivňuje rychlost přenosu.}
+
+\secc Scénář D
+
+\medskip
+\clabel[ScenarioD-img]{Vizualizace parametrů pro měření scénářů D}
+\picw=14cm \cinspic img/ScenarioD.png
+\caption/f Vizualizace parametrů pro měření scénářů D.
+\medskip
+
+Scénář D byl oproti ostatním měřením odlišný v tom, že jsem se nejprve snažili stanovit hranici, kdy je zařízení ještě schopno přijímat zprávy a kdy už ne. Experimentálně jsem dospěl k hranici 580 m. Následně jsem odeslal 1000 zpráv s cílem zjistit, jak je veliká ztrátovost. Měření bylo realizováno na poli, přes které může procházet signál na 2,4 GHz.
+
+\midinsert \clabel[ScenariosD-tab]{Přehled parametrů pro D scénář}
+\ctable{lr}{
+\hfil {\sbf SCÉNÁŘE} & {\sbf D1}\crl
+{\sbf prostředí} & pole (s 2,4 GHz)\cr
+{\sbf překážka} & vzduch\cr
+{\sbf vzdálenost} & 577 m\cr
+{\sbf velikost} & 125 B\cr
+{\sbf počet zpráv} & 1 000\cr
+{\sbf počet chybných zpráv} & 50\cr
+{\sbf typ vysílání} & unicast\cr
+}
+\caption/t Přehled parametrů pro D scénář.
+\endinsert
+
+Při měření jsme zjistil, že při odesílání na velikou vzdálenost je třeba dbát na orientaci čipu. Pokud nebylo zařízení správně natočeno, nešlo odeslat žádné zprávy.
+
+Výsledek měření je vizualizován grafem \ref[ScenarioD-graph]. Při tomto scénáři bylo ovšem mnohem zajímavjěíš pozorovat četnost úplné ztráty dat.
+
+Při odeslání 1000 zpráv, se ztratilo 50. Můžeme tedy jednoduchým výpočtem zjistit jaká je procentuální ztrátovost na dlouhé vzdálenosti.
+
+ $$
+ loss = error / sent
+ $$
+
+V našem případě se při odeslání 1000 zpráv objevilo 50 chyb. Chybovost je tedy 5~\%.\fnote{$50/1000 = 0,05$}.
+
+\sec Hodnocení měření
+
+Veškerá naměřená data se skripty pro vyrenderováni grafů je možné najít v repositáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/main/measure}}
+
+Uvědomuji si, že měření nebylo prováděno za ideálních podmínek. Přesnost měření mohlo ovlivnit především to, že:
+
+\begitems
+* se jeden čipů měl větší odběr proudu a mírně se při měření přehříval,
+* větší vzdálenosti\fnote{více jak 10 m} byly měřeny s přesností na jednotky metrů a největší vzdálenosti\fnote{více jak 100 m} s přesností na 10 m,
+* les nebyl absolutně odstíněný od 2,4 GHz,
+* během měření různých scénářů jsme upravoval kód,
+* v některých scénářích by větší množství dat, mohlo říci více.
+
+Zajímavé jsou ještě 2 výše zmíněné poznání. Konkrétně to, že při přenosu na delší vzdálenost je nutné, aby signálu nebránilo nic v cestě a aby byly moduly správně orientovány.
+
+Výsledky prokazují, že protokol ESP-NOW splňuje očekávané požadavky a je vhodný pro použití v budoucí implementaci.
