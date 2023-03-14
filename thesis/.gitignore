@@ -10,4 +10,6 @@
 *.synctex.gz
 *.sh
 *.toc
-ctuman-*.pdf
+*.fls
+ctuthesis.fdb_latexmk
+ctuthesis.pdf
