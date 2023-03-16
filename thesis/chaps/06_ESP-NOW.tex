@@ -1,0 +1,48 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\label[ESPNOWChap]
+\chap Technologie ESP-NOW
+
+Kapitola se věnuje popisu technologie ESP-NOW, na které je kompletně vybudovaná síťová infrastruktura celého řešení.
+
+\sec Popis technologie
+
+Protokol {\sbf ESP-NOW} je definovaný firmou Espressif speciálně pro procesory ESP32, ESP8266, ESP32-S a ESP32-C. Technologie se od Wifi či Bluetoothe LE liší tím, že horních pět vrstev OSI modelu spojuje do jedné zvané ESP-NOW. Díky tomu je protokol sice méně robustní, naopak je díky němu možné dosáhnout vyšších rychlostí za menší cenu výpočetní síly.
+
+\medskip
+\clabel[ESPNOW-ProtocolStack]{Vizualizace zasazení protokolu ESP-NOW do OSI modelu}
+\picw=16cm \cinspic img/protocol-stack.png
+\caption/f Vizualizace zasazení protokolu ESP-NOW do OSI modelu.~\cite[E7xNXczajtMU8qxH]
+\medskip
+
+Protokol je flexibilní, protože dokáže přenášet data jak v {\em unicast} tak v {\em brodcast} módu a podporuje jak {\em one-to-many}, tak {\em many-to-many} komunikaci.
+
+\secc Formát rámce
+
+Výchozí přenosová rychlost ({\em bit rate}) ESP-NOW je 1 MBps. Rychlost jde měnit pomocí metod definovaných protokolem.
+
+Formát rámce vychází z definice {\em IEEE 802.11},\fnote{{\em IEEE 802.11} kapitola {\em 9.6.7.11 Vendor Specific Public Action frame format}.} konkretně tzv. {\em Action Format} a struktura je definována následovně:~\cite[9363693]
+
+\begitems
+* {\sbf MAC Header} (24 bytes)
+* {\sbf Category Code} (1 byte) indikující typ {\em Action Frame}, v případě ESP-NOW se jedná o tzv. {\em vendor-specific action frame}, a proto je hodnota nastavena na 127
+* Organization Identifier
+* Random Values
+* Vendor Specific Content
+* FCS
+\enditems
+\cite[2zPvvpoRaPgJFnf1]
+
+\secc Typy vysílání
+
+\secc Bezpečnost a šifrování
+
+\secc Limity technologie
+
+\sec Navržení implementace
