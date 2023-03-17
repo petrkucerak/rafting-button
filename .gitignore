@@ -7,3 +7,7 @@
 # generated file
 measure/logs/*
 !measure/logs/README.md
+
+ctustyle-doc.pdf
+ctustyle-doc.ref
+ctustyle-doc.log
