@@ -2,20 +2,6 @@
 
 Samotná bakalářská práce.
 
-## Jak sprovoznit lokální kompilaci
-
-1. nainstaluj texlive včetně luatex (nutná por instalaci OpTeX)
-2. stani si submodul s OpTeX
-3. naistaluj OpTeX
-   ```
-   cd OpTeX/optex/base
-   luatex -ini optex.ini
-   ```
-4. pro live vývoj spusť skritp `texloop.sh`
-   ```
-   ./texloop.sh optex ctustyle-doc
-   ```
-
 ## Požadavky na závěrečnou práci
 
 - [ ] minimálně 20 stran bez přílohy ve formátu A4 o velikosti textu 11pt
@@ -32,4 +18,3 @@ Samotná bakalářská práce.
   - [ ] seznam použité litartury
 
 *viz https://intranet.fel.cvut.cz/cz/rozvoj/smerniceSZZ.pdf*
-
