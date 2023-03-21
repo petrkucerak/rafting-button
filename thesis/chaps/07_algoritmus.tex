@@ -9,24 +9,26 @@
 \label[Algoritmus]
 \chap Algoritmus řešící konsenzus
 
-Kapitola specifikuje požadavky na algoritmus, popisuje známé algoritmy vhodné pro daný problém, které dává do kontextu a diskutuje jejich výhody a nevýhody a detailně popisuje zvolený algoritmus pro implementaci.
+Kapitola specifikuje požadavky na algoritmus, popisuje známé algoritmy vhodné pro daný problém, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro budoucí implementaci.
 
 \sec Požadavky na algoritmus
 
-Od algoritmu se očekává nejen řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive toho, kdo první stiskl tlačítko, ale i konsenzus při určení pořadí stisknutí tlačítek na jednotlivých zařízení.
+Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive toho, v jakém pořadí byla tlačítka stisknuta.
 
-Síť by měla být {\sbf distribuovaná}, tj. ve výchozím módu by měli být všechny zařízení na stejné úrovni a žádné z nich by nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
+Systém by měla být {\sbf distribuovaná}, tj. ve výchozím módu by měli být všechny zařízení na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
 
-Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních, nezávislých, zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmeme distribuovaný systém je takový, v kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní váš počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
+{\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí bezdrátové technologie ESP-NOW.
 
-Literatura se v dané terminologii liší a také na každý z problémů v DS jsou kladeny jiné požadavky, obecně ale můžeme řici, že rozlišujeme dva základní požadavky na DS:
+Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních nezávislých zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmeme distribuovaný systém je takový, v kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní užívaný počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
+
+Literatura se v dané terminologii rozchází a také na každý z problémů v DS jsou kladeny jiné požadavky, obecně ale můžeme řici, že rozlišujeme dva základní požadavky na DS:
 
 \begitems
 * {\sbf živost} ({\em safety}) - časem v DS bude dosažen žádoucí vztah,
 * {\sbf bezpečnost} ({\em liveness}) - nedojde k nežádoucímu stavu.
 \enditems
 
-Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnout současně živosti a bezpečnosti v distribuovaného výpočtu, pokud může docházet k selháním.~\cite[Fischer1985] V praxi se proto spíše vyžaduje bezpečnost a díky částečné synchronicitě zařízení v DS lze předpokládat, že algoritmus doběhne, tj. dosáhne výsledku v konečném čase.\fnote{Takovýto požadavek označujeme jako tzv. {\sbf {\em konečnou} živost} ({\em eventual liveness}).}~\cite[Jakob2021-13]
+Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnout současně živosti a bezpečnosti distribuovaného výpočtu, pokud může docházet k selháním.~\cite[Fischer1985] V praxi se proto spíše vyžaduje bezpečnost a díky částečné synchronicitě zařízení v DS lze předpokládat, že algoritmus doběhne, tj. dosáhne výsledků v konečném čase.\fnote{Takovýto požadavek označujeme jako tzv. {\sbf {\em konečnou} živost} ({\em eventual liveness}).}~\cite[Jakob2021-13]
 
 \secc Požadavky na distribuovaný systém
 
@@ -35,6 +37,12 @@ Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnou
 * {\sbf Konečnou živost} - není nutné, aby byl distribuovaný výpočet dokončen do určitého času. Nýbrž je požadováno dokončení výpočtu v konečném čase.
 * {\sbf Uspořádání} - musí být dodrženo kauzální uspořádání v závislosti na čase, tj. musí být dodrženo pořadí.
 \enditems
+
+\sec Rozbor problému
+
+Předpokládejme, že jsou všechna zařízení DS propojena a komunikace mezi nimi může být spolehlivá, tj. po odeslání každé zprávy obdrží odesílatel od adresáta potvrzení, zdali by byla výměna úspěšná či nikoliv.
+
+
 
 \sec Srovnání možných algoritmů
 
