@@ -21,7 +21,7 @@ Protokol {\sbf ESP-NOW} je definovaný firmou Espressif speciálně pro procesor
 \caption/f Vizualizace zasazení protokolu ESP-NOW do OSI modelu.~\cite[E7xNXczajtMU8qxH]
 \medskip
 
-Protokol je flexibilní, protože dokáže přenášet data jak v {\em unicast} tak v {\em brodcast} módu a podporuje jak {\em one-to-many}, tak {\em many-to-many} komunikaci.
+Protokol je flexibilní, protože dokáže přenášet data jak v {\em unicast} tak v {\em broadcast} módu a podporuje jak {\em one-to-many}, tak {\em many-to-many} komunikaci.
 
 \secc Formát rámce
 
@@ -61,7 +61,7 @@ Protokol ESP-NOW má několik dalších odlišností oproti klasické komunikaci
 \begitems
 * v první adrese ({\em Address 1}) je uložena cílová destinace ve formě MAC adresy,
 * druhá adresa ({\em Address 2}) ukládá adresu zdroje
-* a třetí adresa ({\em Address 3}) je vždy natavena na vysílání brodcastem, tedy na adresu "0xff:0xff:0xff:0xff:0xff:0xff".
+* a třetí adresa ({\em Address 3}) je vždy natavena na vysílání broadcastem, tedy na adresu "0xff:0xff:0xff:0xff:0xff:0xff".
 \enditems
 
 Protokol ESP-NOW je zabezpečen pomocí ECDH a AES128-CCM.\fnote{Definovaných v IEEE 802.11-2012.} Více podrobností o bezpečnosti je možné dohledat v dokumentaci \fnote{\url{https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/network/esp_now.html\#security}} nebo přímo v oficiální repozitáři implementace protokolu.\fnote{\url{https://github.com/espressif/esp-now/tree/master}} Jelikož šifrování nebude při implementaci použito, nebudu se mu v této práce věnovat více.
@@ -108,11 +108,12 @@ Další verze rozšiřují počet šifrovaných zařízení, rychlost přenosu a
 
 Limit, který se dle mého názoru nezmění, tak je velikost zprávy. Ta je dána typem využívaného rámce.
 
+\label[PseudoBroadcast]
 \secc ESP-NOW pro Arduino framework
 
 Oficiální implementaci protokolu je možné aplikovat pouze s využitím {\sbf IoT frameworku ESP-IDF}. Pro využití {\sbf Arduino frameworku} je dostupná neoficiální verze od autora {\em Junxiao Shi} v repozitáři na GitHubu.\fnote{\url{https://github.com/yoursunny/WifiEspNow}} Tato verze není oficiálně udrožovaná a v době psaní této bakalářské práce má z mého pohledu dva zásadní limity.
 
 \begitems
 * Knihovna {\sbf vychází ze zastaralé verze} (ESP-NOW 1.0.0). Tudíž neobsahuje opravy a nové funkce, které přináší až druhá verze protokolu.
-* Knihovna implementuje {\sbf vlastní pseudo {\em {\sbf brodcast}}}. Ten funguje tak, že provede {\em BSSID}\fnote{Zkratka BSSID znamená {\sbf Basic Service Set Identifier} neboli 48-bitový identifikátor, pod kterým je zařízení identifikované v síti.~\cite[esBbWrhMVbvJ2grS]} skenování a na každé nalezné zařízení odešle zprávu pomocí {\em unicastu}. 
+* Knihovna implementuje {\sbf vlastní pseudo {\em {\sbf broadcast}}}. Ten funguje tak, že provede {\em BSSID}\fnote{Zkratka BSSID znamená {\sbf Basic Service Set Identifier} neboli 48-bitový identifikátor, pod kterým je zařízení identifikované v síti.~\cite[esBbWrhMVbvJ2grS]} skenování a na každé nalezné zařízení odešle zprávu pomocí {\em unicastu}. 
 \enditems

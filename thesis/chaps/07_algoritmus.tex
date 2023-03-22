@@ -40,10 +40,26 @@ Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnou
 
 \sec Rozbor problému
 
-Předpokládejme, že jsou všechna zařízení DS propojena a komunikace mezi nimi může být spolehlivá, tj. po odeslání každé zprávy obdrží odesílatel od adresáta potvrzení, zdali by byla výměna úspěšná či nikoliv.
+Abstrahujme síťovou vrstvu DS a předpokládejme, že jsou všechna zařízení DS propojena, komunikace mezi nimi může ale nemusí být spolehlivá, tj. po odeslání každé zprávy může odesílatel obdržet od adresáta potvrzení, zdali byl přenos úspěšný či nikoliv. Úkolem je při stisku periferie ({\em tlačítka}) rozdistribuovat informaci do ostatních zařízení DS a určit pořadí.
+
+Pro {\sbf určení pořadí} je třeba buďto znát {\em kauzalitu událostí}\fnote{Vědět jaké událost té druhé předcházela.} anebo umět vytvořit časovou značku pomocí hodin, které budou synchronizované v celém DS. Kauzalita událostí nám v tomto případě stačit nebude. Důvodem je to, že systém není schopen garantovat rychlost odeslání. Tedy například v momentě využití {\em Lamportových hodin}, které pracují s vektorovými nebo logickými hodinami, nejsme schopni sítí zajistit, že v momentě vzniku události ({\em stisku tlačítek}) se data rozdistribuují okamžitě. Proto při použití logického času nejsme schopni garantovat pořadí.
+
+Systém tedy musí umět {\sbf synchronizovat hodiny} na každém zařízení. K tomuto problému by šlo využít známých protokolů, jako je například {\em Precision Time Protocol (PTP)}. V případě vhodné\fnote{Vhodnou implementací se myslí taková, která funguje jako pravý broadcast popisovaný v IEEE 8002.11, nikoli {\em pseudo broacast} popisovaný v kapitole \ref[PseudoBroadcast].} implementace broadcastu na síťové vrstvě by šlo synchronizaci značně zjednodušit. Mohla by fungovat tak, že by se v síti zvolil {\em MASTER OF TIME}, který by jednou za $n$ sekund rozeslal broadcastem čas všem zařízením v síti.
+
+Kromě distribuce a synchronizovaného času DS musí řešit problematiku {\sbf distribuce logů} s časovými značkami. Logy je myšlena struktura, které obsahuje časovou značku, typ události v DS a popis události. Pro distribuci těchto logů je možné využít několik algoritmů diskutovaných v kapitole \ref[AlgoritmyProLogy]. 
+
+Pro efektivní fungování síťové vrstvy by bylo vhodné, aby DS implementoval i mechanismus, který by byl schopen {\sbf distribuovat} neustále aktualizovaný {\sbf seznam zařízení} v DS.
+
+Z krátké úvodní analýzy problému vyplývá, že algoritmus musí v DS řešit tři základní problémy:
+
+\begitems
+* synchronizaci času,
+* distribuci logů,
+* distribuci seznamu zařízení DS.
+\enditems
 
 
-
+\label[AlgoritmyProLogy]
 \sec Srovnání možných algoritmů
 
 \secc Synchronizace fyzických hodin (PTP, NTP)
