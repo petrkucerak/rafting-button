@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.profiles.linux": {
+      "esp-idf": {
+        "path": "bash",
+        "icon": "tools",
+        "args": ["--init-file", "./code/install-idf.sh"]
+      },
+      "bash": {
+        "path": "bash"
+      },
+      "python": {
+        "path": "python3",
+        "icon": "notebook"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "esp-idf"
+  }
+}
