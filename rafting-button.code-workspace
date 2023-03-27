@@ -19,6 +19,25 @@
         "icon": "notebook"
       }
     },
-    "terminal.integrated.defaultProfile.linux": "esp-idf"
+    "terminal.integrated.defaultProfile.linux": "esp-idf",
+    "actionButtons": {
+      "commands": [
+        {
+          "name": "Build[M]",
+          "color": "white",
+          "command": "cd code/measure-esp-now && idf.py build"
+        },
+        {
+          "name": "Flash[M]",
+          "color": "white",
+          "command": "cd code/measure-esp-now && idf.py -p /dev/ttyACM0 flash"
+        },
+        {
+          "name": "Monitor[M]",
+          "color": "white",
+          "command": "cd code/measure-esp-now && idf.py monitor"
+        }
+      ]
+    }
   }
 }
