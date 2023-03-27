@@ -19,4 +19,7 @@ build/
 # External projects
 *-prefix/
 
+## Old esp sdk configuration
+*.old
+
 # End of https://www.toptal.com/developers/gitignore/api/cmake
