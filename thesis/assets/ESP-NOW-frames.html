@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESP-NOW frames</title>
+    <style>
+      @font-face {
+         font-family: Technika;
+         src: url(../Technika-Book.otf);
+         font-weight: normal;
+      }
+      body {
+         font-size: 1.5rem;
+         text-align: left;
+         font-family: Technika;
+      }
+      table {
+         border-collapse: collapse;
+      }
+      .header {
+         width: 100%;
+         margin-top: 5rem;
+         margin-bottom: 5rem;
+      }
+      .content {
+         width: 100%;
+         margin-top: 5rem;
+         margin-bottom: 5rem;
+      }
+      th, td {
+         border: 1px solid black;
+         padding: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="header">
+      <tr>
+        <th>MAC Header</th>
+        <th>Category Code</th>
+        <th>Organization Identifier</th>
+        <th>Random Values</th>
+        <th>Vendor Specific Content</th>
+        <th>FCS</th>
+      </tr>
+      <tr>
+        <td>24 bytes</td>
+        <td>1 byte</td>
+        <td>3 bytes</td>
+        <td>4 bytes</td>
+        <td>7~255 bytes</td>
+        <td>4 bytes</td>
+      </tr>
+    </table>
+
+    <table class="content">
+      <tr>
+        <th>Element ID</th>
+        <th>Length</th>
+        <th>Organization Identifier</th>
+        <th>Type</th>
+        <th>Version</th>
+        <th>Body</th>
+      </tr>
+      <tr>
+        <td>1 byte</td>
+        <td>1 byte</td>
+        <td>3 bytes</td>
+        <td>1 byte</td>
+        <td>1 byte</td>
+        <td>7~248 bytes</td>
+      </tr>
+    </table>
+  </body>
+</html>

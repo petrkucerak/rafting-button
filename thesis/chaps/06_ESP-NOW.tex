@@ -1,0 +1,119 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\label[ESPNOWChap]
+\chap Protokol ESP-NOW
+
+Kapitola se věnuje popisu technologie ESP-NOW, na které je kompletně vybudovaná síťová infrastruktura celého řešení.
+
+\sec Popis technologie
+
+Protokol {\sbf ESP-NOW} je definovaný firmou Espressif speciálně pro procesory ESP32, ESP8266, ESP32-S a ESP32-C. Technologie se od Wifi či Bluetoothe LE liší tím, že horních pět vrstev OSI modelu spojuje do jedné zvané ESP-NOW. Díky tomu je protokol sice méně robustní, naopak je díky němu možné dosáhnout vyšších rychlostí za menší cenu výpočetní síly.
+
+\medskip
+\clabel[ESPNOW-ProtocolStack]{Vizualizace zasazení protokolu ESP-NOW do OSI modelu}
+\picw=16cm \cinspic img/protocol-stack.png
+\caption/f Vizualizace zasazení protokolu ESP-NOW do OSI modelu.~\cite[E7xNXczajtMU8qxH]
+\medskip
+
+Protokol je flexibilní, protože dokáže přenášet data jak v {\em unicast} tak v {\em broadcast} módu a podporuje jak {\em one-to-many}, tak {\em many-to-many} komunikaci.
+
+\secc Formát rámce
+
+Výchozí přenosová rychlost ({\em bit rate}) ESP-NOW je 1 MBps. Rychlost jde měnit pomocí funkcí definovaných protokolem. Formát rámce vychází z definice {\em IEEE 802.11},\fnote{{\em IEEE 802.11} kapitola {\em 9.6.7.11 Vendor Specific Public Action frame format}.} konkretně tzv. {\em Action Format}.~\cite[2zPvvpoRaPgJFnf1, 9363693]
+
+\begitems
+* {\sbf MAC Header} (24 bytes)
+* {\sbf Category Code} (1 byte) indikující typ {\em Action Frame}. V případě ESP-NOW se jedná o tzv. {\em vendor-specific action frame}, a proto je hodnota nastavena na 127.
+* {\sbf Organization Identifier} (3 bytes) je jedinečný identifikátor. V případě ESP-NOW jde o hodnotu "0x18fe34", která tvoří první 3 byty MAC adresy příslušící firmě Espressif.
+* {\sbf Random Values} (4 bytes) je náhodná hodnota, která se používá k prevenci před relay útokem.\fnote{{\sbf Relay útok} je kyberbezpečnostní útok využívající techniky {\em men-in-the-middle}. Pro více podrobností doporučuji navštívit \url{https://en.wikipedia.org/wiki/Relay_attack}.}
+* {\sbf Vendor Specific Content} (7{\sim}255 bytes) samotný obsah protokolu, který je tvořen vloženým framem.
+    \begitems
+    * {\sbf Element ID} (1 byte) hodnota je nastavena na "221" pro indikaci začátku {\em vendor-specific} části.
+    * {\sbf Length} (1 byte) je celková velikost částí {\em Organization Identifier}, {\em Type}, {\em Version} a {\em Body}.
+    * {\sbf Organization Identifier} (3 bytes) stejná hodnota jako v nadřazeném rámci, do kterého je tento zapouzdřen. Jedná o hodnotu "0x18fe34", která odpovídá prvním třem bajtům MAC adres příslušících firmě Espressif.
+    * {\sbf Type} (1 byte) určuje typ action rámce od Espressifu. V případě užití ESP-NOW je hodnota rovna "4".
+    * {\sbf Version} (1 byte) pole pro nastavení konkrétní verze.
+    * {\sbf Body} (0{\sim}248 bytes\fnote{V oficiální dokumentaci byla v době kdy jsem na práci pracoval chyba. Body bylo definované tak, že může dosahovat velikosti až 250 bajtů. To ale není možné, jelikož součet by přesáhl maximální povolenou velikost, tedy 255 bajtů pro {\em Vendor Specific Content}. Chybu jsem nahlásil a věřím, že bude co nejdříve opravena. \url{https://github.com/espressif/esp-now/issues/59}}) tělo samotného rámce obsahující zprávu.
+    \enditems
+* {\sbf FCS} (4 bytes) frame check sequence
+\enditems
+
+\medskip
+\clabel[ESP-NOW-Frame-01-img]{ESP-NOW Action Frame}
+\picw=14cm \cinspic img/ESP-NOW-frame-01.png
+\caption/f Vizualizace ESP-NOW Action Frame.
+\medskip
+
+\medskip
+\clabel[ESP-NOW-Frame-02-img]{ESP-NOW Content Frame}
+\picw=14cm \cinspic img/ESP-NOW-frame-01.png
+\caption/f Vizualizace ESP-NOW Content Frame.
+\medskip
+
+Protokol ESP-NOW má několik dalších odlišností oproti klasické komunikaci dle IEEE 802.11. Liší se kontrolním rámcem ({\em Frame Control})\fnote{Definovaném v {\em IEEE 802.11} kapitola {\em 9.2.4.1 Frame Control field}} v tom, že bity "FromDS" a "ToDS" jsou nulové a v obecném rámci ({\em General frame formát})\fnote{Definovaný v {\em IEEE 802.11} kapitola {\em 9.2.3 General frame format}}, pro který platí, že:
+
+\begitems
+* v první adrese ({\em Address 1}) je uložena cílová destinace ve formě MAC adresy,
+* druhá adresa ({\em Address 2}) ukládá adresu zdroje
+* a třetí adresa ({\em Address 3}) je vždy natavena na vysílání broadcastem, tedy na adresu "0xff:0xff:0xff:0xff:0xff:0xff".
+\enditems
+
+Protokol ESP-NOW je zabezpečen pomocí ECDH a AES128-CCM.\fnote{Definovaných v IEEE 802.11-2012.} Více podrobností o bezpečnosti je možné dohledat v dokumentaci \fnote{\url{https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/network/esp_now.html\#security}} nebo přímo v oficiální repozitáři implementace protokolu.\fnote{\url{https://github.com/espressif/esp-now/tree/master}} Jelikož šifrování nebude při implementaci použito, nebudu se mu v této práce věnovat více.
+
+\secc Módy provozu Wifi
+
+Moduly podporující ESP-NOW\fnote{ESP32 a ESP8266} umožňují dva módů provozu Wifi technologie: Station mode a Access Point mode (Soft-AP mode).\fnote{Ve skutečnosti existuje více módů provozu Wifi na ESP modulech. Jedná se ale o hybridy již zmíněných módů, proto se jim nebudu více do detaily věnovat.}
+
+{\sbf Station mode} (STA) se na používá v případě, kdy se modul připojuje k access pointu jako je například router. Typickou aplikací je senzor, který například snímá teplotu v místnosti, je napojen na router, který poskytuje připojení k WLAN a v pravidelných intervalech odesílá data do clodu.
+
+Opakem je {\sbf Access Point mode} (Soft-AP mode někdy také označován pouze zkratkou AP mode), který funguje jako router v síti a může k němu být připojeno více zařízení. Typickou aplikací může být například spuštění Wifi a webového serveru na modulu. V momentě, kdy se do sítě připojí nějaké zařízení, webový server vykreslí specifikovanou stránku.\fnote{Poměrně pěkně a detailně je implementace Wifi technologie na ESP zařízeních popsána v hlavičkovém souboru pro framework {\em ESP-IDF}, který je dostupný na adrese \url{https://raw.githubusercontent.com/espressif/esp-idf/4f0769d2ed074ef770c6432565d6e5610124e9ea/components/esp_wifi/include/esp_wifi.h}}
+
+Protokol ESP-NOW může běžet ve všech módech.
+
+\secc Popis fungování
+
+Před využíváním ESP-NOW je třeba aktivovat Wifi a {\sbf inicializovat} nutné struktury pomocí funkce $"esp_now_init()"$. Dokumentace doporučuje striktně dodržet zmiňované pořadí, tedy prvně aktivovat Wifi a až poté ESP-NOW.
+
+Pro odeslání dat je třeba mít informace o cílových zařízeních přidaná v tzv. $"esp_now_peer_info"$. Do této struktury je data možné přidávat pomocí funkce $"esp_now_add_peer()"$. Struktura uchovává MAC adresu zařízení a informace o zabezpečení komunikace. Podle verze protokolu je struktura limitovaná počtem šifrovaných a nešifrovaných zařízení.\fnote{Přesné limity doporučuji sledovat přímo v oficiálním repozitáři protokolu ESP-NOW: \url{https://github.com/espressif/esp-now/tree/master}.} Ve verzi 2.1.0 se jedná o maximálně 20 nešifrovaných případně 17 šifrovaných zařízení. Velikost jde případně uživatelsky v kódu změnit. To ale může mít negativní vliv na rychlost fungování protokolu.
+
+\medskip
+\clabel[ESPNOWDataTransferingImg]{Schéma odesílání dat pomocí ESP-NOW}
+\picw=16cm \cinspic img/ESP-NOW-data-transfering.png
+\caption/f Schéma odesílání dat pomocí ESP-NOW.
+\medskip
+
+Samotné {\sbf odesílání a přijímání dat} je ilustrované na obrázku \ref[ESPNOWDataTransferingImg] a funguje pomocí tzv. {\em call-back} funkcí. Funkce jsou v podstatě {\em Wifi tasky} s vysokou prioritou, které je třeba uživatelsky definovat. Protokol nedefinuje žádnou strukturu pro ukládání a pokročilé zpracovávání dat. Odesílání pak funguje tak, že uživatel zavolá funkci $"esp_now_send()"$, která data odešle na druhou vrstvu protokolu nazývanou MAC layer. Protokol pomocí {\em call-back} funkce $"espnow_send_cb()"$ odešle status úspěšnosti operace. Přijímáni dat funguje na podobném principu. Jakmile {\em Wifi task} zaregistruje příchozí data, zavolá {\em call-back} funkci $"espnow_recv_cb()"$, která data dle definice zpracuje.
+
+Protokol podporuje další pokročilé funkce jako je například {\sbf změna rychlosti přenosu} či využívání {\sbf úsporného režimu vysílání} s metodou nastavení vysílacích intervalů.
+
+\secc Limity technologie
+
+Protokol ESP-NOW je definován poměrně nově. Proto dochází k neustálému vývoji, drobným změnám a posouvání limitů.
+
+První verze (1.0.0) vychází v roce 2016 a dle manuálu\fnote{\url{https://www.espressif.com/sites/default/files/documentation/esp-now_user_guide_en.pdf}} je limitována tím, že:
+
+\begitems
+* nemá implementovaný broadcast,
+* je možné šifrovat spojení pouze s 10 zařízeními
+* a maximální payload zprávy je 250 bajtů.
+\enditems
+
+Další verze rozšiřují počet šifrovaných zařízení, rychlost přenosu a přidávají podporu pro broadcast. Tyto limity se dle mého názoru budou dále rozvíjet. Vývojáři mají v nejbližší době v plánu knihovnu rozšiřovat o možnost clusterizování sítě.
+
+Limit, který se dle mého názoru nezmění, tak je velikost zprávy. Ta je dána typem využívaného rámce.
+
+\label[PseudoBroadcast]
+\secc ESP-NOW pro Arduino framework
+
+Oficiální implementaci protokolu je možné aplikovat pouze s využitím {\sbf IoT frameworku ESP-IDF}. Pro využití {\sbf Arduino frameworku} je dostupná neoficiální verze od autora {\em Junxiao Shi} v repozitáři na GitHubu.\fnote{\url{https://github.com/yoursunny/WifiEspNow}} Tato verze není oficiálně udrožovaná a v době psaní této bakalářské práce má z mého pohledu dva zásadní limity.
+
+\begitems
+* Knihovna {\sbf vychází ze zastaralé verze} (ESP-NOW 1.0.0). Tudíž neobsahuje opravy a nové funkce, které přináší až druhá verze protokolu.
+* Knihovna implementuje {\sbf vlastní pseudo {\em {\sbf broadcast}}}. Ten funguje tak, že provede {\em BSSID}\fnote{Zkratka BSSID znamená {\sbf Basic Service Set Identifier} neboli 48-bitový identifikátor, pod kterým je zařízení identifikované v síti.~\cite[esBbWrhMVbvJ2grS]} skenování a na každé nalezné zařízení odešle zprávu pomocí {\em unicastu}. 
+\enditems
