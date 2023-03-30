@@ -3,6 +3,8 @@
 #include "esp_flash.h"
 #include "esp_log.h"
 #include "esp_netif.h"
+// #include "esp_now.h"
+#include "espnow.h"
 #include "esp_wifi.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -40,7 +42,7 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
    printf("ESP-NOW receive callback has been called\n");
 }
 
-static esp_err_t espnow_init(void)
+static esp_err_t custom_espnow_init(void)
 {
 
    // Initialzie ESP-NOW
@@ -50,15 +52,15 @@ static esp_err_t espnow_init(void)
    ESP_ERROR_CHECK(esp_now_register_send_cb(espnow_send_cb));
    ESP_ERROR_CHECK(esp_now_register_recv_cb(espnow_recv_cb));
 
-   // Set current ESP-NOW version
+   // Get the ESP-NOW version, not works
    uint32_t version;
    ESP_ERROR_CHECK(esp_now_get_version(&version));
-   printf("ESP version is: %ld\n", version);
+   printf("ESP-NOW version is: %ld\n", version);
 
    return ESP_OK;
 }
 
-static esp_err_t espnow_deinit(void)
+static esp_err_t custom_espnow_deinit(void)
 {
    ESP_ERROR_CHECK(esp_now_deinit());
    return ESP_OK;
@@ -87,9 +89,9 @@ void app_main(void)
    printf("The application to measure ESP-NOW latency has been started\n");
    wifi_init();
    printf("Wi-Fi has been started successful\n");
-   espnow_init();
+   custom_espnow_init();
    printf("ESP-NOW has been inicialized successfull\n");
-   espnow_deinit();
+   custom_espnow_deinit();
    printf("ESP-NOW has been deinicialized successfull\n");
 
    // Reset process with delay

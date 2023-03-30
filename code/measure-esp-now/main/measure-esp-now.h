@@ -21,9 +21,9 @@ static void wifi_init(void);
  *
  * @return esp_err_t
  */
-static esp_err_t espnow_init(void);
+static esp_err_t custom_espnow_init(void);
 
-static esp_err_t espnow_deinit(void);
+static esp_err_t custom_espnow_deinit(void);
 
 /**
  * @brief     Callback function of sending ESPNOW data
