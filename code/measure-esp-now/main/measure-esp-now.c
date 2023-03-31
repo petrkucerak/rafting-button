@@ -1,10 +1,10 @@
 #include "measure-esp-now.h"
+#include "cmp.h"
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_log.h"
 #include "esp_netif.h"
-// #include "esp_now.h"
-#include "espnow.h"
+#include "esp_now.h"
 #include "esp_wifi.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -93,6 +93,8 @@ void app_main(void)
    printf("ESP-NOW has been inicialized successfull\n");
    custom_espnow_deinit();
    printf("ESP-NOW has been deinicialized successfull\n");
+
+   cmp_hello();
 
    // Reset process with delay
    for (int i = 20; i >= 0; i -= 2) {
