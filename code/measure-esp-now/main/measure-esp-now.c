@@ -1,4 +1,5 @@
 #include "measure-esp-now.h"
+#include "driver/gpio.h"
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_log.h"
@@ -7,8 +8,8 @@
 #include "esp_wifi.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "gpio.h"
 #include "nvs_flash.h"
+#include "peripheral.h"
 #include "sdkconfig.h"
 #include <inttypes.h>
 #include <stdio.h>
@@ -93,13 +94,17 @@ void app_main(void)
    printf("ESP-NOW has been inicialized successfull\n");
    custom_espnow_deinit();
    printf("ESP-NOW has been deinicialized successfull\n");
-   
-   turn_on_led();
-   turn_off_led();
+
+   config_led(GPIO_NUM_23);
 
    // Reset process with delay
    for (int i = 20; i >= 0; i -= 2) {
       printf("Restarting in %d seconds...\n", i);
+      turn_on_led(GPIO_NUM_23);
+      turn_on_buildin_led();
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
+      turn_off_led(GPIO_NUM_23);
+      turn_off_buildin_led();
       vTaskDelay(2000 / portTICK_PERIOD_MS);
    }
    printf("Restarting now.\n");
