@@ -28,14 +28,29 @@
           "command": "cd code/measure-esp-now && idf.py build"
         },
         {
-          "name": "Flash[M]",
+          "name": "Flash[MS]",
           "color": "white",
           "command": "cd code/measure-esp-now && idf.py -p /dev/ttyACM0 flash"
+        },
+        {
+          "name": "Flash[MB]",
+          "color": "orange",
+          "command": "cd code/measure-esp-now && idf.py -p /dev/ttyUSB0 flash"
         },
         {
           "name": "Monitor[M]",
           "color": "white",
           "command": "cd code/measure-esp-now && idf.py monitor"
+        },
+        {
+          "name": "All[MS]",
+          "color": "yellow",
+          "command": "cd code/measure-esp-now && idf.py build && idf.py -p /dev/ttyACM0 flash && idf.py monitor"
+        },
+        {
+          "name": "All[MB]",
+          "color": "orange",
+          "command": "cd code/measure-esp-now && idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py monitor"
         }
       ]
     }

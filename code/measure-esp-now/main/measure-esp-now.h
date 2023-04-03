@@ -8,6 +8,7 @@
  * round-time trip.
  *
  */
-void measure_broadcast_task(void);
+void measure_broadcast_task_master(void);
+void measure_broadcast_task_slave(void);
 
 #endif // MEASURE_ESP_NOW_H

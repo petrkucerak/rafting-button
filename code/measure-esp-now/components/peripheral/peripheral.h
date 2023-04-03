@@ -41,6 +41,6 @@ void turn_off_buildin_led();
  * 
  * @param mils time of blick in miliseconds
  */
-void do_blick(uint16_t mils);
+void do_blick_task(uint16_t mils);
 
 #endif // PERIPHERAL_H

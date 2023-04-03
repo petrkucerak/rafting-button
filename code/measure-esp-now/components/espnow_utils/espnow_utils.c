@@ -28,22 +28,6 @@ void wifi_init(void)
    // ESP_ERROR_CHECK(esp_wifi_set_channel())
 }
 
-static void espnow_send_cb(const uint8_t *mac_addr,
-                           esp_now_send_status_t status)
-{
-   BaseType_t blick_task;
-   blick_task = xTaskCreate((void *)do_blick, "t_do_blick_send", 4096,
-                            (void *)1000, tskIDLE_PRIORITY, NULL);
-}
-
-static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
-                           const uint8_t *data, int data_len)
-{
-   BaseType_t blick_task;
-   blick_task = xTaskCreate((void *)do_blick, "t_do_blick_recv", 4096,
-                            (void *)1000, tskIDLE_PRIORITY, NULL);
-}
-
 esp_err_t custom_espnow_init(void)
 {
 
