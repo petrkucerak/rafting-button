@@ -1,5 +1,6 @@
 idf_component_register(SRCS "measure-esp-now.c"
-                    INCLUDE_DIRS ".")
+                    INCLUDE_DIRS "."
+                    REQUIRES espnow_utils)
 
 # If some components are kept in a third git repository
 # (not the project repository or ESP-IDF repository),

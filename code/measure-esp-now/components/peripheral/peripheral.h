@@ -36,4 +36,11 @@ void turn_on_buildin_led();
  */
 void turn_off_buildin_led();
 
+/**
+ * @brief Do blick by buildin LED and on GPIO23
+ * 
+ * @param mils time of blick in miliseconds
+ */
+void do_blick(uint16_t mils);
+
 #endif // PERIPHERAL_H

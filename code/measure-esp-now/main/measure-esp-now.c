@@ -18,10 +18,16 @@
 void measure_broadcast_task(void)
 {
    // 1. init wifi
+   wifi_init();
+
    // 2. init esp-now
-   // 3. register callbacks
+   espnow_data_t espnow_data;
+   custom_espnow_init();
+   // 3. register callbacks (aboth blick)
    // 4. run broadcast
-   // 5. print the report
+   // 5. print the report?
+
+   custom_espnow_deinit();
 }
 
 void app_main(void)
@@ -35,16 +41,10 @@ void app_main(void)
    }
    ESP_ERROR_CHECK(ret);
 
-   printf("The application to measure ESP-NOW latency has been started\n");
-   wifi_init();
-   printf("Wi-Fi has been started successful\n");
-   custom_espnow_init();
-   printf("ESP-NOW has been inicialized successfull\n");
-   custom_espnow_deinit();
-   printf("ESP-NOW has been deinicialized successfull\n");
+   measure_broadcast_task();
+
 
    config_led(GPIO_NUM_23);
-
    // Reset process with delay
    for (int i = 20; i >= 0; i -= 2) {
       printf("Restarting in %d seconds...\n", i);

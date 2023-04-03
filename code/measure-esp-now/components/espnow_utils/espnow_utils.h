@@ -1,8 +1,15 @@
 #ifndef ESPNOW_UTILS_H
 #define ESPNOW_UTILS_H
 
-#include <esp_types.h>
 #include <esp_now.h>
+#include <esp_types.h>
+
+typedef struct {
+   uint8_t sender_mac_addr[6];
+   uint8_t is_empty;
+   char data[250];
+   uint8_t data_lenght;
+} espnow_data_t;
 
 /**
  * @brief Initialize Wi-Fi for ESP-NOW
@@ -15,9 +22,9 @@ void wifi_init(void);
  *
  * @return esp_err_t
  */
-static esp_err_t custom_espnow_init(void);
+esp_err_t custom_espnow_init(void);
 
-static esp_err_t custom_espnow_deinit(void);
+esp_err_t custom_espnow_deinit(void);
 
 /**
  * @brief     Callback function of sending ESPNOW data
