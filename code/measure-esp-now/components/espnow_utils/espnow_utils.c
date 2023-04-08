@@ -1,5 +1,6 @@
 #include "espnow_utils.h"
 #include "peripheral.h"
+#include <esp_log.h>
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <freertos/FreeRTOS.h>
@@ -38,6 +39,13 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                                   const uint8_t *data, int data_len)
 {
    printf("Recieve callback\n");
+   espnow_message_t *recv = NULL;
+   recv = (espnow_message_t *)malloc(sizeof(espnow_message_t));
+   if (recv == NULL) {
+      ESP_LOGE(TAG, "ERROR: Can't allocated the memory\n");
+      return;
+   }
+   xQueueSend(recv_messages, (void *)recv, (ESPNOW_MAXDELAY) != pdTRUE);// TODO: Continue here
 }
 
 esp_err_t custom_espnow_init(void)
@@ -49,8 +57,8 @@ esp_err_t custom_espnow_init(void)
    // Init structure for incoming messages
    recv_messages = xQueueCreate(RECV_MESSAGES_COUNT, sizeof(espnow_message_t));
    if (recv_messages == NULL) {
-      printf("ERROR: Can't create freeRTOS Queue\n");
-      return 1;
+      ESP_LOGE(TAG, "ERROR: Can't create freeRTOS Queue\n");
+      return;
    }
 
    // register callbacks

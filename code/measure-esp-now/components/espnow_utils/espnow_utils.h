@@ -12,11 +12,14 @@
 #include <freertos/queue.h>
 
 #define RECV_MESSAGES_COUNT 20
+#define ESPNOW_MAXDELAY                                                        \
+   512 // value from example
+       // https://github.com/espressif/esp-idf/blob/42261df71f12b0b995774d103ce68e40e8fba529/examples/wifi/espnow/main/espnow_example_main.c#L33
 
 typedef struct espnow_message {
-   uint8_t mac_addr; // MAC address of sender from esp_now_peer_info_t
-   ds_message_t content;  // DS message
-   uint8_t lenght;      // length of message
+   uint8_t mac_addr;     // MAC address of sender from esp_now_peer_info_t
+   ds_message_t content; // DS message
+   uint8_t lenght;       // length of message
 } espnow_message_t;
 
 static QueueHandle_t recv_messages;
