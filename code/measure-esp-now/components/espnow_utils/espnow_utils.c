@@ -3,6 +3,7 @@
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 #include <freertos/task.h>
 
 #define TRUE 1
@@ -28,11 +29,36 @@ void wifi_init(void)
    // ESP_ERROR_CHECK(esp_wifi_set_channel())
 }
 
+static void custom_espnow_send_cb(const uint8_t *mac_addr,
+                                  esp_now_send_status_t status)
+{
+   printf("Send callback\n");
+}
+static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
+                                  const uint8_t *data, int data_len)
+{
+   printf("Recieve callback\n");
+}
+
 esp_err_t custom_espnow_init(void)
 {
 
    // Initialzie ESP-NOW
    ESP_ERROR_CHECK(esp_now_init());
+
+   // Init structure for incoming messages
+   recv_messages = xQueueCreate(RECV_MESSAGES_COUNT, sizeof(espnow_message_t));
+   if (recv_messages == NULL) {
+      printf("ERROR: Can't create freeRTOS Queue\n");
+      return 1;
+   }
+
+   // register callbacks
+   esp_err_t status;
+   status = esp_now_register_send_cb(custom_espnow_send_cb);
+   ESP_ERROR_CHECK(status);
+   status = esp_now_register_recv_cb(custom_espnow_recv_cb);
+   ESP_ERROR_CHECK(status);
 
    return ESP_OK;
 }

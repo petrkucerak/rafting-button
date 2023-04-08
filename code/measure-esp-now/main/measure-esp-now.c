@@ -27,6 +27,10 @@ void app_main(void)
    }
    ESP_ERROR_CHECK(ret);
 
+   wifi_init();
+   custom_espnow_init();
+   custom_espnow_deinit();
+
 
    for (int i = 10; i >= 0; i -= 2) {
       printf("Restarting in %d cycles...\n", i);

@@ -12,19 +12,27 @@
 
 // 1. TIME SYNCHRONZIATION
 //    Master                                 Slave
-//                      time                 
-//        ---------------------------------> 
-//                      time                     
+//                      time
+//        --------------------------------->
+//                      time
 //        <---------------------------------
 //    RTT            time + RTT              set time
 //        --------------------------------->
 //                      ACK
 //        <---------------------------------
 
-
 // RTT ... round-trip time
-   
+
 #ifndef DISTRIBUTED_PROTOCOLS_H
 #define DISTRIBUTED_PROTOCOLS_H
+
+#include <esp_types.h>
+
+typedef enum ds_message_type { time, time_RTT, ACK } ds_message_type_t;
+
+typedef struct ds_message {
+   ds_message_type_t type;
+   uint8_t data[200];
+} ds_message_t;
 
 #endif // DISTRIBUTED_PROTOCOLS_H
