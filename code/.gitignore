@@ -19,7 +19,9 @@ build/
 # External projects
 *-prefix/
 
-## Old esp sdk configuration
+## ESP-IDF
 *.old
+dependencies.lock
+managed_components
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake
