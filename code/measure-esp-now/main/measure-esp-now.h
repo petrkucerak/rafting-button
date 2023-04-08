@@ -10,5 +10,6 @@
  */
 void measure_broadcast_task_master(void);
 void measure_broadcast_task_slave(void);
+void measure_unicast_task_master(void);
 
 #endif // MEASURE_ESP_NOW_H

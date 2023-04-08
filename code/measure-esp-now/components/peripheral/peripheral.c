@@ -44,3 +44,16 @@ void do_blick_task(uint16_t mils)
 
    vTaskDelete(NULL);
 }
+void turn_on_led_task(gpio_num_t gpio_num)
+{
+   turn_on_buildin_led();
+   turn_on_led(gpio_num);
+   vTaskDelete(NULL);
+}
+
+void turn_off_led_task(gpio_num_t gpio_num)
+{
+   turn_off_buildin_led();
+   turn_off_led(gpio_num);
+   vTaskDelete(NULL);
+}
