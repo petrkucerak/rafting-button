@@ -6,9 +6,11 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
 #include <freertos/task.h>
+#include <freertos/timers.h>
 
 #define TRUE 1
 #define FALSE 0
+static const char *TAG = "espnow_utils";
 
 void wifi_init(void)
 {
@@ -42,10 +44,13 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
    espnow_message_t *recv = NULL;
    recv = (espnow_message_t *)malloc(sizeof(espnow_message_t));
    if (recv == NULL) {
-      ESP_LOGE(TAG, "ERROR: Can't allocated the memory\n");
+      ESP_LOGE(TAG, "ERROR: Can't allocated the memory");
       return;
    }
-   xQueueSend(recv_messages, (void *)recv, (ESPNOW_MAXDELAY) != pdTRUE);// TODO: Continue here
+   if (xQueueSend(recv_messages, (void *)recv, (TickType_t)ESPNOW_MAXDELAY) !=
+       pdTRUE) {
+      ESP_LOGE(TAG, "ERROR: can't add recv message into the Queue");
+   }
 }
 
 esp_err_t custom_espnow_init(void)
@@ -57,7 +62,7 @@ esp_err_t custom_espnow_init(void)
    // Init structure for incoming messages
    recv_messages = xQueueCreate(RECV_MESSAGES_COUNT, sizeof(espnow_message_t));
    if (recv_messages == NULL) {
-      ESP_LOGE(TAG, "ERROR: Can't create freeRTOS Queue\n");
+      ESP_LOGE(TAG, "ERROR: Can't create freeRTOS Queue");
       return;
    }
 
