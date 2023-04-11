@@ -39,6 +39,6 @@ esp_err_t custom_espnow_init(void);
 
 esp_err_t custom_espnow_deinit(void);
 
-espnow_message_t *get_last_message(void);
+void print_messages(void);
 
 #endif // ESPNOW_UTILS_H

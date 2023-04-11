@@ -44,7 +44,6 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                                   const uint8_t *data, int data_len)
 {
    turn_on_led(GPIO_NUM_23);
-   printf("Recieve callback\n");
 
    espnow_message_t *recv = NULL;
    recv = (espnow_message_t *)malloc(sizeof(espnow_message_t));
@@ -52,13 +51,10 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
       ESP_LOGE(TAG, "ERROR: Can't allocated the memory");
       return;
    }
-   printf("Allocated\n");
 
    recv->lenght = data_len;
    memcpy(recv->mac_addr, esp_now_info->src_addr, 6);
    memcpy(recv->data, data, data_len);
-
-   printf("Copied\n");
 
    if (recv_messages != 0) {
       if (xQueueSend(recv_messages, (void *)recv,
@@ -68,21 +64,16 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
       }
    }
 
-   printf("Pushed\n");
    turn_off_led(GPIO_NUM_23);
 }
 
-espnow_message_t *get_last_message(void)
+void print_messages(void)
 {
-   espnow_message_t *ret = NULL;
-   if (recv_messages != NULL) {
-      if (xQueueReceive(recv_messages, ret, (TickType_t)ESPNOW_MAXDELAY) ==
+   espnow_message_t mes;
+   while (xQueueReceive(recv_messages, &mes, (TickType_t)ESPNOW_MAXDELAY) ==
           pdPASS) {
-         ESP_LOGE(TAG, "ERROR: can't push from Queue");
-         return ret;
-      }
+      printf("%s [%d len]\n", mes.data, mes.lenght);
    }
-   return NULL;
 }
 
 esp_err_t custom_espnow_init(void)

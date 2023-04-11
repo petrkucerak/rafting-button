@@ -33,15 +33,7 @@ void app_main(void)
    custom_espnow_init();
 
    for (int i = 0; i < 100; ++i) {
-      // print Queue and wait for a time
-      // for (int j = 0; j < 19; ++j) {
-         // espnow_message_t *message = get_last_message();
-         // if (message == NULL) {
-         //    printf("NULL\n");
-         // } else {
-         //    printf("Message length is: %d\n", message->lenght);
-         // }
-      // }
+      print_messages();
       vTaskDelay(1000 / portTICK_PERIOD_MS);
    }
    custom_espnow_deinit();
