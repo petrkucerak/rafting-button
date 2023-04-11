@@ -4,9 +4,12 @@
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <freertos/FreeRTOS.h>
+#include <freertos/portmacro.h>
+#include <freertos/projdefs.h>
 #include <freertos/queue.h>
 #include <freertos/task.h>
 #include <freertos/timers.h>
+#include <string.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -40,17 +43,46 @@ static void custom_espnow_send_cb(const uint8_t *mac_addr,
 static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                                   const uint8_t *data, int data_len)
 {
+   turn_on_led(GPIO_NUM_23);
    printf("Recieve callback\n");
+
    espnow_message_t *recv = NULL;
    recv = (espnow_message_t *)malloc(sizeof(espnow_message_t));
    if (recv == NULL) {
       ESP_LOGE(TAG, "ERROR: Can't allocated the memory");
       return;
    }
-   if (xQueueSend(recv_messages, (void *)recv, (TickType_t)ESPNOW_MAXDELAY) !=
-       pdTRUE) {
-      ESP_LOGE(TAG, "ERROR: can't add recv message into the Queue");
+   printf("Allocated\n");
+
+   recv->lenght = data_len;
+   memcpy(recv->mac_addr, esp_now_info->src_addr, 6);
+   memcpy(recv->data, data, data_len);
+
+   printf("Copied\n");
+
+   if (recv_messages != 0) {
+      if (xQueueSend(recv_messages, (void *)recv,
+                     (TickType_t)ESPNOW_MAXDELAY) != pdTRUE) {
+         ESP_LOGE(TAG, "ERROR: can't add recv message into the Queue");
+         return;
+      }
    }
+
+   printf("Pushed\n");
+   turn_off_led(GPIO_NUM_23);
+}
+
+espnow_message_t *get_last_message(void)
+{
+   espnow_message_t *ret = NULL;
+   if (recv_messages != NULL) {
+      if (xQueueReceive(recv_messages, ret, (TickType_t)ESPNOW_MAXDELAY) ==
+          pdPASS) {
+         ESP_LOGE(TAG, "ERROR: can't push from Queue");
+         return ret;
+      }
+   }
+   return NULL;
 }
 
 esp_err_t custom_espnow_init(void)
@@ -63,7 +95,7 @@ esp_err_t custom_espnow_init(void)
    recv_messages = xQueueCreate(RECV_MESSAGES_COUNT, sizeof(espnow_message_t));
    if (recv_messages == NULL) {
       ESP_LOGE(TAG, "ERROR: Can't create freeRTOS Queue");
-      return;
+      return ESP_ERR_NO_MEM;
    }
 
    // register callbacks

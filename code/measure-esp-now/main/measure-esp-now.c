@@ -27,10 +27,24 @@ void app_main(void)
    }
    ESP_ERROR_CHECK(ret);
 
+   config_led(GPIO_NUM_23);
+
    wifi_init();
    custom_espnow_init();
-   custom_espnow_deinit();
 
+   for (int i = 0; i < 100; ++i) {
+      // print Queue and wait for a time
+      // for (int j = 0; j < 19; ++j) {
+         // espnow_message_t *message = get_last_message();
+         // if (message == NULL) {
+         //    printf("NULL\n");
+         // } else {
+         //    printf("Message length is: %d\n", message->lenght);
+         // }
+      // }
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
+   }
+   custom_espnow_deinit();
 
    for (int i = 10; i >= 0; i -= 2) {
       printf("Restarting in %d cycles...\n", i);
