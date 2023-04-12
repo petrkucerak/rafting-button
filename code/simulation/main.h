@@ -6,8 +6,9 @@
 typedef enum status { MASTER, SLAVE } status_t;
 
 typedef struct game {
-   uint64_t time;     // auto-increment value
-   uint64_t deadline; // the 0 value means an infinite loop
+   uint64_t time;       // auto-increment value
+   uint64_t deadline;   // the 0 value means an infinite loop
+   uint8_t nodes_count; // count of nodes
 } game_t;
 
 typedef struct node {
