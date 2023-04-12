@@ -14,7 +14,7 @@ typedef struct game {
 typedef struct node {
    uint64_t time;    // local time
    status_t status;  // MASTER or SLAVE
-   float time_speed; // control speed of local time
+   uint8_t time_speed; // control speed of local time
 } node_t;
 
 #endif // MAIN_H
