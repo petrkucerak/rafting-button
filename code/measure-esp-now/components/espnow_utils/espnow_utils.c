@@ -2,6 +2,7 @@
 #include "peripheral.h"
 #include <esp_log.h>
 #include <esp_now.h>
+#include <esp_timer.h>
 #include <esp_wifi.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/portmacro.h>
@@ -52,6 +53,9 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
       return;
    }
 
+   // long time
+   recv->content->time = esp_timer_get_time();
+
    recv->lenght = data_len;
    memcpy(recv->mac_addr, esp_now_info->src_addr, 6);
    recv->content = (ds_message_t *)data;
@@ -69,10 +73,11 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
 void print_messages(void)
 {
-   espnow_message_t *mes = NULL;
-   while (xQueueReceive(recv_messages, mes, (TickType_t)ESPNOW_MAXDELAY) ==
+   espnow_message_t mes;
+   while (xQueueReceive(recv_messages, &mes, (TickType_t)ESPNOW_MAXDELAY) ==
           pdPASS) {
-      printf("%s [%d len]\n", mes->content->data, mes->lenght);
+      printf("%lld: %s [%d len]\n", mes.content->time, mes.content->data,
+             mes.lenght);
    }
 }
 
@@ -86,7 +91,7 @@ esp_err_t custom_espnow_init(void)
    recv_messages = xQueueCreate(RECV_MESSAGES_COUNT, sizeof(espnow_message_t));
    if (recv_messages == NULL) {
       ESP_LOGE(TAG, "ERROR: Can't create freeRTOS Queue");
-      return ESP_ERR_NO_MEM;
+      return ESP_FAIL;
    }
 
    // register callbacks

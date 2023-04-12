@@ -32,6 +32,7 @@ typedef enum ds_message_type { time, time_RTT, ACK } ds_message_type_t;
 
 typedef struct ds_message {
    ds_message_type_t type;
+   int64_t time;
    uint8_t data[200];
 } ds_message_t;
 
