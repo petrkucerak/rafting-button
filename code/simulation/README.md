@@ -3,5 +3,5 @@
 ## Scripts
 
 ```
-gcc ./main.c & ./a.out
+make && ./main
 ```
