@@ -54,7 +54,7 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
    recv->lenght = data_len;
    memcpy(recv->mac_addr, esp_now_info->src_addr, 6);
-   memcpy(recv->data, data, data_len);
+   recv->content = (ds_message_t *)data;
 
    if (recv_messages != 0) {
       if (xQueueSend(recv_messages, (void *)recv,
@@ -69,10 +69,10 @@ static void custom_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
 void print_messages(void)
 {
-   espnow_message_t mes;
-   while (xQueueReceive(recv_messages, &mes, (TickType_t)ESPNOW_MAXDELAY) ==
+   espnow_message_t *mes = NULL;
+   while (xQueueReceive(recv_messages, mes, (TickType_t)ESPNOW_MAXDELAY) ==
           pdPASS) {
-      printf("%s [%d len]\n", mes.data, mes.lenght);
+      printf("%s [%d len]\n", mes->content->data, mes->lenght);
    }
 }
 
