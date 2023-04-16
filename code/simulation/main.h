@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 typedef enum status { MASTER, SLAVE } status_t;
+typedef enum message_type { TIME, TIME_RTT, ACK } message_type_t;
 
 typedef struct game {
    uint64_t time;       // auto-increment value
@@ -11,10 +12,27 @@ typedef struct game {
    uint8_t nodes_count; // count of nodes
 } game_t;
 
+typedef struct message {
+   message_type_t type;
+   uint64_t content;
+} message_t;
+
+typedef struct queue {
+   message_t *message;
+   struct queue *next;
+} queue_t;
+
 typedef struct node {
-   uint64_t time;    // local time
-   status_t status;  // MASTER or SLAVE
+   uint64_t time;      // local time
+   status_t status;    // MASTER or SLAVE
    uint8_t time_speed; // control speed of local time
+   queue_t *queue;
 } node_t;
+
+void queue_push(uint8_t node, message_t *message);
+message_t *queue_pop(queue_t *queue);
+
+void send_message(message_type_t type, uint64_t content, uint8_t target_node);
+uint8_t is_queue_empty(uint8_t node);
 
 #endif // MAIN_H
