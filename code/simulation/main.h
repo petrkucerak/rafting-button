@@ -29,10 +29,7 @@ typedef struct node {
    queue_t *queue;
 } node_t;
 
-void queue_push(uint8_t node, message_t *message);
-message_t *queue_pop(queue_t *queue);
-
-void send_message(message_type_t type, uint64_t content, uint8_t target_node);
-uint8_t is_queue_empty(uint8_t node);
+void push_to_queue(message_t* message, uint8_t node_no);
+message_t* pop_from_queue(uint8_t node_no);
 
 #endif // MAIN_H
