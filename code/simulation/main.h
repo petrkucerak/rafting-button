@@ -26,7 +26,8 @@ typedef struct node {
    uint64_t time;      // local time
    status_t status;    // MASTER or SLAVE
    uint8_t time_speed; // control speed of local time
-   queue_t *queue;
+   queue_t *queue_head;
+   queue_t *queue_tail;
 } node_t;
 
 void push_to_queue(message_t* message, uint8_t node_no);
