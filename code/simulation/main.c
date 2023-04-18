@@ -47,16 +47,16 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time_speed = 200;
 
-   B.time = 456982;
+   B.time = 0;
    B.time_speed = 198;
 
-   C.time = 154694;
-   C.time_speed = 250;
+   C.time = 0;
+   C.time_speed = 0;
    // ****** CONFIG ******
 
    // TODO: game mechanism
 
-   printf("THE GAME HAS BEEN STARTED\n");
+   // printf("THE GAME HAS BEEN STARTED\n");
    while (game->deadline > game->time || !game->deadline) {
       // processors tick is each 4 ns
       if (!(game->time % 4)) {
@@ -64,16 +64,16 @@ int main(int argc, char const *argv[])
          // increment all cloks
          for (uint8_t i = 0; i < game->nodes_count; ++i) {
             ++nodes[i].time;
-            // speed_time each n * 1000 tick
-            if (!(nodes[i].time % (nodes[i].time_speed * 1000)) &&
-                !nodes[i].time_speed)
+            // speed_time each n * 100 tick
+            if (nodes[i].time_speed != 0 &&
+                !(nodes[i].time % (nodes[i].time_speed * 100)))
                ++nodes[i].time;
          }
       }
       // print round report
-      printf("%ld", game->time);
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         printf(", %ld", nodes[i].time);
+      printf("%ld", nodes[0].time);
+      for (uint8_t i = 1; i < game->nodes_count; ++i) {
+         printf(",%ld", nodes[i].time);
       }
       printf("\n");
 

@@ -29,7 +29,7 @@ typedef struct node {
    status_t status; // MASTER or SLAVE
    uint8_t
        time_speed; // control speed of local time
-                   // (each n*1000 processor tick adds one more tick),
+                   // (each n*100 processor tick adds one more tick),
                    // 0 - no problems, 1 - the most frequent, 255 - last often
    queue_t *queue_head;
    queue_t *queue_tail;
