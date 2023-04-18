@@ -1,6 +1,7 @@
 #include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define N nodes[node_no]
 #define A nodes[0]
@@ -16,6 +17,9 @@ node_t *nodes;
 int main(int argc, char const *argv[])
 {
 
+   // for rnd generator
+   srand(time(NULL));
+
    // create resources
    game = NULL;
    game = (game_t *)malloc(sizeof(game_t));
@@ -26,7 +30,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 10000000; // max value is UINT64_MAX
+   game->deadline = 10000000; // in ns (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -42,6 +46,8 @@ int main(int argc, char const *argv[])
       nodes[i].queue_tail = NULL;
       nodes[i].status = SLAVE;
       nodes[i].time = 0;
+      nodes[i].latency_min = 0;
+      nodes[i].latency_max = 0;
       nodes[i].time_speed = 100;
    }
 
@@ -49,12 +55,18 @@ int main(int argc, char const *argv[])
    // config enviroment to the simulation
    A.status = MASTER;
    A.time_speed = 250;
+   A.latency_min = 80;
+   A.latency_max = 100;
 
-   B.time = 2489;
+   B.time = 67189;
    B.time_speed = 198;
+   B.latency_min = 110;
+   B.latency_max = 160;
 
-   C.time = 987467;
+   C.time = 147189;
    C.time_speed = 2;
+   C.latency_min = 280;
+   C.latency_max = 310;
    // ****** CONFIG ******
 
    // TODO: game mechanism
@@ -78,55 +90,61 @@ int main(int argc, char const *argv[])
 
          // SLAVE operations
          for (uint8_t i = 0; i < game->nodes_count; ++i) {
-            if (!is_queue_empty(i)) {
-               message_t *message = pop_from_queue(i);
+            if (!(game->time % get_rnd_latency(i))) {
+               if (!is_queue_empty(i)) {
+                  message_t *message = pop_from_queue(i);
+                  switch (message->type) {
+                  case TIME:
+                     // send time back
+                     // printf("Slave TIME\n");
+                     send_message(message->content, TIME, message->source, i);
+                     break;
+                  case TIME_RTT:
+                     // set TIME and sent ACK back
+                     // set TIME: if differnt > x set, if differnt < x set
+                     // average different is 10 μs => different 2500 (2500 * 4
+                     // ns) set means set (TIME + RTT) * 1.5 -> 3 ways
+                     // printf("Slave RTT + TIME\n");
+                     if (message->content > 2500) {
+                        nodes[i].time = message->content;
+                     } else {
+                        nodes[i].time =
+                            ((message->content) + nodes[i].time) / 2;
+                     }
+                     send_message(0, ACK, MASTER_NO, i);
+                     break;
+                  }
+                  free(message);
+                  message = NULL;
+               }
+            }
+         }
+         // MASTER operations
+         if (!(game->time % get_rnd_latency(MASTER_NO))) {
+            if (!is_queue_empty(MASTER_NO)) {
+               message_t *message = pop_from_queue(MASTER_NO);
                switch (message->type) {
                case TIME:
-                  // send time back
-                  // printf("Slave TIME\n");
-                  send_message(message->content, TIME, message->source, i);
+                  // send TIME with RTT
+                  // printf("Master TIME\n");
+                  uint64_t RTT = (A.time - message->content) / 2;
+                  send_message(A.time + RTT, TIME_RTT, message->source,
+                               MASTER_NO);
                   break;
-               case TIME_RTT:
-                  // set TIME and sent ACK back
-                  // set TIME: if differnt > x set, if differnt < x set average
-                  // different is 10 μs => different 2500 (2500 * 4 ns)
-                  // set means set (TIME + RTT) * 1.5 -> 3 ways
-                  // printf("Slave RTT + TIME\n");
-                  if (message->content > 2500) {
-                     nodes[i].time = message->content;
-                  } else {
-                     nodes[i].time = ((message->content) + nodes[i].time) / 2;
-                  }
-                  send_message(0, ACK, MASTER_NO, i);
+               case ACK:
+                  // sucess sichnizoation
+                  // printf("Master ACK\n");
                   break;
                }
                free(message);
                message = NULL;
             }
-         }
-         // MASTER operations
-         if (!is_queue_empty(MASTER_NO)) {
-            message_t *message = pop_from_queue(MASTER_NO);
-            switch (message->type) {
-            case TIME:
-               // send TIME with RTT
-               // printf("Master TIME\n");
-               uint64_t RTT = (A.time - message->content) / 2;
-               send_message(A.time + RTT, TIME_RTT, message->source, MASTER_NO);
-               break;
-            case ACK:
-               // sucess sichnizoation
-               // printf("Master ACK\n");
-               break;
-            }
-            free(message);
-            message = NULL;
-         }
-         // send time sych message each (4 ns * 10000 =) 40 μs
-         if (!(A.time % 10000)) {
-            // printf("Send\n");
-            for (uint8_t i = 1; i < game->nodes_count; ++i) {
-               send_message(A.time, TIME, i, MASTER_NO);
+            // send time sych message each (4 ns * 10000 =) 40 μs
+            if (!(A.time % 10000)) {
+               // printf("Send\n");
+               for (uint8_t i = 1; i < game->nodes_count; ++i) {
+                  send_message(A.time, TIME, i, MASTER_NO);
+               }
             }
          }
       }
@@ -209,4 +227,9 @@ uint8_t is_queue_empty(uint8_t node_no)
    if (N.queue_tail == NULL)
       return 1;
    return 0;
+}
+
+uint16_t get_rnd_latency(uint8_t node_no)
+{
+   return (rand() % (N.latency_max - N.latency_min + 1)) + N.latency_min;
 }
