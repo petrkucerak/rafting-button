@@ -3,5 +3,6 @@
 ## Scripts
 
 ```
-make && ./main
+make clean && make && ./main
+make clean && make && ./main > output.txt && python3 visualize.py 
 ```
