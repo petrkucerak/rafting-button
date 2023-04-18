@@ -44,8 +44,11 @@ int main(int argc, char const *argv[])
    printf("%ld \n", test_message->content);
    test_message = pop_from_queue(0);
    printf("%ld \n", test_message->content);
-   test_message = pop_from_queue(0);
-   printf("%ld \n", test_message->content);
+
+   if (!is_queue_empty(0)) {
+      test_message = pop_from_queue(0);
+      printf("%ld \n", test_message->content);
+   }
 
    // game mechanism
 
@@ -105,4 +108,11 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->source = source;
 
    push_to_queue(message, target);
+}
+
+uint8_t is_queue_empty(uint8_t node_no)
+{
+   if (N.queue_tail == NULL)
+      return 1;
+   return 0;
 }
