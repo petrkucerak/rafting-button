@@ -10,5 +10,10 @@ ax.set_title('Time synchronization in DS')
 ax.set_ylabel('Node time\n(ticks)')
 ax.set_xlabel('DS time\n(ns)')
 
-plt.plot(data)
+plt.plot(data[:,0], label="MASTER [A]")
+plt.plot(data[:,1], label="CLAVE [B]")
+plt.plot(data[:,2], label="SLAVE [C]")
+
+plt.legend()
+
 plt.show()

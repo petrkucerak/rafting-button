@@ -8,7 +8,7 @@
 #define C nodes[2]
 #define MASTER_NO 0
 
-// #define BUILD_REPORT
+#define BUILD_REPORT
 
 game_t *game;
 node_t *nodes;
@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 100000; // max value is UINT64_MAX
+   game->deadline = 10000000; // max value is UINT64_MAX
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -48,18 +48,21 @@ int main(int argc, char const *argv[])
    // ****** CONFIG ******
    // config enviroment to the simulation
    A.status = MASTER;
-   A.time_speed = 200;
+   A.time_speed = 250;
 
-   B.time = 0;
+   B.time = 2489;
    B.time_speed = 198;
 
-   C.time = 0;
-   C.time_speed = 0;
+   C.time = 987467;
+   C.time_speed = 2;
    // ****** CONFIG ******
 
    // TODO: game mechanism
 
-   // printf("THE GAME HAS BEEN STARTED\n");
+#ifndef BUILD_REPORT
+   printf("THE GAME HAS BEEN STARTED\n");
+#endif // BUILD_REPORT
+
    while (game->deadline > game->time || !game->deadline) {
       // processors tick is each 4 ns
       if (!(game->time % 4)) {
@@ -80,10 +83,21 @@ int main(int argc, char const *argv[])
                switch (message->type) {
                case TIME:
                   // send time back
+                  // printf("Slave TIME\n");
+                  send_message(message->content, TIME, message->source, i);
                   break;
                case TIME_RTT:
                   // set TIME and sent ACK back
                   // set TIME: if differnt > x set, if differnt < x set average
+                  // different is 10 μs => different 2500 (2500 * 4 ns)
+                  // set means set (TIME + RTT) * 1.5 -> 3 ways
+                  // printf("Slave RTT + TIME\n");
+                  if (message->content > 2500) {
+                     nodes[i].time = message->content;
+                  } else {
+                     nodes[i].time = ((message->content) + nodes[i].time) / 2;
+                  }
+                  send_message(0, ACK, MASTER_NO, i);
                   break;
                }
                free(message);
@@ -96,10 +110,23 @@ int main(int argc, char const *argv[])
             switch (message->type) {
             case TIME:
                // send TIME with RTT
+               // printf("Master TIME\n");
+               uint64_t RTT = (A.time - message->content) / 2;
+               send_message(A.time + RTT, TIME_RTT, message->source, MASTER_NO);
                break;
             case ACK:
                // sucess sichnizoation
+               // printf("Master ACK\n");
                break;
+            }
+            free(message);
+            message = NULL;
+         }
+         // send time sych message each (4 ns * 10000 =) 40 μs
+         if (!(A.time % 10000)) {
+            // printf("Send\n");
+            for (uint8_t i = 1; i < game->nodes_count; ++i) {
+               send_message(A.time, TIME, i, MASTER_NO);
             }
          }
       }
