@@ -149,11 +149,14 @@ int main(int argc, char const *argv[])
 
 // print round report
 #ifdef BUILD_REPORT
-      printf("%ld", nodes[0].time);
-      for (uint8_t i = 1; i < game->nodes_count; ++i) {
-         printf(",%ld", nodes[i].time);
-      }
-      printf("\n");
+      // A report
+      // printf("%ld", nodes[0].time);
+      // for (uint8_t i = 1; i < game->nodes_count; ++i) {
+      //    printf(",%ld", nodes[i].time);
+      // }
+      // printf("\n");
+      printf("%lld", (long long int)nodes[1].time - nodes[0].time);
+      printf(",%lld\n", (long long int)nodes[2].time - nodes[0].time);
 #endif // BUILD_REPORT
 
       // increment game round id
