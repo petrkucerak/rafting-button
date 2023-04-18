@@ -14,6 +14,8 @@
 game_t *game;
 node_t *nodes;
 
+long long int log_tmp[3];
+
 int main(int argc, char const *argv[])
 {
 
@@ -30,7 +32,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 10000000; // in ns (max value is UINT64_MAX)
+   game->deadline = 100000000; // in ns (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -68,6 +70,10 @@ int main(int argc, char const *argv[])
    C.latency_min = 280;
    C.latency_max = 310;
    // ****** CONFIG ******
+
+   log_tmp[0] = 0;
+   log_tmp[1] = 0;
+   log_tmp[2] = 0;
 
 #ifndef BUILD_REPORT
    printf("THE GAME HAS BEEN STARTED\n");
@@ -155,8 +161,17 @@ int main(int argc, char const *argv[])
       //    printf(",%ld", nodes[i].time);
       // }
       // printf("\n");
-      printf("%lld", (long long int)nodes[1].time - nodes[0].time);
-      printf(",%lld\n", (long long int)nodes[2].time - nodes[0].time);
+      if ((long long int)(nodes[1].time - nodes[0].time) != log_tmp[1] ||
+          (long long int)(nodes[2].time - nodes[0].time) != log_tmp[2]) {
+
+         log_tmp[0] = (long long int)game->time;
+         log_tmp[1] = (long long int)(nodes[1].time - nodes[0].time);
+         log_tmp[2] = (long long int)(nodes[2].time - nodes[0].time);
+
+         printf("%ld", game->time);
+         printf(",%lld", log_tmp[1]);
+         printf(",%lld\n", log_tmp[2]);
+      }
 #endif // BUILD_REPORT
 
       // increment game round id
