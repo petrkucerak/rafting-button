@@ -31,8 +31,9 @@ typedef struct node {
        time_speed; // control speed of local time
                    // (each n*100 processor tick adds one more tick),
                    // 0 - no problems, 1 - the most frequent, 255 - last often
-   uint16_t latency_min; // how many tacts shut be delay, how many tacts
+   // how many tacts shut be delay
    // 1 - no problems, 65535 - large latency
+   uint16_t latency_min;
    uint16_t latency_max;
    queue_t *queue_head;
    queue_t *queue_tail;
