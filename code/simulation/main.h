@@ -33,8 +33,8 @@ typedef struct node {
                    // 0 - no problems, 1 - the most frequent, 255 - last often
    // how many tacts shut be delay
    // 1 - no problems, 65535 - large latency
-   uint16_t latency_min;
-   uint16_t latency_max;
+   uint32_t latency_min;
+   uint32_t latency_max;
    queue_t *queue_head;
    queue_t *queue_tail;
 } node_t;
@@ -46,6 +46,6 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
                   uint8_t source);
 
 uint8_t is_queue_empty(uint8_t node_no);
-uint16_t get_rnd_latency(uint8_t node_no);
+uint32_t get_rnd_latency(uint8_t node_no);
 
 #endif // MAIN_H

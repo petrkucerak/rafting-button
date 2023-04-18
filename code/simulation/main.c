@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 1000000000; // in ns (max value is UINT64_MAX)
+   game->deadline = 60000000000; // in ns (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -57,18 +57,18 @@ int main(int argc, char const *argv[])
    // config enviroment to the simulation
    A.status = MASTER;
    A.time_speed = 250;
-   A.latency_min = 50;
-   A.latency_max = 200;
+   A.latency_min = 250000;  // 1 ms
+   A.latency_max = 1000000; // 4 ms
 
    B.time = 67189;
    B.time_speed = 198;
-   B.latency_min = 10;
-   B.latency_max = 300;
+   B.latency_min = 250000;  // 1 ms
+   B.latency_max = 1000000; // 4 ms
 
    C.time = 147189;
    C.time_speed = 100;
-   C.latency_min = 1000;
-   C.latency_max = 60000;
+   C.latency_min = 250000;  // 1 ms
+   C.latency_max = 1000000; // 4 ms
    // ****** CONFIG ******
 
    log_tmp[0] = 0;
@@ -245,7 +245,7 @@ uint8_t is_queue_empty(uint8_t node_no)
    return 0;
 }
 
-uint16_t get_rnd_latency(uint8_t node_no)
+uint32_t get_rnd_latency(uint8_t node_no)
 {
    return (rand() % (N.latency_max - N.latency_min + 1)) + N.latency_min;
 }

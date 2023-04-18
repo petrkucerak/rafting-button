@@ -1,4 +1,4 @@
-CFLAGS= --std=c99 -pipe -Wall -O3
+CFLAGS= --std=c99 -pipe -Wall -O3 -pedantic
 CFLAGS+= -ggdb3 # debug memmory leaks
  
 all:	main
