@@ -37,38 +37,15 @@ int main(int argc, char const *argv[])
    }
 
    // TODO: test queue mechanism
-   {
-      message_t *test_message = NULL;
-      test_message = (message_t *)malloc(sizeof(message_t));
-      test_message->type = TIME;
-      test_message->content = 64789;
-      push_to_queue(test_message, 0);
-   }
-   {
-      message_t *test_message = NULL;
-      test_message = (message_t *)malloc(sizeof(message_t));
-      test_message->type = TIME;
-      test_message->content = 159;
-      push_to_queue(test_message, 0);
-   }
-   {
-      message_t *test_message = NULL;
-      test_message = (message_t *)malloc(sizeof(message_t));
-      test_message->type = TIME;
-      test_message->content = 984638;
-      push_to_queue(test_message, 0);
-   }
+   send_message(45892, TIME, 0, 1);
+   send_message(4585192, TIME, 0, 1);
 
-   printf("%ld\n", nodes[0].queue_head->message->content);
-   printf("%ld\n", nodes[0].queue_head->next->message->content);
-   printf("%ld\n", nodes[0].queue_head->next->next->message->content);
-
-   // message_t *test_message = pop_from_queue(0);
-   // printf("%ld \n", test_message->content);
-   // test_message = pop_from_queue(0);
-   // printf("%ld \n", test_message->content);
-   // test_message = pop_from_queue(0);
-   // printf("%ld \n", test_message->content);
+   message_t *test_message = pop_from_queue(0);
+   printf("%ld \n", test_message->content);
+   test_message = pop_from_queue(0);
+   printf("%ld \n", test_message->content);
+   test_message = pop_from_queue(0);
+   printf("%ld \n", test_message->content);
 
    // game mechanism
 
@@ -101,7 +78,7 @@ void push_to_queue(message_t *message, uint8_t node_no)
 message_t *pop_from_queue(uint8_t node_no)
 {
    if (N.queue_head == NULL) {
-      fprintf(stderr, "ERROR: Queue is empyt [pop_from_queue]\n");
+      fprintf(stderr, "ERROR: Queue is empty [pop_from_queue]\n");
       exit(EXIT_FAILURE);
    }
    queue_t *tmp = N.queue_head;
@@ -111,8 +88,21 @@ message_t *pop_from_queue(uint8_t node_no)
       N.queue_tail = NULL;
 
    message_t *message = tmp->message;
-
    free(tmp);
-
    return message;
+}
+
+void send_message(uint64_t content, message_type_t type, uint8_t target,
+                  uint8_t source)
+{
+   message_t *message = (message_t *)malloc(sizeof(message_t));
+   if (message == NULL) {
+      fprintf(stderr, "ERROR: Can't allocated memory [send_message]\n");
+      exit(EXIT_FAILURE);
+   }
+   message->content = content;
+   message->type = type;
+   message->source = source;
+
+   push_to_queue(message, target);
 }

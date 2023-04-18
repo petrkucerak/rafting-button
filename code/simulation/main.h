@@ -15,6 +15,7 @@ typedef struct game {
 typedef struct message {
    message_type_t type;
    uint64_t content;
+   uint8_t source;
 } message_t;
 
 typedef struct queue {
@@ -30,7 +31,10 @@ typedef struct node {
    queue_t *queue_tail;
 } node_t;
 
-void push_to_queue(message_t* message, uint8_t node_no);
-message_t* pop_from_queue(uint8_t node_no);
+void push_to_queue(message_t *message, uint8_t node_no);
+message_t *pop_from_queue(uint8_t node_no);
+
+void send_message(uint64_t content, message_type_t type, uint8_t target,
+                  uint8_t source);
 
 #endif // MAIN_H
