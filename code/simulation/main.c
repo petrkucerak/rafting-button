@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 #define N nodes[node_no]
+#define A nodes[0]
+#define B nodes[1]
+#define C nodes[2]
 
 game_t *game;
 node_t *nodes;
@@ -17,11 +20,14 @@ int main(int argc, char const *argv[])
       fprintf(stderr, "ERROR: Can't allocated memory [game_t]\n");
       exit(EXIT_FAILURE);
    }
-   // set up game parametrs
-   game->deadline = 10000;
-   game->nodes_count = 2;
-   game->time = 0;
 
+   // ****** CONFIG ******
+   // set up game parametrs
+   game->deadline = 100000; // max value is UINT64_MAX
+   game->nodes_count = 3;
+   // ****** CONFIG ******
+
+   game->time = 0;
    nodes = NULL;
    nodes = (node_t *)malloc(sizeof(node_t) * game->nodes_count);
    if (nodes == NULL) {
@@ -36,25 +42,50 @@ int main(int argc, char const *argv[])
       nodes[i].time_speed = 100;
    }
 
-   // TODO: test queue mechanism
-   send_message(45892, TIME, 0, 1);
-   send_message(4585192, TIME, 0, 1);
+   // ****** CONFIG ******
+   // config enviroment to the simulation
+   A.status = MASTER;
+   A.time_speed = 200;
 
-   message_t *test_message = pop_from_queue(0);
-   printf("%ld \n", test_message->content);
-   test_message = pop_from_queue(0);
-   printf("%ld \n", test_message->content);
+   B.time = 456982;
+   B.time_speed = 198;
 
-   if (!is_queue_empty(0)) {
-      test_message = pop_from_queue(0);
-      printf("%ld \n", test_message->content);
+   C.time = 154694;
+   C.time_speed = 250;
+   // ****** CONFIG ******
+
+   // TODO: game mechanism
+
+   printf("THE GAME HAS BEEN STARTED\n");
+   while (game->deadline > game->time || !game->deadline) {
+      // processors tick is each 4 ns
+      if (!(game->time % 4)) {
+
+         // increment all cloks
+         for (uint8_t i = 0; i < game->nodes_count; ++i) {
+            ++nodes[i].time;
+            // speed_time each n * 1000 tick
+            if (!(nodes[i].time % (nodes[i].time_speed * 1000)) &&
+                !nodes[i].time_speed)
+               ++nodes[i].time;
+         }
+      }
+      // print round report
+      printf("%ld", game->time);
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+         printf(", %ld", nodes[i].time);
+      }
+      printf("\n");
+
+      // increment game round id
+      ++game->time;
    }
 
-   // game mechanism
-
-   // print report
-
    // clean memory
+   free(nodes);
+   nodes = NULL;
+   free(game);
+   game = NULL;
 
    return 0;
 }

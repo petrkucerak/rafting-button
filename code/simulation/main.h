@@ -7,7 +7,7 @@ typedef enum status { MASTER, SLAVE } status_t;
 typedef enum message_type { TIME, TIME_RTT, ACK } message_type_t;
 
 typedef struct game {
-   uint64_t time;       // auto-increment value
+   uint64_t time;       // auto-increment value, represents nanoseconds
    uint64_t deadline;   // the 0 value means an infinite loop
    uint8_t nodes_count; // count of nodes
 } game_t;
@@ -24,9 +24,13 @@ typedef struct queue {
 } queue_t;
 
 typedef struct node {
-   uint64_t time;      // local time
-   status_t status;    // MASTER or SLAVE
-   uint8_t time_speed; // control speed of local time
+   uint64_t time;   // local time (ESP32 speed is 240MHz => 4.1 ns / 1 tact),
+                    // incpement each 4 nanoseconds of game->time
+   status_t status; // MASTER or SLAVE
+   uint8_t
+       time_speed; // control speed of local time
+                   // (each n*1000 processor tick adds one more tick),
+                   // 0 - no problems, 1 - the most frequent, 255 - last often
    queue_t *queue_head;
    queue_t *queue_tail;
 } node_t;
