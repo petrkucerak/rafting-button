@@ -6,6 +6,9 @@
 #define A nodes[0]
 #define B nodes[1]
 #define C nodes[2]
+#define MASTER_NO 0
+
+// #define BUILD_REPORT
 
 game_t *game;
 node_t *nodes;
@@ -61,7 +64,7 @@ int main(int argc, char const *argv[])
       // processors tick is each 4 ns
       if (!(game->time % 4)) {
 
-         // increment all cloks
+         // CLOCK (local time)
          for (uint8_t i = 0; i < game->nodes_count; ++i) {
             ++nodes[i].time;
             // speed_time each n * 100 tick
@@ -69,13 +72,46 @@ int main(int argc, char const *argv[])
                 !(nodes[i].time % (nodes[i].time_speed * 100)))
                ++nodes[i].time;
          }
+
+         // SLAVE operations
+         for (uint8_t i = 0; i < game->nodes_count; ++i) {
+            if (!is_queue_empty(i)) {
+               message_t *message = pop_from_queue(i);
+               switch (message->type) {
+               case TIME:
+                  // send time back
+                  break;
+               case TIME_RTT:
+                  // set TIME and sent ACK back
+                  // set TIME: if differnt > x set, if differnt < x set average
+                  break;
+               }
+               free(message);
+               message = NULL;
+            }
+         }
+         // MASTER operations
+         if (!is_queue_empty(MASTER_NO)) {
+            message_t *message = pop_from_queue(MASTER_NO);
+            switch (message->type) {
+            case TIME:
+               // send TIME with RTT
+               break;
+            case ACK:
+               // sucess sichnizoation
+               break;
+            }
+         }
       }
-      // print round report
+
+// print round report
+#ifdef BUILD_REPORT
       printf("%ld", nodes[0].time);
       for (uint8_t i = 1; i < game->nodes_count; ++i) {
          printf(",%ld", nodes[i].time);
       }
       printf("\n");
+#endif // BUILD_REPORT
 
       // increment game round id
       ++game->time;
