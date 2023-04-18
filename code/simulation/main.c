@@ -69,8 +69,6 @@ int main(int argc, char const *argv[])
    C.latency_max = 310;
    // ****** CONFIG ******
 
-   // TODO: game mechanism
-
 #ifndef BUILD_REPORT
    printf("THE GAME HAS BEEN STARTED\n");
 #endif // BUILD_REPORT
