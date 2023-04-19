@@ -1,10 +1,9 @@
 # Scenarios
 
 ## B1
-```c
-game->deadline = 1000000000; // in ns (max value is UINT64_MAX)
-game->nodes_count = 3;
 
+![B1](B1.png)
+```c
 A.status = MASTER;
 A.time_speed = 250;
 A.latency_min = 100;  // 1 μs
@@ -21,7 +20,10 @@ C.latency_min = 100;  // 1 μs
 C.latency_max = 65535; // 262 μs
 ```
 
-#B2
+## B2
+
+![B2](B2-1.png)
+![B2](B2-2.png)
 ```c
 game->deadline = 1000000000; // in ns (max value is UINT64_MAX)
 
@@ -41,7 +43,8 @@ C.latency_min = 1000;
 C.latency_max = 60000;
 ```
 
-#B3
+## B3
+![B2](B3.png)
 ```c
 A.status = MASTER;
 A.time_speed = 250;
@@ -59,7 +62,9 @@ C.latency_min = 2500;
 C.latency_max = 10000;
 ```
 
-#B4
+## B4
+![B4](B4-1.png)
+![B4](B4-2.png)
 ```c
 A.status = MASTER;
 A.time_speed = 250;
@@ -77,7 +82,8 @@ C.latency_min = 1;
 C.latency_max = 10;
 ```
 
-#B5
+## B5
+![B5](B5.png)
 ```c
 A.status = MASTER;
 A.time_speed = 250;
@@ -95,7 +101,8 @@ C.latency_min = 9500;
 C.latency_max = 10000;
 ```
 
-#B6
+## B6
+![B6](B6.png)
 ```c
 A.status = MASTER;
 A.time_speed = 250;
