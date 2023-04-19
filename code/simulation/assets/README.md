@@ -40,3 +40,39 @@ C.time_speed = 100;
 C.latency_min = 1000;
 C.latency_max = 60000;
 ```
+
+#B3
+```c
+A.status = MASTER;
+A.time_speed = 250;
+A.latency_min = 2500;
+A.latency_max = 10000;
+
+B.time = 67189;
+B.time_speed = 240;
+B.latency_min = 2500;
+B.latency_max = 10000;
+
+C.time = 147189;
+C.time_speed = 255;
+C.latency_min = 2500;
+C.latency_max = 10000;
+```
+
+#B4
+```c
+A.status = MASTER;
+A.time_speed = 250;
+A.latency_min = 1;
+A.latency_max = 10;
+
+B.time = 67189;
+B.time_speed = 240;
+B.latency_min = 1;
+B.latency_max = 10;
+
+C.time = 147189;
+C.time_speed = 255;
+C.latency_min = 1;
+C.latency_max = 10;
+```

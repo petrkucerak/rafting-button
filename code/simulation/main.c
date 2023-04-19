@@ -15,6 +15,7 @@ game_t *game;
 node_t *nodes;
 
 long long int log_tmp[3];
+uint32_t generated_rnd[3];
 
 int main(int argc, char const *argv[])
 {
@@ -32,7 +33,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 60000000000; // in ns (max value is UINT64_MAX)
+   game->deadline = 2000000000; // in ns (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -57,23 +58,26 @@ int main(int argc, char const *argv[])
    // config enviroment to the simulation
    A.status = MASTER;
    A.time_speed = 250;
-   A.latency_min = 250000;  // 1 ms
-   A.latency_max = 1000000; // 4 ms
+   A.latency_min = 1;
+   A.latency_max = 10;
 
    B.time = 67189;
-   B.time_speed = 198;
-   B.latency_min = 250000;  // 1 ms
-   B.latency_max = 1000000; // 4 ms
+   B.time_speed = 240;
+   B.latency_min = 1;
+   B.latency_max = 10;
 
    C.time = 147189;
-   C.time_speed = 100;
-   C.latency_min = 250000;  // 1 ms
-   C.latency_max = 1000000; // 4 ms
+   C.time_speed = 255;
+   C.latency_min = 1;
+   C.latency_max = 10;
    // ****** CONFIG ******
 
    log_tmp[0] = 0;
    log_tmp[1] = 0;
    log_tmp[2] = 0;
+   generated_rnd[0] = 0;
+   generated_rnd[1] = 0;
+   generated_rnd[2] = 0;
 
 #ifndef BUILD_REPORT
    printf("THE GAME HAS BEEN STARTED\n");
@@ -94,8 +98,11 @@ int main(int argc, char const *argv[])
 
          // SLAVE operations
          for (uint8_t i = 0; i < game->nodes_count; ++i) {
-            if (!(game->time % get_rnd_latency(i))) {
+            if (!generated_rnd[i])
+               generated_rnd[i] = get_rnd_latency(i);
+            if (!(game->time % generated_rnd[i])) {
                if (!is_queue_empty(i)) {
+                  generated_rnd[i] = 0;
                   message_t *message = pop_from_queue(i);
                   switch (message->type) {
                   case TIME:
@@ -109,7 +116,7 @@ int main(int argc, char const *argv[])
                      // average different is 10 μs => different 2500 (2500 * 4
                      // ns) set means set (TIME + RTT) * 1.5 -> 3 ways
                      // printf("Slave RTT + TIME\n");
-                     if (message->content > 2500) {
+                     if (message->content > 100) {
                         nodes[i].time = message->content;
                      } else {
                         nodes[i].time =
@@ -124,8 +131,11 @@ int main(int argc, char const *argv[])
             }
          }
          // MASTER operations
-         if (!(game->time % get_rnd_latency(MASTER_NO))) {
+         if (!generated_rnd[MASTER_NO])
+            generated_rnd[MASTER_NO] = get_rnd_latency(MASTER_NO);
+         if (!(game->time % generated_rnd[MASTER_NO])) {
             if (!is_queue_empty(MASTER_NO)) {
+               generated_rnd[MASTER_NO] = 0;
                message_t *message = pop_from_queue(MASTER_NO);
                switch (message->type) {
                case TIME:
