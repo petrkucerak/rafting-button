@@ -14,9 +14,6 @@
 game_t *game;
 node_t *nodes;
 
-long long int log_tmp[3];
-uint32_t generated_rnd[3];
-
 int main(int argc, char const *argv[])
 {
 
@@ -33,7 +30,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 2000000000; // in ns (max value is UINT64_MAX)
+   game->deadline = 60000; // (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -49,140 +46,96 @@ int main(int argc, char const *argv[])
       nodes[i].queue_tail = NULL;
       nodes[i].status = SLAVE;
       nodes[i].time = 0;
-      nodes[i].latency_min = 0;
-      nodes[i].latency_max = 0;
+      nodes[i].latency = 0;
       nodes[i].time_speed = 100;
+      nodes[i].is_first_setup = 1;
    }
 
    // ****** CONFIG ******
    // config enviroment to the simulation
    A.status = MASTER;
-   A.time_speed = 250;
-   A.latency_min = 100;
-   A.latency_max = 150;
+   A.time = 0;
+   A.is_first_setup = 0;
 
-   B.time = 67189;
-   B.time_speed = 240;
-   B.latency_min = 100;
-   B.latency_max = 150;
-
-   C.time = 147189;
-   C.time_speed = 255;
-   C.latency_min = 100;
-   C.latency_max = 150;
+   B.time = 23529;
+   C.time = 98021;
    // ****** CONFIG ******
 
-   log_tmp[0] = 0;
-   log_tmp[1] = 0;
-   log_tmp[2] = 0;
-   generated_rnd[0] = 0;
-   generated_rnd[1] = 0;
-   generated_rnd[2] = 0;
-
-#ifndef BUILD_REPORT
-   printf("THE GAME HAS BEEN STARTED\n");
-#endif // BUILD_REPORT
-
    while (game->deadline > game->time || !game->deadline) {
-      // processors tick is each 4 ns
-      if (!(game->time % 4)) {
 
-         // CLOCK (local time)
-         for (uint8_t i = 0; i < game->nodes_count; ++i) {
-            ++nodes[i].time;
-            // speed_time each n * 100 tick
-            if (nodes[i].time_speed != 0 &&
-                !(nodes[i].time % (nodes[i].time_speed * 100)))
-               ++nodes[i].time;
-         }
+      // time incementation
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+         ++nodes[i].time;
+      }
 
-         // SLAVE operations
-         for (uint8_t i = 0; i < game->nodes_count; ++i) {
-            if (!generated_rnd[i])
-               generated_rnd[i] = get_rnd_latency(i);
-            if (!(game->time % generated_rnd[i])) {
-               if (!is_queue_empty(i)) {
-                  generated_rnd[i] = 0;
-                  message_t *message = pop_from_queue(i);
-                  switch (message->type) {
-                  case TIME:
-                     // send time back
-                     // printf("Slave TIME\n");
-                     send_message(message->content, TIME, message->source, i);
-                     break;
-                  case TIME_RTT:
-                     // set TIME and sent ACK back
-                     // set TIME: if differnt > x set, if differnt < x set
-                     // average different is 10 μs => different 2500 (2500 * 4
-                     // ns) set means set (TIME + RTT) * 1.5 -> 3 ways
-                     // printf("Slave RTT + TIME\n");
-                     if (message->content > 100) {
-                        nodes[i].time = message->content;
-                     } else {
-                        nodes[i].time =
-                            ((message->content) + nodes[i].time) / 2;
-                     }
-                     send_message(0, ACK, MASTER_NO, i);
-                     break;
-                  }
-                  free(message);
-                  message = NULL;
-               }
-            }
-         }
-         // MASTER operations
-         if (!generated_rnd[MASTER_NO])
-            generated_rnd[MASTER_NO] = get_rnd_latency(MASTER_NO);
-         if (!(game->time % generated_rnd[MASTER_NO])) {
-            if (!is_queue_empty(MASTER_NO)) {
-               generated_rnd[MASTER_NO] = 0;
-               message_t *message = pop_from_queue(MASTER_NO);
+      // status machine
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+         if (!is_queue_empty(i)) {
+            message_t *message = pop_from_queue(i);
+            // SLAVE OPERATION
+            if (!is_node_master(i)) {
                switch (message->type) {
                case TIME:
-                  // send TIME with RTT
-                  // printf("Master TIME\n");
-                  uint64_t RTT = (A.time - message->content) / 2;
-                  send_message(A.time + RTT, TIME_RTT, message->source,
-                               MASTER_NO);
+                  // sent message with same content to source
+                  send_message(message->content, TIME, message->source, i);
+                  break;
+
+               case TIME_RTT:
+                  // set time and sent back ACK
+                  // first sync, simply set
+                  if (nodes[i].is_first_setup) {
+                     nodes[i].time = message->content;
+                     nodes[i].is_first_setup = 0;
+                  } else {
+                     // not first sync, set avg
+                     nodes[i].time = (nodes[i].time + message->content) / 2;
+                  }
+                  send_message(message->content, ACK, message->source, i);
+                  break;
+
+               default:
+                  fprintf(stderr, "ERROR: Unknown operation\n");
+                  exit(EXIT_FAILURE);
+                  break;
+               }
+            } else {
+               // MASTER OPERATION
+               switch (message->type) {
+               case TIME:
+                  // get RTT and sent TIME_RTT message
+                  // time + rtt = (b - a) + b = 2b - a
+                  // uint64_t time_rtt = 2 * nodes[i].time - message->content;
+                  send_message(2 * nodes[i].time - message->content, TIME_RTT, message->source, i);
                   break;
                case ACK:
-                  // sucess sichnizoation
-                  // printf("Master ACK\n");
+                  // do nothing
+                  break;
+               default:
+                  fprintf(stderr, "ERROR: Unknown operation\n");
+                  exit(EXIT_FAILURE);
                   break;
                }
-               free(message);
-               message = NULL;
             }
-            // send time sych message each (4 ns * 10000 =) 40 μs
-            if (!(A.time % 10000)) {
-               // printf("Send\n");
-               for (uint8_t i = 1; i < game->nodes_count; ++i) {
-                  send_message(A.time, TIME, i, MASTER_NO);
-               }
-            }
+            free(message);
+            message = NULL;
          }
       }
 
-// print round report
-#ifdef BUILD_REPORT
-      // A report
-      // printf("%ld", nodes[0].time);
-      // for (uint8_t i = 1; i < game->nodes_count; ++i) {
-      //    printf(",%ld", nodes[i].time);
-      // }
-      // printf("\n");
-      if ((long long int)(nodes[1].time - nodes[0].time) != log_tmp[1] ||
-          (long long int)(nodes[2].time - nodes[0].time) != log_tmp[2]) {
-
-         log_tmp[0] = (long long int)game->time;
-         log_tmp[1] = (long long int)(nodes[1].time - nodes[0].time);
-         log_tmp[2] = (long long int)(nodes[2].time - nodes[0].time);
-
-         printf("%ld", game->time);
-         printf(",%lld", log_tmp[1]);
-         printf(",%lld\n", log_tmp[2]);
+      // start time synchronization
+      // sync starts each 10 ms from MATER node
+      if (!(game->time % 100)) {
+         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO);
+         }
       }
-#endif // BUILD_REPORT
+
+      // print round report
+
+      printf("%ld", game->time);
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+         printf(",%lld", (long long int)(nodes[i].time - game->time));
+      }
+      printf("\n");
 
       // increment game round id
       ++game->time;
@@ -255,7 +208,9 @@ uint8_t is_queue_empty(uint8_t node_no)
    return 0;
 }
 
-uint32_t get_rnd_latency(uint8_t node_no)
+uint8_t is_node_master(uint8_t node_no)
 {
-   return (rand() % (N.latency_max - N.latency_min + 1)) + N.latency_min;
+   if (N.status == MASTER)
+      return 1;
+   return 0;
 }
