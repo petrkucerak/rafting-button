@@ -62,3 +62,20 @@ Simulaci se stejnými parametry jsem nechal běžet po dobu jedné hodiny. Stře
 
 - 0.2141 pro B
 - 0.1881 pro C
+
+## D1
+
+Do scénářů jsem implementoval mechanismu balanceru, který ukládá historii času a je tak schopen odfiltrovat extrémy. Měření tak ve střední hodnotě dosahuje větší přesnosti (B 0.112 ms a C 0.459 ms).
+
+V případě větší velikosti balanceru, dochází k nesrovnalostem a algoritmus již nefunguje efektivně.
+
+- **náhodně zpoždění na všech uzlech v rozmezí od 1 - 6 ms**
+- synchronizační zpráva odesílaná každých 50 ms
+- doba simulace je 60 s
+- velikost balanceru 5
+
+![simulace D1](D1.png)
+
+Pokud simulaci nechám běžet delší čas, dosahuje o trochu nižší kvality výsledků ovšem opět se vejdou do limitu 1 ms, konkrétně:
+- pro B je hodnota 0.5595 ms
+- pro C je hodnota 0.1551 ms

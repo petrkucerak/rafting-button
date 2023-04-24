@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 60*60*10000; // 120 s (max value is UINT64_MAX)
+   game->deadline = 60 * 60 * 10000; // 120 s (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -52,6 +52,9 @@ int main(int argc, char const *argv[])
       nodes[i].latency = 0;
       nodes[i].time_speed = 100;
       nodes[i].is_first_setup = 1;
+      for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
+         nodes[i].balancer[j] = 0;
+      }
    }
 
    // ****** CONFIG ******
@@ -79,6 +82,9 @@ int main(int argc, char const *argv[])
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
          ++nodes[i].time;
          // TODO: time speed control
+         for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
+            ++nodes[i].balancer[j];
+         }
       }
 
       // process pipe
@@ -104,6 +110,9 @@ int main(int argc, char const *argv[])
                   // first sync, simply set
                   if (nodes[i].is_first_setup) {
                      nodes[i].time = message->content;
+                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
+                        nodes[i].balancer[j] = message->content;
+                     }
                      nodes[i].is_first_setup = 0;
 #ifdef DEBUG
                      printf("INFO [%d]: First set time on value %ld\n", i,
@@ -116,7 +125,21 @@ int main(int argc, char const *argv[])
                             (nodes[i].time + message->content) / 2,
                             nodes[i].time);
 #endif // DEBUG
-                     nodes[i].time = (nodes[i].time + message->content) / 2;
+                     nodes[i].balancer[game->time % BALANCER_SIZE] =
+                         ((BALANCER_SIZE - 1) * nodes[i].time +
+                          message->content) /
+                         BALANCER_SIZE;
+                     nodes[i].time = 0;
+                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
+                        nodes[i].time += nodes[i].balancer[j];
+                     }
+                     nodes[i].time /= BALANCER_SIZE;
+#ifdef DEBUG
+                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
+                        printf(" %ld", nodes[i].balancer[j]);
+                     }
+                     printf("\n");
+#endif // DEBUG
                   }
                   send_message(message->content, ACK, message->source, i,
                                nodes[i].latency);

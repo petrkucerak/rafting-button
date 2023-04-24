@@ -2,6 +2,7 @@
 #define MAIN_H
 
 #include <stdint.h>
+#define BALANCER_SIZE 5
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
@@ -37,7 +38,8 @@ typedef struct queue {
 } queue_t;
 
 typedef struct node {
-   uint64_t time;      // auto incement, 1 step represents 25000 procesor ticks
+   uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
+   uint64_t balancer[BALANCER_SIZE];
    status_t status;    // MASTER or SLAVE
    uint8_t time_speed; // negligible
    uint32_t latency;   // assume that one message cannot overtake the other
@@ -63,5 +65,6 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
 uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
+
 
 #endif // MAIN_H
