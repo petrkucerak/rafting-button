@@ -9,8 +9,7 @@
 #define C nodes[2]
 #define MASTER_NO 0
 
-#define DEBUG
-
+// #define DEBUG
 #define BUILD_REPORT
 
 game_t *game;
@@ -32,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 60000; // (max value is UINT64_MAX)
+   game->deadline = 60000; // 6 s (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -60,16 +59,18 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
-   A.latency = 10;
 
-   B.time = 187;
-   B.latency = 12;
+   B.time = 70;
 
-   C.time = 207;
-   C.latency = 24;
+   C.time = 167;
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
+
+      // set rnd latency
+      A.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      B.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      C.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
@@ -107,11 +108,12 @@ int main(int argc, char const *argv[])
 #endif // DEBUG
                   } else {
                      // not first sync, set avg
-                     nodes[i].time = (nodes[i].time + message->content) / 2;
 #ifdef DEBUG
-                     printf("INFO [%d]: Set time on value %ld\n", i,
+                     printf("INFO [%d]: Set time on value %ld from %ld\n", i,
+                            (nodes[i].time + message->content) / 2,
                             nodes[i].time);
 #endif // DEBUG
+                     nodes[i].time = (nodes[i].time + message->content) / 2;
                   }
                   send_message(message->content, ACK, message->source, i,
                                nodes[i].latency);
@@ -127,16 +129,19 @@ int main(int argc, char const *argv[])
                switch (message->type) {
                case TIME:
 
+                  uint64_t time_rtt =
+                      nodes[i].time + ((nodes[i].time - message->content) / 2);
+
 #ifdef DEBUG
-                  printf("INFO [%d]: Calcul TIME_RTT, time: %ld, RTT: %ld\n", i,
-                         nodes[i].time, (nodes[i].time - message->content));
+                  printf("INFO [%d]: Calcul TIME_RTT, time: %ld, RTT: %ld, "
+                         "will set %ld\n",
+                         i, nodes[i].time,
+                         (nodes[i].time - message->content) / 2, time_rtt);
 #endif // DEBUG
 
                   // get RTT and sent TIME_RTT message
-                  // time + rtt = (b - a) + b = 2b - a
-                  // uint64_t time_rtt = 2 * nodes[i].time - message->content;
-                  send_message(2 * nodes[i].time - message->content, TIME_RTT,
-                               message->source, i, nodes[i].latency);
+                  send_message(time_rtt, TIME_RTT, message->source, i,
+                               nodes[i].latency);
                   break;
                case ACK:
                   // do nothing
@@ -153,8 +158,8 @@ int main(int argc, char const *argv[])
       }
 
       // start time synchronization
-      // sync starts each 10 ms from MATER node
-      if (!(game->time % 100)) {
+      // sync starts each 50 ms from MATER node
+      if (!(game->time % 500)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
                          nodes[i].latency);
@@ -302,4 +307,8 @@ uint8_t is_after_delay(uint8_t node_no)
    if (game->time >= N.queue_head->message->delay)
       return 1;
    return 0;
+}
+uint32_t get_rnd_between(uint32_t min, uint32_t max)
+{
+   return (uint32_t)((rand() % (max - min + 1)) + min);
 }

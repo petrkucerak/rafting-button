@@ -62,5 +62,6 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
 
 uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
+uint32_t get_rnd_between(uint32_t min, uint32_t max);
 
 #endif // MAIN_H
