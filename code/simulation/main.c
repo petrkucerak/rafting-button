@@ -46,6 +46,8 @@ int main(int argc, char const *argv[])
    for (uint8_t i = 0; i < game->nodes_count; ++i) {
       nodes[i].queue_head = NULL;
       nodes[i].queue_tail = NULL;
+      nodes[i].queue_head = NULL;
+      nodes[i].queue_tail = NULL;
       nodes[i].status = SLAVE;
       nodes[i].time = 0;
       nodes[i].latency = 0;
@@ -75,9 +77,14 @@ int main(int argc, char const *argv[])
          // TODO: time speed control
       }
 
+      // process pipe
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+         process_pipe(i);
+      }
+
       // status machine
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         while (!is_queue_empty(i) && is_after_delay(i)) {
+         while (!is_queue_empty(i)) {
             message_t *message = pop_from_queue(i);
             // SLAVE OPERATION
             if (!is_node_master(i)) {
@@ -194,6 +201,26 @@ void push_to_queue(message_t *message, uint8_t node_no)
    N.queue_tail->next = new_queue;
    N.queue_tail = new_queue;
 }
+void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
+                  uint32_t delay)
+{
+   pipe_t *new_pipe = (pipe_t *)malloc(sizeof(pipe_t));
+   if (new_pipe == NULL) {
+      fprintf(stderr, "ERROR: Can't allocated memory [push_to_pipe]\n");
+      exit(EXIT_FAILURE);
+   }
+   new_pipe->message = message;
+   new_pipe->delay = delay + game->time;
+   new_pipe->target = target;
+   new_pipe->next = NULL;
+   if (nodes[source].pipe_tail == NULL) {
+      nodes[source].pipe_tail = new_pipe;
+      nodes[source].pipe_head = new_pipe;
+      return;
+   }
+   nodes[source].pipe_tail->next = new_pipe;
+   nodes[source].pipe_tail = new_pipe;
+}
 message_t *pop_from_queue(uint8_t node_no)
 {
    if (N.queue_head == NULL) {
@@ -210,6 +237,31 @@ message_t *pop_from_queue(uint8_t node_no)
    free(tmp);
    return message;
 }
+void pop_from_pipe_to_queue(uint8_t node_no)
+{
+   if (N.pipe_head == NULL) {
+      fprintf(stderr, "ERROR: Queue is empty [pop_from_pipe]\n");
+      exit(EXIT_FAILURE);
+   }
+   pipe_t *tmp = N.pipe_head;
+   N.pipe_head = N.pipe_head->next;
+
+   if (N.pipe_head == NULL)
+      N.pipe_tail = NULL;
+
+   message_t *message = tmp->message;
+
+   push_to_queue(message, tmp->target);
+   free(tmp);
+}
+
+void process_pipe(uint8_t node_no)
+{
+
+   while (N.pipe_head != NULL && N.pipe_head->delay <= game->time) {
+      pop_from_pipe_to_queue(node_no);
+   }
+}
 
 void send_message(uint64_t content, message_type_t type, uint8_t target,
                   uint8_t source, uint64_t delay)
@@ -224,10 +276,10 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->source = source;
    message->delay = game->time + delay;
 
-   push_to_queue(message, target);
+   push_to_pipe(message, source, target, delay);
 #ifdef DEBUG
-   printf("INFO [%d]: Mesage type %d sended with %ld to %d\n", source, type,
-          content, target);
+   printf("INFO [%d]: Mesage type %d pushed to pipe with %ld to %d\n", source,
+          type, content, target);
 #endif // DEBUG
 }
 

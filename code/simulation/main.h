@@ -24,6 +24,13 @@ typedef struct message {
    uint64_t delay;
 } message_t;
 
+typedef struct pipe {
+   message_t *message;
+   struct pipe *next;
+   uint8_t target;
+   uint32_t delay;
+} pipe_t;
+
 typedef struct queue {
    message_t *message;
    struct queue *next;
@@ -37,17 +44,23 @@ typedef struct node {
                        // 1 represents 100 µs
    queue_t *queue_head;
    queue_t *queue_tail;
+   pipe_t *pipe_head;
+   pipe_t *pipe_tail;
    uint8_t is_first_setup;
 } node_t;
 
 void push_to_queue(message_t *message, uint8_t node_no);
 message_t *pop_from_queue(uint8_t node_no);
 
+void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
+                  uint32_t delay);
+void pop_from_pipe_to_queue(uint8_t node_no);
+void process_pipe(uint8_t node_no);
+
 void send_message(uint64_t content, message_type_t type, uint8_t target,
                   uint8_t source, uint64_t delay);
 
 uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
-uint8_t is_after_delay(uint8_t node_no);
 
 #endif // MAIN_H
