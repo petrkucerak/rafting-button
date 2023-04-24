@@ -56,9 +56,13 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
+   A.latency = 1;
 
-   B.time = 23529;
-   C.time = 98021;
+   B.time = 29;
+   B.latency = 1;
+
+   C.time = 21;
+   C.latency = 1;
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
@@ -66,18 +70,20 @@ int main(int argc, char const *argv[])
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
          ++nodes[i].time;
+         // TODO: time speed control
       }
 
       // status machine
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         if (!is_queue_empty(i)) {
+         while (!is_queue_empty(i) && is_after_delay(i)) {
             message_t *message = pop_from_queue(i);
             // SLAVE OPERATION
             if (!is_node_master(i)) {
                switch (message->type) {
                case TIME:
                   // sent message with same content to source
-                  send_message(message->content, TIME, message->source, i);
+                  send_message(message->content, TIME, message->source, i,
+                               nodes[i].latency);
                   break;
 
                case TIME_RTT:
@@ -86,11 +92,16 @@ int main(int argc, char const *argv[])
                   if (nodes[i].is_first_setup) {
                      nodes[i].time = message->content;
                      nodes[i].is_first_setup = 0;
+                     // printf("First set time on value %ld in the node %d\n",
+                     //  nodes[i].time, i);
                   } else {
                      // not first sync, set avg
                      nodes[i].time = (nodes[i].time + message->content) / 2;
+                     // printf("Set time on value %ld in the node %d\n",
+                     //        nodes[i].time, i);
                   }
-                  send_message(message->content, ACK, message->source, i);
+                  send_message(message->content, ACK, message->source, i,
+                               nodes[i].latency);
                   break;
 
                default:
@@ -105,7 +116,10 @@ int main(int argc, char const *argv[])
                   // get RTT and sent TIME_RTT message
                   // time + rtt = (b - a) + b = 2b - a
                   // uint64_t time_rtt = 2 * nodes[i].time - message->content;
-                  send_message(2 * nodes[i].time - message->content, TIME_RTT, message->source, i);
+                  // printf("Calcul TIME_RTT, time: %ld, RTT: %ld\n",
+                  //  nodes[i].time, (nodes[i].time - message->content));
+                  send_message(2 * nodes[i].time - message->content, TIME_RTT,
+                               message->source, i, nodes[i].latency);
                   break;
                case ACK:
                   // do nothing
@@ -125,15 +139,16 @@ int main(int argc, char const *argv[])
       // sync starts each 10 ms from MATER node
       if (!(game->time % 100)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO);
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
+                         nodes[i].latency);
          }
       }
 
       // print round report
 
-      printf("%ld", game->time);
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         printf(",%lld", (long long int)(nodes[i].time - game->time));
+      printf("%ld", A.time);
+      for (uint8_t i = 1; i < game->nodes_count; ++i) {
+         printf(",%lld", (long long int)(nodes[i].time - A.time));
       }
       printf("\n");
 
@@ -187,7 +202,7 @@ message_t *pop_from_queue(uint8_t node_no)
 }
 
 void send_message(uint64_t content, message_type_t type, uint8_t target,
-                  uint8_t source)
+                  uint8_t source, uint64_t delay)
 {
    message_t *message = (message_t *)malloc(sizeof(message_t));
    if (message == NULL) {
@@ -197,8 +212,11 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->content = content;
    message->type = type;
    message->source = source;
+   message->delay = game->time + delay;
 
    push_to_queue(message, target);
+
+   // printf("Mesage type %d sended with %ld to %d\n", type, content, target);
 }
 
 uint8_t is_queue_empty(uint8_t node_no)
@@ -211,6 +229,13 @@ uint8_t is_queue_empty(uint8_t node_no)
 uint8_t is_node_master(uint8_t node_no)
 {
    if (N.status == MASTER)
+      return 1;
+   return 0;
+}
+
+uint8_t is_after_delay(uint8_t node_no)
+{
+   if (game->time >= N.queue_head->message->delay)
       return 1;
    return 0;
 }
