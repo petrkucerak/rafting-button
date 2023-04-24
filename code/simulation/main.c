@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 60000; // 6 s (max value is UINT64_MAX)
+   game->deadline = 120*10000; // 120 s (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 

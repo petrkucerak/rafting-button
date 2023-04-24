@@ -38,3 +38,22 @@ Zpoždění jsou konstatní ale na každém uzlu rozdílné. V tomto případě 
 
 ![simulace B3](B3.png)
 
+## C1
+
+Simulace navíc počítá střední hodnotu z naměřených hodnot. Výsledná synchronizovaná hodnota je přesnější. Rozdíl pro s B uzlem je 0.048 ms a s C uzlm 0.390 při ěření po dobu 6 s.
+
+- **náhodně zpoždění na všech uzlech v rozmezí od 1 - 6 ms**
+- synchronizační zpráva odesílaná každých 50 ms
+- doba simulace je 6 s
+
+![simulace C1](C1.png)
+
+## C2
+
+Scénář C2 oproti předchozímu prodlužuje dobu simulace na 2 minuty. Střední hodnota se ustálila na hodnotách 0.141 ms pro C a 0.188 ms pro B.
+
+- **náhodně zpoždění na všech uzlech v rozmezí od 1 - 6 ms**
+- synchronizační zpráva odesílaná každých 50 ms
+- doba simulace je 120 s
+
+![simulace C2](C2.png)
