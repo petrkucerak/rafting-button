@@ -67,7 +67,9 @@ Simulaci se stejnými parametry jsem nechal běžet po dobu jedné hodiny. Stře
 
 Do scénářů jsem implementoval mechanismu balanceru, který ukládá historii času a je tak schopen odfiltrovat extrémy. Měření tak ve střední hodnotě dosahuje větší přesnosti (B 0.112 ms a C 0.459 ms).
 
-V případě větší velikosti balanceru, dochází k nesrovnalostem a algoritmus již nefunguje efektivně.
+Nevýhodou tohoto přístupu je ovšem vyšší datová a výpočetní náročnost.
+
+> V případě větší velikosti balanceru, dochází k nesrovnalostem a algoritmus již nefunguje efektivně.
 
 - **náhodně zpoždění na všech uzlech v rozmezí od 1 - 6 ms**
 - synchronizační zpráva odesílaná každých 50 ms
