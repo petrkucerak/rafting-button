@@ -57,3 +57,8 @@ Scénář C2 oproti předchozímu prodlužuje dobu simulace na 2 minuty. Středn
 - doba simulace je 120 s
 
 ![simulace C2](C2.png)
+
+Simulaci se stejnými parametry jsem nechal běžet po dobu jedné hodiny. Střední hodnota vyšla:
+
+- 0.2141 pro B
+- 0.1881 pro C
