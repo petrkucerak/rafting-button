@@ -78,6 +78,6 @@ Nevýhodou tohoto přístupu je ovšem vyšší datová a výpočetní náročno
 
 ![simulace D1](D1.png)
 
-Pokud simulaci nechám běžet delší čas, dosahuje o trochu nižší kvality výsledků ovšem opět se vejdou do limitu 1 ms, konkrétně:
+Pokud simulaci nechám běžet delší čas (60 min), dosahuje o trochu nižší kvality výsledků ovšem opět se vejdou do limitu 1 ms, konkrétně:
 - pro B je hodnota 0.5595 ms
 - pro C je hodnota 0.1551 ms
