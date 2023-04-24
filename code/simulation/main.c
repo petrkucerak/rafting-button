@@ -59,18 +59,21 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
+   A.latency = 20;
 
    B.time = 70;
+   B.latency = 20;
 
    C.time = 167;
+   C.latency = 20;
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
-      B.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
-      C.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      // A.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      // B.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      // C.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
