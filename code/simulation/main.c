@@ -59,13 +59,13 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
-   A.latency = 20;
+   A.latency = 10;
 
    B.time = 70;
-   B.latency = 20;
+   B.latency = 12;
 
    C.time = 167;
-   C.latency = 20;
+   C.latency = 8;
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
