@@ -9,6 +9,8 @@
 #define C nodes[2]
 #define MASTER_NO 0
 
+#define DEBUG
+
 #define BUILD_REPORT
 
 game_t *game;
@@ -56,13 +58,13 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
-   A.latency = 1;
+   A.latency = 10;
 
-   B.time = 29;
-   B.latency = 1;
+   B.time = 187;
+   B.latency = 12;
 
-   C.time = 21;
-   C.latency = 1;
+   C.time = 207;
+   C.latency = 24;
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
@@ -92,13 +94,17 @@ int main(int argc, char const *argv[])
                   if (nodes[i].is_first_setup) {
                      nodes[i].time = message->content;
                      nodes[i].is_first_setup = 0;
-                     // printf("First set time on value %ld in the node %d\n",
-                     //  nodes[i].time, i);
+#ifdef DEBUG
+                     printf("INFO [%d]: First set time on value %ld\n", i,
+                            nodes[i].time);
+#endif // DEBUG
                   } else {
                      // not first sync, set avg
                      nodes[i].time = (nodes[i].time + message->content) / 2;
-                     // printf("Set time on value %ld in the node %d\n",
-                     //        nodes[i].time, i);
+#ifdef DEBUG
+                     printf("INFO [%d]: Set time on value %ld\n", i,
+                            nodes[i].time);
+#endif // DEBUG
                   }
                   send_message(message->content, ACK, message->source, i,
                                nodes[i].latency);
@@ -113,11 +119,15 @@ int main(int argc, char const *argv[])
                // MASTER OPERATION
                switch (message->type) {
                case TIME:
+
+#ifdef DEBUG
+                  printf("INFO [%d]: Calcul TIME_RTT, time: %ld, RTT: %ld\n", i,
+                         nodes[i].time, (nodes[i].time - message->content));
+#endif // DEBUG
+
                   // get RTT and sent TIME_RTT message
                   // time + rtt = (b - a) + b = 2b - a
                   // uint64_t time_rtt = 2 * nodes[i].time - message->content;
-                  // printf("Calcul TIME_RTT, time: %ld, RTT: %ld\n",
-                  //  nodes[i].time, (nodes[i].time - message->content));
                   send_message(2 * nodes[i].time - message->content, TIME_RTT,
                                message->source, i, nodes[i].latency);
                   break;
@@ -215,8 +225,10 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->delay = game->time + delay;
 
    push_to_queue(message, target);
-
-   // printf("Mesage type %d sended with %ld to %d\n", type, content, target);
+#ifdef DEBUG
+   printf("INFO [%d]: Mesage type %d sended with %ld to %d\n", source, type,
+          content, target);
+#endif // DEBUG
 }
 
 uint8_t is_queue_empty(uint8_t node_no)
