@@ -7,3 +7,8 @@ idf.py build
 idf.py -p <PORT> flash
 idf.py monitor
 ```
+
+## Schéma zapojení
+
+![schema zapojeni](schema/schematic.svg)
+![foto zapojeni](schema/zapojeni.jpg)
