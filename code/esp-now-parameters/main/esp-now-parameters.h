@@ -1,0 +1,4 @@
+#ifndef ESP_NOW_PARAMETERS_H
+#define ESP_NOW_PARAMETERS_H
+
+#endif // ESP_NOW_PARAMETERS_H
