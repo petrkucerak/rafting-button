@@ -33,19 +33,19 @@ void app_main(void)
       ret = nvs_flash_init();
    }
    ESP_ERROR_CHECK(ret);
-   
+
+   // Reset pint
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
-   printf("Reset pin\n");
+   // Set intr type
    ESP_ERROR_CHECK(gpio_set_intr_type(GPIO_NUM_21, GPIO_INTR_POSEDGE));
-   printf("Set intr type\n");
+   // Eneable intr
    ESP_ERROR_CHECK(gpio_intr_enable(GPIO_NUM_21));
-   printf("Eneable intr\n");
+   // Set gpio direction
    ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_21, GPIO_MODE_INPUT));
-   printf("Set gpio direction\n");
+   // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
-   printf("Install isr service\n");
+   // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
-   printf("Add isr handler\n");
 
    cyrcle = 0;
    while (1) {
