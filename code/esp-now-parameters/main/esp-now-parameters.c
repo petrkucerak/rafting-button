@@ -17,7 +17,11 @@
 
 uint64_t cyrcle;
 
-static void IRAM_ATTR gpio_handler_isr(void *) { cyrcle = 0; }
+static void IRAM_ATTR gpio_handler_isr(void *)
+{
+   cyrcle = 0;
+   // printf("Test\n");
+}
 
 void app_main(void)
 {
@@ -29,12 +33,19 @@ void app_main(void)
       ret = nvs_flash_init();
    }
    ESP_ERROR_CHECK(ret);
-
-   gpio_set_direction(21, GPIO_MODE_INPUT);
-   ret = esp_intr_alloc(21, 0, gpio_handler_isr, NULL, NULL);
-   if (ret != ESP_OK) {
-      ESP_ERROR_CHECK(ret);
-   }
+   
+   ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
+   printf("Reset pin\n");
+   ESP_ERROR_CHECK(gpio_set_intr_type(GPIO_NUM_21, GPIO_INTR_POSEDGE));
+   printf("Set intr type\n");
+   ESP_ERROR_CHECK(gpio_intr_enable(GPIO_NUM_21));
+   printf("Eneable intr\n");
+   ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_21, GPIO_MODE_INPUT));
+   printf("Set gpio direction\n");
+   ESP_ERROR_CHECK(gpio_install_isr_service(0));
+   printf("Install isr service\n");
+   ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
+   printf("Add isr handler\n");
 
    cyrcle = 0;
    while (1) {
