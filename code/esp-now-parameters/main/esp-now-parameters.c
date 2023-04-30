@@ -4,6 +4,7 @@
 #include <esp_flash.h>
 #include <esp_intr_alloc.h>
 #include <esp_log.h>
+#include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <inttypes.h>
@@ -12,16 +13,20 @@
 // #include <soc.h> // defines interrupts
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-uint64_t cyrcle;
+uint64_t start_time;
+esp_timer_handle_t timer_handle;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
-   cyrcle = 0;
-   // printf("Test\n");
+   esp_timer_restart(timer_handle, 1000);
+   start_time = esp_timer_get_time();
 }
+
+static void timer_callback(void *arg) { ++time; }
 
 void app_main(void)
 {
@@ -47,11 +52,21 @@ void app_main(void)
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
-   cyrcle = 0;
+   // set up timer
+   esp_timer_create_args_t timer_args = {};
+   timer_args.name = "timer";
+   timer_args.callback = &timer_callback;
+
+   ESP_ERROR_CHECK(esp_timer_create(&timer_args, &timer_handle));
+
+   // Periodic esp_timer also imposes a 50us restriction on the minimal timer
+   // period. Periodic software timers with period of less than 50us are not
+   // practical since they would consume most of the CPU time.
+   ESP_ERROR_CHECK(esp_timer_start_periodic(timer_handle, 1000));
+
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
-      printf("%lld s\n", cyrcle);
-      ++cyrcle;
+      printf("%lld\n", time);
    }
 
    // Ending rutine
