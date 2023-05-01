@@ -35,3 +35,13 @@ Měřící sestava obsahuje 3 ESP32 a jedno STM32 (STM32G431KB používá se pro
    - $T_{DS}$ ... čas synchronizovaný v DS
    - $T_g$ ... globální čas běhu daného zařízení
    - $T_s$ ... doba synchornizace času
+
+**Veškeré naměření hodnoty jsou udávány v *µs*.**
+999 906
+### Technické poznámky
+
+- Čas je synchronziován s průměrnou odchylkou *259 µs*. Tato hodnota byla určena měřením kdy je generován pulz o frekvenci 1Hz, perioda je tedy 1 s. A ISR halder funkce vždy spočítá čas čas od předchozího běhu a vynuluje $T_s$. Zpoždění je dáno režijními náklady běhu procesoru. Maximální odchylka byla určená také měřením a při běhu 5 min dosáhla maximální hodnoty *794 µs*. Overhead je poměrně veliký a je způsoben funkcí `esp_timer_get_time()`, která vrací dobu běhu procesoru v *µs*. Daná problematika je detailněji popisována v diskuzi https://esp32.com/viewtopic.php?t=16228. 
+
+
+
+

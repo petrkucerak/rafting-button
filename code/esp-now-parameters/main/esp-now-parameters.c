@@ -18,15 +18,14 @@
 #include <string.h>
 
 uint64_t start_time;
-esp_timer_handle_t timer_handle;
+uint64_t test_time;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
-   esp_timer_restart(timer_handle, 1000);
-   start_time = esp_timer_get_time();
+   uint64_t tmp = esp_timer_get_time();
+   test_time = tmp - start_time;
+   start_time = tmp;
 }
-
-static void timer_callback(void *arg) { ++time; }
 
 void app_main(void)
 {
@@ -52,21 +51,9 @@ void app_main(void)
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
-   // set up timer
-   esp_timer_create_args_t timer_args = {};
-   timer_args.name = "timer";
-   timer_args.callback = &timer_callback;
-
-   ESP_ERROR_CHECK(esp_timer_create(&timer_args, &timer_handle));
-
-   // Periodic esp_timer also imposes a 50us restriction on the minimal timer
-   // period. Periodic software timers with period of less than 50us are not
-   // practical since they would consume most of the CPU time.
-   ESP_ERROR_CHECK(esp_timer_start_periodic(timer_handle, 1000));
-
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
-      printf("%lld\n", time);
+      printf("%lld\n", test_time);
    }
 
    // Ending rutine
