@@ -17,11 +17,14 @@
 #include <stdio.h>
 #include <string.h>
 
+// uint32_t start_time;
+// uint32_t test_time;
 uint64_t start_time;
 uint64_t test_time;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
+   // uint32_t tmp = xthal_get_ccount();
    uint64_t tmp = esp_timer_get_time();
    test_time = tmp - start_time;
    start_time = tmp;
@@ -53,6 +56,7 @@ void app_main(void)
 
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
+      // printf("%ld\n", (uint32_t)((test_time * 4.16667) / 1000));
       printf("%lld\n", test_time);
    }
 

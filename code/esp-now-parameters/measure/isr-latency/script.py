@@ -1,6 +1,6 @@
 import numpy as np
 
-filename = "output-P-S.txt"
+filename = "output.txt"
 data = np.loadtxt(filename, dtype=float, delimiter=",")
 
 mean_diff = np.mean(np.abs(1000000 - data))
