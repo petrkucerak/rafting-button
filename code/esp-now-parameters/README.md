@@ -40,8 +40,12 @@ Měřící sestava obsahuje 3 ESP32 a jedno STM32 (STM32G431KB používá se pro
 
 ### Technické poznámky
 
-- Čas je synchronziován s průměrnou odchylkou okolo *173 µs*. Tato hodnota byla určena měřením kdy je generován pulz o frekvenci 1Hz, perioda je tedy 1 s. A ISR halder funkce vždy spočítá čas čas od předchozího běhu a vynuluje $T_s$. Zpoždění je dáno režijními náklady běhu procesoru. Maximální odchylka byla určená také měřením a při běhu 24 min a 18 s dosáhla maximální hodnoty *810 µs*. Původně jsem se domníval, že overhead je veliký především kvůlu funkci `esp_timer_get_time()` z důvodu dohledané diskuze https://esp32.com/viewtopic.php?t=16228. Experimentem jsem ale ověřil, že tato funkce není hlavní brzdou při měření. Prodluvu se mi ale povedlo snížit přetaktováním na 240 MHz a optimalizací kódu.
-
+- Čas je synchronziován s průměrnou odchylkou okolo *173 µs*. Tato hodnota byla určena měřením kdy je generován pulz o frekvenci 1Hz, perioda je tedy 1 s. A ISR handler funkce vždy spočítá čas čas od předchozího běhu a vynuluje $T_s$. Zpoždění je dáno režijními náklady běhu procesoru. Maximální odchylka byla určená také měřením a při běhu 24 min a 18 s dosáhla maximální hodnoty *810 µs*.
+  
+  Původně jsem se domníval, že overhead je veliký především kvůlu funkci `esp_timer_get_time()` z důvodu dohledané diskuze https://esp32.com/viewtopic.php?t=16228. Experimentem jsem ale ověřil, že tato funkce není hlavní brzdou při měření. Prodluvu se mi ale povedlo snížit přetaktováním na 240 MHz a optimalizací kódu.
+  
+  *Nepřesnost v tomto měření může způsobit i skutečnost, že nevím s jakou přesností je generován referenční signál.*
+- 
 
 
 
