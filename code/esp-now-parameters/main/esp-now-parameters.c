@@ -12,7 +12,9 @@
 #include <nvs_flash.h>
 #include <sdkconfig.h>
 // #include <soc.h> // defines interrupts
+#include "peripheral.h"
 #include <esp_mac.h>
+#include <esp_now.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <stdint.h>
@@ -20,7 +22,7 @@
 #include <string.h>
 
 #define IS_MASTER
-#define IS_SLAVE
+// #define IS_SLAVE
 
 static const char *TAG = "MAIN";
 
@@ -30,6 +32,21 @@ static void IRAM_ATTR gpio_handler_isr(void *)
 {
    // uint32_t tmp = xthal_get_ccount();
    uint64_t start_time = esp_timer_get_time();
+}
+
+static void measure_espnow_send_cb(const uint8_t *mac_addr,
+                                   esp_now_send_status_t status)
+{
+   do_blick(10);
+   if (status != ESP_OK)
+      ESP_LOGW(TAG, "The target " MACSTR " didn't receive a message",
+               MAC2STR(mac_addr));
+}
+
+static void measure_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
+                                   const uint8_t *data, int data_len)
+{
+   do_blick(100);
 }
 
 void app_main(void)
@@ -43,6 +60,7 @@ void app_main(void)
    }
    ESP_ERROR_CHECK(ret);
 
+   // SET UP INTERRUPT
    // Reset pint
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
    // Set intr type
@@ -56,10 +74,44 @@ void app_main(void)
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
+   // Print device MAC address
    print_mac_address();
 
+   // Set up GPIO_NUM_23 for LED blink
+   config_led(GPIO_NUM_23);
+
+   // Init ESP-NOW
+   wifi_init();
+   ESP_ERROR_CHECK(esp_now_init());
+   ESP_ERROR_CHECK(esp_now_register_recv_cb(measure_espnow_recv_cb));
+   ESP_ERROR_CHECK(esp_now_register_send_cb(measure_espnow_send_cb));
+
+#ifdef IS_MASTER
+   esp_now_peer_info_t peer_info_2 = {};
+   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
+   if (!esp_now_is_peer_exist(mac_addr_2)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
+   }
+   esp_now_peer_info_t peer_info_3 = {};
+   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
+   if (!esp_now_is_peer_exist(mac_addr_3)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
+   }
+#endif // IS_MASTER
+
+   uint64_t message;
    while (1) {
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+#ifdef IS_MASTER
+      message = esp_timer_get_time();
+      ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
+      vTaskDelay(200 / portTICK_PERIOD_MS);
+      message = esp_timer_get_time();
+      ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
+      vTaskDelay(200 / portTICK_PERIOD_MS);
+#endif // IS_MASTER
+
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
    }
 
    // Ending rutine

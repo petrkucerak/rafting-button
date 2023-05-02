@@ -54,3 +54,14 @@ void print_mac_address()
    ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
    ESP_LOGI(TAG, "Device MAC addres is:" MACSTR "\n", MAC2STR(mac_addr));
 }
+
+uint8_t is_device_mac(uint8_t *mac_addr)
+{
+   uint8_t tmp[6];
+   ESP_ERROR_CHECK(esp_read_mac(tmp, ESP_MAC_BASE));
+   for (uint8_t i = 0; i < 6; ++i) {
+      if (tmp[i] != mac_addr[i])
+         return 0;
+   }
+   return 1;
+}

@@ -41,6 +41,18 @@ void do_blick_task(uint16_t mils)
 
    vTaskDelete(NULL);
 }
+
+void do_blick(uint16_t mils)
+{
+   turn_on_led(GPIO_NUM_23);
+   turn_on_buildin_led();
+
+   vTaskDelay(mils / portTICK_PERIOD_MS);
+
+   turn_off_led(GPIO_NUM_23);
+   turn_off_buildin_led();
+}
+
 void turn_on_led_task(gpio_num_t gpio_num)
 {
    turn_on_buildin_led();

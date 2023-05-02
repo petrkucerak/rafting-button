@@ -1,6 +1,6 @@
 idf_component_register(SRCS "esp-now-parameters.c"
                     INCLUDE_DIRS "."
-                    REQUIRES espnow_utils)
+                    REQUIRES espnow_utils peripheral)
 
 # If some components are kept in a third git repository
 # (not the project repository or ESP-IDF repository),

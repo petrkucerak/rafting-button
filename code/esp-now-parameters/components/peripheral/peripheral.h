@@ -43,6 +43,8 @@ void turn_off_buildin_led();
  */
 void do_blick_task(uint16_t mils);
 
+void do_blick(uint16_t mils);
+
 void turn_on_led_task(gpio_num_t gpio_num);
 
 void turn_off_led_task(gpio_num_t gpio_num);

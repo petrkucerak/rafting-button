@@ -19,7 +19,7 @@ Měřící sestava obsahuje 3 ESP32 a jedno STM32 (STM32G431KB používá se pro
 
 **Měření latence** probíhá přesně následujícím způsobem:
 1. Zařízení A odešle do zařízení B a C zprávu se synchronizovaným časem odeslání
-2. Zařízení B a C zprávu přijmou a spočítají latenci, tedy dobu od odeslání (zapasání zprávy se sycnhronziovaným časem) do přijmutím zprávy (spuštění callback funkce a provedení výpočtu latence). Latence se následně počítá jako
+2. Zařízení B a C zprávu přijmou a spočítají latenci, tedy dobu od odeslání (zapasání zprávy se synchronziovaným časem) do přijmutím zprávy (spuštění callback funkce a provedení výpočtu latence). Latence se následně počítá jako
    $$
    t_l = T_{B,C}-T_A
    $$
