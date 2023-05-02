@@ -21,17 +21,18 @@
 #include <stdio.h>
 #include <string.h>
 
-#define IS_MASTER
-// #define IS_SLAVE
+// #define IS_MASTER
 
 static const char *TAG = "MAIN";
 
 uint64_t start_time;
+uint8_t time_reseted;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
    // uint32_t tmp = xthal_get_ccount();
-   uint64_t start_time = esp_timer_get_time();
+   start_time = esp_timer_get_time();
+   time_reseted = 1;
 }
 
 static void measure_espnow_send_cb(const uint8_t *mac_addr,
@@ -46,7 +47,11 @@ static void measure_espnow_send_cb(const uint8_t *mac_addr,
 static void measure_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                                    const uint8_t *data, int data_len)
 {
-   do_blick(100);
+   uint64_t loc_time = esp_timer_get_time() - start_time;
+   do_blick(10);
+   uint64_t send_time;
+   memcpy(&send_time, data, data_len);
+   printf("%lld\n", loc_time - send_time);
 }
 
 void app_main(void)
@@ -103,15 +108,39 @@ void app_main(void)
    while (1) {
 
 #ifdef IS_MASTER
-      message = esp_timer_get_time();
-      ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
-      vTaskDelay(200 / portTICK_PERIOD_MS);
-      message = esp_timer_get_time();
-      ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
-      vTaskDelay(200 / portTICK_PERIOD_MS);
-#endif // IS_MASTER
+      if (time_reseted) {
+         // First batch
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
 
-      vTaskDelay(2000 / portTICK_PERIOD_MS);
+         // Second batch
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+
+         // Third batch
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+         message = esp_timer_get_time() - start_time;
+         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+
+         // Reset time
+         time_reseted = 0;
+      }
+#endif // IS_MASTER
+      #ifndef IS_MASTER
+      vTaskDelay(3000 / portTICK_PERIOD_MS);
+      #endif // IS_MASTER
+
    }
 
    // Ending rutine
