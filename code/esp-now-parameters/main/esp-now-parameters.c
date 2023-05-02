@@ -22,7 +22,7 @@
 #define IS_MASTER
 #define IS_SLAVE
 
-static const char *TAG = "MAIN: ";
+static const char *TAG = "MAIN";
 
 uint64_t start_time;
 

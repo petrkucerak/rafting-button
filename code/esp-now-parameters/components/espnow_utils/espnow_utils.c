@@ -10,7 +10,7 @@
 #define TRUE 1
 #define FALSE 0
 
-static const char *TAG = "ESPNOW_UTILS: ";
+static const char *TAG = "ESPNOW_UTILS";
 
 void wifi_init(void)
 {
@@ -52,5 +52,5 @@ void print_mac_address()
 {
    uint8_t mac_addr[6];
    ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
-   ESP_LOGI(TAG, MACSTR "\n", MAC2STR(mac_addr));
+   ESP_LOGI(TAG, "Device MAC addres is:" MACSTR "\n", MAC2STR(mac_addr));
 }
