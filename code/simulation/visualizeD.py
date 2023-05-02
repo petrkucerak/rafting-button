@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename = "outputT.txt"
+filename = "output.txt"
 data = np.loadtxt(filename, dtype=float, delimiter=',')
 
 fig, ax = plt.subplots(figsize=(12, 8))
