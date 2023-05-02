@@ -1,5 +1,6 @@
 #include "espnow_utils.h"
 #include "peripheral.h"
+#include <esp_log.h>
 #include <esp_mac.h>
 #include <esp_now.h>
 #include <esp_wifi.h>
@@ -8,6 +9,8 @@
 
 #define TRUE 1
 #define FALSE 0
+
+static const char *TAG = "ESPNOW_UTILS: ";
 
 void wifi_init(void)
 {
@@ -49,5 +52,5 @@ void print_mac_address()
 {
    uint8_t mac_addr[6];
    ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
-   printf(MACSTR "\n", MAC2STR(mac_addr));
+   ESP_LOGI(TAG, MACSTR "\n", MAC2STR(mac_addr));
 }

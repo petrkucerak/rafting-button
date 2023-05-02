@@ -19,17 +19,17 @@
 #include <stdio.h>
 #include <string.h>
 
-// uint32_t start_time;
-// uint32_t test_time;
+#define IS_MASTER
+#define IS_SLAVE
+
+static const char *TAG = "MAIN: ";
+
 uint64_t start_time;
-uint64_t test_time;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
    // uint32_t tmp = xthal_get_ccount();
-   uint64_t tmp = esp_timer_get_time();
-   test_time = tmp - start_time;
-   start_time = tmp;
+   uint64_t start_time = esp_timer_get_time();
 }
 
 void app_main(void)
@@ -56,11 +56,10 @@ void app_main(void)
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
+   print_mac_address();
+
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
-      // printf("%ld\n", (uint32_t)((test_time * 4.16667) / 1000));
-      printf("%lld\n", test_time);
-      print_mac_address();
    }
 
    // Ending rutine
