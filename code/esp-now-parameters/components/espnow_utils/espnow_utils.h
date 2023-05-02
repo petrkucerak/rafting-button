@@ -68,4 +68,6 @@ static void blick_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                             (void *)10, tskIDLE_PRIORITY, NULL);
 }
 
+void print_mac_address();
+
 #endif // ESPNOW_UTILS_H

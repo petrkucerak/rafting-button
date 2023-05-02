@@ -1,5 +1,6 @@
 #include "espnow_utils.h"
 #include "peripheral.h"
+#include <esp_mac.h>
 #include <esp_now.h>
 #include <esp_wifi.h>
 #include <freertos/FreeRTOS.h>
@@ -42,4 +43,11 @@ esp_err_t custom_espnow_deinit(void)
    ESP_ERROR_CHECK(esp_now_deinit());
 
    return ESP_OK;
+}
+
+void print_mac_address()
+{
+   uint8_t mac_addr[6];
+   ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
+   printf(MACSTR "\n", MAC2STR(mac_addr));
 }

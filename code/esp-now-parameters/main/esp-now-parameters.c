@@ -1,4 +1,5 @@
 #include "esp-now-parameters.h"
+#include "espnow_utils.h"
 #include <driver/gpio.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
@@ -11,6 +12,7 @@
 #include <nvs_flash.h>
 #include <sdkconfig.h>
 // #include <soc.h> // defines interrupts
+#include <esp_mac.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include <stdint.h>
@@ -58,6 +60,7 @@ void app_main(void)
       vTaskDelay(1000 / portTICK_PERIOD_MS);
       // printf("%ld\n", (uint32_t)((test_time * 4.16667) / 1000));
       printf("%lld\n", test_time);
+      print_mac_address();
    }
 
    // Ending rutine
