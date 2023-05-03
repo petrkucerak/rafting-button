@@ -8,8 +8,9 @@
 #define B nodes[1]
 #define C nodes[2]
 #define MASTER_NO 0
+#define N_106 1000000 // 10^6
 
-// #define DEBUG
+#define DEBUG
 #define BUILD_REPORT
 
 game_t *game;
@@ -50,10 +51,14 @@ int main(int argc, char const *argv[])
       nodes[i].status = SLAVE;
       nodes[i].time = 0;
       nodes[i].latency = 0;
-      nodes[i].time_speed = 100;
-      nodes[i].is_first_setup = 1;
+      nodes[i].time_speed = 0;
+      nodes[i].is_first_setup_rtt = 1;
+      nodes[i].is_first_setup_k = 1;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
          nodes[i].balancer_RTT[j] = 0;
+      }
+      for (uint8_t j = 0; j < BALANCER_SIZE_K; ++j) {
+         nodes[i].balancer_K[j] = 0;
       }
    }
 
@@ -61,13 +66,14 @@ int main(int argc, char const *argv[])
    // config enviroment to the simulation
    A.status = MASTER;
    A.time = 0;
-   A.is_first_setup = 0;
+   A.is_first_setup_rtt = 0;
+   A.is_first_setup_k = 0;
    A.time_speed = get_rnd_between(1, 15);
 
-   B.time = 13;
+   B.time = get_rnd_between(10, 150);
    B.time_speed = get_rnd_between(1, 15);
 
-   C.time = 21;
+   C.time = get_rnd_between(10, 150);
    C.time_speed = get_rnd_between(1, 15);
 
    // ****** CONFIG ******
@@ -75,17 +81,23 @@ int main(int argc, char const *argv[])
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
-      B.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
-      C.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
+      A.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
+      B.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
+      C.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
          ++nodes[i].time;
 
          // create timer deviation, more infromation is in main.h
-         if (!(game->time % (100000 * nodes[i].time_speed))) {
-            ++nodes[i].time;
+         // if value is 0, no deviation is applied
+         if (nodes[i].time_speed != 0) {
+            if (!(game->time % (100000 * nodes[i].time_speed))) {
+#ifdef DEBUG
+               printf("INFO [%d]: Deviation is applied\n", i);
+#endif // DEBUG
+               ++nodes[i].time;
+            }
          }
       }
 
@@ -109,15 +121,48 @@ int main(int argc, char const *argv[])
                case RTT_VAL:
                   // Save RTT value
                   // for first message, paste rtt into all array
-                  if (nodes[i].is_first_setup) {
+                  if (nodes[i].is_first_setup_rtt) {
                      for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
                         nodes[i].balancer_RTT[j] = message->source;
                      }
-                     nodes[i].is_first_setup = 0;
+                     nodes[i].is_first_setup_rtt = 0;
                   } else {
                      // save RTT value
                      nodes[i].balancer_RTT[game->time % BALANCER_SIZE_RTT] =
                          message->content;
+                  }
+                  break;
+               case TIME:
+                  // first set up
+                  message->content += 1; // +1 one tick for processing
+                  if (nodes[i].is_first_setup_k) {
+                     // set time + rtt dirrectly
+                     nodes[i].time = message->content + get_rtt_abs(i);
+
+                     // calcul k for all el in balancer array
+                     uint32_t tmp_k = ((message->content * N_106) /
+                                       (nodes[i].time + get_rtt_abs(i)));
+                     for (uint8_t j = 0; j < BALANCER_SIZE_K; ++j) {
+                        nodes[i].balancer_K[j] = tmp_k;
+                     }
+                     nodes[i].is_first_setup_k = 0;
+#ifdef DEBUG
+                     printf(
+                         "INFO [%d]: First time is set with value %d,  master "
+                         "value %ld, current value %ld\n",
+                         i, tmp_k, A.time, nodes[i].time);
+#endif // DEBUG
+                  } else {
+                     // normaly set up
+                     nodes[i].balancer_K[game->time % BALANCER_SIZE_K] =
+                         ((message->content * N_106) /
+                          (nodes[i].time + get_rtt_abs(i)));
+                     nodes[i].time = (get_k_abs(i) * message->content / N_106);
+#ifdef DEBUG
+                     printf("INFO [%d]: Time is set with k value %d, master "
+                            "value %ld, current value %ld\n",
+                            i, get_k_abs(i), A.time, nodes[i].time);
+#endif // DEBUG
                   }
                   break;
                default:
@@ -155,7 +200,16 @@ int main(int argc, char const *argv[])
                          nodes[i].latency);
          }
       }
+      // start TIME sycnhronization
+      // sync starts each 500 ms from MASTER node
+      if (!(game->time % 5050)) {
+         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
+                         nodes[i].latency);
+         }
+      }
 
+#ifdef BUILD_REPORT
       // print round report
       printf("%ld", A.time);
       for (uint8_t i = 1; i < game->nodes_count; ++i) {
@@ -169,6 +223,7 @@ int main(int argc, char const *argv[])
          printf(",%d", nodes[i].latency);
       }
       printf("\n");
+#endif // BUILD_REPORT
 
       // increment game round id
       ++game->time;
@@ -316,4 +371,26 @@ uint64_t get_rtt_abs(uint8_t node_no)
       rtt += nodes[node_no].balancer_RTT[i];
    }
    return (uint64_t)(rtt / BALANCER_SIZE_RTT);
+}
+
+uint32_t get_k_abs(uint8_t node_no)
+{
+#ifdef DEBUG
+   printf("INFO [%d]: Get k abs |", node_no);
+#endif // DEBUG
+
+   uint32_t k = 0;
+   for (uint8_t i = 0; i < BALANCER_SIZE_K; ++i) {
+      k += nodes[node_no].balancer_K[i];
+
+#ifdef DEBUG
+      printf(" %d", nodes[node_no].balancer_K[i]);
+#endif // DEBUG
+   }
+
+#ifdef DEBUG
+   printf(" = %d\n", k / BALANCER_SIZE_K);
+#endif // DEBUG
+
+   return (uint32_t)(k / BALANCER_SIZE_K);
 }

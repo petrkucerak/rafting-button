@@ -12,14 +12,13 @@ ax.set_xlabel('Time\n(ms)')
 # ax.set_yscale('log')
 
 plt.plot(data[:, 0]/10, data[:, 1]/10, label="SLAVE [B]")
-plt.plot(data[:, 0]/10, data[:, 2]/10, label="SLAVE [C]")
+plt.plot(data[:, 0]/10, data[:, 4]/10, label="SLAVE [C]")
 
 plt.axhline(y=np.mean(data[:,1]/10), color='green', label="SLAVE [B] mean")
-plt.axhline(y=np.mean(data[:,2]/10), color='brown', label="SLAVE [C] mean")
+plt.axhline(y=np.mean(data[:,4]/10), color='brown', label="SLAVE [C] mean")
 
-# plt.axhline(y=np.mean(data[:,3]/10), color='pink', label="rnd [A] mean")
-# plt.axhline(y=np.mean(data[:,4]/10), color='grey', label="rnd [B] mean")
-# plt.axhline(y=np.mean(data[:,5]/10), color='yellow', label="rnd [C] mean")
+print("B mean",np.mean(data[:,1]/10))
+print("C mean",np.mean(data[:,4]/10))
 
 plt.legend()
 plt.grid(True)
