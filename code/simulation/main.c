@@ -7,7 +7,12 @@
 #define A nodes[0]
 #define B nodes[1]
 #define C nodes[2]
+#define D nodes[3]
 #define MASTER_NO 0
+
+#define N_106 1000000
+#define N_102 100
+#define N_101 10
 
 // #define DEBUG
 #define BUILD_REPORT
@@ -31,8 +36,9 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->nodes_count = 3;
+   // game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->nodes_count = 4;
    // ****** CONFIG ******
 
    game->time = 0;
@@ -71,18 +77,18 @@ int main(int argc, char const *argv[])
    C.time = get_rnd_between(10, 150);
    C.time_speed = get_rnd_between(1, 15);
 
+   D.time = get_rnd_between(10, 150);
+   D.time_speed = get_rnd_between(1, 15);
+
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
-      B.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
-      C.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
-
-      // A.latency = 10;
-      // B.latency = 10;
-      // C.latency = 10;
+      A.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
+      B.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
+      C.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
+      D.latency = get_rnd_between(9, 15);
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
@@ -135,6 +141,14 @@ int main(int argc, char const *argv[])
                      if (nodes[i].stamp_rtt == BALANCER_SIZE_RTT)
                         nodes[i].stamp_rtt = 0;
                   }
+
+#ifdef DEBUG
+                  printf("RND ABS: %ld ||", get_rtt_abs(i));
+                  for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                     printf(" %ld", nodes[i].balancer_RTT[j]);
+                  }
+                  printf("\n");
+#endif // DEBUG
                   break;
 
                default:
@@ -149,7 +163,8 @@ int main(int argc, char const *argv[])
                case RTT_CAL:
                   // calcule and send RTT to slave
                   send_message(
-                      (uint64_t)((nodes[i].time - message->content) / 2),
+                      (uint64_t)(((nodes[i].time - message->content) * N_106) /
+                                 2),
                       RTT_VAL, message->source, i, nodes[i].latency);
                   break;
 
@@ -330,5 +345,5 @@ uint64_t get_rtt_abs(uint8_t node_no)
    for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
       rtt += nodes[node_no].balancer_RTT[i];
    }
-   return (uint64_t)(rtt / BALANCER_SIZE_RTT);
+   return (uint64_t)(rtt / (BALANCER_SIZE_RTT * N_106));
 }

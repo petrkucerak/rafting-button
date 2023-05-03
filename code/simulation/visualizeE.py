@@ -13,6 +13,7 @@ ax.set_xlabel('Time\n(ms)')
 
 plt.plot(data[:, 0]/10, data[:, 2]/10, label="~RTT [B]")
 plt.plot(data[:, 0]/10, data[:, 5]/10, label="~RTT [C]")
+plt.plot(data[:, 0]/10, data[:, 8]/10, label="~RTT [D]")
 
 
 
