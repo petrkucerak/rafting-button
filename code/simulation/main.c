@@ -63,13 +63,13 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup_rtt = 0;
-   // A.time_speed = get_rnd_between(1, 15);
+   A.time_speed = get_rnd_between(1, 15);
 
    B.time = get_rnd_between(10, 150);
-   // B.time_speed = get_rnd_between(1, 15);
+   B.time_speed = get_rnd_between(1, 15);
 
    C.time = get_rnd_between(10, 150);
-   // C.time_speed = get_rnd_between(1, 15);
+   C.time_speed = get_rnd_between(1, 15);
 
    // ****** CONFIG ******
 
@@ -92,7 +92,10 @@ int main(int argc, char const *argv[])
          // if value is 0, no deviation is applied
          if (nodes[i].time_speed != 0) {
             if (!(game->time % (100000 * nodes[i].time_speed))) {
-               ++nodes[i].time;
+               if (get_rnd_between(0, 1))
+                  ++nodes[i].time;
+               else
+                  --nodes[i].time;
             }
          }
       }
@@ -119,15 +122,15 @@ int main(int argc, char const *argv[])
                   // Save RTT value
                   // for first message, paste rtt into all array
                   if (nodes[i].is_first_setup_rtt) {
-                     for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                     for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
                         nodes[i].balancer_RTT[j] = message->content;
                      }
                      nodes[i].is_first_setup_rtt = 0;
                   } else {
-                     // Save RTT value
                      nodes[i].balancer_RTT[nodes[i].stamp_rtt] =
                          message->content;
 
+                     // Increase the stamp value
                      ++nodes[i].stamp_rtt;
                      if (nodes[i].stamp_rtt == BALANCER_SIZE_RTT)
                         nodes[i].stamp_rtt = 0;
@@ -145,7 +148,6 @@ int main(int argc, char const *argv[])
                switch (message->type) {
                case RTT_CAL:
                   // calcule and send RTT to slave
-                  // uint64_t rtt = (nodes[i].time - message->content) / 2;
                   send_message(
                       (uint64_t)((nodes[i].time - message->content) / 2),
                       RTT_VAL, message->source, i, nodes[i].latency);
