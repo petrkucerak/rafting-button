@@ -14,7 +14,7 @@
 #define N_102 100
 #define N_101 10
 
-// #define DEBUG
+#define DEBUG
 #define BUILD_REPORT
 
 game_t *game;
@@ -143,7 +143,7 @@ int main(int argc, char const *argv[])
                   }
 
 #ifdef DEBUG
-                  printf("RND ABS: %ld ||", get_rtt_abs(i));
+                  printf("#RND ABS: %ld ||", get_rtt_abs(i));
                   for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
                      printf(" %ld", nodes[i].balancer_RTT[j]);
                   }
