@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = 8 * 60 * 10000; // 8 min (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -69,6 +69,7 @@ int main(int argc, char const *argv[])
 
    C.time = 21;
    // C.latency = 8;
+   
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
@@ -125,9 +126,9 @@ int main(int argc, char const *argv[])
                             (nodes[i].time + message->content) / 2,
                             nodes[i].time);
 #endif // DEBUG
-
                      nodes[i].balancer[game->time % BALANCER_SIZE] =
                          message->content;
+
                      nodes[i].time = 0;
                      for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
                         nodes[i].time += nodes[i].balancer[j];
