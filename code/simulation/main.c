@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 60 * 60 * 10000; // 120 s (max value is UINT64_MAX)
+   game->deadline = 8 * 60 * 10000; // 8 min (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -64,19 +64,20 @@ int main(int argc, char const *argv[])
    A.is_first_setup = 0;
    // A.latency = 10;
 
-   B.time = 70;
+   B.time = 13;
    // B.latency = 12;
 
-   C.time = 167;
+   C.time = 21;
    // C.latency = 8;
+   
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
-      B.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
-      C.latency = get_rnd_between(10, 60); // latency is 1 - 6 ms
+      A.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
+      B.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
+      C.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
@@ -126,9 +127,8 @@ int main(int argc, char const *argv[])
                             nodes[i].time);
 #endif // DEBUG
                      nodes[i].balancer[game->time % BALANCER_SIZE] =
-                         ((BALANCER_SIZE - 1) * nodes[i].time +
-                          message->content) /
-                         BALANCER_SIZE;
+                         message->content;
+
                      nodes[i].time = 0;
                      for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
                         nodes[i].time += nodes[i].balancer[j];

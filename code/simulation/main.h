@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE 5
+#define BALANCER_SIZE 50
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
