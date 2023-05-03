@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #define BALANCER_SIZE_RTT 100
-#define BALANCER_SIZE_K 10
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
@@ -41,7 +40,6 @@ typedef struct queue {
 typedef struct node {
    uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
    uint64_t balancer_RTT[BALANCER_SIZE_RTT];
-   uint32_t balancer_K[BALANCER_SIZE_K]; // 1*10^6
    status_t status;                      // MASTER or SLAVE
    uint8_t
        time_speed; // frequency deviation of less than ±10 ppm
@@ -59,7 +57,6 @@ typedef struct node {
    pipe_t *pipe_head;
    pipe_t *pipe_tail;
    uint8_t is_first_setup_rtt;
-   uint8_t is_first_setup_k;
    uint32_t stamp_rtt;
 } node_t;
 
@@ -78,6 +75,5 @@ uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
 uint64_t get_rtt_abs(uint8_t node_no);
-uint32_t get_k_abs(uint8_t node_no);
 
 #endif // MAIN_H
