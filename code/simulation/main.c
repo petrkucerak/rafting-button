@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 8 * 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -52,8 +52,8 @@ int main(int argc, char const *argv[])
       nodes[i].latency = 0;
       nodes[i].time_speed = 100;
       nodes[i].is_first_setup = 1;
-      for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-         nodes[i].balancer[j] = 0;
+      for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+         nodes[i].balancer_RTT[j] = 0;
       }
    }
 
@@ -87,10 +87,6 @@ int main(int argc, char const *argv[])
          if (!(game->time % (100000 * nodes[i].time_speed))) {
             ++nodes[i].time;
          }
-
-         for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-            ++nodes[i].balancer[j];
-         }
       }
 
       // process pipe
@@ -105,51 +101,25 @@ int main(int argc, char const *argv[])
             // SLAVE OPERATION
             if (!is_node_master(i)) {
                switch (message->type) {
-               case TIME:
-                  // sent message with same content to source
-                  send_message(message->content, TIME, message->source, i,
+               case RTT_CAL:
+                  // send value back
+                  send_message(message->content, RTT_CAL, message->source, i,
                                nodes[i].latency);
                   break;
-
-               case TIME_RTT:
-                  // set time and sent back ACK
-                  // first sync, simply set
+               case RTT_VAL:
+                  // Save RTT value
+                  // for first message, paste rtt into all array
                   if (nodes[i].is_first_setup) {
-                     nodes[i].time = message->content;
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        nodes[i].balancer[j] = message->content;
+                     for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                        nodes[i].balancer_RTT[j] = message->source;
                      }
                      nodes[i].is_first_setup = 0;
-#ifdef DEBUG
-                     printf("INFO [%d]: First set time on value %ld\n", i,
-                            nodes[i].time);
-#endif // DEBUG
                   } else {
-                     // not first sync, set avg
-#ifdef DEBUG
-                     printf("INFO [%d]: Set time on value %ld from %ld\n", i,
-                            (nodes[i].time + message->content) / 2,
-                            nodes[i].time);
-#endif // DEBUG
-                     nodes[i].balancer[game->time % BALANCER_SIZE] =
+                     // save RTT value
+                     nodes[i].balancer_RTT[game->time % BALANCER_SIZE_RTT] =
                          message->content;
-
-                     nodes[i].time = 0;
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        nodes[i].time += nodes[i].balancer[j];
-                     }
-                     nodes[i].time /= BALANCER_SIZE;
-#ifdef DEBUG
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        printf(" %ld", nodes[i].balancer[j]);
-                     }
-                     printf("\n");
-#endif // DEBUG
                   }
-                  send_message(message->content, ACK, message->source, i,
-                               nodes[i].latency);
                   break;
-
                default:
                   fprintf(stderr, "ERROR: Unknown operation\n");
                   exit(EXIT_FAILURE);
@@ -158,25 +128,14 @@ int main(int argc, char const *argv[])
             } else {
                // MASTER OPERATION
                switch (message->type) {
-               case TIME:
-
-                  uint64_t time_rtt =
-                      nodes[i].time + ((nodes[i].time - message->content) / 2);
-
-#ifdef DEBUG
-                  printf("INFO [%d]: Calcul TIME_RTT, time: %ld, RTT: %ld, "
-                         "will set %ld\n",
-                         i, nodes[i].time,
-                         (nodes[i].time - message->content) / 2, time_rtt);
-#endif // DEBUG
-
-                  // get RTT and sent TIME_RTT message
-                  send_message(time_rtt, TIME_RTT, message->source, i,
-                               nodes[i].latency);
+               case RTT_CAL:
+                  // calcule and send RTT to slave
+                  // uint64_t rtt = (nodes[i].time - message->content) / 2;
+                  send_message(
+                      (uint64_t)((nodes[i].time - message->content) / 2),
+                      RTT_VAL, message->source, i, nodes[i].latency);
                   break;
-               case ACK:
-                  // do nothing
-                  break;
+
                default:
                   fprintf(stderr, "ERROR: Unknown operation\n");
                   exit(EXIT_FAILURE);
@@ -188,20 +147,23 @@ int main(int argc, char const *argv[])
          }
       }
 
-      // start time synchronization
-      // sync starts each 50 ms from MATER node
-      if (!(game->time % 500)) {
+      // start RTT synchronization
+      // sync starts each 100 ms from MATER node
+      if (!(game->time % 1000)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
+            send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
                          nodes[i].latency);
          }
       }
 
       // print round report
-
       printf("%ld", A.time);
       for (uint8_t i = 1; i < game->nodes_count; ++i) {
+         // time
          printf(",%lld", (long long int)(nodes[i].time - A.time));
+
+         // rtt
+         printf(",%lld", (long long int)(get_rtt_abs(i)));
       }
       printf("\n");
 
@@ -342,4 +304,13 @@ uint8_t is_after_delay(uint8_t node_no)
 uint32_t get_rnd_between(uint32_t min, uint32_t max)
 {
    return (uint32_t)((rand() % (max - min + 1)) + min);
+}
+
+uint64_t get_rtt_abs(uint8_t node_no)
+{
+   uint64_t rtt = 0;
+   for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
+      rtt += nodes[node_no].balancer_RTT[i];
+   }
+   return (uint64_t)(rtt / BALANCER_SIZE_RTT);
 }
