@@ -53,3 +53,9 @@ Měřící sestava obsahuje 3 ESP32 a jedno STM32 (STM32G431KB používá se pro
   | 3   | large | `c8:f0:9e:7b:10:8c` | COM7 |
 
 
+## Výsledky měření latence
+
+Měření jsem spustil ve dvou scénářích. Lišili se pouze časem. Výsledné hodnoty jsou totožené, pouze se liší množstvím odeslaných a přijatých zpráv.
+
+![A scenario](measure/esp-latency/A.png)
+![B scenario](measure/esp-latency/B.png)
