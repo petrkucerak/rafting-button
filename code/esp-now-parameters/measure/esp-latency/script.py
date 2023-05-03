@@ -1,8 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-filename1 = "output-COM6B.txt"
-filename2 = "output-COM7B.txt"
+filename1 = "output-COM6A.txt"
+filename2 = "output-COM7A.txt"
 data1 = np.loadtxt(filename1, dtype=float, delimiter=",")
 data2 = np.loadtxt(filename2, dtype=float, delimiter=",")
 
