@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE_RTT 10
+#define BALANCER_SIZE_RTT 50
 #define BALANCER_SIZE_K 10
 
 // SIMULATION TIME
@@ -60,6 +60,7 @@ typedef struct node {
    pipe_t *pipe_tail;
    uint8_t is_first_setup_rtt;
    uint8_t is_first_setup_k;
+   uint32_t stamp_rtt;
 } node_t;
 
 void push_to_queue(message_t *message, uint8_t node_no);

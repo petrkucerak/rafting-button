@@ -10,7 +10,7 @@
 #define MASTER_NO 0
 #define N_106 1000000 // 10^6
 
-#define DEBUG
+// #define DEBUG
 #define BUILD_REPORT
 
 game_t *game;
@@ -54,6 +54,7 @@ int main(int argc, char const *argv[])
       nodes[i].time_speed = 0;
       nodes[i].is_first_setup_rtt = 1;
       nodes[i].is_first_setup_k = 1;
+      nodes[i].stamp_rtt = 0;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
          nodes[i].balancer_RTT[j] = 0;
       }
@@ -110,6 +111,9 @@ int main(int argc, char const *argv[])
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
          while (!is_queue_empty(i)) {
             message_t *message = pop_from_queue(i);
+            // message->content += 1; // +1 one tick for processing; => it
+            // doesn't make sense
+
             // SLAVE OPERATION
             if (!is_node_master(i)) {
                switch (message->type) {
@@ -123,18 +127,26 @@ int main(int argc, char const *argv[])
                   // for first message, paste rtt into all array
                   if (nodes[i].is_first_setup_rtt) {
                      for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
-                        nodes[i].balancer_RTT[j] = message->source;
+                        nodes[i].balancer_RTT[j] = message->content;
                      }
                      nodes[i].is_first_setup_rtt = 0;
+
+#ifdef DEBUG
+                     printf("INFO [%d]: First RTT set up with value %ld\n", i,
+                            message->content);
+#endif // DEBUG
                   } else {
                      // save RTT value
-                     nodes[i].balancer_RTT[game->time % BALANCER_SIZE_RTT] =
+                     nodes[i].balancer_RTT[nodes[i].stamp_rtt] =
                          message->content;
+                         
+                     ++nodes[i].stamp_rtt;
+                     if (nodes[i].stamp_rtt == BALANCER_SIZE_RTT)
+                        nodes[i].stamp_rtt = 0;
                   }
                   break;
                case TIME:
                   // first set up
-                  message->content += 1; // +1 one tick for processing
                   if (nodes[i].is_first_setup_k) {
                      // set time + rtt dirrectly
                      nodes[i].time = message->content + get_rtt_abs(i);
@@ -157,6 +169,14 @@ int main(int argc, char const *argv[])
                      nodes[i].balancer_K[game->time % BALANCER_SIZE_K] =
                          ((message->content * N_106) /
                           (nodes[i].time + get_rtt_abs(i)));
+#ifdef DEBUG
+                     printf("INFO [%d]: %d = %ld / (%ld + %ld)\n", i,
+                            nodes[i].balancer_K[game->time % BALANCER_SIZE_K],
+                            message->content, nodes[i].time, get_rtt_abs(i));
+                     printf("INFO [%d]: %ld = %d * %ld\n", i, nodes[i].time,
+                            get_k_abs(i), message->content);
+#endif // DEBUG
+
                      nodes[i].time = (get_k_abs(i) * message->content / N_106);
 #ifdef DEBUG
                      printf("INFO [%d]: Time is set with k value %d, master "
@@ -171,11 +191,19 @@ int main(int argc, char const *argv[])
                   break;
                }
             } else {
+
                // MASTER OPERATION
                switch (message->type) {
                case RTT_CAL:
                   // calcule and send RTT to slave
                   // uint64_t rtt = (nodes[i].time - message->content) / 2;
+
+#ifdef DEBUG
+                  printf("INFO [%d]: rtt = %ld = (%ld - %ld)/2\n", i,
+                         (nodes[i].time - message->content) / 2, nodes[i].time,
+                         message->content);
+#endif // DEBUG
+
                   send_message(
                       (uint64_t)((nodes[i].time - message->content) / 2),
                       RTT_VAL, message->source, i, nodes[i].latency);
@@ -202,8 +230,10 @@ int main(int argc, char const *argv[])
       }
       // start TIME sycnhronization
       // sync starts each 500 ms from MASTER node
-      if (!(game->time % 5050)) {
+      // + 50 => RTT and TIME shut not start in a same moment
+      if (!(game->time % (5000 + 50))) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
+
             send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
                          nodes[i].latency);
          }
