@@ -40,10 +40,18 @@ typedef struct queue {
 typedef struct node {
    uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
    uint64_t balancer[BALANCER_SIZE];
-   status_t status;    // MASTER or SLAVE
-   uint8_t time_speed; // negligible
-   uint32_t latency;   // assume that one message cannot overtake the other
-                       // 1 represents 100 µs
+   status_t status; // MASTER or SLAVE
+   uint8_t
+       time_speed; // frequency deviation of less than ±10 ppm
+                   // https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html#overview
+                   // if timer 80MHz => one tick is 12.5 ns ± 0.124 ps deviation
+                   // if 1 step is 100 µs, timer do 8 000 ticks in one step, so
+                   // the max deviation is 8000*0.124 ps = 0.992 ns ~= 1 ns
+                   // => max processor deviation is 1 ns / 100 µs (1 step)
+                   // => cpu drift shut be one per 100 000 steps
+                   // time_speed variable randomize deviation
+   uint32_t latency; // assume that one message cannot overtake the other
+                     // 1 represents 100 µs
    queue_t *queue_head;
    queue_t *queue_tail;
    pipe_t *pipe_head;
@@ -65,6 +73,5 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
 uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
-
 
 #endif // MAIN_H

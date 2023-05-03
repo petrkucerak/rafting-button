@@ -62,14 +62,14 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup = 0;
-   // A.latency = 10;
+   A.time_speed = get_rnd_between(1, 250);
 
    B.time = 13;
-   // B.latency = 12;
+   B.time_speed = get_rnd_between(1, 250);
 
    C.time = 21;
-   // C.latency = 8;
-   
+   C.time_speed = get_rnd_between(1, 250);
+
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
@@ -82,7 +82,12 @@ int main(int argc, char const *argv[])
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
          ++nodes[i].time;
-         // TODO: time speed control
+
+         // create timer deviation, more infromation is in main.h
+         if (!(game->time % (100000 + (100 * nodes[i].time_speed)))) {
+            ++nodes[i].time;
+         }
+
          for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
             ++nodes[i].balancer[j];
          }
@@ -185,12 +190,12 @@ int main(int argc, char const *argv[])
 
       // start time synchronization
       // sync starts each 50 ms from MATER node
-      if (!(game->time % 500)) {
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
-                         nodes[i].latency);
-         }
-      }
+      // if (!(game->time % 500)) {
+      //    for (uint8_t i = 1; i < game->nodes_count; ++i) {
+      //       send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
+      //                    nodes[i].latency);
+      //    }
+      // }
 
       // print round report
 
