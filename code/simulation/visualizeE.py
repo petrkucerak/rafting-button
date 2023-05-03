@@ -12,12 +12,12 @@ ax.set_xlabel('Time\n(ms)')
 # ax.set_yscale('log')
 
 plt.plot(data[:, 0]/10, data[:, 2]/10, label="~RTT [B]")
-plt.plot(data[:, 0]/10, data[:, 5]/10, label="~RTT [B]")
+plt.plot(data[:, 0]/10, data[:, 5]/10, label="~RTT [C]")
 
 
 
-plt.axhline(y=np.mean(data[:,3]/10), color='green', label="latency [B] mean")
-plt.axhline(y=np.mean(data[:,6]/10), color='brown', label="latency [C] mean")
+# plt.axhline(y=np.mean(data[:,3]/10), color='green', label="latency [B] mean")
+# plt.axhline(y=np.mean(data[:,6]/10), color='brown', label="latency [C] mean")
 
 
 

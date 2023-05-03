@@ -10,7 +10,7 @@
 #define MASTER_NO 0
 #define N_106 1000000 // 10^6
 
-// #define DEBUG
+#define DEBUG
 #define BUILD_REPORT
 
 game_t *game;
@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = /*1 * */ 20 * 10000; // 8 min (max value is UINT64_MAX)
    game->nodes_count = 3;
    // ****** CONFIG ******
 
@@ -69,22 +69,26 @@ int main(int argc, char const *argv[])
    A.time = 0;
    A.is_first_setup_rtt = 0;
    A.is_first_setup_k = 0;
-   A.time_speed = get_rnd_between(1, 15);
+   // A.time_speed = get_rnd_between(1, 15);
 
    B.time = get_rnd_between(10, 150);
-   B.time_speed = get_rnd_between(1, 15);
+   // B.time_speed = get_rnd_between(1, 15);
 
    C.time = get_rnd_between(10, 150);
-   C.time_speed = get_rnd_between(1, 15);
+   // C.time_speed = get_rnd_between(1, 15);
 
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
-      B.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
-      C.latency = get_rnd_between(8, 14); // latency is 0.8 - 1.4 ms
+      A.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
+      B.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
+      C.latency = get_rnd_between(7, 15); // latency is 0.8 - 1.4 ms
+
+      // A.latency = 10;
+      // B.latency = 10;
+      // C.latency = 10;
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
@@ -139,10 +143,16 @@ int main(int argc, char const *argv[])
                      // save RTT value
                      nodes[i].balancer_RTT[nodes[i].stamp_rtt] =
                          message->content;
-                         
+
                      ++nodes[i].stamp_rtt;
                      if (nodes[i].stamp_rtt == BALANCER_SIZE_RTT)
                         nodes[i].stamp_rtt = 0;
+
+#ifdef DEBUG
+                     uint64_t rrt = get_rtt_abs(i);
+                     printf("INFO [%d]: RTT set up with value %ld, %ld\n", i,
+                            message->content, rrt);
+#endif // DEBUG
                   }
                   break;
                case TIME:
@@ -231,13 +241,13 @@ int main(int argc, char const *argv[])
       // start TIME sycnhronization
       // sync starts each 500 ms from MASTER node
       // + 50 => RTT and TIME shut not start in a same moment
-      if (!(game->time % (5000 + 50))) {
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+      // if (!(game->time % (5000 + 50))) {
+      //    for (uint8_t i = 1; i < game->nodes_count; ++i) {
 
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
-                         nodes[i].latency);
-         }
-      }
+      //       send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
+      //                    nodes[i].latency);
+      //    }
+      // }
 
 #ifdef BUILD_REPORT
       // print round report

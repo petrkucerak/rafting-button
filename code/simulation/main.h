@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE_RTT 50
+#define BALANCER_SIZE_RTT 100
 #define BALANCER_SIZE_K 10
 
 // SIMULATION TIME
