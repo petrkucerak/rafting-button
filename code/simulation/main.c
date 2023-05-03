@@ -164,6 +164,9 @@ int main(int argc, char const *argv[])
 
          // rtt
          printf(",%lld", (long long int)(get_rtt_abs(i)));
+
+         // rnd latency
+         printf(",%d", nodes[i].latency);
       }
       printf("\n");
 
