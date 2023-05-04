@@ -1,4 +1,5 @@
 #include "main.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -37,7 +38,7 @@ int main(int argc, char const *argv[])
    // ****** CONFIG ******
    // set up game parametrs
    // game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->deadline = 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = 2 * 60 * 10000; // 8 min (max value is UINT64_MAX)
    game->nodes_count = 4;
    // ****** CONFIG ******
 
@@ -143,11 +144,14 @@ int main(int argc, char const *argv[])
                   }
 
 #ifdef DEBUG
-                  printf("#RND ABS: %ld ||", get_rtt_abs(i));
-                  for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
-                     printf(" %ld", nodes[i].balancer_RTT[j]);
+                  {
+                     printf("# RND ABS [%d]: %f ||", i,
+                            round((double)get_rtt_abs(i)));
+                     for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                        printf(" %Lf", nodes[i].balancer_RTT[j]);
+                     }
+                     printf("\n");
                   }
-                  printf("\n");
 #endif // DEBUG
                   break;
 
@@ -163,8 +167,7 @@ int main(int argc, char const *argv[])
                case RTT_CAL:
                   // calcule and send RTT to slave
                   send_message(
-                      (uint64_t)(((nodes[i].time - message->content) * N_106) /
-                                 2),
+                      (long double)(((nodes[i].time - message->content)) / 2),
                       RTT_VAL, message->source, i, nodes[i].latency);
                   break;
 
@@ -196,7 +199,7 @@ int main(int argc, char const *argv[])
          printf(",%lld", (long long int)(nodes[i].time - A.time));
 
          // rtt
-         printf(",%lld", (long long int)(get_rtt_abs(i)));
+         printf(",%f", round((double)get_rtt_abs(i)));
 
          // rnd latency
          printf(",%d", nodes[i].latency);
@@ -339,11 +342,11 @@ uint32_t get_rnd_between(uint32_t min, uint32_t max)
    return (uint32_t)((rand() % (max - min + 1)) + min);
 }
 
-uint64_t get_rtt_abs(uint8_t node_no)
+long double get_rtt_abs(uint8_t node_no)
 {
-   uint64_t rtt = 0;
+   long double rtt = 0;
    for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
       rtt += nodes[node_no].balancer_RTT[i];
    }
-   return (uint64_t)(rtt / (BALANCER_SIZE_RTT * N_106));
+   return (long double)((rtt / (BALANCER_SIZE_RTT)));
 }
