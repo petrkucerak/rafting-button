@@ -7,7 +7,7 @@ main.o:	main.c main.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 main:	main.o
-	$(CC) $(CFLAGS) main.o -o $@ -lm
+	$(CC) $(CFLAGS) main.o -o $@
  
 clean:	
 	rm -f *.o

@@ -39,7 +39,7 @@ typedef struct queue {
 
 typedef struct node {
    uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
-   long double balancer_RTT[BALANCER_SIZE_RTT];
+   uint32_t balancer_RTT[BALANCER_SIZE_RTT];
    status_t status;                      // MASTER or SLAVE
    uint8_t
        time_speed; // frequency deviation of less than ±10 ppm
@@ -74,6 +74,6 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
 uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
-long double get_rtt_abs(uint8_t node_no);
+uint32_t get_rtt_abs(uint8_t node_no);
 
 #endif // MAIN_H
