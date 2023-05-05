@@ -59,6 +59,8 @@ int main(int argc, char const *argv[])
       nodes[i].latency = 0;
       nodes[i].time_speed = 0;
       nodes[i].is_first_setup_rtt = 1;
+      nodes[i].is_first_setup_deviation = 1;
+      nodes[i].deviation = 0;
       nodes[i].stamp_rtt = 0;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
          nodes[i].balancer_RTT[j] = 0;
@@ -154,6 +156,27 @@ int main(int argc, char const *argv[])
 #endif // DEBUG
                   break;
 
+               case TIME:
+                  // Calcule deviation 0
+                  //          D1
+                  // T1 ----------------> T2
+                  // T2 = T1 + D1 + O1
+                  // 01 = T2 - T1 - D1, in reality use only average =>
+                  // 0~ = T2 - T1 - D~
+                  if (nodes[i].is_first_setup_deviation) {
+                     // for first setting up, set clear value
+                     nodes[i].deviation = nodes[i].time - message->content -
+                                          (uint64_t)get_rtt_abs(i);
+                     nodes[i].is_first_setup_deviation = 0;
+                  } else {
+                     // for not first setting, set weighted value
+                     // TODO: implement
+                     nodes[i].deviation =
+                         (nodes[i].time =
+                              message->content - (uint64_t)get_rtt_abs(i));
+                  }
+                  break;
+
                default:
                   fprintf(stderr, "ERROR: Unknown operation\n");
                   exit(EXIT_FAILURE);
@@ -188,6 +211,15 @@ int main(int argc, char const *argv[])
       if (!(game->time % 1000)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
+                         nodes[i].latency);
+         }
+      }
+
+      // Start TIME sychronization
+      // sync starts each 500 ms from MASTER node
+      if (!(game->time % 5000)) {
+         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
                          nodes[i].latency);
          }
       }

@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #define BALANCER_SIZE_RTT 100
+#define BALACNER_SIZE_DEVIATION 100
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
@@ -57,6 +58,8 @@ typedef struct node {
    pipe_t *pipe_head;
    pipe_t *pipe_tail;
    uint8_t is_first_setup_rtt;
+   uint8_t is_first_setup_deviation;
+   uint64_t deviation;
    uint32_t stamp_rtt;
 } node_t;
 
