@@ -52,8 +52,8 @@ int main(int argc, char const *argv[])
    for (uint8_t i = 0; i < game->nodes_count; ++i) {
       nodes[i].queue_head = NULL;
       nodes[i].queue_tail = NULL;
-      nodes[i].queue_head = NULL;
-      nodes[i].queue_tail = NULL;
+      nodes[i].pipe_head = NULL;
+      nodes[i].pipe_tail = NULL;
       nodes[i].status = SLAVE;
       nodes[i].time = 0;
       nodes[i].latency = 0;
@@ -252,13 +252,32 @@ void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
    new_pipe->delay = delay + game->time;
    new_pipe->target = target;
    new_pipe->next = NULL;
+
+   // If a queue is an empty
    if (nodes[source].pipe_tail == NULL) {
       nodes[source].pipe_tail = new_pipe;
       nodes[source].pipe_head = new_pipe;
       return;
    }
-   nodes[source].pipe_tail->next = new_pipe;
-   nodes[source].pipe_tail = new_pipe;
+
+   // Special Case: The head of list has lesser priority than new node. So
+   // insert new node before head node and change head node.
+   if (nodes[source].pipe_head->delay > new_pipe->delay) {
+      // Insert new pipe element before the head
+      new_pipe->next = nodes[source].pipe_head;
+      nodes[source].pipe_head = new_pipe;
+      return;
+   }
+
+   pipe_t *tmp = NULL;
+   tmp = nodes[source].pipe_head;
+   // Traverse the list and find a position to insert new node
+   while (tmp->next != NULL && tmp->next->delay < new_pipe->delay) {
+      tmp = tmp->next;
+   }
+   // Either at the ends of the list or at required position
+   new_pipe->next = tmp->next;
+   tmp->next = new_pipe;
 }
 message_t *pop_from_queue(uint8_t node_no)
 {

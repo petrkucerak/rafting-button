@@ -40,7 +40,7 @@ typedef struct queue {
 typedef struct node {
    uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
    uint32_t balancer_RTT[BALANCER_SIZE_RTT];
-   status_t status;                      // MASTER or SLAVE
+   status_t status; // MASTER or SLAVE
    uint8_t
        time_speed; // frequency deviation of less than ±10 ppm
                    // https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html#overview
@@ -60,9 +60,15 @@ typedef struct node {
    uint32_t stamp_rtt;
 } node_t;
 
+/**
+ * Normal queue
+ */
 void push_to_queue(message_t *message, uint8_t node_no);
 message_t *pop_from_queue(uint8_t node_no);
 
+/**
+ * Priority
+ */
 void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
                   uint32_t delay);
 void pop_from_pipe_to_queue(uint8_t node_no);
