@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE_RTT 200
+#define BALANCER_SIZE_RTT 100
 #define BALACNER_SIZE_RTT_2 10
 #define BALACNER_SIZE_DEVIATION 15
 
@@ -73,7 +73,7 @@ typedef struct node {
    int64_t deviation_last_tmp;
    int64_t deviation_abs_2;
    int64_t deviation_last_tmp_2;
-   print_tmp_t *last_printed_values;
+   print_tmp_t last_print;
 } node_t;
 
 /**
