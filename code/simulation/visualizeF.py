@@ -24,7 +24,7 @@ ax.set_xlabel('Time\n(ms)')
 # print("D mean",np.mean(data[:,11]/10))
 
 
-# plt.plot(data[:, 0]/10, data[:, 5]/10, label="O [B]")
+plt.plot(data[:, 0]/10, data[:, 5]/10, label="O [B]")
 # plt.plot(data[:, 0]/10, data[:, 9]/10, label="O [C]")
 # plt.plot(data[:, 0]/10, data[:, 14]/10, label="O [D]")
 
@@ -37,7 +37,7 @@ plt.plot(data[:, 0]/10, data[:, 6]/10, label="O~ [B]")
 # plt.plot(data[:, 0]/10, data[:, 7]/10, label="OL [B]")
 
 
-plt.plot(data[:, 0]/10, data[:, 8]/10, label="O~L [B]")
+# plt.plot(data[:, 0]/10, data[:, 8]/10, label="O~L [B]")
 
 
 plt.legend()

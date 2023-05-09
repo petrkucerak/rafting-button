@@ -195,7 +195,7 @@ int main(int argc, char const *argv[])
                          (int64_t)((int64_t)(nodes[i].time * N_101) -
                                    (int64_t)(message->content * N_101) -
                                    (int64_t)get_rtt_abs(i));
-                     
+
                      nodes[i].deviation_abs_2 =
                          (int64_t)((int64_t)(nodes[i].time * N_101) -
                                    (int64_t)(message->content * N_101) -
@@ -219,7 +219,10 @@ int main(int argc, char const *argv[])
                         nodes[i].stamp_devition = 0;
 
 #ifdef DEVIATION_SLIDE_ABS_SCENARIO
-                     nodes[i].deviation_last_tmp = nodes[i].deviation_abs;
+                     nodes[i].deviation_last_tmp =
+                         (int64_t)(nodes[i].time * N_101) -
+                         (int64_t)(message->content * N_101) -
+                         (int64_t)get_rtt_abs(i);
                      nodes[i].deviation_abs =
                          (int64_t)((int64_t)(nodes[i].deviation_abs +
                                              (int64_t)(nodes[i].time * N_101) -
