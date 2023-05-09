@@ -2,7 +2,8 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE_RTT 100
+#define BALANCER_SIZE_RTT 200
+#define BALACNER_SIZE_RTT_2 10
 #define BALACNER_SIZE_DEVIATION 15
 
 // SIMULATION TIME
@@ -62,6 +63,10 @@ typedef struct node {
    uint8_t is_first_setup_deviation;
    uint32_t stamp_rtt;
    uint32_t stamp_devition;
+   int64_t deviation_abs;
+   int64_t deviation_last_tmp;
+   int64_t deviation_abs_2;
+   int64_t deviation_last_tmp_2;
 } node_t;
 
 /**
@@ -85,6 +90,7 @@ uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
 uint32_t get_rtt_abs(uint8_t node_no);
+uint32_t get_rtt_abs_limit(uint8_t node_no);
 int64_t get_deviation_abs(uint8_t node_no);
 int64_t get_deviation_last(uint8_t node_no);
 
