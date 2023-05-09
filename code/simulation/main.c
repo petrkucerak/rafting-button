@@ -15,12 +15,12 @@
 #define N_102 100
 #define N_101 10
 
-#define DEBUG
+// #define DEBUG
 #define BUILD_REPORT
 
 // #define DEVIATION_SCENARIO
-// #define RTT_SCENARIO
-#define DEVIATION_SLIDE_ABS_SCENARIO
+#define RTT_SCENARIO
+// #define DEVIATION_SLIDE_ABS_SCENARIO
 
 game_t *game;
 node_t *nodes;
@@ -41,8 +41,8 @@ int main(int argc, char const *argv[])
 
    // ****** CONFIG ******
    // set up game parametrs
-   // game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->deadline = 3 * 60 * 10000; // x min (max value is UINT64_MAX)
+   game->deadline = 1 * 60 * 1000000; // x min (max value is UINT64_MAX)
+   // game->deadline = 1000000; // x min (max value is UINT64_MAX)
    game->nodes_count = 4;
    // ****** CONFIG ******
 
@@ -76,6 +76,12 @@ int main(int argc, char const *argv[])
       for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
          nodes[i].balancer_deviation[j] = 0;
       }
+
+      nodes[i].last_printed_values = (print_tmp_t *)malloc(sizeof(print_tmp_t));
+      if (nodes[i].last_printed_values == NULL) {
+         fprintf(stderr, "ERROR: Can't allocated memory [print_tmp_t]\n");
+         exit(EXIT_FAILURE);
+      }
    }
 
    // ****** CONFIG ******
@@ -91,20 +97,20 @@ int main(int argc, char const *argv[])
    B.time_speed = 0;
 
    C.time = get_rnd_between(10, 150);
-   C.time_speed = get_rnd_between(1, 15);
+   C.time_speed = 0;
 
    D.time = get_rnd_between(10, 150);
-   D.time_speed = get_rnd_between(1, 15);
+   D.time_speed = 0;
 
    // ****** CONFIG ******
 
    while (game->deadline > game->time || !game->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
-      B.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
-      C.latency = get_rnd_between(9, 15); // latency is 0.8 - 1.4 ms
-      D.latency = get_rnd_between(9, 15);
+      A.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
+      B.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
+      C.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
+      D.latency = get_rnd_between(900, 1500);
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
@@ -113,7 +119,7 @@ int main(int argc, char const *argv[])
          // create timer deviation, more infromation is in main.h
          // if value is 0, no deviation is applied
          if (nodes[i].time_speed != 0) {
-            if (!(game->time % (100000 * nodes[i].time_speed))) {
+            if (!(game->time % (1000 * nodes[i].time_speed))) {
                if (get_rnd_between(0, 1))
                   ++nodes[i].time;
                else
@@ -181,28 +187,27 @@ int main(int argc, char const *argv[])
                      // all array
                      for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
                         nodes[i].balancer_deviation[j] =
-                            (nodes[i].time * N_101) -
-                            (message->content * N_101) - get_rtt_abs(i);
+                            nodes[i].time - message->content - get_rtt_abs(i);
                      }
                      nodes[i].is_first_setup_deviation = 0;
 
 #ifdef DEVIATION_SLIDE_ABS_SCENARIO
                      nodes[i].deviation_abs =
-                         (int64_t)((int64_t)(nodes[i].time * N_101) -
-                                   (int64_t)(message->content * N_101) -
+                         (int64_t)((int64_t)(nodes[i].time) -
+                                   (int64_t)(message->content) -
                                    (int64_t)get_rtt_abs(i));
                      nodes[i].deviation_last_tmp =
-                         (int64_t)((int64_t)(nodes[i].time * N_101) -
-                                   (int64_t)(message->content * N_101) -
+                         (int64_t)((int64_t)(nodes[i].time) -
+                                   (int64_t)(message->content) -
                                    (int64_t)get_rtt_abs(i));
 
                      nodes[i].deviation_abs_2 =
-                         (int64_t)((int64_t)(nodes[i].time * N_101) -
-                                   (int64_t)(message->content * N_101) -
+                         (int64_t)((int64_t)(nodes[i].time) -
+                                   (int64_t)(message->content) -
                                    (int64_t)get_rtt_abs_limit(i));
                      nodes[i].deviation_last_tmp_2 =
-                         (int64_t)((int64_t)(nodes[i].time * N_101) -
-                                   (int64_t)(message->content * N_101) -
+                         (int64_t)((int64_t)(nodes[i].time) -
+                                   (int64_t)(message->content) -
                                    (int64_t)get_rtt_abs_limit(i));
 #endif // DEVIATION_SLIDE_ABS_SCENARIO
 
@@ -210,8 +215,7 @@ int main(int argc, char const *argv[])
                      // For next, insert value into the
                      // stamp element in array
                      nodes[i].balancer_deviation[nodes[i].stamp_devition] =
-                         (nodes[i].time * N_101) - (message->content * N_101) -
-                         get_rtt_abs(i);
+                         (nodes[i].time) - (message->content) - get_rtt_abs(i);
 
                      // Increase stamp index
                      ++nodes[i].stamp_devition;
@@ -219,23 +223,20 @@ int main(int argc, char const *argv[])
                         nodes[i].stamp_devition = 0;
 
 #ifdef DEVIATION_SLIDE_ABS_SCENARIO
-                     nodes[i].deviation_last_tmp =
-                         (int64_t)(nodes[i].time * N_101) -
-                         (int64_t)(message->content * N_101) -
-                         (int64_t)get_rtt_abs(i);
+                     nodes[i].deviation_last_tmp = (int64_t)(nodes[i].time) -
+                                                   (int64_t)(message->content) -
+                                                   (int64_t)get_rtt_abs(i);
                      nodes[i].deviation_abs =
                          (int64_t)((int64_t)(nodes[i].deviation_abs +
-                                             (int64_t)(nodes[i].time * N_101) -
-                                             (int64_t)(message->content *
-                                                       N_101) -
+                                             (int64_t)(nodes[i].time) -
+                                             (int64_t)(message->content) -
                                              (int64_t)get_rtt_abs(i)) /
                                    2);
                      nodes[i].deviation_last_tmp_2 = nodes[i].deviation_abs_2;
                      nodes[i].deviation_abs_2 =
                          (int64_t)((int64_t)(nodes[i].deviation_abs +
-                                             (int64_t)(nodes[i].time * N_101) -
-                                             (int64_t)(message->content *
-                                                       N_101) -
+                                             (int64_t)(nodes[i].time) -
+                                             (int64_t)(message->content) -
                                              (int64_t)get_rtt_abs_limit(i)) /
                                    2);
 
@@ -247,46 +248,43 @@ int main(int argc, char const *argv[])
                      // O = T2 - T1 - D
                      printf("# TIME | DEVIATION [%d]: %ld = %ld + %ld + %d || ",
                             i,
-                            message->content + (get_deviation_abs(i) / N_101) +
-                                (get_rtt_abs(i) / N_101),
-                            message->content, (get_deviation_abs(i) / N_101),
-                            (get_rtt_abs(i) / N_101));
+                            message->content + (get_deviation_abs(i)) +
+                                (get_rtt_abs(i)),
+                            message->content, (get_deviation_abs(i)),
+                            (get_rtt_abs(i)));
 
                      for (uint32_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
                         printf(" %ld", nodes[i].balancer_deviation[j]);
                      }
                      printf("\n");
 
-                     printf("# DEVIATION ABS SLADE [%d]: %ld = %ld + %ld / 2\n",
-                            i, nodes[i].deviation_abs,
-                            nodes[i].deviation_last_tmp,
-                            (nodes[i].time * N_101) -
-                                (message->content * N_101) - get_rtt_abs(i));
+                     printf(
+                         "# DEVIATION ABS SLADE [%d]: %ld = %ld + %ld / 2\n", i,
+                         nodes[i].deviation_abs, nodes[i].deviation_last_tmp,
+                         (nodes[i].time) - (message->content) - get_rtt_abs(i));
                   }
 #endif // DEBUG
 
 // Set the time
 #ifdef DEVIATION_SCENARIO
-                  if (get_deviation_abs(i) / N_101 > 10 ||
-                      get_deviation_abs(i) / N_101 < -10) {
-                     nodes[i].time = message->content + get_rtt_abs(i) / N_101;
+                  if (get_deviation_abs(i) > 10 || get_deviation_abs(i) < -10) {
+                     nodes[i].time = message->content + get_rtt_abs(i);
                   } else
-                     nodes[i].time = message->content +
-                                     (get_deviation_abs(i) / N_101) +
-                                     (get_rtt_abs(i) / N_101);
+                     nodes[i].time = message->content + (get_deviation_abs(i)) +
+                                     (get_rtt_abs(i));
 #endif // DEVIATION_SCENARIO
 #ifdef RTT_SCENARIO
-                  nodes[i].time = message->content + (get_rtt_abs(i) / N_101);
+                  nodes[i].time = message->content + (get_rtt_abs(i));
 #endif // RTT_SCENARIO
 
 #ifdef DEVIATION_SLIDE_ABS_SCENARIO
-                  if (nodes[i].deviation_abs / N_101 > 10 ||
-                      nodes[i].deviation_abs / N_101 < -10) {
-                     nodes[i].time = message->content + get_rtt_abs(i) / N_101;
+                  if (nodes[i].deviation_abs > 10 ||
+                      nodes[i].deviation_abs < -10) {
+                     nodes[i].time = message->content + get_rtt_abs(i);
                   } else {
                      nodes[i].time = message->content +
-                                     (nodes[i].deviation_abs / N_101) +
-                                     (get_rtt_abs(i) / N_101);
+                                     (nodes[i].deviation_abs) +
+                                     (get_rtt_abs(i));
                   }
 #endif // DEVIATION_SLIDE_ABS_SCENARIO
                   break;
@@ -303,9 +301,7 @@ int main(int argc, char const *argv[])
                case RTT_CAL:
                   // calcule and send RTT to slave
                   send_message(
-                      (long double)(((nodes[i].time - message->content) *
-                                     N_101) /
-                                    2),
+                      (long double)(((nodes[i].time - message->content)) / 2),
                       RTT_VAL, message->source, i, nodes[i].latency);
                   break;
 
@@ -322,7 +318,7 @@ int main(int argc, char const *argv[])
 
       // Start RTT synchronization
       // sync starts each 100 ms from MATER node
-      if (!(game->time % 1000)) {
+      if (!(game->time % 100000)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
                          nodes[i].latency);
@@ -331,7 +327,7 @@ int main(int argc, char const *argv[])
 
       // Start TIME sychronization
       // sync starts each 500 ms from MASTER node
-      if ((game->time % 5000) == 4999) {
+      if ((game->time % 500000) == 499999) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
                          nodes[i].latency);
@@ -340,33 +336,56 @@ int main(int argc, char const *argv[])
 
 #ifdef BUILD_REPORT
       // print round report
-      printf("%ld", A.time);
-      for (uint8_t i = 1; i < 2; ++i) {
+      uint8_t shut_print = 0;
+      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+
          // time
-         printf(",%lld", (long long int)(nodes[i].time - A.time));
+         int32_t tmp_32 = (int32_t)(nodes[i].time - A.time);
+         if (nodes[i].last_printed_values->time != tmp_32)
+            shut_print = 1;
+         nodes[i].last_printed_values->time = tmp_32;
 
          // rtt
-         printf(",%d", (get_rtt_abs(i)));
-
-         // rtt limit
-         printf(",%d", (get_rtt_abs_limit(i)));
+         tmp_32 = (int32_t)(get_rtt_abs(i));
+         if (nodes[i].last_printed_values->rtt != tmp_32)
+            shut_print = 1;
+         nodes[i].last_printed_values->rtt = tmp_32;
 
          // rnd latency
-         printf(",%d", nodes[i].latency);
-
-         // O actual
-         printf(",%ld", nodes[i].deviation_last_tmp);
-
-         // O abs
-         printf(",%ld", nodes[i].deviation_abs);
-
-         // O actual limit
-         printf(",%ld", nodes[i].deviation_last_tmp_2);
-
-         // O abs limit
-         printf(",%ld", nodes[i].deviation_abs_2);
+         // tmp_32 = (int32_t)(nodes[i].latency);
+         // if (nodes[i].last_printed_values->latency != tmp_32)
+         //    shut_print = 1;
+         // nodes[i].last_printed_values->latency = tmp_32;
       }
-      printf("\n");
+      if (A.time || shut_print) {
+         printf("%ld", A.time);
+         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+            // time
+            printf(",%d", nodes[i].last_printed_values->time);
+
+            // rtt
+            printf(",%d", (nodes[i].last_printed_values->rtt));
+
+            // // rtt limit
+            // printf(",%d", (get_rtt_abs_limit(i)));
+
+            // rnd latency
+            // printf(",%d", nodes[i].last_printed_values->latency);
+
+            // // O actual
+            // printf(",%ld", nodes[i].deviation_last_tmp);
+
+            // // O abs
+            // printf(",%ld", nodes[i].deviation_abs);
+
+            // // O actual limit
+            // printf(",%ld", nodes[i].deviation_last_tmp_2);
+
+            // // O abs limit
+            // printf(",%ld", nodes[i].deviation_abs_2);
+         }
+         printf("\n");
+      }
 #endif // BUILD_REPORT
 
       // increment game round id
@@ -374,6 +393,10 @@ int main(int argc, char const *argv[])
    }
 
    // clean memory
+   for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      free(nodes[i].last_printed_values);
+      nodes[i].last_printed_values = NULL;
+   }
    free(nodes);
    nodes = NULL;
    free(game);

@@ -8,14 +8,14 @@
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
-// - global time 1 step is 100 µs
-// - local time (f=240MHz => T=4.16e-9) so 1 step represents 25000 ticks
+// - global time 1 step is 1 µs
+// - local time (f=240MHz => T=4.16e-9) so 1 step represents 250 ticks
 
 typedef enum status { MASTER, SLAVE } status_t;
 typedef enum message_type { RTT_CAL, RTT_VAL, TIME } message_type_t;
 
 typedef struct game {
-   uint64_t time;       // auto-increment value, 1 step represents 100 µs
+   uint64_t time;       // auto-increment value, 1 step represents 1 µs
    uint64_t deadline;   // the 0 value means an infinite loop
    uint8_t nodes_count; // count of nodes
 } game_t;
@@ -39,22 +39,28 @@ typedef struct queue {
    struct queue *next;
 } queue_t;
 
+typedef struct print_tmp {
+   int32_t time;
+   int32_t rtt;
+   int32_t latency;
+} print_tmp_t;
+
 typedef struct node {
-   uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
-   uint32_t balancer_RTT[BALANCER_SIZE_RTT];             // latency
+   uint64_t time; // auto incement, 1 step represents 250 procesor ticks
+   uint32_t balancer_RTT[BALANCER_SIZE_RTT];            // latency
    int64_t balancer_deviation[BALACNER_SIZE_DEVIATION]; // deviation
-   status_t status;                                      // MASTER or SLAVE
+   status_t status;                                     // MASTER or SLAVE
    uint8_t
        time_speed; // frequency deviation of less than ±10 ppm
                    // https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html#overview
                    // if timer 80MHz => one tick is 12.5 ns ± 0.124 ps deviation
-                   // if 1 step is 100 µs, timer do 8 000 ticks in one step, so
-                   // the max deviation is 8000*0.124 ps = 0.992 ns ~= 1 ns
-                   // => max processor deviation is 1 ns / 100 µs (1 step)
-                   // => cpu drift shut be one per 100 000 steps
+                   // if 1 step is 1 µs, timer do 80 ticks in one step, so
+                   // the max deviation is 80*0.124 ps = 0.00992 ns ~= 0.01 ns
+                   // => max processor deviation is 0.01 ns / 1 µs (1 step)
+                   // => cpu drift shut be one per 1 000 steps
                    // time_speed variable randomize deviation
    uint32_t latency; // assume that one message cannot overtake the other
-                     // 1 represents 100 µs
+                     // 1 represents 1 µs
    queue_t *queue_head;
    queue_t *queue_tail;
    pipe_t *pipe_head;
@@ -67,6 +73,7 @@ typedef struct node {
    int64_t deviation_last_tmp;
    int64_t deviation_abs_2;
    int64_t deviation_last_tmp_2;
+   print_tmp_t *last_printed_values;
 } node_t;
 
 /**
