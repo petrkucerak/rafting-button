@@ -18,6 +18,9 @@
 #define DEBUG
 #define BUILD_REPORT
 
+// #define DEVIATION_SCENARIO
+#define RTT_SCENARIO
+
 game_t *game;
 node_t *nodes;
 
@@ -38,7 +41,7 @@ int main(int argc, char const *argv[])
    // ****** CONFIG ******
    // set up game parametrs
    // game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->deadline = 3 * 60 * 10000; // x min (max value is UINT64_MAX)
+   game->deadline = 10 * 60 * 10000; // x min (max value is UINT64_MAX)
    game->nodes_count = 4;
    // ****** CONFIG ******
 
@@ -206,7 +209,8 @@ int main(int argc, char const *argv[])
                   }
 #endif // DEBUG
 
-                  // Set the time
+// Set the time
+#ifdef DEVIATION_SCENARIO
                   if (get_deviation_abs(i) / N_101 > 10 ||
                       get_deviation_abs(i) / N_101 < -10) {
                      nodes[i].time = message->content + get_rtt_abs(i) / N_101;
@@ -214,6 +218,10 @@ int main(int argc, char const *argv[])
                      nodes[i].time = message->content +
                                      (get_deviation_abs(i) / N_101) +
                                      (get_rtt_abs(i) / N_101);
+#endif // DEVIATION_SCENARIO
+#ifdef RTT_SCENARIO
+                  nodes[i].time = message->content + (get_rtt_abs(i) / N_101);
+#endif // RTT_SCENARIO
                   break;
 
                default:
