@@ -17,11 +17,11 @@ plt.plot(data[:, 0]/10, data[:, 7]/10, label="SLAVE [D]")
 
 plt.axhline(y=np.mean(data[:,1]/10), color='green', label="SLAVE [B] mean")
 plt.axhline(y=np.mean(data[:,4]/10), color='brown', label="SLAVE [C] mean")
-plt.axhline(y=np.mean(data[:,7]/10), color='brown', label="SLAVE [D] mean")
+plt.axhline(y=np.mean(data[:,7]/10), color='grey', label="SLAVE [D] mean")
 
 print("B mean",np.mean(data[:,1]/10))
 print("C mean",np.mean(data[:,4]/10))
-print("C mean",np.mean(data[:,7]/10))
+print("D mean",np.mean(data[:,7]/10))
 
 plt.legend()
 plt.grid(True)

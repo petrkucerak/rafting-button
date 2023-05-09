@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
    // ****** CONFIG ******
    // set up game parametrs
    // game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->deadline = 2 * 60 * 10000; // 8 min (max value is UINT64_MAX)
+   game->deadline = 3 * 60 * 10000; // x min (max value is UINT64_MAX)
    game->nodes_count = 4;
    // ****** CONFIG ******
 
@@ -60,10 +60,13 @@ int main(int argc, char const *argv[])
       nodes[i].time_speed = 0;
       nodes[i].is_first_setup_rtt = 1;
       nodes[i].is_first_setup_deviation = 1;
-      nodes[i].deviation = 0;
       nodes[i].stamp_rtt = 0;
+      nodes[i].stamp_devition = 0;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
          nodes[i].balancer_RTT[j] = 0;
+      }
+      for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
+         nodes[i].balancer_deviation[j] = 0;
       }
    }
 
@@ -164,17 +167,53 @@ int main(int argc, char const *argv[])
                   // 01 = T2 - T1 - D1, in reality use only average =>
                   // 0~ = T2 - T1 - D~
                   if (nodes[i].is_first_setup_deviation) {
-                     // for first setting up, set clear value
-                     nodes[i].deviation = nodes[i].time - message->content -
-                                          (uint64_t)get_rtt_abs(i);
+                     // For first, set same value into the
+                     // all array
+                     for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
+                        nodes[i].balancer_deviation[j] =
+                            (nodes[i].time * N_101) -
+                            (message->content * N_101) - get_rtt_abs(i);
+                     }
                      nodes[i].is_first_setup_deviation = 0;
+
                   } else {
-                     // for not first setting, set weighted value
-                     // TODO: implement
-                     nodes[i].deviation =
-                         (nodes[i].time =
-                              message->content - (uint64_t)get_rtt_abs(i));
+                     // For next, insert value into the
+                     // stamp element in array
+                     nodes[i].balancer_deviation[nodes[i].stamp_devition] =
+                         (nodes[i].time * N_101) - (message->content * N_101) -
+                         get_rtt_abs(i);
+
+                     // Increase stamp index
+                     ++nodes[i].stamp_devition;
+                     if (nodes[i].stamp_devition == BALACNER_SIZE_DEVIATION)
+                        nodes[i].stamp_devition = 0;
                   }
+
+#ifdef DEBUG
+                  {
+                     // O = T2 - T1 - D
+                     printf("# TIME | DEVIATION [%d]: %ld = %ld + %ld + %d || ",
+                            i,
+                            message->content + (get_deviation_abs(i) / N_101) +
+                                (get_rtt_abs(i) / N_101),
+                            message->content, (get_deviation_abs(i) / N_101),
+                            (get_rtt_abs(i) / N_101));
+
+                     for (uint32_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
+                        printf(" %ld", nodes[i].balancer_deviation[j]);
+                     }
+                     printf("\n");
+                  }
+#endif // DEBUG
+
+                  // Set the time
+                  if (get_deviation_abs(i) / N_101 > 10 ||
+                      get_deviation_abs(i) / N_101 < -10) {
+                     nodes[i].time = message->content + get_rtt_abs(i) / N_101;
+                  } else
+                     nodes[i].time = message->content +
+                                     (get_deviation_abs(i) / N_101) +
+                                     (get_rtt_abs(i) / N_101);
                   break;
 
                default:
@@ -217,7 +256,7 @@ int main(int argc, char const *argv[])
 
       // Start TIME sychronization
       // sync starts each 500 ms from MASTER node
-      if (!(game->time % 5000)) {
+      if ((game->time % 5000) == 4999) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
                          nodes[i].latency);
@@ -396,9 +435,26 @@ uint32_t get_rnd_between(uint32_t min, uint32_t max)
 
 uint32_t get_rtt_abs(uint8_t node_no)
 {
-   long double rtt = 0;
+   uint32_t rtt = 0;
    for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
-      rtt += nodes[node_no].balancer_RTT[i];
+      rtt += N.balancer_RTT[i];
    }
-   return (uint32_t)((rtt / (BALANCER_SIZE_RTT)));
+   return (uint32_t)((rtt / BALANCER_SIZE_RTT));
+}
+
+int64_t get_deviation_abs(uint8_t node_no)
+{
+   int64_t devition = 0;
+   for (uint8_t i = 0; i < BALACNER_SIZE_DEVIATION; ++i) {
+      devition += N.balancer_deviation[i];
+   }
+   return (int64_t)(devition / BALACNER_SIZE_DEVIATION);
+}
+
+int64_t get_deviation_last(uint8_t node_no)
+{
+   if (N.stamp_devition == 0)
+      return (int64_t)N.balancer_deviation[BALACNER_SIZE_DEVIATION - 1];
+   else
+      return (int64_t)N.balancer_deviation[N.stamp_devition - 1];
 }

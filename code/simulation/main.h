@@ -2,8 +2,8 @@
 #define MAIN_H
 
 #include <stdint.h>
-#define BALANCER_SIZE_RTT 100
-#define BALACNER_SIZE_DEVIATION 100
+#define BALANCER_SIZE_RTT 5
+#define BALACNER_SIZE_DEVIATION 15
 
 // SIMULATION TIME
 // - targeted delay is between 1 ms - 10 ms
@@ -40,8 +40,9 @@ typedef struct queue {
 
 typedef struct node {
    uint64_t time; // auto incement, 1 step represents 25000 procesor ticks
-   uint32_t balancer_RTT[BALANCER_SIZE_RTT];
-   status_t status; // MASTER or SLAVE
+   uint32_t balancer_RTT[BALANCER_SIZE_RTT];             // latency
+   int64_t balancer_deviation[BALACNER_SIZE_DEVIATION]; // deviation
+   status_t status;                                      // MASTER or SLAVE
    uint8_t
        time_speed; // frequency deviation of less than ±10 ppm
                    // https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/system_time.html#overview
@@ -59,8 +60,8 @@ typedef struct node {
    pipe_t *pipe_tail;
    uint8_t is_first_setup_rtt;
    uint8_t is_first_setup_deviation;
-   uint64_t deviation;
    uint32_t stamp_rtt;
+   uint32_t stamp_devition;
 } node_t;
 
 /**
@@ -84,5 +85,7 @@ uint8_t is_queue_empty(uint8_t node_no);
 uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
 uint32_t get_rtt_abs(uint8_t node_no);
+int64_t get_deviation_abs(uint8_t node_no);
+int64_t get_deviation_last(uint8_t node_no);
 
 #endif // MAIN_H
