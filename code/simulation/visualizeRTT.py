@@ -11,9 +11,9 @@ ax.set_ylabel('Difference between MASTER and SLAVE\n(ms)')
 ax.set_xlabel('Time\n(ms)')
 # ax.set_yscale('log')
 
-plt.plot(data[:, 0]/10, data[:, 1]/10, label="~RTT [B]")
-plt.plot(data[:, 0]/10, data[:, 2]/10, label="~RTT [C]")
-plt.plot(data[:, 0]/10, data[:, 3]/10, label="~RTT [D]")
+plt.plot(data[:, 0]/1000, data[:, 1]/1000, label="~RTT [B]")
+plt.plot(data[:, 0]/1000, data[:, 4]/1000, label="~RTT [C]")
+plt.plot(data[:, 0]/1000, data[:, 7]/1000, label="~RTT [D]")
 
 # plt.plot(data[:, 0]/10, data[:, 3]/10, label="RTT l [B]")
 # plt.plot(data[:, 0]/10, data[:, 9]/10, label="RTT l [C]")

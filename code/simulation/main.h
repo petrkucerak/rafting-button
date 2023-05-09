@@ -42,6 +42,7 @@ typedef struct queue {
 typedef struct print_tmp {
    int32_t time;
    int32_t rtt;
+   int32_t deviation;
    int32_t latency;
 } print_tmp_t;
 

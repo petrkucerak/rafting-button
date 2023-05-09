@@ -10,6 +10,7 @@
 #define C nodes[2]
 #define D nodes[3]
 #define MASTER_NO 0
+#define Ni nodes[i]
 
 #define N_106 1000000
 #define N_102 100
@@ -50,30 +51,31 @@ int main(int argc, char const *argv[])
       exit(EXIT_FAILURE);
    }
    for (uint8_t i = 0; i < game->nodes_count; ++i) {
-      nodes[i].queue_head = NULL;
-      nodes[i].queue_tail = NULL;
-      nodes[i].pipe_head = NULL;
-      nodes[i].pipe_tail = NULL;
-      nodes[i].status = SLAVE;
-      nodes[i].time = 0;
-      nodes[i].latency = 0;
-      nodes[i].time_speed = 0;
-      nodes[i].is_first_setup_rtt = 1;
-      nodes[i].is_first_setup_deviation = 1;
-      nodes[i].stamp_rtt = 0;
-      nodes[i].stamp_devition = 0;
-      nodes[i].deviation_abs = 0;
-      nodes[i].deviation_last_tmp = 0;
-      nodes[i].deviation_abs_2 = 0;
-      nodes[i].deviation_last_tmp_2 = 0;
-      nodes[i].last_print.latency = 0;
-      nodes[i].last_print.rtt = 0;
-      nodes[i].last_print.time = 0;
+      Ni.queue_head = NULL;
+      Ni.queue_tail = NULL;
+      Ni.pipe_head = NULL;
+      Ni.pipe_tail = NULL;
+      Ni.status = SLAVE;
+      Ni.time = 0;
+      Ni.latency = 0;
+      Ni.time_speed = 0;
+      Ni.is_first_setup_rtt = 1;
+      Ni.is_first_setup_deviation = 1;
+      Ni.stamp_rtt = 0;
+      Ni.stamp_devition = 0;
+      Ni.deviation_abs = 0;
+      Ni.deviation_last_tmp = 0;
+      Ni.deviation_abs_2 = 0;
+      Ni.deviation_last_tmp_2 = 0;
+      Ni.last_print.latency = 0;
+      Ni.last_print.rtt = 0;
+      Ni.last_print.time = 0;
+      Ni.last_print.deviation = 0;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
-         nodes[i].balancer_RTT[j] = 0;
+         Ni.balancer_RTT[j] = 0;
       }
       for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
-         nodes[i].balancer_deviation[j] = 0;
+         Ni.balancer_deviation[j] = 0;
       }
    }
 
@@ -107,16 +109,16 @@ int main(int argc, char const *argv[])
 
       // time incementation
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         ++nodes[i].time;
+         ++Ni.time;
 
          // create timer deviation, more infromation is in main.h
          // if value is 0, no deviation is applied
-         if (nodes[i].time_speed != 0) {
-            if (!(game->time % (1000 * nodes[i].time_speed))) {
+         if (Ni.time_speed != 0) {
+            if (!(game->time % (1000 * Ni.time_speed))) {
                if (get_rnd_between(0, 1))
-                  ++nodes[i].time;
+                  ++Ni.time;
                else
-                  --nodes[i].time;
+                  --Ni.time;
             }
          }
       }
@@ -137,31 +139,30 @@ int main(int argc, char const *argv[])
                case RTT_CAL:
                   // send value back
                   send_message(message->content, RTT_CAL, message->source, i,
-                               nodes[i].latency);
+                               Ni.latency);
                   break;
                case RTT_VAL:
                   // Save RTT value
                   // for first message, paste rtt into all array
-                  if (nodes[i].is_first_setup_rtt) {
+                  if (Ni.is_first_setup_rtt) {
                      for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
-                        nodes[i].balancer_RTT[j] = message->content;
+                        Ni.balancer_RTT[j] = message->content;
                      }
-                     nodes[i].is_first_setup_rtt = 0;
+                     Ni.is_first_setup_rtt = 0;
                   } else {
-                     nodes[i].balancer_RTT[nodes[i].stamp_rtt] =
-                         message->content;
+                     Ni.balancer_RTT[Ni.stamp_rtt] = message->content;
 
                      // Increase the stamp value
-                     ++nodes[i].stamp_rtt;
-                     if (nodes[i].stamp_rtt == BALANCER_SIZE_RTT)
-                        nodes[i].stamp_rtt = 0;
+                     ++Ni.stamp_rtt;
+                     if (Ni.stamp_rtt == BALANCER_SIZE_RTT)
+                        Ni.stamp_rtt = 0;
                   }
 
 #ifdef DEBUG
                   {
                      printf("# RND ABS [%d]: %d ||", i, get_rtt_abs(i));
                      for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
-                        printf(" %d", nodes[i].balancer_RTT[j]);
+                        printf(" %d", Ni.balancer_RTT[j]);
                      }
                      printf("\n");
                   }
@@ -169,12 +170,26 @@ int main(int argc, char const *argv[])
                   break;
 
                case TIME:
-                  // Calcule deviation 0
-                  //          D1
-                  // T1 ----------------> T2
-                  // T2 = T1 + D1 + O1
-                  // 01 = T2 - T1 - D1, in reality use only average =>
-                  // 0~ = T2 - T1 - D~
+                  // Calcule deviation 0~
+                  if (Ni.is_first_setup_deviation) {
+                     Ni.deviation_abs = (int64_t)Ni.time -
+                                        (int64_t)message->content -
+                                        (int64_t)get_rtt_abs(i);
+                     Ni.is_first_setup_deviation = 0;
+                  } else {
+                     Ni.deviation_abs =
+                         (Ni.deviation_abs - (int64_t)Ni.time -
+                          (int64_t)message->content - (int64_t)get_rtt_abs(i)) /
+                         2;
+                  }
+
+                  // Set time
+                  if (Ni.deviation_abs > 50 || Ni.deviation_abs < -50) {
+                     Ni.time = message->content + get_rtt_abs(i);
+                  } else {
+                     Ni.time =
+                         message->content + get_rtt_abs(i) + Ni.deviation_abs;
+                  }
 
                   break;
 
@@ -189,8 +204,8 @@ int main(int argc, char const *argv[])
                switch (message->type) {
                case RTT_CAL:
                   // calcule and send RTT to slave
-                  send_message(((nodes[i].time - message->content) / 2),
-                               RTT_VAL, message->source, i, nodes[i].latency);
+                  send_message(((Ni.time - message->content) / 2), RTT_VAL,
+                               message->source, i, Ni.latency);
                   break;
 
                default:
@@ -209,7 +224,7 @@ int main(int argc, char const *argv[])
       if (!(game->time % 100000)) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
-                         nodes[i].latency);
+                         Ni.latency);
          }
       }
 
@@ -217,8 +232,7 @@ int main(int argc, char const *argv[])
       // sync starts each 500 ms from MASTER node
       if ((game->time % 500000) == 499999) {
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
-                         nodes[i].latency);
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO, Ni.latency);
          }
       }
 
@@ -226,16 +240,36 @@ int main(int argc, char const *argv[])
       // print round report
       int print_changed = 0;
       for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         if (get_rtt_abs(i) != nodes[i].last_print.rtt) {
+         // rtt
+         if (get_rtt_abs(i) != Ni.last_print.rtt) {
             print_changed = 1;
          }
-         nodes[i].last_print.rtt = get_rtt_abs(i);
+         Ni.last_print.rtt = get_rtt_abs(i);
+
+         // O~
+         if ((int32_t)Ni.deviation_abs != Ni.last_print.deviation) {
+            print_changed = 1;
+         }
+         Ni.last_print.deviation = (int32_t)Ni.deviation_abs;
+
+         // time
+         if ((int32_t)(A.time - Ni.time) != Ni.last_print.time) {
+            print_changed = 1;
+         }
+         Ni.last_print.time = (int32_t)(A.time - Ni.time);
       }
 
       if (print_changed == 1 || A.time == 1) {
          printf("%ld", A.time);
          for (uint8_t i = 1; i < game->nodes_count; ++i) {
+            // rtt
             printf(",%d", get_rtt_abs(i));
+
+            // deviation
+            printf(",%d", Ni.last_print.deviation);
+
+            // time
+            printf(",%d", Ni.last_print.time);
          }
          printf("\n");
       }
