@@ -178,13 +178,13 @@ int main(int argc, char const *argv[])
                      Ni.is_first_setup_deviation = 0;
                   } else {
                      Ni.deviation_abs =
-                         (Ni.deviation_abs - (int64_t)Ni.time -
+                         (Ni.deviation_abs + (int64_t)Ni.time -
                           (int64_t)message->content - (int64_t)get_rtt_abs(i)) /
                          2;
                   }
 
                   // Set time
-                  if (Ni.deviation_abs > 50 || Ni.deviation_abs < -50) {
+                  if (Ni.deviation_abs > 250 || Ni.deviation_abs < -250) {
                      Ni.time = message->content + get_rtt_abs(i);
                   } else {
                      Ni.time =
