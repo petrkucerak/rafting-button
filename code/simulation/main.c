@@ -84,12 +84,13 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup_rtt = 0;
+   A.time_speed = 0;
    // A.time_speed = get_rnd_between(1, 15);
-   A.time_speed = 1;
+   // A.time_speed = 1;
 
    B.time = get_rnd_between(100, 1500);
    // B.time_speed = get_rnd_between(1, 15);
-   B.time_speed = 0;
+   B.time_speed = 1;
 
    C.time = get_rnd_between(100, 1500);
    C.time_speed = 0;
@@ -184,8 +185,10 @@ int main(int argc, char const *argv[])
                   }
 
                   // Set time
-                  if (Ni.deviation_abs > 250 || Ni.deviation_abs < -250) {
-                     Ni.time = message->content + get_rtt_abs(i);
+                  if (Ni.deviation_abs > 100) {
+                     Ni.time = message->content + get_rtt_abs(i) + 100;
+                  } else if (Ni.deviation_abs < -100) {
+                     Ni.time = message->content + get_rtt_abs(i) - 100;
                   } else {
                      Ni.time =
                          message->content + get_rtt_abs(i) + Ni.deviation_abs;

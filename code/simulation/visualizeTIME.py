@@ -15,7 +15,7 @@ plt.plot(data[:, 0]/1000, data[:, 3]/1000, label="SLAVE [B]")
 plt.plot(data[:, 0]/1000, data[:, 6]/1000, label="SLAVE [C]")
 plt.plot(data[:, 0]/1000, data[:, 9]/1000, label="SLAVE [D]")
 
-plt.axhline(y=np.mean(data[:,3]/1000), color='green', label="SLAVE [B] mean")
+plt.axhline(y=np.mean(data[:,3]/1000), color='violet', label="SLAVE [B] mean")
 plt.axhline(y=np.mean(data[:,6]/1000), color='brown', label="SLAVE [C] mean")
 plt.axhline(y=np.mean(data[:,9]/1000), color='grey', label="SLAVE [D] mean")
 
