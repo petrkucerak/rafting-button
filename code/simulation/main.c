@@ -12,14 +12,10 @@
 #define MASTER_NO 0
 #define Ni nodes[i]
 
-#define N_106 1000000
-#define N_102 100
-#define N_101 10
-
 // #define DEBUG
 #define BUILD_REPORT
 
-game_t *game;
+simulation_t *simulation;
 node_t *nodes;
 
 int main(int argc, char const *argv[])
@@ -29,28 +25,27 @@ int main(int argc, char const *argv[])
    srand(time(NULL));
 
    // create resources
-   game = NULL;
-   game = (game_t *)malloc(sizeof(game_t));
-   if (game == NULL) {
-      fprintf(stderr, "ERROR: Can't allocated memory [game_t]\n");
+   simulation = NULL;
+   simulation = (simulation_t *)malloc(sizeof(simulation_t));
+   if (simulation == NULL) {
+      fprintf(stderr, "ERROR: Can't allocated memory [simulation_t]\n");
       exit(EXIT_FAILURE);
    }
 
    // ****** CONFIG ******
-   // set up game parametrs
-   game->deadline = 3 * 60 * 1000000; // x min (max value is UINT64_MAX)
-   // game->deadline = 1000000; // x min (max value is UINT64_MAX)
-   game->nodes_count = 4;
+   // set up simulation parametrs
+   simulation->deadline = 3 * 60 * 1000000; // x min (max value is UINT64_MAX)
+   simulation->nodes_count = 4;
    // ****** CONFIG ******
 
-   game->time = 0;
+   simulation->time = 0;
    nodes = NULL;
-   nodes = (node_t *)malloc(sizeof(node_t) * game->nodes_count);
+   nodes = (node_t *)malloc(sizeof(node_t) * simulation->nodes_count);
    if (nodes == NULL) {
       fprintf(stderr, "ERROR: Can't allocated memory [nodes_t]\n");
       exit(EXIT_FAILURE);
    }
-   for (uint8_t i = 0; i < game->nodes_count; ++i) {
+   for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
       Ni.queue_head = NULL;
       Ni.queue_tail = NULL;
       Ni.pipe_head = NULL;
@@ -58,24 +53,17 @@ int main(int argc, char const *argv[])
       Ni.status = SLAVE;
       Ni.time = 0;
       Ni.latency = 0;
-      Ni.time_speed = 0;
+      Ni.cpu_drift = 0;
       Ni.is_first_setup_rtt = 1;
       Ni.is_first_setup_deviation = 1;
       Ni.stamp_rtt = 0;
-      Ni.stamp_devition = 0;
       Ni.deviation_abs = 0;
-      Ni.deviation_last_tmp = 0;
-      Ni.deviation_abs_2 = 0;
-      Ni.deviation_last_tmp_2 = 0;
-      Ni.last_print.latency = 0;
+
       Ni.last_print.rtt = 0;
       Ni.last_print.time = 0;
       Ni.last_print.deviation = 0;
       for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
          Ni.balancer_RTT[j] = 0;
-      }
-      for (uint8_t j = 0; j < BALACNER_SIZE_DEVIATION; ++j) {
-         Ni.balancer_deviation[j] = 0;
       }
    }
 
@@ -84,23 +72,23 @@ int main(int argc, char const *argv[])
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup_rtt = 0;
-   A.time_speed = 0;
-   // A.time_speed = get_rnd_between(1, 15);
-   // A.time_speed = 1;
+   A.cpu_drift = 0;
+   // A.cpu_drift = get_rnd_between(1, 15);
+   // A.cpu_drift = 1;
 
    B.time = get_rnd_between(100, 1500);
-   // B.time_speed = get_rnd_between(1, 15);
-   B.time_speed = 1;
+   // B.cpu_drift = get_rnd_between(1, 15);
+   B.cpu_drift = 1;
 
    C.time = get_rnd_between(100, 1500);
-   C.time_speed = 0;
+   C.cpu_drift = 0;
 
    D.time = get_rnd_between(100, 1500);
-   D.time_speed = 0;
+   D.cpu_drift = 0;
 
    // ****** CONFIG ******
 
-   while (game->deadline > game->time || !game->deadline) {
+   while (simulation->deadline > simulation->time || !simulation->deadline) {
 
       // set rnd latency
       A.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
@@ -109,13 +97,13 @@ int main(int argc, char const *argv[])
       D.latency = get_rnd_between(900, 1500);
 
       // time incementation
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          ++Ni.time;
 
          // create timer deviation, more infromation is in main.h
          // if value is 0, no deviation is applied
-         if (Ni.time_speed != 0) {
-            if (!(game->time % (1000 * Ni.time_speed))) {
+         if (Ni.cpu_drift != 0) {
+            if (!(simulation->time % (1000 * Ni.cpu_drift))) {
                if (get_rnd_between(0, 1))
                   ++Ni.time;
                else
@@ -125,12 +113,12 @@ int main(int argc, char const *argv[])
       }
 
       // process pipe
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          process_pipe(i);
       }
 
       // status machine
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          while (!is_queue_empty(i)) {
             message_t *message = pop_from_queue(i);
 
@@ -224,8 +212,8 @@ int main(int argc, char const *argv[])
 
       // Start RTT synchronization
       // sync starts each 100 ms from MATER node
-      if (!(game->time % 100000)) {
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+      if (!(simulation->time % 100000)) {
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
                          Ni.latency);
          }
@@ -233,8 +221,8 @@ int main(int argc, char const *argv[])
 
       // Start TIME sychronization
       // sync starts each 500 ms from MASTER node
-      if ((game->time % 500000) == 499999) {
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+      if ((simulation->time % 500000) == 499999) {
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
             send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO, Ni.latency);
          }
       }
@@ -242,7 +230,7 @@ int main(int argc, char const *argv[])
 #ifdef BUILD_REPORT
       // print round report
       int print_changed = 0;
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          // rtt
          if (get_rtt_abs(i) != Ni.last_print.rtt) {
             print_changed = 1;
@@ -264,7 +252,7 @@ int main(int argc, char const *argv[])
 
       if (print_changed == 1 || A.time == 1) {
          printf("%ld", A.time);
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
             // rtt
             printf(",%d", get_rtt_abs(i));
 
@@ -279,15 +267,15 @@ int main(int argc, char const *argv[])
 
 #endif // BUILD_REPORT
 
-      // increment game round id
-      ++game->time;
+      // increment simulation round id
+      ++simulation->time;
    }
 
    // clear memory
    free(nodes);
    nodes = NULL;
-   free(game);
-   game = NULL;
+   free(simulation);
+   simulation = NULL;
 
    return 0;
 }
@@ -312,7 +300,7 @@ void push_to_queue(message_t *message, uint8_t node_no)
    N.queue_tail = new_queue;
 }
 void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
-                  uint32_t delay)
+                  uint32_t latency)
 {
    pipe_t *new_pipe = (pipe_t *)malloc(sizeof(pipe_t));
    if (new_pipe == NULL) {
@@ -320,7 +308,7 @@ void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
       exit(EXIT_FAILURE);
    }
    new_pipe->message = message;
-   new_pipe->delay = delay + game->time;
+   new_pipe->latency = latency + simulation->time;
    new_pipe->target = target;
    new_pipe->next = NULL;
 
@@ -333,7 +321,7 @@ void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
 
    // Special Case: The head of list has lesser priority than new node. So
    // insert new node before head node and change head node.
-   if (nodes[source].pipe_head->delay > new_pipe->delay) {
+   if (nodes[source].pipe_head->latency > new_pipe->latency) {
       // Insert new pipe element before the head
       new_pipe->next = nodes[source].pipe_head;
       nodes[source].pipe_head = new_pipe;
@@ -343,7 +331,7 @@ void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
    pipe_t *tmp = NULL;
    tmp = nodes[source].pipe_head;
    // Traverse the list and find a position to insert new node
-   while (tmp->next != NULL && tmp->next->delay < new_pipe->delay) {
+   while (tmp->next != NULL && tmp->next->latency < new_pipe->latency) {
       tmp = tmp->next;
    }
    // Either at the ends of the list or at required position
@@ -387,13 +375,13 @@ void pop_from_pipe_to_queue(uint8_t node_no)
 void process_pipe(uint8_t node_no)
 {
 
-   while (N.pipe_head != NULL && N.pipe_head->delay <= game->time) {
+   while (N.pipe_head != NULL && N.pipe_head->latency <= simulation->time) {
       pop_from_pipe_to_queue(node_no);
    }
 }
 
 void send_message(uint64_t content, message_type_t type, uint8_t target,
-                  uint8_t source, uint64_t delay)
+                  uint8_t source, uint64_t latency)
 {
    message_t *message = (message_t *)malloc(sizeof(message_t));
    if (message == NULL) {
@@ -403,9 +391,9 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->content = content;
    message->type = type;
    message->source = source;
-   message->delay = game->time + delay;
+   message->latency = simulation->time + latency;
 
-   push_to_pipe(message, source, target, delay);
+   push_to_pipe(message, source, target, latency);
 }
 
 uint8_t is_queue_empty(uint8_t node_no)
@@ -422,9 +410,9 @@ uint8_t is_node_master(uint8_t node_no)
    return 0;
 }
 
-uint8_t is_after_delay(uint8_t node_no)
+uint8_t is_after_latency(uint8_t node_no)
 {
-   if (game->time >= N.queue_head->message->delay)
+   if (simulation->time >= N.queue_head->message->latency)
       return 1;
    return 0;
 }
@@ -440,33 +428,4 @@ uint32_t get_rtt_abs(uint8_t node_no)
       rtt += N.balancer_RTT[i];
    }
    return (uint32_t)((rtt / BALANCER_SIZE_RTT));
-}
-
-uint32_t get_rtt_abs_limit(uint8_t node_no)
-{
-   uint32_t rtt = 0;
-   for (uint8_t i = 0; i < BALACNER_SIZE_RTT_2; ++i) {
-      int stamp = N.stamp_rtt - i;
-      if (stamp < 0)
-         stamp += BALANCER_SIZE_RTT;
-      rtt += N.balancer_RTT[stamp];
-   }
-   return (uint32_t)(rtt / BALACNER_SIZE_RTT_2);
-}
-
-int64_t get_deviation_abs(uint8_t node_no)
-{
-   int64_t devition = 0;
-   for (uint8_t i = 0; i < BALACNER_SIZE_DEVIATION; ++i) {
-      devition += N.balancer_deviation[i];
-   }
-   return (int64_t)(devition / BALACNER_SIZE_DEVIATION);
-}
-
-int64_t get_deviation_last(uint8_t node_no)
-{
-   if (N.stamp_devition == 0)
-      return (int64_t)N.balancer_deviation[BALACNER_SIZE_DEVIATION - 1];
-   else
-      return (int64_t)N.balancer_deviation[N.stamp_devition - 1];
 }
