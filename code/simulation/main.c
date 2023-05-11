@@ -23,6 +23,8 @@
 #define MASTER_NO 0
 #define Ni nodes[i]
 
+#define DEVIATION_MAX_CONSTATN 100
+
 // #define DEBUG
 #define BUILD_REPORT
 
@@ -181,10 +183,12 @@ int main(int argc, char const *argv[])
                   }
 
                   // Set time
-                  if (Ni.deviation_avg > 100) {
-                     Ni.time = message->content + get_rtt_avg(i) + 100;
-                  } else if (Ni.deviation_avg < -100) {
-                     Ni.time = message->content + get_rtt_avg(i) - 100;
+                  if (Ni.deviation_avg > DEVIATION_MAX_CONSTATN) {
+                     Ni.time = message->content + get_rtt_avg(i) +
+                               DEVIATION_MAX_CONSTATN;
+                  } else if (Ni.deviation_avg < -DEVIATION_MAX_CONSTATN) {
+                     Ni.time = message->content + get_rtt_avg(i) -
+                               DEVIATION_MAX_CONSTATN;
                   } else {
                      Ni.time =
                          message->content + get_rtt_avg(i) + Ni.deviation_avg;
