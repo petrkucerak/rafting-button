@@ -1,3 +1,14 @@
+/**
+ * @file main.c
+ * @author Petr Kucera (kucerp28@fel.cvut.cz)
+ * @brief The simulation implementation. A detailed description is in the header
+ * file (main.h).
+ * @version 1.0
+ * @date 2023-05-11
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 #include "main.h"
 #include <math.h>
 #include <stdio.h>
@@ -21,7 +32,7 @@ node_t *nodes;
 int main(int argc, char const *argv[])
 {
 
-   // for rnd generator
+   // set rnd seed from time
    srand(time(NULL));
 
    // create resources
@@ -32,13 +43,13 @@ int main(int argc, char const *argv[])
       exit(EXIT_FAILURE);
    }
 
-   // ****** CONFIG ******
+   // ****** START OF SIMULATION CONFIG ******
    // set up simulation parametrs
-   simulation->deadline = 3 * 60 * 1000000; // x min (max value is UINT64_MAX)
+   simulation->deadline = 10 * 60 * 1000000; // 10 min (max value is UINT64_MAX)
    simulation->nodes_count = 4;
-   // ****** CONFIG ******
-
    simulation->time = 0;
+   // ****** END OF SIMULATION CONFIG ******
+
    nodes = NULL;
    nodes = (node_t *)malloc(sizeof(node_t) * simulation->nodes_count);
    if (nodes == NULL) {
@@ -67,34 +78,31 @@ int main(int argc, char const *argv[])
       }
    }
 
-   // ****** CONFIG ******
+   // ****** START OF NODES CONFIG ******
    // config enviroment to the simulation
    A.status = MASTER;
    A.time = 0;
    A.is_first_setup_rtt = 0;
-   A.cpu_drift = 0;
-   // A.cpu_drift = get_rnd_between(1, 15);
-   // A.cpu_drift = 1;
+   A.cpu_drift = get_rnd_between(1, 10);
 
    B.time = get_rnd_between(100, 1500);
-   // B.cpu_drift = get_rnd_between(1, 15);
-   B.cpu_drift = 1;
+   B.cpu_drift = get_rnd_between(1, 10);
 
    C.time = get_rnd_between(100, 1500);
-   C.cpu_drift = 0;
+   C.cpu_drift = get_rnd_between(1, 10);
 
    D.time = get_rnd_between(100, 1500);
-   D.cpu_drift = 0;
+   D.cpu_drift = get_rnd_between(1, 10);
 
-   // ****** CONFIG ******
+   // ****** END OF NODES CONFIG ******
 
    while (simulation->deadline > simulation->time || !simulation->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
-      B.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
-      C.latency = get_rnd_between(900, 1500); // latency is 0.8 - 1.4 ms
-      D.latency = get_rnd_between(900, 1500);
+      A.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      B.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      C.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      D.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
 
       // time incementation
       for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
