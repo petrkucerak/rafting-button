@@ -56,8 +56,8 @@ int main(int argc, char const *argv[])
       Ni.cpu_drift = 0;
       Ni.is_first_setup_rtt = 1;
       Ni.is_first_setup_deviation = 1;
-      Ni.stamp_rtt = 0;
-      Ni.deviation_abs = 0;
+      Ni.rtt_index = 0;
+      Ni.deviation_avg = 0;
 
       Ni.last_print.rtt = 0;
       Ni.last_print.time = 0;
@@ -139,17 +139,17 @@ int main(int argc, char const *argv[])
                      }
                      Ni.is_first_setup_rtt = 0;
                   } else {
-                     Ni.balancer_RTT[Ni.stamp_rtt] = message->content;
+                     Ni.balancer_RTT[Ni.rtt_index] = message->content;
 
                      // Increase the stamp value
-                     ++Ni.stamp_rtt;
-                     if (Ni.stamp_rtt == BALANCER_SIZE_RTT)
-                        Ni.stamp_rtt = 0;
+                     ++Ni.rtt_index;
+                     if (Ni.rtt_index == BALANCER_SIZE_RTT)
+                        Ni.rtt_index = 0;
                   }
 
 #ifdef DEBUG
                   {
-                     printf("# RND ABS [%d]: %d ||", i, get_rtt_abs(i));
+                     printf("# RND ABS [%d]: %d ||", i, get_rtt_avg(i));
                      for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
                         printf(" %d", Ni.balancer_RTT[j]);
                      }
@@ -161,25 +161,25 @@ int main(int argc, char const *argv[])
                case TIME:
                   // Calcule deviation 0~
                   if (Ni.is_first_setup_deviation) {
-                     Ni.deviation_abs = (int64_t)Ni.time -
+                     Ni.deviation_avg = (int64_t)Ni.time -
                                         (int64_t)message->content -
-                                        (int64_t)get_rtt_abs(i);
+                                        (int64_t)get_rtt_avg(i);
                      Ni.is_first_setup_deviation = 0;
                   } else {
-                     Ni.deviation_abs =
-                         (Ni.deviation_abs + (int64_t)Ni.time -
-                          (int64_t)message->content - (int64_t)get_rtt_abs(i)) /
+                     Ni.deviation_avg =
+                         (Ni.deviation_avg + (int64_t)Ni.time -
+                          (int64_t)message->content - (int64_t)get_rtt_avg(i)) /
                          2;
                   }
 
                   // Set time
-                  if (Ni.deviation_abs > 100) {
-                     Ni.time = message->content + get_rtt_abs(i) + 100;
-                  } else if (Ni.deviation_abs < -100) {
-                     Ni.time = message->content + get_rtt_abs(i) - 100;
+                  if (Ni.deviation_avg > 100) {
+                     Ni.time = message->content + get_rtt_avg(i) + 100;
+                  } else if (Ni.deviation_avg < -100) {
+                     Ni.time = message->content + get_rtt_avg(i) - 100;
                   } else {
                      Ni.time =
-                         message->content + get_rtt_abs(i) + Ni.deviation_abs;
+                         message->content + get_rtt_avg(i) + Ni.deviation_avg;
                   }
 
                   break;
@@ -232,16 +232,16 @@ int main(int argc, char const *argv[])
       int print_changed = 0;
       for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          // rtt
-         if (get_rtt_abs(i) != Ni.last_print.rtt) {
+         if (get_rtt_avg(i) != Ni.last_print.rtt) {
             print_changed = 1;
          }
-         Ni.last_print.rtt = get_rtt_abs(i);
+         Ni.last_print.rtt = get_rtt_avg(i);
 
          // O~
-         if ((int32_t)Ni.deviation_abs != Ni.last_print.deviation) {
+         if ((int32_t)Ni.deviation_avg != Ni.last_print.deviation) {
             print_changed = 1;
          }
-         Ni.last_print.deviation = (int32_t)Ni.deviation_abs;
+         Ni.last_print.deviation = (int32_t)Ni.deviation_avg;
 
          // time
          if ((int32_t)(A.time - Ni.time) != Ni.last_print.time) {
@@ -254,7 +254,7 @@ int main(int argc, char const *argv[])
          printf("%ld", A.time);
          for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
             // rtt
-            printf(",%d", get_rtt_abs(i));
+            printf(",%d", get_rtt_avg(i));
 
             // deviation
             printf(",%d", Ni.last_print.deviation);
@@ -421,7 +421,7 @@ uint32_t get_rnd_between(uint32_t min, uint32_t max)
    return (uint32_t)((rand() % (max - min + 1)) + min);
 }
 
-uint32_t get_rtt_abs(uint8_t node_no)
+uint32_t get_rtt_avg(uint8_t node_no)
 {
    uint32_t rtt = 0;
    for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
