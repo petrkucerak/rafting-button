@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "EspressIf")(type "KiCad")(uri "${KIPRJMOD}/EspressIf.kicad_sym")(options "")(descr ""))
+  (lib (name "esp32-schematic")(type "KiCad")(uri "C:/Users/Petr.Kucera/KiCad/kicad-libraries-1.1.0/libraries/esp32-schematic.kicad_sym")(options "")(descr ""))
+)
