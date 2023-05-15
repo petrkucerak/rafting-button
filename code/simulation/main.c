@@ -1,4 +1,16 @@
+/**
+ * @file main.c
+ * @author Petr Kucera (kucerp28@fel.cvut.cz)
+ * @brief The simulation implementation. A detailed description is in the header
+ * file (main.h).
+ * @version 1.0
+ * @date 2023-05-11
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 #include "main.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,141 +19,181 @@
 #define A nodes[0]
 #define B nodes[1]
 #define C nodes[2]
+#define D nodes[3]
 #define MASTER_NO 0
+#define Ni nodes[i]
+
+#define DEVIATION_MAX_CONSTATN 100
 
 // #define DEBUG
 #define BUILD_REPORT
 
-game_t *game;
+simulation_t *simulation;
 node_t *nodes;
 
 int main(int argc, char const *argv[])
 {
 
-   // for rnd generator
+   // set rnd seed from time
    srand(time(NULL));
 
    // create resources
-   game = NULL;
-   game = (game_t *)malloc(sizeof(game_t));
-   if (game == NULL) {
-      fprintf(stderr, "ERROR: Can't allocated memory [game_t]\n");
+   simulation = NULL;
+   simulation = (simulation_t *)malloc(sizeof(simulation_t));
+   if (simulation == NULL) {
+      fprintf(stderr, "ERROR: Can't allocated memory [simulation_t]\n");
       exit(EXIT_FAILURE);
    }
 
-   // ****** CONFIG ******
-   // set up game parametrs
-   game->deadline = 1 * 60 * 10000; // 8 min (max value is UINT64_MAX)
-   game->nodes_count = 3;
-   // ****** CONFIG ******
+   // ****** START OF SIMULATION CONFIG ******
+   // set up simulation parametrs
+   simulation->deadline = 10 * 60 * 1000000; // 10 min (max value is UINT64_MAX)
+   simulation->nodes_count = 4;
+   simulation->time = 0;
+   // ****** END OF SIMULATION CONFIG ******
 
-   game->time = 0;
    nodes = NULL;
-   nodes = (node_t *)malloc(sizeof(node_t) * game->nodes_count);
+   nodes = (node_t *)malloc(sizeof(node_t) * simulation->nodes_count);
    if (nodes == NULL) {
       fprintf(stderr, "ERROR: Can't allocated memory [nodes_t]\n");
       exit(EXIT_FAILURE);
    }
-   for (uint8_t i = 0; i < game->nodes_count; ++i) {
-      nodes[i].queue_head = NULL;
-      nodes[i].queue_tail = NULL;
-      nodes[i].queue_head = NULL;
-      nodes[i].queue_tail = NULL;
-      nodes[i].status = SLAVE;
-      nodes[i].time = 0;
-      nodes[i].latency = 0;
-      nodes[i].time_speed = 100;
-      nodes[i].is_first_setup = 1;
-      for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-         nodes[i].balancer[j] = 0;
+   for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
+      Ni.queue_head = NULL;
+      Ni.queue_tail = NULL;
+      Ni.pipe_head = NULL;
+      Ni.pipe_tail = NULL;
+      Ni.status = SLAVE;
+      Ni.time = 0;
+      Ni.latency = 0;
+      Ni.cpu_drift = 0;
+      Ni.is_first_setup_rtt = 1;
+      Ni.is_first_setup_deviation = 1;
+      Ni.rtt_index = 0;
+      Ni.deviation_avg = 0;
+
+      Ni.last_print.rtt = 0;
+      Ni.last_print.time = 0;
+      Ni.last_print.deviation = 0;
+      for (uint8_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+         Ni.balancer_RTT[j] = 0;
       }
    }
 
-   // ****** CONFIG ******
+   // ****** START OF NODES CONFIG ******
    // config enviroment to the simulation
    A.status = MASTER;
    A.time = 0;
-   A.is_first_setup = 0;
-   // A.latency = 10;
+   A.is_first_setup_rtt = 0;
+   A.cpu_drift = get_rnd_between(1, 10);
 
-   B.time = 13;
-   // B.latency = 12;
+   B.time = get_rnd_between(100, 1500);
+   B.cpu_drift = get_rnd_between(1, 10);
 
-   C.time = 21;
-   // C.latency = 8;
-   // ****** CONFIG ******
+   C.time = get_rnd_between(100, 1500);
+   C.cpu_drift = get_rnd_between(1, 10);
 
-   while (game->deadline > game->time || !game->deadline) {
+   D.time = get_rnd_between(100, 1500);
+   D.cpu_drift = get_rnd_between(1, 10);
+
+   // ****** END OF NODES CONFIG ******
+
+   while (simulation->deadline > simulation->time || !simulation->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
-      B.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
-      C.latency = get_rnd_between(8, 14); // latency is 1 - 6 ms
+      A.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      B.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      C.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      D.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
 
       // time incementation
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
-         ++nodes[i].time;
-         // TODO: time speed control
-         for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-            ++nodes[i].balancer[j];
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
+         ++Ni.time;
+
+         // create timer deviation, more infromation is in main.h
+         // if value is 0, no deviation is applied
+         if (Ni.cpu_drift != 0) {
+            if (!(simulation->time % (1000 * Ni.cpu_drift))) {
+               if (get_rnd_between(0, 1))
+                  ++Ni.time;
+               else
+                  --Ni.time;
+            }
          }
       }
 
       // process pipe
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          process_pipe(i);
       }
 
       // status machine
-      for (uint8_t i = 0; i < game->nodes_count; ++i) {
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
          while (!is_queue_empty(i)) {
             message_t *message = pop_from_queue(i);
+
             // SLAVE OPERATION
             if (!is_node_master(i)) {
                switch (message->type) {
-               case TIME:
-                  // sent message with same content to source
-                  send_message(message->content, TIME, message->source, i,
-                               nodes[i].latency);
+               case RTT_CAL:
+                  // send value back
+                  send_message(message->content, RTT_CAL, message->source, i,
+                               Ni.latency);
                   break;
-
-               case TIME_RTT:
-                  // set time and sent back ACK
-                  // first sync, simply set
-                  if (nodes[i].is_first_setup) {
-                     nodes[i].time = message->content;
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        nodes[i].balancer[j] = message->content;
+               case RTT_VAL:
+                  // Save RTT value
+                  // for first message, paste rtt into all array
+                  if (Ni.is_first_setup_rtt) {
+                     for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                        Ni.balancer_RTT[j] = message->content;
                      }
-                     nodes[i].is_first_setup = 0;
-#ifdef DEBUG
-                     printf("INFO [%d]: First set time on value %ld\n", i,
-                            nodes[i].time);
-#endif // DEBUG
+                     Ni.is_first_setup_rtt = 0;
                   } else {
-                     // not first sync, set avg
-#ifdef DEBUG
-                     printf("INFO [%d]: Set time on value %ld from %ld\n", i,
-                            (nodes[i].time + message->content) / 2,
-                            nodes[i].time);
-#endif // DEBUG
+                     Ni.balancer_RTT[Ni.rtt_index] = message->content;
 
-                     nodes[i].balancer[game->time % BALANCER_SIZE] =
-                         message->content;
-                     nodes[i].time = 0;
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        nodes[i].time += nodes[i].balancer[j];
-                     }
-                     nodes[i].time /= BALANCER_SIZE;
+                     // Increase the stamp value
+                     ++Ni.rtt_index;
+                     if (Ni.rtt_index == BALANCER_SIZE_RTT)
+                        Ni.rtt_index = 0;
+                  }
+
 #ifdef DEBUG
-                     for (uint8_t j = 0; j < BALANCER_SIZE; ++j) {
-                        printf(" %ld", nodes[i].balancer[j]);
+                  {
+                     printf("# RND ABS [%d]: %d ||", i, get_rtt_avg(i));
+                     for (uint32_t j = 0; j < BALANCER_SIZE_RTT; ++j) {
+                        printf(" %d", Ni.balancer_RTT[j]);
                      }
                      printf("\n");
-#endif // DEBUG
                   }
-                  send_message(message->content, ACK, message->source, i,
-                               nodes[i].latency);
+#endif // DEBUG
+                  break;
+
+               case TIME:
+                  // Calcule deviation 0~
+                  if (Ni.is_first_setup_deviation) {
+                     Ni.deviation_avg = (int64_t)Ni.time -
+                                        (int64_t)message->content -
+                                        (int64_t)get_rtt_avg(i);
+                     Ni.is_first_setup_deviation = 0;
+                  } else {
+                     Ni.deviation_avg =
+                         (Ni.deviation_avg + (int64_t)Ni.time -
+                          (int64_t)message->content - (int64_t)get_rtt_avg(i)) /
+                         2;
+                  }
+
+                  // Set time
+                  if (Ni.deviation_avg > DEVIATION_MAX_CONSTATN) {
+                     Ni.time = message->content + get_rtt_avg(i) +
+                               DEVIATION_MAX_CONSTATN;
+                  } else if (Ni.deviation_avg < -DEVIATION_MAX_CONSTATN) {
+                     Ni.time = message->content + get_rtt_avg(i) -
+                               DEVIATION_MAX_CONSTATN;
+                  } else {
+                     Ni.time =
+                         message->content + get_rtt_avg(i) + Ni.deviation_avg;
+                  }
+
                   break;
 
                default:
@@ -150,27 +202,15 @@ int main(int argc, char const *argv[])
                   break;
                }
             } else {
+
                // MASTER OPERATION
                switch (message->type) {
-               case TIME:
-
-                  uint64_t time_rtt =
-                      nodes[i].time + ((nodes[i].time - message->content) / 2);
-
-#ifdef DEBUG
-                  printf("INFO [%d]: Calcul TIME_RTT, time: %ld, RTT: %ld, "
-                         "will set %ld\n",
-                         i, nodes[i].time,
-                         (nodes[i].time - message->content) / 2, time_rtt);
-#endif // DEBUG
-
-                  // get RTT and sent TIME_RTT message
-                  send_message(time_rtt, TIME_RTT, message->source, i,
-                               nodes[i].latency);
+               case RTT_CAL:
+                  // calcule and send RTT to slave
+                  send_message(((Ni.time - message->content) / 2), RTT_VAL,
+                               message->source, i, Ni.latency);
                   break;
-               case ACK:
-                  // do nothing
-                  break;
+
                default:
                   fprintf(stderr, "ERROR: Unknown operation\n");
                   exit(EXIT_FAILURE);
@@ -182,32 +222,72 @@ int main(int argc, char const *argv[])
          }
       }
 
-      // start time synchronization
-      // sync starts each 50 ms from MATER node
-      if (!(game->time % 500)) {
-         for (uint8_t i = 1; i < game->nodes_count; ++i) {
-            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO,
-                         nodes[i].latency);
+      // Start RTT synchronization
+      // sync starts each 100 ms from MATER node
+      if (!(simulation->time % 100000)) {
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
+            send_message(nodes[MASTER_NO].time, RTT_CAL, i, MASTER_NO,
+                         Ni.latency);
          }
       }
 
-      // print round report
-
-      printf("%ld", A.time);
-      for (uint8_t i = 1; i < game->nodes_count; ++i) {
-         printf(",%lld", (long long int)(nodes[i].time - A.time));
+      // Start TIME sychronization
+      // sync starts each 500 ms from MASTER node
+      if ((simulation->time % 500000) == 499999) {
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
+            send_message(nodes[MASTER_NO].time, TIME, i, MASTER_NO, Ni.latency);
+         }
       }
-      printf("\n");
 
-      // increment game round id
-      ++game->time;
+#ifdef BUILD_REPORT
+      // print round report
+      int print_changed = 0;
+      for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
+         // rtt
+         if (get_rtt_avg(i) != Ni.last_print.rtt) {
+            print_changed = 1;
+         }
+         Ni.last_print.rtt = get_rtt_avg(i);
+
+         // O~
+         if ((int32_t)Ni.deviation_avg != Ni.last_print.deviation) {
+            print_changed = 1;
+         }
+         Ni.last_print.deviation = (int32_t)Ni.deviation_avg;
+
+         // time
+         if ((int32_t)(A.time - Ni.time) != Ni.last_print.time) {
+            print_changed = 1;
+         }
+         Ni.last_print.time = (int32_t)(A.time - Ni.time);
+      }
+
+      if (print_changed == 1 || A.time == 1) {
+         printf("%ld", A.time);
+         for (uint8_t i = 1; i < simulation->nodes_count; ++i) {
+            // rtt
+            printf(",%d", get_rtt_avg(i));
+
+            // deviation
+            printf(",%d", Ni.last_print.deviation);
+
+            // time
+            printf(",%d", Ni.last_print.time);
+         }
+         printf("\n");
+      }
+
+#endif // BUILD_REPORT
+
+      // increment simulation round id
+      ++simulation->time;
    }
 
-   // clean memory
+   // clear memory
    free(nodes);
    nodes = NULL;
-   free(game);
-   game = NULL;
+   free(simulation);
+   simulation = NULL;
 
    return 0;
 }
@@ -232,7 +312,7 @@ void push_to_queue(message_t *message, uint8_t node_no)
    N.queue_tail = new_queue;
 }
 void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
-                  uint32_t delay)
+                  uint32_t latency)
 {
    pipe_t *new_pipe = (pipe_t *)malloc(sizeof(pipe_t));
    if (new_pipe == NULL) {
@@ -240,16 +320,35 @@ void push_to_pipe(message_t *message, uint8_t source, uint8_t target,
       exit(EXIT_FAILURE);
    }
    new_pipe->message = message;
-   new_pipe->delay = delay + game->time;
+   new_pipe->latency = latency + simulation->time;
    new_pipe->target = target;
    new_pipe->next = NULL;
+
+   // If a queue is an empty
    if (nodes[source].pipe_tail == NULL) {
       nodes[source].pipe_tail = new_pipe;
       nodes[source].pipe_head = new_pipe;
       return;
    }
-   nodes[source].pipe_tail->next = new_pipe;
-   nodes[source].pipe_tail = new_pipe;
+
+   // Special Case: The head of list has lesser priority than new node. So
+   // insert new node before head node and change head node.
+   if (nodes[source].pipe_head->latency > new_pipe->latency) {
+      // Insert new pipe element before the head
+      new_pipe->next = nodes[source].pipe_head;
+      nodes[source].pipe_head = new_pipe;
+      return;
+   }
+
+   pipe_t *tmp = NULL;
+   tmp = nodes[source].pipe_head;
+   // Traverse the list and find a position to insert new node
+   while (tmp->next != NULL && tmp->next->latency < new_pipe->latency) {
+      tmp = tmp->next;
+   }
+   // Either at the ends of the list or at required position
+   new_pipe->next = tmp->next;
+   tmp->next = new_pipe;
 }
 message_t *pop_from_queue(uint8_t node_no)
 {
@@ -288,13 +387,13 @@ void pop_from_pipe_to_queue(uint8_t node_no)
 void process_pipe(uint8_t node_no)
 {
 
-   while (N.pipe_head != NULL && N.pipe_head->delay <= game->time) {
+   while (N.pipe_head != NULL && N.pipe_head->latency <= simulation->time) {
       pop_from_pipe_to_queue(node_no);
    }
 }
 
 void send_message(uint64_t content, message_type_t type, uint8_t target,
-                  uint8_t source, uint64_t delay)
+                  uint8_t source, uint64_t latency)
 {
    message_t *message = (message_t *)malloc(sizeof(message_t));
    if (message == NULL) {
@@ -304,13 +403,9 @@ void send_message(uint64_t content, message_type_t type, uint8_t target,
    message->content = content;
    message->type = type;
    message->source = source;
-   message->delay = game->time + delay;
+   message->latency = simulation->time + latency;
 
-   push_to_pipe(message, source, target, delay);
-#ifdef DEBUG
-   printf("INFO [%d]: Mesage type %d pushed to pipe with %ld to %d\n", source,
-          type, content, target);
-#endif // DEBUG
+   push_to_pipe(message, source, target, latency);
 }
 
 uint8_t is_queue_empty(uint8_t node_no)
@@ -327,13 +422,22 @@ uint8_t is_node_master(uint8_t node_no)
    return 0;
 }
 
-uint8_t is_after_delay(uint8_t node_no)
+uint8_t is_after_latency(uint8_t node_no)
 {
-   if (game->time >= N.queue_head->message->delay)
+   if (simulation->time >= N.queue_head->message->latency)
       return 1;
    return 0;
 }
 uint32_t get_rnd_between(uint32_t min, uint32_t max)
 {
    return (uint32_t)((rand() % (max - min + 1)) + min);
+}
+
+uint32_t get_rtt_avg(uint8_t node_no)
+{
+   uint32_t rtt = 0;
+   for (uint8_t i = 0; i < BALANCER_SIZE_RTT; ++i) {
+      rtt += N.balancer_RTT[i];
+   }
+   return (uint32_t)((rtt / BALANCER_SIZE_RTT));
 }
