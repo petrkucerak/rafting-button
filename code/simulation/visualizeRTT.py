@@ -7,7 +7,7 @@ data = np.loadtxt(filename, dtype=float, delimiter=',')
 fig, ax = plt.subplots(figsize=(12, 8))
 
 ax.set_title('RTT synchronization in DS')
-ax.set_ylabel('Difference between MASTER and SLAVE\n(ms)')
+ax.set_ylabel('Size of D~\n(ms)')
 ax.set_xlabel('Time\n(ms)')
 # ax.set_yscale('log')
 

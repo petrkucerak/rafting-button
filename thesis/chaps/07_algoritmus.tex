@@ -191,6 +191,7 @@ Druhý skript $"visualizeRTT.py"$ zobrazuje průměrnou hodnotu doby přenosu $\
 
 Třetí soubor se souborem $"visualizeTIME.py"$ zobrazuje rozdíl uzlu {\em MASTER} a {\em SLAVE} v závislosti na čase simulace pro 3 {\em SLAVE} uzly a umožňuje zobrazit střední hodnotu vypsaných hodnot.
 
+\label[getsimparameters]
 \secc Získání parametrů pro simulaci
 
 Pro spuštění simulace, je třeba znát latenci, resp. reálnou dobu odesílání zpráv mezi zařízeními. K tomu jsem připravil zapojení, které funguj tak, že propojuje ESP32 zařízení vodičem, který synchronizuje jejich vnitřní hodiny a je ho možné dohledat v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/main/code/esp-now-parameters}}
@@ -238,4 +239,22 @@ Pokud se na naměřená data chceme podívat z pohledu četnosti pro jednotlivé
 
 Zajímavé jsou vždy 2 oblasti vyšší četnosti. Ty si i na základě detailního studování logů\fnote{Možné dohledat v repozitáři projektu.} vysvětluji tak, že vždy první odeslání trvá delší dobu. Testovací vysílání totiž funguje tak, že z uzlu {\em MASTER} vždy odešle 3x2 zprávy, resp. 3x odešle zprávu do uzlu COM6 a COM7. První odesílání je vždy do uzlu COM6. Poté se počká na synchronizaci času a měření se opakuje.
 
-Z měření vyplývá, že {\sbf průměrná doba zpoždění} {\em unicast} vysílání se pohybuje mezi 900 µs a 1050 µs.
+Z měření vyplývá, že {\sbf průměrná doba zpoždění} {\em unicast} vysílání se pohybuje mezi 900 µs a 1050 µs.\fnote{Dle skriptu $"distribution.py"$ víme, že přesně 86,7\% zpráv byla odeslána v tomto časovém intervalu.}
+
+\secc Simulace s reálnými parametry
+
+Simulace byla prováděna s konfigurací, kdy
+
+\begitems
+* doba simulace byla 10 min (bylo provedeno 6000 synchronizací doby odesílání a 2000 synchronizací času),
+* pro simulaci byly užity 4 uzle,
+* {\em MASTER} uzel začínal v čase nula, ostatní uzly na náhodném čase v rozmezí 100~µs až 1500~µs,
+* doba zpoždění zpráv byla náhodně zvolena pro každé odesílání a to v rozsahu od 900 µs až po 1050 µs,
+* a chyba oscilátorů se pohybovala náhodně mezi maximální chybou ±1~ppm až ±10~ppm.
+\enditems
+
+Jsem si vědom, že simulace nezohledňuje veškerou problematiku. To především, že rozdělení odesílání zprávy není náhodné, nýbrž se chová dle výsledků kapitoly \ref[getsimparameters]. Teoreticky při běhu může také dojít k tomu, že jedna situace nastane vícekrát. To v případě, kdy během synchronizace bude čas nastaven dozadu. Jsem si této chyby vědom. Nicméně se v mém případě nejedná o kritickou aplikaci a synchronizace dosahuje takových výsledků přesnosti, že je vysoce nepravděpodobné, že by k této chybě došlo.
+
+Výsledky chování simulace zobrazují 3 grafy. První z nich \ref[latencyO] ukazuje průměrnou chybu $\bar{O}$ v závislosti na čase a střední hodnotu chyb. Ty se pohybuji v blízkém okolí nuly, jak bychom očekávali. Druhý graf \ref[latencyRTT] zobrazuje průměrnou hodnotu doby přenosu $\bar{D}$ v závislosti na čase. Vidíme, že k synchronizaci dojde poměrně rychle. Třetí a pro splnění stanovených parametrů nejvíce důležitý graf \ref[latencyTIME] zobrazuje rozdíl času mezi {\em MASTER} uzlem a {\em SLAVE} uzlem. Střední hodnota tohoto ukazatele je okolo nuly a simulace dosahuje maximální odchylky do ±0,25 ms, což hravě splňuje náš limit 1 ms.
+
+Ze simulace vyplývá, že navržený algoritmus dle simulace {\sbf splňuje stanovený požadavek přesnosti synchronizace času}, tedy 1~ms.

@@ -1,0 +1,28 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\label[TimeSyncSimulation]
+\app Simulace algoritmu synchronizující čas
+
+\medskip
+\clabel[latencyO]{Simulace fungování algoritmu pro synchronizaci času - chyba}
+\picw=16cm \cinspic img/latency-O.png
+\caption/f Simulace fungování algoritmu pro synchronizaci času - chyba.
+\medskip
+
+\medskip
+\clabel[latencyRTT]{Simulace fungování algoritmu pro synchronizaci času - doba přenosu}
+\picw=16cm \cinspic img/latency-RTT.png
+\caption/f Simulace fungování algoritmu pro synchronizaci času - doba přenosu.
+\medskip
+
+\medskip
+\clabel[latencyTIME]{Simulace fungování algoritmu pro synchronizaci času - rozdíl čas}
+\picw=16cm \cinspic img/latency-TIME.png
+\caption/f Simulace fungování algoritmu pro synchronizaci času - rozdíl času.
+\medskip
