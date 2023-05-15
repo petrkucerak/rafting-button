@@ -11,9 +11,10 @@ print("A | mean: ", np.mean(data1), " | max: ",
 print("B | mean: ", np.mean(data2), " | max: ",
       np.max(data2), " | min: ", np.min(data2))
 
-plt.hist([data1, data2], bins=np.arange(np.min(data1), 1400), align="left")
+plt.figure(figsize=(12, 8))
+plt.hist([data1, data2], bins=np.arange(np.min(data1), 1200), align="left")
 plt.xlabel("Latency µs")
-plt.ylabel("Count of the message")
-plt.title("Latency of ESP-NOW protocol\nin multicast mode")
+plt.ylabel("Count of message")
+plt.title("Latency of ESP-NOW protocol\nin unicast mode")
 plt.legend(["COM6", "COM7"])
 plt.show()
