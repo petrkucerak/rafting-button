@@ -64,5 +64,5 @@ Měření jsem spustil ve dvou scénářích. Lišily se pouze časem běhu. Vý
 | B *(cca 37 min)*  | COM6     | 1152.03 µs      | 13239 µs          | 893 µs            |
 |                   | COM7     | 1134.67 µs      | 25143 µs          | 871 µs            |
 
-![A scenario](measure/esp-latency/A.png)
-![B scenario](measure/esp-latency/B.png)
+![A scenario](measure/esp-latency/latency-A.png)
+![B scenario](measure/esp-latency/latency-B.png)
