@@ -101,10 +101,10 @@ int main(int argc, char const *argv[])
    while (simulation->deadline > simulation->time || !simulation->deadline) {
 
       // set rnd latency
-      A.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
-      B.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
-      C.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
-      D.latency = get_rnd_between(900, 1500); // latency is 0.9 - 1.5 ms
+      A.latency = get_rnd_between(900, 1050); // latency is 0.9 - 1.05 ms
+      B.latency = get_rnd_between(900, 1050); // latency is 0.9 - 1.05 ms
+      C.latency = get_rnd_between(900, 1050); // latency is 0.9 - 1.05 ms
+      D.latency = get_rnd_between(900, 1050); // latency is 0.9 - 1.05 ms
 
       // time incementation
       for (uint8_t i = 0; i < simulation->nodes_count; ++i) {
@@ -431,6 +431,18 @@ uint8_t is_after_latency(uint8_t node_no)
 uint32_t get_rnd_between(uint32_t min, uint32_t max)
 {
    return (uint32_t)((rand() % (max - min + 1)) + min);
+}
+uint32_t get_rnd_between_with_distribution(uint32_t min_major,
+                                           uint32_t max_major,
+                                           uint32_t min_minor,
+                                           uint32_t max_minor, uint8_t splitter)
+{
+   if (get_rnd_between(0, 100) > splitter)
+      // minor
+      return (uint32_t)((rand() % (max_minor - min_minor + 1)) + min_minor);
+   else
+      // major
+      return (uint32_t)((rand() % (max_major - min_major + 1)) + min_major);
 }
 
 uint32_t get_rtt_avg(uint8_t node_no)

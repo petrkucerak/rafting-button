@@ -215,6 +215,23 @@ uint8_t is_node_master(uint8_t node_no);
 uint32_t get_rnd_between(uint32_t min, uint32_t max);
 
 /**
+ * @brief Get the rnd between two values with two modes by percent.
+ * Distribution minor > splitter > major
+ *
+ * @param min_major
+ * @param max_major
+ * @param min_minor
+ * @param max_minor
+ * @param splitter 0 - 100
+ * @return uint32_t
+ */
+uint32_t get_rnd_between_with_distribution(uint32_t min_major,
+                                           uint32_t max_major,
+                                           uint32_t min_minor,
+                                           uint32_t max_minor,
+                                           uint8_t splitter);
+
+/**
  * @brief Get the average of RTT in current node
  *
  * @param node_no node index number
