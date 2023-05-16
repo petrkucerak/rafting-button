@@ -25,6 +25,7 @@
 #define PRIORITY_MESSAGE_INIT_RTT 2
 #define PRIORITY_MESSAGE_INIT_TIME 2
 #define QUEUE_INCOME_LENGTH 10
+#define ESPNOW_MAXDELAY 512
 
 #define IS_MASTER
 #define IS_SLAVE
@@ -32,7 +33,7 @@
 static const char *TAG = "MAIN";
 
 uint64_t time_corection;
-QueueHandle_t incoming_messages;
+static QueueHandle_t espnow_queue;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
@@ -43,17 +44,30 @@ static void IRAM_ATTR gpio_handler_isr(void *)
 static void measure_espnow_send_cb(const uint8_t *mac_addr,
                                    esp_now_send_status_t status)
 {
-   do_blick(10);
-   if (status != ESP_OK)
-      ESP_LOGW(TAG, "The target " MACSTR " didn't receive a message",
-               MAC2STR(mac_addr));
+   espnow_event_t evt;
+   espnow_event_send_cb_t *send_cb = &evt.info.send_cb;
+
+   // Check arg error
+   if (mac_addr == NULL) {
+      ESP_LOGE(TAG, "Send cb arg error");
+      return;
+   }
+
+   // Copy data
+   evt.id = ESPNOW_SEND_CB;
+   memcpy(send_cb->mac_addr, mac_addr, ESP_NOW_ETH_ALEN);
+   send_cb->status = status;
+
+   // Push to queue
+   if (xQueueSend(espnow_queue, &evt, ESPNOW_MAXDELAY) != pdTRUE)
+      ESP_LOGW(TAG, "Send event into the queue fail");
 }
 
 static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                            const uint8_t *data, int data_len)
 {
    // do_blick(10);
-   message_t tmp = (message_t)&data;
+   // message_t tmp = (message_t)&data;
 }
 
 static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
