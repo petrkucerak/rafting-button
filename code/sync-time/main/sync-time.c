@@ -60,14 +60,34 @@ static void measure_espnow_send_cb(const uint8_t *mac_addr,
 
    // Push to queue
    if (xQueueSend(espnow_queue, &evt, ESPNOW_MAXDELAY) != pdTRUE)
-      ESP_LOGW(TAG, "Send event into the queue fail");
+      ESP_LOGW(TAG, "Send se d event into the queue fail");
 }
 
 static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                            const uint8_t *data, int data_len)
 {
-   // do_blick(10);
-   // message_t tmp = (message_t)&data;
+   espnow_event_t evt;
+   espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
+   uint8_t *mac_addr = esp_now_info->src_addr;
+
+   // Check args error
+   if (mac_addr == NULL || data == NULL || data_len <= 0) {
+      ESP_LOGE(TAG, "Receive cb args error");
+      return;
+   }
+
+   // Copy data
+   evt.id = ESPNOW_RECV_CB;
+   memcpy(recv_cb->mac_addr, mac_addr, ESP_NOW_ETH_ALEN);
+   recv_cb->data = malloc(data_len);
+   if (recv_cb->data == NULL) {
+      ESP_LOGE(TAG, "Malloc receive data fail");
+      return;
+   }
+   memcpy(recv_cb->data, data, data_len);
+   recv_cb->data_len = data_len;
+   if (xQueueSend(espnow_queue, &evt, ESPNOW_MAXDELAY) != pdTRUE)
+      ESP_LOGW(TAG, "Send receive event into the queue fail");
 }
 
 static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
