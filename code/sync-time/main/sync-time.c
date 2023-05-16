@@ -16,23 +16,28 @@
 #include <esp_mac.h>
 #include <esp_now.h>
 #include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 #include <freertos/task.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
-// #define IS_MASTER
+#define PRIORITY_MESSAGE_INIT_RTT 2
+#define PRIORITY_MESSAGE_INIT_TIME 2
+#define QUEUE_INCOME_LENGTH 10
+
+#define IS_MASTER
+#define IS_SLAVE
 
 static const char *TAG = "MAIN";
 
-uint64_t start_time;
-uint8_t time_reseted;
+uint64_t time_corection;
+QueueHandle_t incoming_messages;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
    // uint32_t tmp = xthal_get_ccount();
-   start_time = esp_timer_get_time();
-   time_reseted = 1;
+   // start_time = esp_timer_get_time();
 }
 
 static void measure_espnow_send_cb(const uint8_t *mac_addr,
@@ -44,14 +49,69 @@ static void measure_espnow_send_cb(const uint8_t *mac_addr,
                MAC2STR(mac_addr));
 }
 
-static void measure_espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
-                                   const uint8_t *data, int data_len)
+static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
+                           const uint8_t *data, int data_len)
 {
-   uint64_t loc_time = esp_timer_get_time() - start_time;
-   do_blick(10);
-   uint64_t send_time;
-   memcpy(&send_time, data, data_len);
-   printf("%lld\n", loc_time - send_time);
+   // do_blick(10);
+   message_t tmp = (message_t)&data;
+}
+
+static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
+
+void init_rtt_message_task(void)
+{
+   // Add peers
+   esp_now_peer_info_t peer_info_2 = {};
+   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
+   if (!esp_now_is_peer_exist(mac_addr_2)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
+   }
+   esp_now_peer_info_t peer_info_3 = {};
+   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
+   if (!esp_now_is_peer_exist(mac_addr_3)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
+   }
+   message_t message;
+   message.type = RTT_CAL;
+   while (1) {
+      message.content = get_time();
+      ESP_ERROR_CHECK(
+          esp_now_send(mac_addr_2, (uint8_t *)&message, sizeof(message_t)));
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+
+      message.content = get_time();
+      ESP_ERROR_CHECK(
+          esp_now_send(mac_addr_3, (uint8_t *)&message, sizeof(message_t)));
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+   }
+}
+
+void init_time_message_task(void)
+{
+   // Add peers
+   esp_now_peer_info_t peer_info_2 = {};
+   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
+   if (!esp_now_is_peer_exist(mac_addr_2)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
+   }
+   esp_now_peer_info_t peer_info_3 = {};
+   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
+   if (!esp_now_is_peer_exist(mac_addr_3)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
+   }
+   message_t message;
+   message.type = TIME;
+   while (1) {
+      message.content = get_time();
+      ESP_ERROR_CHECK(
+          esp_now_send(mac_addr_2, (uint8_t *)&message, sizeof(message_t)));
+      vTaskDelay(250 / portTICK_PERIOD_MS);
+
+      message.content = get_time();
+      ESP_ERROR_CHECK(
+          esp_now_send(mac_addr_3, (uint8_t *)&message, sizeof(message_t)));
+      vTaskDelay(250 / portTICK_PERIOD_MS);
+   }
 }
 
 void app_main(void)
@@ -88,59 +148,26 @@ void app_main(void)
    // Init ESP-NOW
    wifi_init();
    ESP_ERROR_CHECK(esp_now_init());
-   ESP_ERROR_CHECK(esp_now_register_recv_cb(measure_espnow_recv_cb));
+   ESP_ERROR_CHECK(esp_now_register_recv_cb(espnow_recv_cb));
    ESP_ERROR_CHECK(esp_now_register_send_cb(measure_espnow_send_cb));
 
-#ifdef IS_MASTER
-   esp_now_peer_info_t peer_info_2 = {};
-   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
-   if (!esp_now_is_peer_exist(mac_addr_2)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
-   }
-   esp_now_peer_info_t peer_info_3 = {};
-   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
-   if (!esp_now_is_peer_exist(mac_addr_3)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
-   }
-#endif // IS_MASTER
+   BaseType_t init_rtt_message;
+   BaseType_t init_time_message;
 
-   uint64_t message;
+   incoming_messages = xQueueCreate(QUEUE_INCOME_LENGTH, sizeof(message_t));
+   if (incoming_messages == 0) {
+      ESP_LOGE(TAG, "ERROR: Can't not create queue\n");
+   }
+
    while (1) {
+      init_rtt_message =
+          xTaskCreate(init_rtt_message_task, "init_rtt_message_task", 4096,
+                      NULL, PRIORITY_MESSAGE_INIT_RTT, NULL);
+      init_time_message =
+          xTaskCreate(init_time_message_task, "init_time_message_task", 4096,
+                      NULL, PRIORITY_MESSAGE_INIT_TIME, NULL);
 
-#ifdef IS_MASTER
-      if (time_reseted) {
-         // First batch
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-
-         // Second batch
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-
-         // Third batch
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_2, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-         message = esp_timer_get_time() - start_time;
-         ESP_ERROR_CHECK(esp_now_send(mac_addr_3, (uint8_t *)&message, 8));
-         vTaskDelay(100 / portTICK_PERIOD_MS);
-
-         // Reset time
-         time_reseted = 0;
-      }
-#endif // IS_MASTER
-      #ifndef IS_MASTER
-      vTaskDelay(3000 / portTICK_PERIOD_MS);
-      #endif // IS_MASTER
-
+      vTaskDelay(200);
    }
 
    // Ending rutine
