@@ -24,7 +24,7 @@
 
 #define PRIORITY_MESSAGE_INIT_RTT 2
 #define PRIORITY_MESSAGE_INIT_TIME 2
-#define QUEUE_INCOME_LENGTH 10
+#define ESPNOW_QUEUE_SIZE 10
 #define ESPNOW_MAXDELAY 512
 
 #define IS_MASTER
@@ -188,10 +188,7 @@ void app_main(void)
    BaseType_t init_rtt_message;
    BaseType_t init_time_message;
 
-   incoming_messages = xQueueCreate(QUEUE_INCOME_LENGTH, sizeof(message_t));
-   if (incoming_messages == 0) {
-      ESP_LOGE(TAG, "ERROR: Can't not create queue\n");
-   }
+   espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 
    while (1) {
       init_rtt_message =
