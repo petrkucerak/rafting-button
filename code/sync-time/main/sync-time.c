@@ -9,6 +9,7 @@
 #include <esp_log.h>
 #include <esp_mac.h>
 #include <esp_now.h>
+#include <esp_random.h>
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
@@ -25,6 +26,8 @@
 #define PRIORITY_MESSAGE_INIT_TIME 2
 #define ESPNOW_QUEUE_SIZE 10
 #define ESPNOW_MAXDELAY 512
+
+#define CONFIG_ESPNOW_SEND_LEN 250
 
 #define IS_MASTER
 #define IS_SLAVE
@@ -127,6 +130,26 @@ void espnow_handler_task(void)
    message_type_t type;
    int ret;
 
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   // send_param->type;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+
    while (xQueueReceive(espnow_queue, &evt, portMAX_DELAY) == pdTRUE) {
       switch (evt.id) {
       case ESPNOW_SEND_CB: {
@@ -142,9 +165,18 @@ void espnow_handler_task(void)
          switch (ret) {
          case RTT_CAL_MASTER:
             // send value back to master with type RTT_CAL_SLAVE
+            send_param->content = content;
+            send_param->type = RTT_CAL_SLAVE;
+            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
+            espnow_data_prepare(send_param);
+            if (esp_now_send(send_param->dest_mac, send_param->buf,
+                             send_param->data_len) != ESP_OK) {
+               ESP_LOGW(TAG, "Send error");
+            }
             break;
          case RTT_CAL_SLAVE:
             // calcule RTT and send it back to slave with type RTT_VAL
+
             break;
          case RTT_VAL:
             // set RTT value into the array
@@ -164,6 +196,9 @@ void espnow_handler_task(void)
          break;
       }
    }
+
+   free(send_param);
+   vSemaphoreDelete(espnow_queue);
 }
 
 void app_main(void)
