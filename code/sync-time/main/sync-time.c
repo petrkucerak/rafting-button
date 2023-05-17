@@ -90,61 +90,66 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
       ESP_LOGW(TAG, "Send receive event into the queue fail");
 }
 
-static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
-
-void init_rtt_message_task(void)
+int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
+                      uint64_t *content)
 {
-   // Add peers
-   esp_now_peer_info_t peer_info_2 = {};
-   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
-   if (!esp_now_is_peer_exist(mac_addr_2)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
-   }
-   esp_now_peer_info_t peer_info_3 = {};
-   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
-   if (!esp_now_is_peer_exist(mac_addr_3)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
-   }
-   message_t message;
-   message.type = RTT_CAL;
-   while (1) {
-      message.content = get_time();
-      ESP_ERROR_CHECK(
-          esp_now_send(mac_addr_2, (uint8_t *)&message, sizeof(message_t)));
-      vTaskDelay(50 / portTICK_PERIOD_MS);
+   message_data_t *buf = (message_data_t *)data;
 
-      message.content = get_time();
-      ESP_ERROR_CHECK(
-          esp_now_send(mac_addr_3, (uint8_t *)&message, sizeof(message_t)));
-      vTaskDelay(50 / portTICK_PERIOD_MS);
+   if (data_len < sizeof(message_data_t)) {
+      ESP_LOGE(TAG, "Receive ESPNOW data is too short, len:%d", data_len);
+      return -1;
    }
+
+   *type = buf->type;
+   *content = buf->content;
+   return buf->type;
 }
 
-void init_time_message_task(void)
-{
-   // Add peers
-   esp_now_peer_info_t peer_info_2 = {};
-   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
-   if (!esp_now_is_peer_exist(mac_addr_2)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
-   }
-   esp_now_peer_info_t peer_info_3 = {};
-   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
-   if (!esp_now_is_peer_exist(mac_addr_3)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
-   }
-   message_t message;
-   message.type = TIME;
-   while (1) {
-      message.content = get_time();
-      ESP_ERROR_CHECK(
-          esp_now_send(mac_addr_2, (uint8_t *)&message, sizeof(message_t)));
-      vTaskDelay(250 / portTICK_PERIOD_MS);
+static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
 
-      message.content = get_time();
-      ESP_ERROR_CHECK(
-          esp_now_send(mac_addr_3, (uint8_t *)&message, sizeof(message_t)));
-      vTaskDelay(250 / portTICK_PERIOD_MS);
+void espnow_handler_task(void)
+{
+   espnow_event_t evt;
+   uint64_t content = 0;
+   message_type_t type;
+   int ret;
+
+   while (xQueueReceive(espnow_queue, &evt, portMAX_DELAY) == pdTRUE) {
+      switch (evt.id) {
+      case ESPNOW_SEND_CB: {
+         // handle send
+         break;
+      }
+      case ESPNOW_RECV_CB: {
+         // handle recv
+         espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
+         ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
+                                 &content);
+         free(recv_cb->data);
+         switch (ret) {
+         case RTT_CAL_MASTER:
+            // send value back to master with type RTT_CAL_SLAVE
+            break;
+         case RTT_CAL_SLAVE:
+            // calcule RTT and send it back to slave with type RTT_VAL
+            break;
+         case RTT_VAL:
+            // set RTT value into the array
+            break;
+         case TIME:
+            // calcule deviation O~
+            // set time
+            break;
+         default:
+            ESP_LOGE(TAG, "Receive unknown message type");
+            break;
+         }
+         break;
+      }
+      default:
+         ESP_LOGE(TAG, "Callback type error: %d", evt.id);
+         break;
+      }
    }
 }
 
@@ -191,12 +196,6 @@ void app_main(void)
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 
    while (1) {
-      init_rtt_message =
-          xTaskCreate(init_rtt_message_task, "init_rtt_message_task", 4096,
-                      NULL, PRIORITY_MESSAGE_INIT_RTT, NULL);
-      init_time_message =
-          xTaskCreate(init_time_message_task, "init_time_message_task", 4096,
-                      NULL, PRIORITY_MESSAGE_INIT_TIME, NULL);
 
       vTaskDelay(200);
    }
