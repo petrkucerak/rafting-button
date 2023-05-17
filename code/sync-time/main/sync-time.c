@@ -23,15 +23,17 @@
 // #include <soc.h> // defines interrupts
 
 #define PRIORITY_RTT_START 2
-#define PRIORITY_MESSAGE_START 2
+#define PRIORITY_TIME_START 2
+#define PRIORITY_HANDLER 3
+
 #define ESPNOW_QUEUE_SIZE 10
-#define ESPNOW_MAXDELAY 512
+#define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
 #define IS_MASTER
-#define IS_SLAVE
+// #define IS_SLAVE
 
 static const char *TAG = "MAIN";
 
@@ -63,7 +65,7 @@ static void measure_espnow_send_cb(const uint8_t *mac_addr,
 
    // Push to queue
    if (xQueueSend(espnow_queue, &evt, ESPNOW_MAXDELAY) != pdTRUE)
-      ESP_LOGW(TAG, "Send se d event into the queue fail");
+      ESP_LOGW(TAG, "Send send event into the queue fail");
 }
 
 static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
@@ -110,9 +112,9 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
 
 void espnow_data_prepare(espnow_send_param_t *send_param)
 {
-   message_data_t *buf = (espnow_data_t *)send_param->buf;
+   message_data_t *buf = (message_data_t *)send_param->buf;
 
-   assert(send_param->data_len >= sizeof(espnow_data_t));
+   send_param->data_len = sizeof(message_data_t);
    buf->type = send_param->type;
    buf->content = send_param->content;
    /* Fill all remaining bytes after the data with random values */
@@ -122,6 +124,25 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
 static uint64_t get_time(void)
 {
    return esp_timer_get_time() - node.time_corection;
+}
+
+void handle_espnow_send_error(esp_err_t code)
+{
+   if (code == ESP_OK)
+      ESP_LOGI(TAG, "Send is OK");
+   else if (code == ESP_ERR_ESPNOW_NOT_INIT)
+      ESP_LOGE(TAG, "ESPNOW is not initialized");
+   else if (code == ESP_ERR_ESPNOW_ARG)
+      ESP_LOGE(TAG, "Invalid argument");
+   else if (code == ESP_ERR_ESPNOW_INTERNAL)
+      ESP_LOGE(TAG, "Internal error");
+   else if (code == ESP_ERR_ESPNOW_NO_MEM)
+      ESP_LOGE(TAG, "Out of memory, when this happens, you can delay a while "
+                    "before sending the next data");
+   else if (code == ESP_ERR_ESPNOW_NOT_FOUND)
+      ESP_LOGE(TAG, "Peer is not found");
+   else if (code == ESP_ERR_ESPNOW_IF)
+      ESP_LOGE(TAG, "Current WiFi interface doesn't match that of peer");
 }
 
 void espnow_handler_task(void)
@@ -155,6 +176,10 @@ void espnow_handler_task(void)
       switch (evt.id) {
       case ESPNOW_SEND_CB: {
          // handle send
+         espnow_event_send_cb_t *send_cb = &evt.info.send_cb;
+         if (send_cb->status != ESP_OK)
+            ESP_LOGW(TAG, "Send to " MACSTR " failed",
+                     MAC2STR(send_cb->mac_addr));
          break;
       }
       case ESPNOW_RECV_CB: {
@@ -215,7 +240,7 @@ void espnow_handler_task(void)
          break;
       }
    }
-
+   free(send_param->buf);
    free(send_param);
    vSemaphoreDelete(espnow_queue);
 }
@@ -239,6 +264,8 @@ void task_start_sync_rtt(void)
       free(send_param);
       vTaskDelete(NULL);
    }
+   esp_err_t ret;
+   vTaskDelay(500 / portTICK_PERIOD_MS);
    while (1) {
       vTaskDelay(50 / portTICK_PERIOD_MS);
 
@@ -247,10 +274,10 @@ void task_start_sync_rtt(void)
       send_param->content = get_time();
       espnow_data_prepare(send_param);
 
-      if (esp_now_send(send_param->dest_mac, send_param->buf,
-                       send_param->data_len) != ESP_OK) {
-         ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
-      }
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
 
       vTaskDelay(50 / portTICK_PERIOD_MS);
 
@@ -259,11 +286,12 @@ void task_start_sync_rtt(void)
       send_param->content = get_time();
       espnow_data_prepare(send_param);
 
-      if (esp_now_send(send_param->dest_mac, send_param->buf,
-                       send_param->data_len) != ESP_OK) {
-         ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
-      }
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
    }
+   free(send_param);
    vTaskDelete(NULL);
 }
 
@@ -336,19 +364,26 @@ void app_main(void)
       ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
    }
 
+   BaseType_t handler_task;
+   handler_task =
+       xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
+                   STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
+
 #ifdef IS_MASTER
    // Init MASTER tasks
    BaseType_t start_rtt_sync_task;
    start_rtt_sync_task =
-       xTaskCreate(task_start_sync_rtt, "task_start_sync_rtt", STACK_SIZE, NULL,
-                   PRIORITY_RTT_START, NULL);
+       xTaskCreate((TaskFunction_t)task_start_sync_rtt, "task_start_sync_rtt",
+                   STACK_SIZE, NULL, PRIORITY_RTT_START, NULL);
 
    BaseType_t start_time_sync_task;
 #endif // IS_MASTER
 
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
-      ESP_LOGI(TAG, "avg rtt: %d", get_rtt_avg());
+      ESP_LOGI(TAG, "Numbe of messages stored in a queue is: %d",
+               uxQueueMessagesWaiting(espnow_queue));
+      ESP_LOGI(TAG, "avg rtt: %ld", get_rtt_avg());
    }
 
    // Ending rutine
