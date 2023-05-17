@@ -1,6 +1,8 @@
 #ifndef SYNC_TIME_H
 #define SYNC_TIME_H
 
+#define BALANCER_SIZE 25
+
 #include <espnow.h>
 #include <inttypes.h>
 
@@ -49,6 +51,24 @@ typedef enum message_type {
 typedef struct message {
    message_type_t type;
    uint64_t content;
+   uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
+
+typedef struct espnow_send_param {
+   message_type_t type;
+   uint64_t content;
+   int data_len;
+   uint8_t *buf;
+   uint8_t dest_mac[ESP_NOW_ETH_ALEN];
+} espnow_send_param_t;
+
+typedef struct node_info {
+   uint64_t time_corection;
+   uint32_t rtt_balancer[BALANCER_SIZE];
+   uint16_t rtt_balancer_index;
+   bool is_firts_setup_rtt;
+   bool is_first_setup_deviation;
+   int64_t deviation_avg;
+} node_info_t;
 
 #endif // SYNC_TIME_H

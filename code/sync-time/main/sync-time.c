@@ -1,26 +1,25 @@
 #include "sync-time.h"
 #include "espnow_utils.h"
+#include "peripheral.h"
+#include <assert.h>
 #include <driver/gpio.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
 #include <esp_intr_alloc.h>
 #include <esp_log.h>
+#include <esp_mac.h>
+#include <esp_now.h>
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 #include <freertos/task.h>
 #include <inttypes.h>
 #include <nvs_flash.h>
 #include <sdkconfig.h>
-// #include <soc.h> // defines interrupts
-#include "peripheral.h"
-#include <esp_mac.h>
-#include <esp_now.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/queue.h>
-#include <freertos/task.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+// #include <soc.h> // defines interrupts
 
 #define PRIORITY_MESSAGE_INIT_RTT 2
 #define PRIORITY_MESSAGE_INIT_TIME 2
@@ -32,7 +31,7 @@
 
 static const char *TAG = "MAIN";
 
-uint64_t time_corection;
+node_info_t node;
 static QueueHandle_t espnow_queue;
 
 static void IRAM_ATTR gpio_handler_isr(void *)
@@ -105,7 +104,21 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    return buf->type;
 }
 
-static uint64_t get_time(void) { return esp_timer_get_time() - time_corection; }
+void espnow_data_prepare(espnow_send_param_t *send_param)
+{
+   message_data_t *buf = (espnow_data_t *)send_param->buf;
+
+   assert(send_param->data_len >= sizeof(espnow_data_t));
+   buf->type = send_param->type;
+   buf->content = send_param->content;
+   /* Fill all remaining bytes after the data with random values */
+   esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
+}
+
+static uint64_t get_time(void)
+{
+   return esp_timer_get_time() - node.time_corection;
+}
 
 void espnow_handler_task(void)
 {
