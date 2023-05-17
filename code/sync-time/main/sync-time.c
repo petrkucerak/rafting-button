@@ -22,10 +22,11 @@
 #include <string.h>
 // #include <soc.h> // defines interrupts
 
-#define PRIORITY_MESSAGE_INIT_RTT 2
-#define PRIORITY_MESSAGE_INIT_TIME 2
+#define PRIORITY_RTT_START 2
+#define PRIORITY_MESSAGE_START 2
 #define ESPNOW_QUEUE_SIZE 10
 #define ESPNOW_MAXDELAY 512
+#define STACK_SIZE 2048
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
@@ -219,6 +220,62 @@ void espnow_handler_task(void)
    vSemaphoreDelete(espnow_queue);
 }
 
+void task_start_sync_rtt(void)
+{
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vTaskDelete(NULL);
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   // send_param->type;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vTaskDelete(NULL);
+   }
+   while (1) {
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+
+      send_param->type = RTT_CAL_MASTER;
+      memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      if (esp_now_send(send_param->dest_mac, send_param->buf,
+                       send_param->data_len) != ESP_OK) {
+         ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
+      }
+
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+
+      send_param->type = RTT_CAL_MASTER;
+      memcpy(send_param->dest_mac, mac_addr_3, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      if (esp_now_send(send_param->dest_mac, send_param->buf,
+                       send_param->data_len) != ESP_OK) {
+         ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
+      }
+   }
+   vTaskDelete(NULL);
+}
+
+uint32_t get_rtt_avg()
+{
+   uint32_t avg = 0;
+   for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
+      avg += node.rtt_balancer[i];
+   }
+   return (uint32_t)(avg / BALANCER_SIZE);
+}
+
 void app_main(void)
 {
    // Init NVS
@@ -256,18 +313,42 @@ void app_main(void)
    ESP_ERROR_CHECK(esp_now_register_recv_cb(espnow_recv_cb));
    ESP_ERROR_CHECK(esp_now_register_send_cb(measure_espnow_send_cb));
 
-   BaseType_t init_rtt_message;
-   BaseType_t init_time_message;
-
    node.is_first_setup_deviation = 1;
    node.is_firts_setup_rtt = 1;
    node.rtt_balancer_index = 0;
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 
-   while (1) {
+   // Add peers
+   esp_now_peer_info_t peer_info_1 = {};
+   memcpy(&peer_info_1.peer_addr, mac_addr_1, 6);
+   if (!esp_now_is_peer_exist(mac_addr_1)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_1));
+   }
+   esp_now_peer_info_t peer_info_2 = {};
+   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
+   if (!esp_now_is_peer_exist(mac_addr_2)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
+   }
+   esp_now_peer_info_t peer_info_3 = {};
+   memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
+   if (!esp_now_is_peer_exist(mac_addr_3)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
+   }
 
-      vTaskDelay(200);
+#ifdef IS_MASTER
+   // Init MASTER tasks
+   BaseType_t start_rtt_sync_task;
+   start_rtt_sync_task =
+       xTaskCreate(task_start_sync_rtt, "task_start_sync_rtt", STACK_SIZE, NULL,
+                   PRIORITY_RTT_START, NULL);
+
+   BaseType_t start_time_sync_task;
+#endif // IS_MASTER
+
+   while (1) {
+      vTaskDelay(1000 / portTICK_PERIOD_MS);
+      ESP_LOGI(TAG, "avg rtt: %d", get_rtt_avg());
    }
 
    // Ending rutine
