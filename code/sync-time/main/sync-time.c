@@ -171,15 +171,33 @@ void espnow_handler_task(void)
             espnow_data_prepare(send_param);
             if (esp_now_send(send_param->dest_mac, send_param->buf,
                              send_param->data_len) != ESP_OK) {
-               ESP_LOGW(TAG, "Send error");
+               ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
             }
             break;
          case RTT_CAL_SLAVE:
             // calcule RTT and send it back to slave with type RTT_VAL
-
+            send_param->content = (get_time() - content) / 2;
+            send_param->type = RTT_VAL;
+            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
+            espnow_data_prepare(send_param);
+            if (esp_now_send(send_param->dest_mac, send_param->buf,
+                             send_param->data_len) != ESP_OK) {
+               ESP_LOGW(TAG, "Send RTT_CAL_SLAVE error");
+            }
             break;
          case RTT_VAL:
             // set RTT value into the array
+            if (node.is_firts_setup_rtt) {
+               for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
+                  node.rtt_balancer[i] = content;
+               }
+               node.is_firts_setup_rtt = 0;
+            } else {
+               node.rtt_balancer[node.rtt_balancer_index] = content;
+               ++node.rtt_balancer_index;
+               if (node.rtt_balancer_index == BALANCER_SIZE)
+                  node.rtt_balancer_index = 0;
+            }
             break;
          case TIME:
             // calcule deviation O~
@@ -240,6 +258,10 @@ void app_main(void)
 
    BaseType_t init_rtt_message;
    BaseType_t init_time_message;
+
+   node.is_first_setup_deviation = 1;
+   node.is_firts_setup_rtt = 1;
+   node.rtt_balancer_index = 0;
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 
