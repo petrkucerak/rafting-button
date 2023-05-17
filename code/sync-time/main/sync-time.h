@@ -68,7 +68,13 @@ typedef struct node_info {
    uint16_t rtt_balancer_index;
    bool is_firts_setup_rtt;
    bool is_first_setup_deviation;
-   int64_t deviation_avg;
+   int32_t deviation_avg;
 } node_info_t;
+
+typedef struct print_data {
+   uint64_t rtt;
+   int32_t deviation;
+   uint64_t time;
+} print_data_t;
 
 #endif // SYNC_TIME_H

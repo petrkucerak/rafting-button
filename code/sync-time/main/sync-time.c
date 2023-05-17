@@ -25,20 +25,32 @@
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
 #define PRIORITY_HANDLER 3
+#define PRIORITY_TIME_START 3
 
 #define ESPNOW_QUEUE_SIZE 10
 #define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
+#define DEVIATION_MAX_CONSTATN 100
+
 #define CONFIG_ESPNOW_SEND_LEN 250
 
 #define IS_MASTER
-// #define IS_SLAVE
+#define IS_SLAVE
 
 static const char *TAG = "MAIN";
 
 node_info_t node;
 static QueueHandle_t espnow_queue;
+
+uint32_t get_rtt_avg()
+{
+   uint32_t avg = 0;
+   for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
+      avg += node.rtt_balancer[i];
+   }
+   return (uint32_t)(avg / BALANCER_SIZE);
+}
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
@@ -227,7 +239,30 @@ void espnow_handler_task(void)
             break;
          case TIME:
             // calcule deviation O~
+            if (node.is_first_setup_deviation) {
+               node.deviation_avg = (int32_t)get_time() - (int32_t)content -
+                                    (int32_t)get_rtt_avg();
+               node.is_first_setup_deviation = 0;
+            } else {
+               node.deviation_avg =
+                   (node.deviation_avg + (int32_t)get_time() -
+                    (int32_t)content - (int32_t)get_rtt_avg()) /
+                   2;
+            }
+
             // set time
+            if (node.deviation_avg > DEVIATION_MAX_CONSTATN)
+               node.time_corection =
+                   esp_timer_get_time() -
+                   (content + (uint64_t)get_rtt_avg() + DEVIATION_MAX_CONSTATN);
+            else if (node.deviation_avg < -DEVIATION_MAX_CONSTATN)
+               node.time_corection =
+                   esp_timer_get_time() -
+                   (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTATN);
+            else
+               node.time_corection =
+                   esp_timer_get_time() -
+                   (content + (uint64_t)get_rtt_avg() + (uint64_t)node.deviation_avg);
             break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
@@ -295,13 +330,54 @@ void task_start_sync_rtt(void)
    vTaskDelete(NULL);
 }
 
-uint32_t get_rtt_avg()
+void task_start_sync_time(void)
 {
-   uint32_t avg = 0;
-   for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
-      avg += node.rtt_balancer[i];
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vTaskDelete(NULL);
    }
-   return (uint32_t)(avg / BALANCER_SIZE);
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   // send_param->type;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vTaskDelete(NULL);
+   }
+   esp_err_t ret;
+   vTaskDelay(500 / portTICK_PERIOD_MS);
+   while (1) {
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+
+      send_param->type = TIME;
+      memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+
+      send_param->type = TIME;
+      memcpy(send_param->dest_mac, mac_addr_3, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+   }
+   free(send_param);
+   vTaskDelete(NULL);
 }
 
 void app_main(void)
@@ -373,17 +449,21 @@ void app_main(void)
    // Init MASTER tasks
    BaseType_t start_rtt_sync_task;
    start_rtt_sync_task =
-       xTaskCreate((TaskFunction_t)task_start_sync_rtt, "task_start_sync_rtt",
+       xTaskCreate((TaskFunction_t)task_start_sync_rtt, "start_sync_rtt",
                    STACK_SIZE, NULL, PRIORITY_RTT_START, NULL);
 
    BaseType_t start_time_sync_task;
+   start_time_sync_task =
+       xTaskCreate((TaskFunction_t)task_start_sync_time, "start_sync_time",
+                   STACK_SIZE, NULL, PRIORITY_TIME_START, NULL);
 #endif // IS_MASTER
 
    while (1) {
       vTaskDelay(1000 / portTICK_PERIOD_MS);
-      ESP_LOGI(TAG, "Numbe of messages stored in a queue is: %d",
-               uxQueueMessagesWaiting(espnow_queue));
-      ESP_LOGI(TAG, "avg rtt: %ld", get_rtt_avg());
+      // ESP_LOGI(TAG, "Numbe of messages stored in a queue is: %d",
+      //          uxQueueMessagesWaiting(espnow_queue));
+      ESP_LOGI(TAG, "%ld,%ld,%lld", get_rtt_avg(), node.deviation_avg,
+               get_time());
    }
 
    // Ending rutine
