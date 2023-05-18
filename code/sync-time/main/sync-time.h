@@ -9,11 +9,17 @@
 // Device 1 <70:b8:f6:5b:d3:24>
 static uint8_t mac_addr_1[] = {0x70, 0xb8, 0xf6, 0x5b, 0xd3, 0x24};
 
-// Device 1 <cc:db:a7:1d:c4:08>
+// Device 2 <cc:db:a7:1d:c4:08>
 static uint8_t mac_addr_2[] = {0xcc, 0xdb, 0xa7, 0x1d, 0xc4, 0x08};
 
-// Device 1 <c8:f0:9e:7b:10:8c>
+// Device 3 <c8:f0:9e:7b:10:8c>
 static uint8_t mac_addr_3[] = {0xc8, 0xf0, 0x9e, 0x7b, 0x10, 0x8c};
+
+// Device 4 <cc:db:a7:1d:c7:cc>
+static uint8_t mac_addr_4[] = {0xcc, 0xdb, 0xa7, 0x1d, 0xc7, 0xcc};
+
+// Device 5 <c8:f0:9e:7b:10:8c>
+static uint8_t mac_addr_5[] = {0x94, 0xb5, 0x55, 0xf9, 0xf2, 0xf0};
 
 typedef enum espnow_event_id {
    ESPNOW_SEND_CB,
@@ -72,7 +78,7 @@ typedef struct node_info {
 } node_info_t;
 
 typedef struct print_data {
-   uint64_t rtt;
+   uint32_t rtt;
    int32_t deviation;
    uint64_t time;
 } print_data_t;

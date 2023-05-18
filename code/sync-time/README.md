@@ -22,3 +22,5 @@ idf.py monitor
   | 3   | ESP32 large | `c8:f0:9e:7b:10:8c` | COM7 |
   | 4   | ESP32 small | `cc:db:a7:1d:c7:cc` | COM8 |
   | 5   | ESP32 large | `94:b5:55:f9:f2:f0` | COM9 |
+
+Simulation starts in 13:50

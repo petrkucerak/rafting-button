@@ -25,9 +25,10 @@
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
 #define PRIORITY_HANDLER 3
-#define PRIORITY_TIME_START 3
 
 #define ESPNOW_QUEUE_SIZE 10
+#define PRINT_QUEUE_SIZE 4
+
 #define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
@@ -42,6 +43,7 @@ static const char *TAG = "MAIN";
 
 node_info_t node;
 static QueueHandle_t espnow_queue;
+static QueueHandle_t print_data;
 
 uint32_t get_rtt_avg()
 {
@@ -52,10 +54,18 @@ uint32_t get_rtt_avg()
    return (uint32_t)(avg / BALANCER_SIZE);
 }
 
+static uint64_t get_time(void)
+{
+   return esp_timer_get_time() - node.time_corection;
+}
+
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
-   // uint32_t tmp = xthal_get_ccount();
-   // start_time = esp_timer_get_time();
+   print_data_t data;
+   data.rtt = get_rtt_avg();
+   data.deviation = node.deviation_avg;
+   data.time = get_time();
+   xQueueSendFromISR(print_data, &data, NULL);
 }
 
 static void measure_espnow_send_cb(const uint8_t *mac_addr,
@@ -131,11 +141,6 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->content = send_param->content;
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
-}
-
-static uint64_t get_time(void)
-{
-   return esp_timer_get_time() - node.time_corection;
 }
 
 void handle_espnow_send_error(esp_err_t code)
@@ -261,8 +266,8 @@ void espnow_handler_task(void)
                    (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTATN);
             else
                node.time_corection =
-                   esp_timer_get_time() -
-                   (content + (uint64_t)get_rtt_avg() + (uint64_t)node.deviation_avg);
+                   esp_timer_get_time() - (content + (uint64_t)get_rtt_avg() +
+                                           (uint64_t)node.deviation_avg);
             break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
@@ -302,8 +307,9 @@ void task_start_sync_rtt(void)
    esp_err_t ret;
    vTaskDelay(500 / portTICK_PERIOD_MS);
    while (1) {
-      vTaskDelay(50 / portTICK_PERIOD_MS);
+      vTaskDelay(25 / portTICK_PERIOD_MS);
 
+      // Node 2
       send_param->type = RTT_CAL_MASTER;
       memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
       send_param->content = get_time();
@@ -314,10 +320,35 @@ void task_start_sync_rtt(void)
       if (ret != ESP_OK)
          handle_espnow_send_error(ret);
 
-      vTaskDelay(50 / portTICK_PERIOD_MS);
+      vTaskDelay(25 / portTICK_PERIOD_MS);
 
+      // Node 3
       send_param->type = RTT_CAL_MASTER;
       memcpy(send_param->dest_mac, mac_addr_3, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+      vTaskDelay(25 / portTICK_PERIOD_MS);
+
+      // Node 4
+      send_param->type = RTT_CAL_MASTER;
+      memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+      vTaskDelay(25 / portTICK_PERIOD_MS);
+
+      // Node 5
+      send_param->type = RTT_CAL_MASTER;
+      memcpy(send_param->dest_mac, mac_addr_5, ESP_NOW_ETH_ALEN);
       send_param->content = get_time();
       espnow_data_prepare(send_param);
 
@@ -352,25 +383,45 @@ void task_start_sync_time(void)
    esp_err_t ret;
    vTaskDelay(500 / portTICK_PERIOD_MS);
    while (1) {
-      vTaskDelay(50 / portTICK_PERIOD_MS);
-
+      // Node 2
+      vTaskDelay(125 / portTICK_PERIOD_MS);
       send_param->type = TIME;
       memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
       send_param->content = get_time();
       espnow_data_prepare(send_param);
-
       ret = esp_now_send(send_param->dest_mac, send_param->buf,
                          send_param->data_len);
       if (ret != ESP_OK)
          handle_espnow_send_error(ret);
 
-      vTaskDelay(50 / portTICK_PERIOD_MS);
-
+      // Node 3
+      vTaskDelay(125 / portTICK_PERIOD_MS);
       send_param->type = TIME;
       memcpy(send_param->dest_mac, mac_addr_3, ESP_NOW_ETH_ALEN);
       send_param->content = get_time();
       espnow_data_prepare(send_param);
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
 
+      // Node 4
+      vTaskDelay(125 / portTICK_PERIOD_MS);
+      send_param->type = TIME;
+      memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+
+      // Node 5
+      vTaskDelay(125 / portTICK_PERIOD_MS);
+      send_param->type = TIME;
+      memcpy(send_param->dest_mac, mac_addr_5, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
       ret = esp_now_send(send_param->dest_mac, send_param->buf,
                          send_param->data_len);
       if (ret != ESP_OK)
@@ -439,6 +490,16 @@ void app_main(void)
    if (!esp_now_is_peer_exist(mac_addr_3)) {
       ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
    }
+   esp_now_peer_info_t peer_info_4 = {};
+   memcpy(&peer_info_4.peer_addr, mac_addr_4, 6);
+   if (!esp_now_is_peer_exist(mac_addr_4)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_4));
+   }
+   esp_now_peer_info_t peer_info_5 = {};
+   memcpy(&peer_info_5.peer_addr, mac_addr_5, 6);
+   if (!esp_now_is_peer_exist(mac_addr_5)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_5));
+   }
 
    BaseType_t handler_task;
    handler_task =
@@ -458,12 +519,14 @@ void app_main(void)
                    STACK_SIZE, NULL, PRIORITY_TIME_START, NULL);
 #endif // IS_MASTER
 
-   while (1) {
-      vTaskDelay(1000 / portTICK_PERIOD_MS);
-      // ESP_LOGI(TAG, "Numbe of messages stored in a queue is: %d",
-      //          uxQueueMessagesWaiting(espnow_queue));
-      ESP_LOGI(TAG, "%ld,%ld,%lld", get_rtt_avg(), node.deviation_avg,
-               get_time());
+   print_data = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(print_data_t));
+
+   print_data_t data;
+
+   vTaskDelay(1000 / portTICK_PERIOD_MS);
+
+   while (xQueueReceive(print_data, &data, portMAX_DELAY) == pdTRUE) {
+      printf("%ld,%ld,%lld\n", data.rtt, data.deviation, data.time);
    }
 
    // Ending rutine
