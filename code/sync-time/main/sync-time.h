@@ -1,7 +1,7 @@
 #ifndef SYNC_TIME_H
 #define SYNC_TIME_H
 
-#define BALANCER_SIZE 25
+#define BALANCER_SIZE 100
 
 #include <espnow.h>
 #include <inttypes.h>

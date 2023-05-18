@@ -36,7 +36,7 @@
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
-#define IS_MASTER
+// #define IS_MASTER
 #define IS_SLAVE
 
 static const char *TAG = "MAIN";
