@@ -1,0 +1,4138 @@
+Executing action: flash
+Running ninja in directory C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time\build
+Executing "ninja flash"...
+[1/5] cmd.exe /C "cd /D C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time\build\esp-idf\esptool_py && C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe C:/Users/Petr.Kucera/Embeded/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app C:/Users/Petr.Kucera/Documents/rafting-button/code/sync-time/build/partition_table/partition-table.bin C:/Users/Petr.Kucera/Documents/rafting-button/code/sync-time/build/sync-time.bin"
+sync-time.bin binary size 0xb5500 bytes. Smallest app partition is 0x100000 bytes. 0x4ab00 bytes (29%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cmd.exe /C "cd /D C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time\build\bootloader\esp-idf\esptool_py && C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe C:/Users/Petr.Kucera/Embeded/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x1000 C:/Users/Petr.Kucera/Documents/rafting-button/code/sync-time/build/bootloader/bootloader.bin"
+Bootloader binary size 0x67c0 bytes. 0x840 bytes (7%) free.
+[2/3] cmd.exe /C "cd /D C:\Users\Petr.Kucera\Embeded\esp\esp-idf\components\esptool_py && C:\Users\Petr.Kucera\.espressif\tools\cmake\3.24.0\bin\cmake.exe -D IDF_PATH=C:/Users/Petr.Kucera/Embeded/esp/esp-idf -D SERIAL_TOOL=C:/Users/Petr.Kucera/.espressif/python_env/idf5.1_py3.10_env/Scripts/python.exe;;C:/Users/Petr.Kucera/Embeded/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32 -D SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args -D WORKING_DIRECTORY=C:/Users/Petr.Kucera/Documents/rafting-button/code/sync-time/build -P C:/Users/Petr.Kucera/Embeded/esp/esp-idf/components/esptool_py/run_serial_tool.cmake"
+esptool esp32 -p COM4 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 2MB 0x1000 bootloader/bootloader.bin 0x10000 sync-time.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.5.1
+Serial port COM4
+Connecting....
+Chip is ESP32-D0WD-V3 (revision v3.0)
+Features: WiFi, BT, Dual Core, 240MHz, VRef calibration in efuse, Coding Scheme None
+Crystal is 40MHz
+MAC: 70:b8:f6:5b:d3:24
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00001000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x000c5fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 26560 bytes to 16610...
+Writing at 0x00001000... (50 %)
+Writing at 0x00007698... (100 %)
+Wrote 26560 bytes (16610 compressed) at 0x00001000 in 0.8 seconds (effective 271.2 kbit/s)...
+Hash of data verified.
+Compressed 742656 bytes to 477376...
+Writing at 0x00010000... (3 %)
+Writing at 0x0001bd36... (6 %)
+Writing at 0x0002496f... (10 %)
+Writing at 0x00029e64... (13 %)
+Writing at 0x00031c3e... (16 %)
+Writing at 0x00037594... (20 %)
+Writing at 0x0003cfa1... (23 %)
+Writing at 0x00042bbb... (26 %)
+Writing at 0x0004887e... (30 %)
+Writing at 0x0004db8b... (33 %)
+Writing at 0x00052f12... (36 %)
+Writing at 0x000583b4... (40 %)
+Writing at 0x0005d82d... (43 %)
+Writing at 0x00062f2f... (46 %)
+Writing at 0x00068711... (50 %)
+Writing at 0x0006e45e... (53 %)
+Writing at 0x000738a7... (56 %)
+Writing at 0x00078f57... (60 %)
+Writing at 0x0007e93d... (63 %)
+Writing at 0x000840c1... (66 %)
+Writing at 0x00089b73... (70 %)
+Writing at 0x0008ff17... (73 %)
+Writing at 0x00095740... (76 %)
+Writing at 0x0009ba5d... (80 %)
+Writing at 0x000a5e71... (83 %)
+Writing at 0x000ac0e3... (86 %)
+Writing at 0x000b403e... (90 %)
+Writing at 0x000b98fe... (93 %)
+Writing at 0x000bf2d2... (96 %)
+Writing at 0x000c4639... (100 %)
+Wrote 742656 bytes (477376 compressed) at 0x00010000 in 10.8 seconds (effective 548.6 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 103...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (103 compressed) at 0x00008000 in 0.0 seconds (effective 620.2 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:7096
+load:0x40078000,len:15488
+load:0x40080400,len:4
+ho 8 tail 4 room 4
+load:0x40080404,len:3876
+entry 0x4008064c
+[0;32mI (31) boot: ESP-IDF v5.1-dev-4528-g420ebd208a 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 16 2023 16:44:24[0m
+[0;32mI (33) boot: Multicore bootloader[0m
+[0;32mI (37) boot: chip revision: v3.0[0m
+[0;32mI (41) boot.esp32: SPI Speed      : 40MHz[0m
+[0;32mI (45) boot.esp32: SPI Mode       : DIO[0m
+[0;32mI (50) boot.esp32: SPI Flash Size : 2MB[0m
+[0;32mI (54) boot: Enabling RNG early entropy source...[0m
+[0;32mI (60) boot: Partition Table:[0m
+[0;32mI (63) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (71) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (78) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (86) boot:  2 factory          factory app      00 00 00010000 00100000[0m
+[0;32mI (93) boot: End of partition table[0m
+[0;32mI (97) esp_image: segment 0: paddr=00010020 vaddr=3f400020 size=1fe6ch (130668) map[0m
+[0;32mI (153) esp_image: segment 1: paddr=0002fe94 vaddr=3ffb0000 size=00184h (   388) load[0m
+[0;32mI (153) esp_image: segment 2: paddr=00030020 vaddr=400d0020 size=7c85ch (510044) map[0m
+[0;32mI (343) esp_image: segment 3: paddr=000ac884 vaddr=3ffb0184 size=035bch ( 13756) load[0m
+[0;32mI (349) esp_image: segment 4: paddr=000afe48 vaddr=40080000 size=15694h ( 87700) load[0m
+[0;32mI (396) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (396) boot: Disabling RNG early entropy source...[0m
+[0;32mI (408) cpu_start: Multicore app[0m
+[0;32mI (408) cpu_start: Pro cpu up.[0m
+[0;32mI (408) cpu_start: Starting app cpu, entry point is 0x40081384[0m
+[0;32mI (0) cpu_start: App cpu up.[0m
+[0;32mI (443) cpu_start: Pro cpu start user code[0m
+[0;32mI (443) cpu_start: cpu freq: 240000000 Hz[0m
+[0;32mI (443) cpu_start: Application information:[0m
+[0;32mI (446) cpu_start: Project name:     sync-time[0m
+[0;32mI (451) cpu_start: App version:      3.0.3-35-g5788a34-dirty[0m
+[0;32mI (458) cpu_start: Compile time:     May 18 2023 13:17:04[0m
+[0;32mI (464) cpu_start: ELF file SHA256:  2110dc4718b68a2f...[0m
+[0;32mI (470) cpu_start: ESP-IDF:          v5.1-dev-4528-g420ebd208a[0m
+[0;32mI (476) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (481) cpu_start: Max chip rev:     v3.99 [0m
+[0;32mI (486) cpu_start: Chip rev:         v3.0[0m
+[0;32mI (491) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (498) heap_init: At 3FFAE6E0 len 00001920 (6 KiB): DRAM[0m
+[0;32mI (504) heap_init: At 3FFB7910 len 000286F0 (161 KiB): DRAM[0m
+[0;32mI (510) heap_init: At 3FFE0440 len 00003AE0 (14 KiB): D/IRAM[0m
+[0;32mI (516) heap_init: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM[0m
+[0;32mI (523) heap_init: At 40095694 len 0000A96C (42 KiB): IRAM[0m
+[0;32mI (531) spi_flash: detected chip: generic[0m
+[0;32mI (534) spi_flash: flash io: dio[0m
+[0;33mW (538) spi_flash: Detected size(4096k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (552) app_start: Starting scheduler on CPU0[0m
+[0;32mI (556) app_start: Starting scheduler on CPU1[0m
+[0;32mI (556) main_task: Started on CPU0[0m
+[0;32mI (566) main_task: Calling app_main()[0m
+[0;32mI (576) gpio: GPIO[21]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (586) ESPNOW_UTILS: Device MAC addres is:70:b8:f6:5b:d3:24
+[0m
+I (596) wifi:wifi driver task: 3ffbf594, prio:23, stack:6656, core=0
+I (596) wifi:wifi firmware version: 3078359
+I (596) wifi:wifi certification version: v7.0
+I (596) wifi:config NVS flash: enabled
+I (606) wifi:config nano formating: disabled
+I (606) wifi:Init data frame dynamic rx buffer num: 32
+I (616) wifi:Init management frame dynamic rx buffer num: 32
+I (616) wifi:Init management short buffer num: 32
+I (626) wifi:Init dynamic tx buffer num: 32
+I (626) wifi:Init static rx buffer size: 1600
+I (626) wifi:Init static rx buffer num: 10
+I (636) wifi:Init dynamic rx buffer num: 32
+[0;32mI (636) wifi_init: rx ba win: 6[0m
+[0;32mI (646) wifi_init: tcpip mbox: 32[0m
+[0;32mI (646) wifi_init: udp mbox: 6[0m
+[0;32mI (646) wifi_init: tcp mbox: 6[0m
+[0;32mI (656) wifi_init: tcp tx win: 5744[0m
+[0;32mI (656) wifi_init: tcp rx win: 5744[0m
+[0;32mI (666) wifi_init: tcp mss: 1440[0m
+[0;32mI (666) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (666) wifi_init: WiFi RX IRAM OP enabled[0m
+I (676) wifi:Set ps type: 0
+
+[0;32mI (676) phy_init: phy_version 4670,719f9f6,Feb 18 2021,17:07:07[0m
+I (776) wifi:mode : sta (70:b8:f6:5b:d3:24)
+I (776) wifi:enable tsf
+I (776) ESPNOW: espnow [version: 1.0] init
+[0;33mW (39466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39806) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (39946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40286) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40766) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (40986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41246) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41726) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (41946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42206) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42686) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (42986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43166) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43646) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (43946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44126) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44606) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (44986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45086) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45566) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (45946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46046) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46526) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (46986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47006) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47486) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (47966) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48446) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48926) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (48986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49406) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49886) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (49946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50366) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50846) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (50986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51326) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51806) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (51946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52286) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52766) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52906) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (52986) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53066) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53146) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53226) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53246) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53306) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53386) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53466) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53546) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53626) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53706) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53726) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53786) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53866) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (53946) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54026) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54106) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54186) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54206) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54266) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54346) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54426) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54506) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54586) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54666) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54686) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54746) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (54826) MAIN: Send to cc:db:a7:1d:c4:08 failed[0m
+[0;33mW (100406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (100926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101736) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (101966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (102926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (103986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104386) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104396) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104866) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (104926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (104946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105346) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105356) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105826) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105836) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (105926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (105946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (105966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (105986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106306) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106316) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106336) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106786) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106796) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (106946) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (106966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (106976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107266) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107296) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107746) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (107926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (107966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (107986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108066) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108076) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108096) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108116) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108226) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108236) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108256) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108706) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108716) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (108926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (108946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (108976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109186) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109416) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109666) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (109926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (109966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (109986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110146) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110616) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110626) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (110926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (110966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (110986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111106) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111116) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111586) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (111926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (111966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (111986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112066) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112096) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112446) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112546) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (112926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (112946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (112966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113026) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113036) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113056) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113406) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113506) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113516) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113886) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (113906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (113966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (113986) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114046) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114126) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114206) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114366) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114456) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114476) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114846) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (114926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114946) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (114956) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (114976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115286) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115326) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115406) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115426) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115486) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115566) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115646) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115806) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115906) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115916) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (115936) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (115966) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (115986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116056) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116076) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116526) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116606) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116686) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116726) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116766) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116866) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116926) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (116946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (116966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (116986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117006) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (117026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117086) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (117106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117166) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (117196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117216) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (117226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117246) MAIN: Send to c8:f0:9e:7b:10:8c failed[0m
+[0;33mW (117266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (117926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (117986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+[0;33mW (118896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (118966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (119926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (120966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (121926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+[0;33mW (122326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,139441339
+0,0,139541272
+0,0,139641209
+0,0,139741151
+0,0,139841096
+0,0,139941066
+0,0,140041027
+0,0,140140967
+0,0,140240917
+0,0,140340895
+0,0,140440881
+0,0,140540850
+0,0,140640790
+0,0,140740718
+0,0,140840650
+0,0,140940574
+0,0,141040504
+0,0,141140481
+0,0,141240421
+0,0,141340369
+0,0,141440327
+0,0,141540252
+0,0,141640206
+0,0,141740138
+0,0,141840082
+0,0,141940019
+0,0,142039949
+0,0,142139885
+0,0,142239812
+0,0,142339715
+0,0,142439612
+0,0,142539547
+0,0,142639506
+0,0,142739458
+0,0,142839408
+0,0,142939364
+0,0,143039326
+0,0,143139285
+0,0,143239239
+0,0,143339189
+0,0,143439135
+0,0,143539087
+0,0,143639047
+0,0,143739015
+0,0,143838978
+0,0,143938911
+0,0,144038852
+0,0,144138820
+0,0,144238761
+0,0,144338732
+0,0,144438686
+0,0,144538621
+0,0,144638561
+0,0,144738499
+0,0,144838470
+0,0,144938457
+0,0,145038419
+0,0,145138374
+0,0,145238328
+0,0,145338289
+0,0,145438247
+0,0,145538215
+0,0,145638161
+0,0,145738119
+0,0,145838081
+0,0,145938031
+0,0,146037971
+0,0,146137892
+0,0,146237818
+0,0,146337748
+0,0,146437699
+0,0,146537628
+0,0,146637545
+0,0,146737478
+0,0,146837405
+0,0,146937330
+0,0,147037294
+0,0,147137247
+0,0,147237184
+0,0,147337122
+0,0,147437055
+0,0,147537012
+0,0,147636990
+0,0,147736954
+0,0,147836908
+0,0,147936838
+0,0,148036760
+0,0,148136685
+0,0,148236609
+0,0,148336527
+0,0,148436448
+0,0,148536371
+0,0,148636320
+0,0,148736263
+0,0,148836189
+0,0,148936110
+0,0,149036042
+0,0,149135977
+0,0,149235903
+0,0,149335799
+0,0,149435692
+0,0,149535598
+0,0,149635527
+0,0,149735447
+0,0,149835401
+0,0,149935343
+0,0,150035281
+0,0,150135261
+0,0,150235246
+0,0,150335221
+0,0,150435194
+0,0,150535171
+0,0,150635143
+0,0,150735106
+0,0,150835038
+0,0,150934966
+0,0,151034918
+0,0,151134864
+0,0,151234816
+0,0,151334762
+0,0,151434708
+0,0,151534687
+0,0,151634664
+0,0,151734617
+0,0,151834557
+0,0,151934492
+0,0,152034468
+0,0,152134452
+0,0,152234442
+0,0,152334425
+0,0,152434415
+0,0,152534414
+0,0,152634402
+0,0,152734400
+0,0,152834384
+0,0,152934350
+0,0,153034312
+0,0,153134262
+0,0,153234211
+0,0,153334171
+0,0,153434152
+0,0,153534145
+0,0,153634139
+0,0,153734130
+0,0,153834083
+0,0,153934030
+0,0,154034018
+0,0,154133954
+0,0,154233893
+0,0,154333849
+0,0,154433805
+0,0,154533769
+0,0,154633727
+0,0,154733670
+0,0,154833643
+0,0,154933632
+0,0,155033609
+0,0,155133563
+0,0,155233509
+0,0,155333459
+0,0,155433410
+0,0,155533399
+0,0,155633350
+0,0,155733295
+0,0,155833238
+0,0,155933239
+0,0,156033239
+0,0,156133244
+0,0,156233244
+0,0,156333241
+0,0,156433216
+0,0,156533205
+0,0,156633203
+0,0,156733201
+0,0,156833201
+0,0,156933200
+0,0,157033192
+0,0,157133182
+0,0,157233168
+0,0,157333157
+0,0,157433145
+0,0,157533127
+0,0,157633117
+0,0,157733110
+0,0,157833097
+0,0,157933048
+0,0,158032997
+0,0,158132943
+0,0,158232890
+0,0,158332835
+0,0,158432771
+0,0,158532710
+0,0,158632653
+0,0,158732600
+0,0,158832527
+0,0,158932457
+0,0,159032398
+0,0,159132334
+0,0,159232297
+0,0,159332240
+0,0,159432186
+0,0,159532142
+0,0,159632103
+0,0,159732057
+0,0,159831998
+0,0,159931947
+0,0,160031917
+0,0,160131871
+0,0,160231833
+0,0,160331793
+0,0,160431763
+0,0,160531750
+0,0,160631699
+0,0,160731649
+0,0,160831579
+0,0,160931511
+0,0,161031437
+0,0,161131360
+0,0,161231306
+0,0,161331259
+0,0,161431178
+0,0,161531110
+0,0,161631058
+0,0,161731001
+0,0,161830984
+0,0,161930927
+0,0,162030895
+0,0,162130882
+0,0,162230867
+0,0,162330807
+0,0,162430747
+0,0,162530696
+0,0,162630629
+0,0,162730562
+0,0,162830504
+0,0,162930448
+0,0,163030385
+0,0,163130331
+0,0,163230290
+0,0,163330234
+0,0,163430194
+0,0,163530169
+0,0,163630172
+0,0,163730176
+0,0,163830168
+0,0,163930134
+0,0,164030070
+0,0,164130016
+0,0,164229969
+0,0,164329903
+0,0,164429827
+0,0,164529744
+0,0,164629659
+0,0,164729606
+0,0,164829549
+0,0,164929488
+0,0,165029442
+0,0,165129395
+0,0,165229335
+0,0,165329296
+0,0,165429270
+0,0,165529236
+0,0,165629188
+0,0,165729159
+0,0,165829160
+0,0,165929140
+0,0,166029094
+0,0,166129053
+0,0,166229029
+0,0,166328986
+0,0,166428952
+0,0,166528930
+0,0,166628943
+0,0,166728946
+0,0,166828898
+0,0,166928823
+0,0,167028749
+0,0,167128673
+0,0,167228595
+0,0,167328528
+0,0,167428495
+0,0,167528452
+0,0,167628420
+0,0,167728388
+0,0,167828339
+0,0,167928319
+0,0,168028291
+0,0,168128254
+0,0,168228228
+0,0,168328188
+0,0,168428147
+0,0,168528132
+0,0,168628110
+0,0,168728122
+0,0,168828143
+0,0,168928140
+0,0,169028104
+0,0,169128083
+0,0,169228088
+0,0,169328063
+0,0,169428041
+0,0,169528030
+0,0,169628003
+0,0,169727969
+0,0,169827894
+0,0,169927843
+0,0,170027825
+0,0,170127785
+0,0,170227728
+0,0,170327668
+0,0,170427633
+0,0,170527614
+0,0,170627599
+0,0,170727590
+0,0,170827600
+0,0,170927620
+0,0,171027642
+0,0,171127665
+0,0,171227699
+0,0,171327711
+0,0,171427706
+0,0,171527652
+0,0,171627594
+0,0,171727546
+0,0,171827503
+0,0,171927480
+0,0,172027457
+0,0,172127431
+0,0,172227386
+0,0,172327321
+0,0,172427258
+0,0,172527211
+0,0,172627182
+0,0,172727119
+0,0,172827037
+0,0,172926957
+0,0,173026880
+0,0,173126812
+0,0,173226743
+0,0,173326697
+0,0,173426624
+0,0,173526559
+0,0,173626488
+0,0,173726422
+0,0,173826351
+0,0,173926275
+0,0,174026195
+0,0,174126142
+0,0,174226080
+0,0,174326007
+0,0,174425932
+0,0,174525857
+0,0,174625789
+0,0,174725729
+0,0,174825661
+0,0,174925596
+0,0,175025546
+0,0,175125499
+0,0,175225463
+0,0,175325425
+0,0,175425385
+0,0,175525345
+0,0,175625301
+0,0,175725251
+0,0,175825250
+0,0,175925223
+0,0,176025184
+0,0,176125166
+0,0,176225138
+0,0,176325099
+0,0,176425097
+0,0,176525048
+0,0,176624994
+0,0,176724981
+0,0,176824960
+0,0,176924913
+0,0,177024859
+0,0,177124817
+0,0,177224761
+0,0,177324714
+0,0,177424715
+0,0,177524675
+0,0,177624633
+0,0,177724610
+0,0,177824593
+0,0,177924590
+0,0,178024571
+0,0,178124563
+0,0,178224555
+0,0,178324525
+0,0,178424487
+0,0,178524464
+0,0,178624443
+0,0,178724410
+0,0,178824369
+0,0,178924347
+0,0,179024297
+0,0,179124253
+0,0,179224201
+0,0,179324145
+0,0,179424088
+0,0,179524022
+0,0,179623964
+0,0,179723900
+0,0,179823827
+0,0,179923776
+0,0,180023724
+0,0,180123678
+0,0,180223625
+0,0,180323559
+0,0,180423492
+0,0,180523434
+0,0,180623379
+0,0,180723329
+0,0,180823288
+0,0,180923250
+0,0,181023204
+0,0,181123165
+0,0,181223153
+0,0,181323143
+0,0,181423127
+0,0,181523077
+0,0,181623061
+0,0,181723038
+0,0,181823008
+0,0,181922962
+0,0,182022945
+0,0,182122918
+0,0,182222884
+0,0,182322819
+0,0,182422756
+0,0,182522687
+0,0,182622613
+0,0,182722570
+0,0,182822532
+0,0,182922465
+0,0,183022390
+0,0,183122340
+0,0,183222266
+0,0,183322194
+0,0,183422155
+0,0,183522144
+0,0,183622118
+0,0,183722066
+0,0,183822036
+0,0,183921982
+0,0,184021962
+0,0,184121930
+0,0,184221854
+0,0,184321790
+0,0,184421720
+0,0,184521671
+0,0,184621634
+0,0,184721570
+0,0,184821487
+0,0,184921421
+0,0,185021401
+0,0,185121352
+0,0,185221275
+0,0,185321210
+0,0,185421160
+0,0,185521145
+0,0,185621153
+0,0,185721146
+0,0,185821100
+0,0,185921102
+0,0,186021092
+0,0,186121042
+0,0,186220988
+0,0,186320929
+0,0,186420875
+0,0,186520804
+0,0,186620752
+0,0,186720705
+0,0,186820664
+0,0,186920636
+0,0,187020601
+0,0,187120575
+0,0,187220543
+0,0,187320508
+0,0,187420479
+0,0,187520443
+0,0,187620443
+0,0,187720430
+0,0,187820401
+0,0,187920343
+0,0,188020265
+0,0,188120224
+0,0,188220184
+0,0,188320129
+0,0,188420086
+0,0,188520028
+0,0,188619943
+0,0,188719867
+0,0,188819811
+0,0,188919765
+0,0,189019722
+0,0,189119675
+0,0,189219619
+0,0,189319569
+0,0,189419522
+0,0,189519469
+0,0,189619413
+0,0,189719355
+0,0,189819296
+0,0,189919239
+0,0,190019182
+0,0,190119118
+0,0,190219036
+0,0,190318995
+0,0,190418940
+0,0,190518858
+0,0,190618821
+0,0,190718777
+0,0,190818720
+0,0,190918697
+0,0,191018671
+0,0,191118651
+0,0,191218651
+0,0,191318650
+0,0,191418630
+0,0,191518568
+0,0,191618502
+0,0,191718451
+0,0,191818441
+0,0,191918401
+0,0,192018354
+0,0,192118314
+0,0,192218283
+0,0,192318252
+0,0,192418216
+0,0,192518186
+0,0,192618153
+0,0,192718118
+0,0,192818106
+0,0,192918079
+0,0,193018043
+0,0,193118023
+0,0,193218024
+0,0,193318021
+0,0,193418002
+0,0,193517998
+0,0,193617962
+0,0,193717942
+0,0,193817911
+0,0,193917872
+0,0,194017836
+0,0,194117828
+0,0,194217820
+0,0,194317790
+0,0,194417755
+0,0,194517715
+0,0,194617681
+0,0,194717651
+0,0,194817626
+0,0,194917617
+0,0,195017602
+0,0,195117613
+0,0,195217624
+0,0,195317641
+0,0,195417603
+0,0,195517573
+0,0,195617533
+0,0,195717499
+0,0,195817472
+0,0,195917446
+0,0,196017409
+0,0,196117389
+0,0,196217386
+0,0,196317378
+0,0,196417353
+0,0,196517327
+0,0,196617305
+0,0,196717288
+0,0,196817262
+0,0,196917228
+0,0,197017194
+0,0,197117159
+0,0,197217135
+0,0,197317102
+0,0,197417067
+0,0,197517024
+0,0,197616974
+0,0,197716921
+0,0,197816865
+0,0,197916814
+0,0,198016771
+0,0,198116763
+0,0,198216753
+0,0,198316751
+0,0,198416743
+0,0,198516739
+0,0,198616729
+0,0,198716719
+0,0,198816699
+0,0,198916661
+0,0,199016633
+0,0,199116612
+0,0,199216565
+0,0,199316497
+0,0,199416459
+0,0,199516451
+0,0,199616443
+0,0,199716436
+0,0,199816429
+0,0,199916412
+0,0,200016377
+0,0,200116336
+0,0,200216310
+0,0,200316314
+0,0,200416308
+0,0,200516275
+0,0,200616238
+0,0,200716201
+0,0,200816182
+0,0,200916196
+0,0,201016192
+0,0,201116149
+0,0,201216100
+0,0,201316056
+0,0,201416046
+0,0,201516047
+0,0,201616057
+0,0,201716077
+0,0,201816090
+0,0,201916097
+0,0,202016114
+0,0,202116125
+0,0,202216136
+0,0,202316154
+0,0,202416163
+0,0,202516170
+0,0,202616167
+0,0,202716153
+0,0,202816129
+0,0,202916086
+0,0,203016040
+0,0,203116038
+0,0,203216026
+0,0,203315988
+0,0,203415944
+0,0,203515891
+0,0,203615839
+0,0,203715781
+0,0,203815739
+0,0,203915698
+0,0,204015662
+0,0,204115625
+0,0,204215579
+0,0,204315576
+0,0,204415566
+0,0,204515538
+0,0,204615518
+0,0,204715478
+0,0,204815481
+0,0,204915445
+0,0,205015412
+0,0,205115372
+0,0,205215333
+0,0,205315309
+0,0,205415278
+0,0,205515247
+0,0,205615200
+0,0,205715139
+0,0,205815079
+0,0,205915018
+0,0,206014945
+0,0,206114871
+0,0,206214794
+0,0,206314708
+0,0,206414633
+0,0,206514556
+0,0,206614476
+0,0,206714411
+0,0,206814366
+0,0,206914327
+0,0,207014328
+0,0,207114324
+0,0,207214312
+0,0,207314282
+0,0,207414219
+0,0,207514173
+0,0,207614117
+0,0,207714103
+0,0,207814063
+0,0,207914012
+0,0,208013970
+0,0,208113926
+0,0,208213877
+0,0,208313812
+0,0,208413754
+0,0,208513684
+0,0,208613617
+0,0,208713582
+0,0,208813555
+0,0,208913499
+0,0,209013432
+0,0,209113378
+0,0,209213366
+0,0,209313331
+0,0,209413289
+0,0,209513231
+0,0,209613177
+0,0,209713129
+0,0,209813085
+0,0,209913032
+0,0,210012984
+0,0,210112962
+0,0,210212916
+0,0,210312871
+0,0,210412831
+0,0,210512784
+0,0,210612730
+0,0,210712718
+0,0,210812715
+0,0,210912702
+0,0,211012653
+0,0,211112613
+0,0,211212571
+0,0,211312518
+0,0,211412504
+0,0,211512461
+0,0,211612414
+0,0,211712360
+0,0,211812307
+0,0,211912257
+0,0,212012222
+0,0,212112180
+0,0,212212134
+0,0,212312055
+0,0,212411971
+0,0,212511899
+0,0,212611876
+0,0,212711800
+0,0,212811725
+0,0,212911677
+0,0,213011632
+0,0,213111620
+0,0,213211614
+0,0,213311579
+0,0,213411550
+0,0,213511508
+0,0,213611468
+0,0,213711432
+0,0,213811412
+0,0,213911397
+0,0,214011363
+0,0,214111355
+0,0,214211349
+0,0,214311348
+0,0,214411341
+0,0,214511346
+0,0,214611342
+0,0,214711335
+0,0,214811256
+0,0,214911220
+0,0,215011184
+0,0,215111156
+0,0,215211150
+0,0,215311151
+0,0,215411121
+0,0,215511072
+0,0,215611015
+0,0,215710947
+0,0,215810872
+0,0,215910807
+0,0,216010737
+0,0,216110671
+0,0,216210613
+0,0,216310544
+0,0,216410468
+0,0,216510390
+0,0,216610352
+0,0,216710345
+0,0,216810347
+0,0,216910335
+0,0,217010300
+0,0,217110271
+0,0,217210196
+0,0,217310124
+0,0,217410052
+0,0,217509986
+0,0,217609924
+0,0,217709897
+0,0,217809836
+0,0,217909762
+0,0,218009723
+0,0,218109679
+0,0,218209644
+0,0,218309600
+0,0,218409575
+0,0,218509565
+0,0,218609515
+0,0,218709437
+0,0,218809409
+0,0,218909376
+0,0,219009328
+0,0,219109310
+0,0,219209313
+0,0,219309314
+0,0,219409311
+0,0,219509265
+0,0,219609218
+0,0,219709165
+0,0,219809127
+0,0,219909123
+0,0,220009120
+0,0,220109117
+0,0,220209110
+0,0,220309110
+0,0,220409112
+0,0,220509117
+0,0,220609121
+0,0,220709120
+0,0,220809095
+0,0,220909049
+0,0,221009020
+0,0,221109003
+0,0,221208942
+0,0,221308891
+0,0,221408868
+0,0,221508820
+0,0,221608773
+0,0,221708732
+0,0,221808676
+0,0,221908626
+0,0,222008612
+0,0,222108598
+0,0,222208569
+0,0,222308521
+0,0,222408500
+0,0,222508485
+0,0,222608442
+0,0,222708382
+0,0,222808321
+0,0,222908255
+0,0,223008189
+0,0,223108134
+0,0,223208081
+0,0,223308026
+0,0,223407968
+0,0,223507915
+0,0,223607841
+0,0,223707786
+0,0,223807724
+0,0,223907634
+0,0,224007542
+0,0,224107454
+0,0,224207372
+0,0,224307287
+0,0,224407207
+0,0,224507147
+0,0,224607143
+0,0,224707139
+0,0,224807054
+0,0,224907001
+0,0,225006951
+0,0,225106899
+0,0,225206866
+0,0,225306834
+0,0,225406828
+0,0,225506826
+0,0,225606799
+0,0,225706770
+0,0,225806765
+0,0,225906791
+0,0,226006787
+0,0,226106758
+0,0,226206734
+0,0,226306701
+0,0,226406675
+0,0,226506684
+0,0,226606692
+0,0,226706699
+0,0,226806687
+0,0,226906652
+0,0,227006617
+0,0,227106607
+0,0,227206608
+0,0,227306637
+0,0,227406618
+0,0,227506606
+0,0,227606583
+0,0,227706568
+0,0,227806556
+0,0,227906545
+0,0,228006552
+0,0,228106570
+0,0,228206597
+0,0,228306618
+0,0,228406638
+0,0,228506640
+0,0,228606626
+0,0,228706583
+0,0,228806582
+0,0,228906583
+0,0,229006575
+0,0,229106569
+0,0,229206557
+0,0,229306542
+0,0,229406526
+0,0,229506511
+0,0,229606480
+0,0,229706429
+0,0,229806366
+0,0,229906313
+0,0,230006264
+0,0,230106256
+0,0,230206206
+0,0,230306146
+0,0,230406133
+0,0,230506123
+0,0,230606101
+0,0,230706069
+0,0,230806021
+0,0,230905935
+0,0,231005871
+0,0,231105840
+0,0,231205813
+0,0,231305780
+0,0,231405706
+0,0,231505662
+0,0,231605630
+0,0,231705599
+0,0,231805562
+0,0,231905490
+0,0,232005408
+0,0,232105321
+0,0,232205241
+0,0,232305162
+0,0,232405110
+0,0,232505078
+0,0,232605007
+0,0,232704944
+0,0,232804915
+0,0,232904887
+0,0,233004849
+0,0,233104809
+0,0,233204771
+0,0,233304731
+0,0,233404678
+0,0,233504597
+0,0,233604533
+0,0,233704484
+0,0,233804486
+0,0,233904488
+0,0,234004502
+0,0,234104533
+0,0,234204521
+0,0,234304509
+0,0,234404471
+0,0,234504440
+0,0,234604395
+0,0,234704345
+0,0,234804330
+0,0,234904342
+0,0,235004341
+0,0,235104332
+0,0,235204309
+0,0,235304284
+0,0,235404246
+0,0,235504200
+0,0,235604182
+0,0,235704152
+0,0,235804144
+0,0,235904159
+0,0,236004182
+0,0,236104223
+0,0,236204255
+0,0,236304258
+0,0,236404257
+0,0,236504262
+0,0,236604262
+0,0,236704258
+0,0,236804241
+0,0,236904220
+0,0,237004204
+0,0,237104198
+0,0,237204186
+0,0,237304169
+0,0,237404152
+0,0,237504144
+0,0,237604151
+0,0,237704177
+0,0,237804196
+0,0,237904214
+0,0,238004207
+0,0,238104236
+0,0,238204262
+0,0,238304284
+0,0,238404300
+0,0,238504316
+0,0,238604299
+0,0,238704317
+0,0,238804321
+0,0,238904300
+0,0,239004277
+0,0,239104293
+0,0,239204301
+0,0,239304304
+0,0,239404293
+0,0,239504251
+0,0,239604222
+0,0,239704215
+0,0,239804188
+0,0,239904181
+0,0,240004209
+0,0,240104240
+0,0,240204224
+0,0,240304202
+0,0,240404186
+0,0,240504179
+0,0,240604167
+0,0,240704153
+0,0,240804152
+0,0,240904167
+0,0,241004178
+0,0,241104153
+0,0,241204158
+0,0,241304168
+0,0,241404171
+0,0,241504135
+0,0,241604089
+0,0,241704042
+0,0,241804000
+0,0,241903964
+0,0,242003931
+0,0,242103903
+0,0,242203870
+0,0,242303836
+0,0,242403799
+0,0,242503770
+0,0,242603734
+0,0,242703698
+0,0,242803655
+0,0,242903626
+0,0,243003594
+0,0,243103571
+0,0,243203559
+0,0,243303547
+0,0,243403519
+0,0,243503466
+0,0,243603427
+0,0,243703422
+0,0,243803395
+0,0,243903364
+0,0,244003322
+0,0,244103277
+0,0,244203253
+0,0,244303246
+0,0,244403196
+0,0,244503154
+0,0,244603113
+0,0,244703110
+0,0,244803128
+0,0,244903104
+0,0,245003096
+0,0,245103063
+0,0,245203003
+0,0,245302954
+0,0,245402909
+0,0,245502893
+0,0,245602899
+0,0,245702885
+0,0,245802893
+0,0,245902911
+0,0,246002896
+0,0,246102870
+0,0,246202888
+0,0,246302902
+0,0,246402897
+0,0,246502884
+0,0,246602855
+0,0,246702830
+0,0,246802789
+0,0,246902740
+0,0,247002678
+0,0,247102628
+0,0,247202606
+0,0,247302577
+0,0,247402549
+0,0,247502516
+0,0,247602480
+0,0,247702404
+0,0,247802344
+0,0,247902297
+0,0,248002274
+0,0,248102248
+0,0,248202227
+0,0,248302199
+0,0,248402177
+0,0,248502141
+0,0,248602110
+0,0,248702082
+0,0,248802014
+0,0,248901933
+0,0,249001857
+0,0,249101777
+0,0,249201704
+0,0,249301638
+0,0,249401569
+0,0,249501506
+0,0,249601441
+0,0,249701362
+0,0,249801289
+0,0,249901216
+0,0,250001150
+0,0,250101085
+0,0,250201023
+0,0,250300957
+0,0,250400875
+0,0,250500799
+0,0,250600731
+0,0,250700678
+0,0,250800628
+0,0,250900581
+0,0,251000535
+0,0,251100482
+0,0,251200442
+0,0,251300443
+0,0,251400420
+0,0,251500391
+0,0,251600353
+0,0,251700325
+0,0,251800296
+0,0,251900251
+0,0,252000202
+0,0,252100180
+0,0,252200185
+0,0,252300162
+0,0,252400153
+0,0,252500107
+0,0,252600082
+0,0,252700012
+0,0,252799958
+0,0,252899927
+0,0,252999866
+0,0,253099793
+0,0,253199724
+0,0,253299648
+0,0,253399593
+0,0,253499554
+0,0,253599527
+0,0,253699510
+0,0,253799457
+0,0,253899387
+0,0,253999307
+0,0,254099236
+0,0,254199174
+0,0,254299119
+0,0,254399043
+0,0,254498983
+0,0,254598944
+0,0,254698901
+0,0,254798869
+0,0,254898864
+0,0,254998876
+0,0,255098900
+0,0,255198912
+0,0,255298872
+0,0,255398842
+0,0,255498850
+0,0,255598855
+0,0,255698864
+0,0,255798873
+0,0,255898904
+0,0,255998905
+0,0,256098881
+0,0,256198835
+0,0,256298802
+0,0,256398766
+0,0,256498729
+0,0,256598684
+0,0,256698645
+0,0,256798603
+0,0,256898575
+0,0,256998538
+0,0,257098534
+0,0,257198517
+0,0,257298482
+0,0,257398439
+0,0,257498403
+0,0,257598366
+0,0,257698336
+0,0,257798311
+0,0,257898286
+0,0,257998267
+0,0,258098255
+0,0,258198261
+0,0,258298213
+0,0,258398162
+0,0,258498115
+0,0,258598086
+0,0,258698049
+0,0,258798012
+0,0,258898014
+0,0,258997988
+0,0,259097962
+0,0,259197945
+0,0,259297920
+0,0,259397898
+0,0,259497930
+0,0,259597957
+0,0,259697993
+0,0,259798000
+0,0,259897979
+0,0,259997960
+0,0,260097934
+0,0,260197909
+0,0,260297930
+0,0,260397957
+0,0,260497943
+0,0,260597933
+0,0,260697942
+0,0,260797933
+0,0,260897917
+0,0,260997911
+0,0,261097902
+0,0,261197883
+0,0,261297882
+0,0,261397908
+0,0,261497909
+0,0,261597895
+0,0,261697882
+0,0,261797872
+0,0,261897891
+0,0,261997930
+0,0,262097970
+0,0,262197984
+0,0,262297976
+0,0,262397994
+0,0,262498030
+0,0,262598061
+0,0,262698076
+0,0,262798064
+0,0,262898071
+0,0,262998044
+0,0,263098033
+0,0,263198037
+0,0,263298041
+0,0,263398063
+0,0,263498096
+0,0,263598131
+0,0,263698160
+0,0,263798203
+0,0,263898239
+0,0,263998248
+0,0,264098254
+0,0,264198272
+0,0,264298290
+0,0,264398293
+0,0,264498261
+0,0,264598208
+0,0,264698144
+0,0,264798118
+0,0,264898073
+0,0,264998033
+0,0,265098013
+0,0,265197985
+0,0,265297929
+0,0,265397866
+0,0,265497861
+0,0,265597832
+0,0,265697777
+0,0,265797741
+0,0,265897724
+0,0,265997708
+0,0,266097709
+0,0,266197682
+0,0,266297668
+0,0,266397696
+0,0,266497718
+0,0,266597741
+0,0,266697768
+0,0,266797793
+0,0,266897823
+0,0,266997849
+0,0,267097876
+0,0,267197901
+0,0,267297906
+0,0,267397920
+0,0,267497931
+0,0,267597954
+0,0,267697971
+0,0,267797990
+0,0,267898010
+0,0,267997993
+0,0,268097965
+0,0,268197952
+0,0,268297946
+0,0,268397950
+0,0,268497990
+0,0,268598022
+0,0,268698004
+0,0,268798004
+0,0,268898009
+0,0,268998016
+0,0,269097994
+0,0,269198019
+0,0,269298044
+0,0,269398067
+0,0,269498074
+0,0,269598097
+0,0,269698071
+0,0,269798043
+0,0,269897992
+0,0,269997928
+0,0,270097890
+0,0,270197879
+0,0,270297894
+0,0,270397874
+0,0,270497835
+0,0,270597806
+0,0,270697798
+0,0,270797776
+0,0,270897750
+0,0,270997716
+0,0,271097713
+0,0,271197726
+0,0,271297719
+0,0,271397689
+0,0,271497620
+0,0,271597583
+0,0,271697550
+0,0,271797535
+0,0,271897550
+0,0,271997572
+0,0,272097591
+0,0,272197623
+0,0,272297642
+0,0,272397671
+0,0,272497681
+0,0,272597693
+0,0,272697714
+0,0,272797704
+0,0,272897699
+0,0,272997667
+0,0,273097644
+0,0,273197623
+0,0,273297611
+0,0,273397608
+0,0,273497592
+0,0,273597573
+0,0,273697516
+0,0,273797477
+0,0,273897434
+0,0,273997384
+0,0,274097332
+0,0,274197275
+0,0,274297249
+0,0,274397220
+0,0,274497196
+0,0,274597204
+0,0,274697212
+0,0,274797227
+0,0,274897245
+0,0,274997262
+0,0,275097263
+0,0,275197271
+0,0,275297284
+0,0,275397262
+0,0,275497237
+0,0,275597209
+0,0,275697183
+0,0,275797161
+0,0,275897128
+0,0,275997090
+0,0,276097057
+0,0,276197028
+0,0,276296991
+0,0,276396949
+0,0,276496942
+0,0,276596903
+0,0,276696865
+0,0,276796813
+0,0,276896772
+0,0,276996733
+0,0,277096739
+0,0,277196748
+0,0,277296757
+0,0,277396772
+0,0,277496785
+0,0,277596782
+0,0,277696751
+0,0,277796709
+0,0,277896667
+0,0,277996648
+0,0,278096616
+0,0,278196572
+0,0,278296564
+0,0,278396543
+0,0,278496497
+0,0,278596447
+0,0,278696413
+0,0,278796374
+0,0,278896321
+0,0,278996274
+0,0,279096224
+0,0,279196155
+0,0,279296088
+0,0,279396011
+0,0,279495962
+0,0,279595920
+0,0,279695904
+0,0,279795880
+0,0,279895858
+0,0,279995831
+0,0,280095793
+0,0,280195761
+0,0,280295740
+0,0,280395698
+0,0,280495634
+0,0,280595570
+0,0,280695505
+0,0,280795444
+0,0,280895382
+0,0,280995313
+0,0,281095231
+0,0,281195183
+0,0,281295158
+0,0,281395108
+0,0,281495049
+0,0,281595012
+0,0,281694977
+0,0,281794954
+0,0,281894925
+0,0,281994904
+0,0,282094876
+0,0,282194848
+0,0,282294810
+0,0,282394778
+0,0,282494786
+0,0,282594796
+0,0,282694811
+0,0,282794788
+0,0,282894799
+0,0,282994813
+0,0,283094788
+0,0,283194771
+0,0,283294754
+0,0,283394777
+0,0,283494769
+0,0,283594745
+0,0,283694714
+0,0,283794722
+0,0,283894724
+0,0,283994721
+0,0,284094681
+0,0,284194665
+0,0,284294625
+0,0,284394605
+0,0,284494578
+0,0,284594565
+0,0,284694540
+0,0,284794500
+0,0,284894462
+0,0,284994426
+0,0,285094384
+0,0,285194348
+0,0,285294327
+0,0,285394301
+0,0,285494278
+0,0,285594237
+0,0,285694200
+0,0,285794164
+0,0,285894123
+0,0,285994092
+0,0,286094061
+0,0,286194024
+0,0,286294008
+0,0,286393972
+0,0,286493926
+0,0,286593908
+0,0,286693900
+0,0,286793899
+0,0,286893866
+0,0,286993818
+0,0,287093768
+0,0,287193737
+0,0,287293680
+0,0,287393638
+0,0,287493591
+0,0,287593546
+0,0,287693501
+0,0,287793450
+0,0,287893404
+0,0,287993364
+0,0,288093328
+0,0,288193289
+0,0,288293247
+0,0,288393221
+0,0,288493193
+0,0,288593162
+0,0,288693157
+0,0,288793184
+0,0,288893215
+0,0,288993238
+0,0,289093271
+0,0,289193287
+0,0,289293275
+0,0,289393272
+0,0,289493260
+0,0,289593254
+0,0,289693197
+0,0,289793139
+0,0,289893078
+0,0,289993012
+0,0,290092973
+0,0,290192964
+0,0,290292952
+0,0,290392931
+0,0,290492928
+0,0,290592910
+0,0,290692895
+0,0,290792878
+0,0,290892864
+0,0,290992850
+0,0,291092842
+0,0,291192816
+0,0,291292810
+0,0,291392805
+0,0,291492813
+0,0,291592790
+0,0,291692761
+0,0,291792732
+0,0,291892696
+0,0,291992668
+0,0,292092640
+0,0,292192603
+0,0,292292570
+0,0,292392537
+0,0,292492497
+0,0,292592491
+0,0,292692478
+0,0,292792461
+0,0,292892426
+0,0,292992374
+0,0,293092328
+0,0,293192282
+0,0,293292270
+0,0,293392231
+0,0,293492204
+0,0,293592207
+0,0,293692205
+0,0,293792172
+0,0,293892193
+0,0,293992212
+0,0,294092210
+0,0,294192219
+0,0,294292228
+0,0,294392205
+0,0,294492170
+0,0,294592164
+0,0,294692157
+0,0,294792145
+0,0,294892143
+0,0,294992137
+0,0,295092103
+0,0,295192098
+0,0,295292072
+0,0,295392047
+0,0,295492049
+0,0,295592047
+0,0,295692046
+0,0,295792055
+0,0,295892064
+0,0,295992077
+0,0,296092058
+0,0,296192039
+0,0,296292025
+0,0,296392015
+0,0,296492032
+0,0,296592020
+0,0,296691998
+0,0,296791976
+0,0,296891946
+0,0,296991924
+0,0,297091912
+0,0,297191889
+0,0,297291876
+0,0,297391863
+0,0,297491839
+0,0,297591819
+0,0,297691819
+0,0,297791832
+0,0,297891828
+0,0,297991803
+0,0,298091810
+0,0,298191838
+0,0,298291841
+0,0,298391836
+0,0,298491839
+0,0,298591821
+0,0,298691833
+0,0,298791806
+0,0,298891790
+0,0,298991770
+0,0,299091762
+0,0,299191772
+0,0,299291759
+0,0,299391740
+0,0,299491749
+0,0,299591767
+0,0,299691747
+0,0,299791729
+0,0,299891708
+0,0,299991697
+0,0,300091693
+0,0,300191729
+0,0,300291753
+0,0,300391781
+0,0,300491767
+0,0,300591731
+0,0,300691701
+0,0,300791704
+0,0,300891719
+0,0,300991727
+0,0,301091727
+0,0,301191725
+0,0,301291720
+0,0,301391695
+0,0,301491713
+0,0,301591749
+0,0,301691785
+0,0,301791813
+0,0,301891837
+0,0,301991866
+0,0,302091891
+0,0,302191909
+0,0,302291902
+0,0,302391893
+0,0,302491903
+0,0,302591930
+0,0,302691954
+0,0,302791979
+0,0,302891992
+0,0,302991990
+0,0,303092017
+0,0,303192035
+0,0,303292064
+0,0,303392054
+0,0,303492019
+0,0,303591979
+0,0,303691948
+0,0,303791920
+0,0,303891900
+0,0,303991886
+0,0,304091867
+0,0,304191854
+0,0,304291845
+0,0,304391871
+0,0,304491916
+0,0,304591938
+0,0,304691920
+0,0,304791910
+0,0,304891902
+0,0,304991883
+0,0,305091856
+0,0,305191855
+0,0,305291861
+0,0,305391870
+0,0,305491876
+0,0,305591870
+0,0,305691870
+0,0,305791874
+0,0,305891878
+0,0,305991900
+0,0,306091938
+0,0,306191969
+0,0,306291937
+0,0,306391915
+0,0,306491881
+0,0,306591848
+0,0,306691839
+0,0,306791813
+0,0,306891798
+0,0,306991760
+0,0,307091734
+0,0,307191723
+0,0,307291703
+0,0,307391686
+0,0,307491665
+0,0,307591613
+0,0,307691546
+0,0,307791483
+0,0,307891435
+0,0,307991411
+0,0,308091386
+0,0,308191354
+0,0,308291351
+0,0,308391364
+0,0,308491371
+0,0,308591354
+0,0,308691361
+0,0,308791363
+0,0,308891324
+0,0,308991285
+0,0,309091248
+0,0,309191229
+0,0,309291206
+0,0,309391167
+0,0,309491124
+0,0,309591069
+0,0,309691022
+0,0,309791019
+0,0,309891000
+0,0,309990968
+0,0,310090937
+0,0,310190916
+0,0,310290861
+0,0,310390811
+0,0,310490769
+0,0,310590735
+0,0,310690704
+0,0,310790677
+0,0,310890647
+0,0,310990601
+0,0,311090548
+0,0,311190487
+0,0,311290426
+0,0,311390375
+0,0,311490322
+0,0,311590277
+0,0,311690267
+0,0,311790252
+0,0,311890260
+0,0,311990240
+0,0,312090218
+0,0,312190235
+0,0,312290248
+0,0,312390221
+0,0,312490186
+0,0,312590154
+0,0,312690158
+0,0,312790130
+0,0,312890106
+0,0,312990099
+0,0,313090109
+0,0,313190079
+0,0,313290050
+0,0,313390039
+0,0,313490039
+0,0,313590037
+0,0,313690039
+0,0,313790058
+0,0,313890085
+0,0,313990114
+0,0,314090141
+0,0,314190175
+0,0,314290202
+0,0,314390203
+0,0,314490213
+0,0,314590191
+0,0,314690189
+0,0,314790194
+0,0,314890215
+0,0,314990235
+0,0,315090244
+0,0,315190250
+0,0,315290263
+0,0,315390272
+0,0,315490262
+0,0,315590259
+0,0,315690247
+0,0,315790233
+0,0,315890223
+0,0,315990207
+0,0,316090188
+0,0,316190136
+0,0,316290086
+0,0,316390022
+0,0,316489953
+0,0,316589918
+0,0,316689896
+0,0,316789834
+0,0,316889763
+0,0,316989705
+0,0,317089688
+0,0,317189661
+0,0,317289632
+0,0,317389609
+0,0,317489575
+0,0,317589533
+0,0,317689512
+0,0,317789487
+0,0,317889462
+0,0,317989439
+0,0,318089420
+0,0,318189411
+0,0,318289399
+0,0,318389400
+0,0,318489425
+0,0,318589441
+0,0,318689464
+0,0,318789488
+0,0,318889494
+0,0,318989466
+0,0,319089419
+0,0,319189374
+0,0,319289350
+0,0,319389327
+0,0,319489294
+0,0,319589279
+0,0,319689220
+0,0,319789213
+0,0,319889188
+0,0,319989133
+0,0,320089076
+0,0,320189018
+0,0,320288986
+0,0,320388976
+0,0,320488962
+0,0,320588951
+0,0,320688981
+0,0,320789012
+0,0,320889014
+0,0,320989043
+0,0,321089053
+0,0,321189073
+0,0,321289099
+0,0,321389131
+0,0,321489154
+0,0,321589138
+0,0,321689120
+0,0,321789146
+0,0,321889160
+0,0,321989150
+0,0,322089146
+0,0,322189127
+0,0,322289139
+0,0,322389164
+0,0,322489145
+0,0,322589124
+0,0,322689101
+0,0,322789089
+0,0,322889093
+0,0,322989094
+0,0,323089067
+0,0,323189029
+0,0,323289005
+0,0,323389017
+0,0,323489041
+0,0,323589064
+0,0,323689051
+0,0,323789034
+0,0,323889010
+0,0,323988966
+0,0,324088932
+0,0,324188905
+0,0,324288879
+0,0,324388843
+0,0,324488812
+0,0,324588768
+0,0,324688751
+0,0,324788759
+0,0,324888731
+0,0,324988690
+0,0,325088663
+0,0,325188616
+0,0,325288578
+0,0,325388554
+0,0,325488533
+0,0,325588517
+0,0,325688517
+0,0,325788503
+0,0,325888497
+0,0,325988511
+0,0,326088525
+0,0,326188513
+0,0,326288518
+0,0,326388513
+0,0,326488496
+0,0,326588513
+0,0,326688530
+0,0,326788557
+0,0,326888584
+0,0,326988603
+0,0,327088625
+0,0,327188645
+0,0,327288668
+0,0,327388686
+0,0,327488706
+0,0,327588730
+0,0,327688743
+0,0,327788759
+0,0,327888768
+0,0,327988749
+0,0,328088734
+0,0,328188720
+0,0,328288715
+0,0,328388684
+0,0,328488664
+0,0,328588634
+0,0,328688620
+0,0,328788598
+0,0,328888571
+0,0,328988540
+0,0,329088507
+0,0,329188480
+0,0,329288455
+0,0,329388418
+0,0,329488377
+0,0,329588347
+0,0,329688361
+0,0,329788367
+0,0,329888366
+0,0,329988334
+0,0,330088299
+0,0,330188264
+0,0,330288241
+0,0,330388241
+0,0,330488264
+0,0,330588282
+0,0,330688302
+0,0,330788322
+0,0,330888332
+0,0,330988348
+0,0,331088360
+0,0,331188386
+0,0,331288406
+0,0,331388427
+0,0,331488416
+0,0,331588425
+0,0,331688397
+0,0,331788356
+0,0,331888315
+0,0,331988272
+0,0,332088239
+0,0,332188208
+0,0,332288167
+0,0,332388128
+0,0,332488085
+0,0,332588047
+0,0,332688017
+0,0,332787992
+0,0,332887972
+0,0,332987946
+0,0,333087911
+0,0,333187887
+0,0,333287906
+0,0,333387926
+0,0,333487944
+0,0,333587935
+0,0,333687921
+0,0,333787907
+0,0,333887868
+0,0,333987850
+0,0,334087858
+0,0,334187829
+0,0,334287775
+0,0,334387715
+0,0,334487678
+0,0,334587665
+0,0,334687653
+0,0,334787658
+0,0,334887662
+0,0,334987681
+0,0,335087687
+0,0,335187671
+0,0,335287639
+0,0,335387606
+0,0,335487617
+0,0,335587625
+0,0,335687589
+0,0,335787560
+0,0,335887519
+0,0,335987491
+0,0,336087472
+0,0,336187457
+0,0,336287422
+0,0,336387371
+0,0,336487329
+0,0,336587261
+0,0,336687189
+0,0,336787124
+0,0,336887055
+0,0,336987003
+0,0,337086968
+0,0,337186943
+0,0,337286903
+0,0,337386876
+0,0,337486858
+0,0,337586852
+0,0,337686876
+0,0,337786899
+0,0,337886925
+0,0,337986942
+0,0,338086952
+0,0,338186958
+0,0,338286977
+0,0,338386968
+0,0,338486948
+0,0,338586918
+0,0,338686890
+0,0,338786859
+0,0,338886819
+0,0,338986788
+0,0,339086772
+0,0,339186753
+0,0,339286745
+0,0,339386741
+0,0,339486730
+0,0,339586723
+0,0,339686706
+0,0,339786694
+0,0,339886674
+0,0,339986652
+0,0,340086663
+0,0,340186685
+0,0,340286717
+0,0,340386744
+0,0,340486769
+0,0,340586797
+0,0,340686842
+0,0,340786849
+0,0,340886843
+0,0,340986843
+0,0,341086864
+0,0,341186860
+0,0,341286892
+0,0,341386929
+0,0,341486921
+0,0,341586883
+0,0,341686895
+0,0,341786876
+0,0,341886843
+0,0,341986820
+0,0,342086792
+0,0,342186764
+0,0,342286743
+0,0,342386718
+0,0,342486690
+0,0,342586700
+0,0,342686694
+0,0,342786679
+0,0,342886691
+0,0,342986682
+0,0,343086688
+0,0,343186691
+0,0,343286654
+0,0,343386605
+0,0,343486560
+0,0,343586515
+0,0,343686480
+0,0,343786422
+0,0,343886362
+0,0,343986302
+0,0,344086254
+0,0,344186221
+0,0,344286190
+0,0,344386178
+0,0,344486166
+0,0,344586151
+0,0,344686140
+0,0,344786114
+0,0,344886094
+0,0,344986076
+0,0,345086044
+0,0,345185988
+0,0,345285968
+0,0,345385938
+0,0,345485916
+0,0,345585875
+0,0,345685863
+0,0,345785860
+0,0,345885840
+0,0,345985811
+0,0,346085769
+0,0,346185742
+0,0,346285712
+0,0,346385688
+0,0,346485672
+0,0,346585678
+0,0,346685651
+0,0,346785621
+0,0,346885623
+0,0,346985645
+0,0,347085652
+0,0,347185653
+0,0,347285611
+0,0,347385558
+0,0,347485504
+0,0,347585459
+0,0,347685409
+0,0,347785346
+0,0,347885278
+0,0,347985217
+0,0,348085179
+0,0,348185161
+0,0,348285143
+0,0,348385084
+0,0,348485026
+0,0,348584985
+0,0,348684947
+0,0,348784883
+0,0,348884826
+0,0,348984785
+0,0,349084739
+0,0,349184720
+0,0,349284671
+0,0,349384607
+0,0,349484548
+0,0,349584506
+0,0,349684449
+0,0,349784427
+0,0,349884415
+0,0,349984396
+0,0,350084378
+0,0,350184324
+0,0,350284284
+0,0,350384247
+0,0,350484183
+0,0,350584104
+0,0,350684041
+0,0,350783976
+0,0,350883939
+0,0,350983930
+0,0,351083890
+0,0,351183892
+0,0,351283888
+0,0,351383865
+0,0,351483850
+0,0,351583852
+0,0,351683853
+0,0,351783860
+0,0,351883859
+0,0,351983863
+0,0,352083862
+0,0,352183816
+0,0,352283778
+0,0,352383740
+0,0,352483732
+0,0,352583738
+0,0,352683739
+0,0,352783744
+0,0,352883736
+0,0,352983725
+0,0,353083714
+0,0,353183695
+0,0,353283681
+0,0,353383650
+0,0,353483610
+0,0,353583582
+0,0,353683590
+0,0,353783606
+0,0,353883623
+0,0,353983599
+0,0,354083545
+0,0,354183470
+0,0,354283456
+0,0,354383416
+0,0,354483374
+0,0,354583334
+0,0,354683290
+0,0,354783253
+0,0,354883209
+0,0,354983177
+0,0,355083148
+0,0,355183112
+0,0,355283066
+0,0,355383026
+0,0,355482995
+0,0,355582958
+0,0,355682918
+0,0,355782885
+0,0,355882853
+0,0,355982860
+0,0,356082865
+0,0,356182868
+0,0,356282855
+0,0,356382866
+0,0,356482878
+0,0,356582847
+0,0,356682802
+0,0,356782756
+0,0,356882711
+0,0,356982677
+0,0,357082638
+0,0,357182594
+0,0,357282549
+0,0,357382509
+0,0,357482483
+0,0,357582484
+0,0,357682462
+0,0,357782438
+0,0,357882418
+0,0,357982407
+0,0,358082399
+0,0,358182390
+0,0,358282374
+0,0,358382354
+0,0,358482334
+0,0,358582307
+0,0,358682275
+0,0,358782242
+0,0,358882212
+0,0,358982224
+0,0,359082244
+0,0,359182254
+0,0,359282236
+0,0,359382240
+0,0,359482213
+0,0,359582199
+0,0,359682198
+0,0,359782196
+0,0,359882195
+0,0,359982183
+0,0,360082182
+0,0,360182185
+0,0,360282171
+0,0,360382163
+0,0,360482143
+0,0,360582107
+0,0,360682064
+0,0,360782008
+0,0,360881968
+0,0,360981917
+0,0,361081855
+0,0,361181804
+0,0,361281748
+0,0,361381737
+0,0,361481733
+0,0,361581731
+0,0,361681721
+0,0,361781672
+0,0,361881642
+0,0,361981586
+0,0,362081529
+0,0,362181466
+0,0,362281405
+0,0,362381379
+0,0,362481340
+0,0,362581290
+0,0,362681234
+0,0,362781243
+0,0,362881239
+0,0,362981225
+0,0,363081215
+0,0,363181195
+0,0,363281171
+0,0,363381155
+0,0,363481157
+0,0,363581149
+0,0,363681144
+0,0,363781105
+0,0,363881055
+0,0,363981005
+0,0,364080966
+0,0,364180914
+0,0,364280883
+0,0,364380830
+0,0,364480770
+0,0,364580751
+0,0,364680720
+0,0,364780671
+0,0,364880657
+0,0,364980646
+0,0,365080641
+0,0,365180623
+0,0,365280616
+0,0,365380610
+0,0,365480610
+0,0,365580604
+0,0,365680560
+0,0,365780521
+0,0,365880466
+0,0,365980415
+0,0,366080395
+0,0,366180389
+0,0,366280354
+0,0,366380316
+0,0,366480315
+0,0,366580319
+0,0,366680291
+0,0,366780247
+0,0,366880198
+0,0,366980185
+0,0,367080184
+0,0,367180180
+0,0,367280173
+0,0,367380146
+0,0,367480102
+0,0,367580051
+0,0,367679994
+0,0,367779920
+0,0,367879843
+0,0,367979785
+0,0,368079722
+0,0,368179694
+0,0,368279685
+0,0,368379693
+0,0,368479702
+0,0,368579699
+0,0,368679688
+0,0,368779687
+0,0,368879661
+0,0,368979609
+0,0,369079572
+0,0,369179529
+0,0,369279476
+0,0,369379433
+0,0,369479393
+0,0,369579353
+0,0,369679310
+0,0,369779261
+0,0,369879217
+0,0,369979177
+0,0,370079138
+0,0,370179096
+0,0,370279043
+0,0,370378983
+0,0,370478927
+0,0,370578861
+0,0,370678800
+0,0,370778745
+0,0,370878707
+0,0,370978656
+0,0,371078617
+0,0,371178578
+0,0,371278545
+0,0,371378558
+0,0,371478578
+0,0,371578560
+0,0,371678555
+0,0,371778574
+0,0,371878593
+0,0,371978610
+0,0,372078613
+0,0,372178624
+0,0,372278614
+0,0,372378605
+0,0,372478561
+0,0,372578514
+0,0,372678462
+0,0,372778432
+0,0,372878380
+0,0,372978326
+0,0,373078300
+0,0,373178287
+0,0,373278240
+0,0,373378192
+0,0,373478137
+0,0,373578089
+0,0,373678026
+0,0,373777980
+0,0,373877940
+0,0,373977910
+0,0,374077888
+0,0,374177847
+0,0,374277822
+0,0,374377771
+0,0,374477715
+0,0,374577646
+0,0,374677610
+0,0,374777551
+0,0,374877486
+0,0,374977425
+0,0,375077359
+0,0,375177287
+0,0,375277223
+0,0,375377147
+0,0,375477086
+0,0,375577043
+0,0,375676989
+0,0,375776944
+0,0,375876900
+0,0,375976849
+0,0,376076841
+0,0,376176826
+0,0,376276802
+0,0,376376751
+0,0,376476699
+0,0,376576683
+0,0,376676663
+0,0,376776611
+0,0,376876602
+0,0,376976558
+0,0,377076513
+0,0,377176475
+0,0,377276431
+0,0,377376402
+0,0,377476366
+0,0,377576343
+0,0,377676341
+0,0,377776314
+0,0,377876248
+0,0,377976168
+0,0,378076109
+0,0,378176077
+0,0,378276080
+0,0,378376047
+0,0,378476006
+0,0,378575965
+0,0,378675933
+0,0,378775903
+0,0,378875901
+0,0,378975917
+0,0,379075932
+0,0,379175936
+0,0,379275941
+0,0,379375948
+0,0,379475950
+0,0,379575927
+0,0,379675881
+0,0,379775867
+0,0,379875858
+0,0,379975855
+0,0,380075851
+0,0,380175844
+0,0,380275835
+0,0,380375825
+0,0,380475810
+0,0,380575803
+0,0,380675793
+0,0,380775780
+0,0,380875768
+0,0,380975720
+0,0,381075660
+0,0,381175602
+0,0,381275573
+0,0,381375564
+0,0,381475510
+0,0,381575457
+0,0,381675411
+0,0,381775358
+0,0,381875308
+0,0,381975269
+0,0,382075261
+0,0,382175254
+0,0,382275259
+0,0,382375244
+0,0,382475197
+0,0,382575156
+0,0,382675111
+0,0,382775118
+0,0,382875106
+0,0,382975125
+0,0,383075111
+0,0,383175126
+0,0,383275146
+0,0,383375157
+0,0,383475154
+0,0,383575139
+0,0,383675157
+0,0,383775129
+0,0,383875076
+0,0,383975022
+0,0,384074998
+0,0,384174946
+0,0,384274904
+0,0,384374856
+0,0,384474827
+0,0,384574779
+0,0,384674752
+0,0,384774723
+0,0,384874655
+0,0,384974622
+0,0,385074582
+0,0,385174533
+0,0,385274516
+0,0,385374521
+0,0,385474495
+0,0,385574469
+0,0,385674435
+0,0,385774407
+0,0,385874351
+0,0,385974283
+0,0,386074242
+0,0,386174200
+0,0,386274172
+0,0,386374191
+0,0,386474217
+0,0,386574235
+0,0,386674245
+0,0,386774244
+0,0,386874245
+0,0,386974236
+0,0,387074214
+0,0,387174170
+0,0,387274139
+0,0,387374098
+0,0,387474041
+0,0,387573994
+0,0,387673949
+0,0,387773939
+0,0,387873944
+0,0,387973944
+0,0,388073929
+0,0,388173923
+0,0,388273937
+0,0,388373963
+0,0,388473968
+0,0,388573989
+0,0,388673984
+0,0,388773990
+0,0,388874002
+0,0,388973987
+0,0,389073969
+0,0,389173945
+0,0,389273918
+0,0,389373891
+0,0,389473863
+0,0,389573838
+0,0,389673790
+0,0,389773744
+0,0,389873701
+0,0,389973639
+0,0,390073600
+0,0,390173597
+0,0,390273561
+0,0,390373529
+0,0,390473480
+0,0,390573426
+0,0,390673379
+0,0,390773346
+0,0,390873321
+0,0,390973296
+0,0,391073302
+0,0,391173300
+0,0,391273293
+0,0,391373286
+0,0,391473275
+0,0,391573234
+0,0,391673167
+0,0,391773084
+0,0,391873005
+0,0,391972954
+0,0,392072910
+0,0,392172852
+0,0,392272764
+0,0,392372679
+0,0,392472594
+0,0,392572543
+0,0,392672479
+0,0,392772442
+0,0,392872384
+0,0,392972328
+0,0,393072275
+0,0,393172221
+0,0,393272175
+0,0,393372176
+0,0,393472163
+0,0,393572160
+0,0,393672128
+0,0,393772082
+0,0,393872083
+0,0,393972093
+0,0,394072081
+0,0,394172073
+0,0,394272052
+0,0,394372027
+0,0,394472008
+0,0,394571978
+0,0,394671951
+0,0,394771926
+0,0,394871892
+0,0,394971891
+0,0,395071861
+0,0,395171880
+0,0,395271905
+0,0,395371928
+0,0,395471929
+0,0,395571905
+0,0,395671861
+0,0,395771821
+0,0,395871773
+0,0,395971744
+0,0,396071731
+0,0,396171727
+0,0,396271726
+0,0,396371717
+0,0,396471697
+0,0,396571664
+0,0,396671631
+0,0,396771583
+0,0,396871512
+0,0,396971445
+0,0,397071411
+0,0,397171381
+0,0,397271383
+0,0,397371391
+0,0,397471407
+0,0,397571383
+0,0,397671352
+0,0,397771350
+0,0,397871324
+0,0,397971334
+0,0,398071326
+0,0,398171320
+0,0,398271321
+0,0,398371332
+0,0,398471332
+0,0,398571297
+0,0,398671250
+0,0,398771203
+0,0,398871156
+0,0,398971113
+0,0,399071067
+0,0,399171061
+0,0,399271064
+0,0,399371065
+0,0,399471066
+0,0,399571075
+0,0,399671074
+0,0,399771061
+0,0,399871033
+0,0,399970991
+0,0,400070951
+0,0,400170945
+0,0,400270919
+0,0,400370898
+0,0,400470869
+0,0,400570833
+0,0,400670765
+0,0,400770705
+0,0,400870662
+0,0,400970614
+0,0,401070546
+0,0,401170488
+0,0,401270439
+0,0,401370391
+0,0,401470352
+0,0,401570361
+0,0,401670351
+0,0,401770322
+0,0,401870317
+0,0,401970316
+0,0,402070297
+0,0,402170304
+0,0,402270316
+0,0,402370325
+0,0,402470343
+0,0,402570359
+0,0,402670378
+0,0,402770395
+0,0,402870361
+0,0,402970334
+0,0,403070292
+0,0,403170266
+0,0,403270263
+0,0,403370270
+0,0,403470238
+0,0,403570196
+0,0,403670153
+0,0,403770123
+0,0,403870090
+0,0,403970056
+0,0,404070029
+0,0,404169995
+0,0,404269989
+0,0,404369999
+0,0,404470007
+0,0,404570014
+0,0,404670013
+0,0,404769983
+0,0,404869952
+0,0,404969918
+0,0,405069894
+0,0,405169874
+0,0,405269881
+0,0,405369900
+0,0,405469911
+0,0,405569854
+0,0,405669806
+0,0,405769766
+0,0,405869714
+0,0,405969649
+0,0,406069629
+0,0,406169613
+0,0,406269594
+0,0,406369602
+0,0,406469582
+0,0,406569562
+0,0,406669537
+0,0,406769508
+0,0,406869489
+0,0,406969468
+0,0,407069484
+0,0,407169474
+0,0,407269442
+0,0,407369407
+0,0,407469385
+0,0,407569396
+0,0,407669373
+0,0,407769364
+0,0,407869376
+0,0,407969373
+0,0,408069345
+0,0,408169359
+0,0,408269344
+0,0,408369347
+0,0,408469368
+0,0,408569398
+0,0,408669421
+0,0,408769420
+0,0,408869415
+0,0,408969440
+0,0,409069445
+0,0,409169420
+0,0,409269396
+0,0,409369369
+0,0,409469391
+0,0,409569380
+0,0,409669355
+0,0,409769320
+0,0,409869294
+0,0,409969272
+0,0,410069262
+0,0,410169254
+0,0,410269242
+0,0,410369234
+0,0,410469204
+0,0,410569178
+0,0,410669145
+0,0,410769123
+0,0,410869134
+0,0,410969134
+0,0,411069105
+0,0,411169075
+0,0,411269081
+0,0,411369076
+0,0,411469055
+0,0,411569039
+0,0,411669011
+0,0,411768986
+0,0,411868966
+0,0,411968934
+0,0,412068920
+0,0,412168929
+0,0,412268931
+0,0,412368916
+0,0,412468940
+0,0,412568975
+0,0,412668976
+0,0,412768950
+0,0,412868923
+0,0,412968901
+0,0,413068872
+0,0,413168831
+0,0,413268802
+0,0,413368781
+0,0,413468757
+0,0,413568744
+0,0,413668722
+0,0,413768642
+0,0,413868567
+0,0,413968505
+0,0,414068470
+0,0,414168469
+0,0,414268438
+0,0,414368398
+0,0,414468346
+0,0,414568299
+0,0,414668259
+0,0,414768224
+0,0,414868185
+0,0,414968156
+0,0,415068138
+0,0,415168096
+0,0,415268091
+0,0,415368057
+0,0,415468033
+0,0,415568005
+0,0,415667971
+0,0,415767967
+0,0,415867885
+0,0,415967810
+0,0,416067774
+0,0,416167736
+0,0,416267652
+0,0,416367585
+0,0,416467518
+0,0,416567442
+0,0,416667367
+0,0,416767328
+0,0,416867299
+0,0,416967236
+0,0,417067167
+0,0,417167146
+0,0,417267148
+0,0,417367148
+0,0,417467138
+0,0,417567111
+0,0,417667074
+0,0,417767032
+0,0,417867010
+0,0,417967001
+0,0,418066988
+0,0,418166961
+0,0,418266943
+0,0,418366943
+0,0,418466886
+0,0,418566856
+0,0,418666821
+0,0,418766771
+0,0,418866726
+0,0,418966729
+0,0,419066720
+0,0,419166712
+0,0,419266720
+0,0,419366720
+0,0,419466715
+0,0,419566679
+0,0,419666671
+0,0,419766679
+0,0,419866696
+0,0,419966696
+0,0,420066716
+0,0,420166740
+0,0,420266758
+0,0,420366771
+0,0,420466786
+0,0,420566796
+0,0,420666785
+0,0,420766764
+0,0,420866741
+0,0,420966698
+0,0,421066642
+0,0,421166603
+0,0,421266550
+0,0,421366511
+0,0,421466485
+0,0,421566477
+0,0,421666504
+0,0,421766523
+0,0,421866544
+0,0,421966552
+0,0,422066541
+0,0,422166563
+0,0,422266548
+0,0,422366532
+0,0,422466516
+0,0,422566491
+0,0,422666452
+0,0,422766471
+0,0,422866481
+0,0,422966495
+0,0,423066504
+0,0,423166515
+0,0,423266533
+0,0,423366546
+0,0,423466563
+0,0,423566584
+0,0,423666598
+0,0,423766594
+0,0,423866620
+0,0,423966648
+0,0,424066682
+0,0,424166672
+0,0,424266654
+0,0,424366637
+0,0,424466641
+0,0,424566658
+0,0,424666676
+0,0,424766695
+0,0,424866723
+0,0,424966743
+0,0,425066749
+0,0,425166743
+0,0,425266713
+0,0,425366686
+0,0,425466697
+0,0,425566708
+0,0,425666720
+0,0,425766722
+0,0,425866730
+0,0,425966745
+0,0,426066751
+0,0,426166765
+0,0,426266741
+0,0,426366699
+0,0,426466670
+0,0,426566628
+0,0,426666580
+0,0,426766563
+0,0,426866550
+0,0,426966542
+0,0,427066509
+0,0,427166498
+0,0,427266462
+0,0,427366443
+0,0,427466460
+0,0,427566482
+0,0,427666507
+0,0,427766529
+0,0,427866547
+0,0,427966543
+0,0,428066513
+0,0,428166456
+0,0,428266396
+0,0,428366334
+0,0,428466285
+0,0,428566223
+0,0,428666162
+0,0,428766101
+0,0,428866033
+0,0,428965965
+0,0,429065906
+0,0,429165834
+0,0,429265768
+0,0,429365733
+0,0,429465721
+0,0,429565704
+0,0,429665685
+0,0,429765670
+0,0,429865658
+0,0,429965611
+0,0,430065559
+0,0,430165503
+0,0,430265428
+0,0,430365376
+0,0,430465347
+0,0,430565292
+0,0,430665220
+0,0,430765138
+0,0,430865063
+0,0,430964997
+0,0,431064934
+0,0,431164872
+0,0,431264809
+0,0,431364751
+0,0,431464698
+0,0,431564675
+0,0,431664647
+0,0,431764606
+0,0,431864563
+0,0,431964542
+0,0,432064511
+0,0,432164485
+0,0,432264494
+0,0,432364506
+0,0,432464492
+0,0,432564455
+0,0,432664422
+0,0,432764395
+0,0,432864356
+0,0,432964349
+0,0,433064338
+0,0,433164343
+0,0,433264331
+0,0,433364311
+0,0,433464289
+0,0,433564256
+0,0,433664225
+0,0,433764190
+0,0,433864138
+0,0,433964092
+0,0,434064084
+0,0,434164067
+0,0,434264024
+0,0,434363958
+0,0,434463896
+0,0,434563833
+0,0,434663786
+0,0,434763765
+0,0,434863736
+0,0,434963727
+0,0,435063713
+0,0,435163721
+0,0,435263728
+0,0,435363722
+0,0,435463701
+0,0,435563678
+0,0,435663655
+0,0,435763628
+0,0,435863600
+0,0,435963568
+0,0,436063580
+0,0,436163556
+0,0,436263529
+0,0,436363536
+0,0,436463554
+0,0,436563570
+0,0,436663585
+0,0,436763559
+0,0,436863567
+0,0,436963575
+0,0,437063566
+0,0,437163553
+0,0,437263546
+0,0,437363521
+0,0,437463540
+0,0,437563556
+0,0,437663554
+0,0,437763532
+0,0,437863528
+0,0,437963474
+0,0,438063417
+0,0,438163403
+0,0,438263390
+0,0,438363349
+0,0,438463304
+0,0,438563250
+0,0,438663214
+0,0,438763206
+0,0,438863188
+0,0,438963130
+0,0,439063071
+0,0,439163014
+0,0,439262955
+0,0,439362906
+0,0,439462852
+0,0,439562806
+0,0,439662810
+0,0,439762819
+0,0,439862826
+0,0,439962833
+0,0,440062815
+0,0,440162799
+0,0,440262786
+0,0,440362750
+0,0,440462747
+0,0,440562707
+0,0,440662670
+0,0,440762636
+0,0,440862602
+0,0,440962568
+0,0,441062538
+0,0,441162502
+0,0,441262481
+0,0,441362459
+0,0,441462434
+0,0,441562408
+0,0,441662393
+0,0,441762404
+0,0,441862417
+0,0,441962430
+0,0,442062441
+0,0,442162449
+0,0,442262423
+0,0,442362423
+0,0,442462411
+0,0,442562371
+0,0,442662296
+0,0,442762218
+0,0,442862146
+0,0,442962093
+0,0,443062051
+0,0,443161993
+0,0,443261921
+0,0,443361857
+0,0,443461802
+0,0,443561762
+0,0,443661714
+0,0,443761643
+0,0,443861574
+0,0,443961498
+Executing action: monitor
+Running idf_monitor in directory C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time
+Executing "C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe C:\Users\Petr.Kucera\Embeded\esp\esp-idf\tools/idf_monitor.py -p COM4 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time\build\sync-time.elf --force-color -m 'C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe' 'C:\Users\Petr.Kucera\Embeded\esp\esp-idf\tools\idf.py' '-p' 'COM4'"...
+Done

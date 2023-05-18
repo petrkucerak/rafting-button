@@ -15,16 +15,22 @@ data4 = np.loadtxt(filenames[4], dtype=float, delimiter=',')
 
 fig, ax = plt.subplots(figsize=(12, 8))
 
-ax.set_title('RTT synchronization in DS')
-ax.set_ylabel('Size of D~\n(ms)')
+ax.set_title('Time synchronization in DS')
+ax.set_ylabel('Difference between MASTER and SLAVE\n(ms)')
 ax.set_xlabel('Time\n(s)')
 # ax.set_yscale('log')
 
 # plt.plot(data0[:, 0]/1000, label="~RTT [COM4]")
-plt.plot(data1[:, 0]/1000, label="~RTT [COM6]")
-plt.plot(data2[:, 0]/1000, label="~RTT [COM7]")
-plt.plot(data3[:, 0]/1000, label="~RTT [COM8]")
-plt.plot(data4[:, 0]/1000, label="~RTT [CON9]")
+plt.plot((data0[:,2] - data1[:, 2])/1000, label="[COM6]")
+plt.plot((data0[:,2] - data2[:, 2])/1000, label="[COM7]")
+plt.plot((data0[:,2] - data3[:, 2])/1000, label="[COM8]")
+plt.plot((data0[:,2] - data4[:, 2])/1000, label="[CON9]")
+
+# plt.plot(data0[:, 2]/1000, label="~O [COM4]")
+# plt.plot(data1[:, 2]/1000, label="~O [COM6]")
+# plt.plot(data2[:, 2]/1000, label="~O [COM7]")
+# plt.plot(data3[:, 2]/1000, label="~O [COM8]")
+# plt.plot(data4[:, 2]/1000, label="~O [CON9]")
 
 # plt.plot(data[:, 0]/10, data[:, 3]/10, label="RTT l [B]")
 # plt.plot(data[:, 0]/10, data[:, 9]/10, label="RTT l [C]")
