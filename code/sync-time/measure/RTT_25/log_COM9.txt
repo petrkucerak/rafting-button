@@ -1701,7 +1701,3 @@
 1222,-145,1704567817
 1151,-98,1705567572
 1208,-637,1706567222
-Executing action: monitor
-Running idf_monitor in directory C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time
-Executing "C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe C:\Users\Petr.Kucera\Embeded\esp\esp-idf\tools/idf_monitor.py -p COM10 -b 115200 --toolchain-prefix xtensa-esp32-elf- --target esp32 --revision 0 C:\Users\Petr.Kucera\Documents\rafting-button\code\sync-time\build\sync-time.elf --force-color -m 'C:\Users\Petr.Kucera\.espressif\python_env\idf5.1_py3.10_env\Scripts\python.exe' 'C:\Users\Petr.Kucera\Embeded\esp\esp-idf\tools\idf.py' '-p' 'COM10'"...
-Done
