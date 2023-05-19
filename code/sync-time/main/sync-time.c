@@ -32,7 +32,7 @@
 #define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
-#define DEVIATION_MAX_CONSTATN 1000
+#define DEVIATION_MAX_CONSTATN 100
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
@@ -259,11 +259,11 @@ void espnow_handler_task(void)
             if (node.deviation_avg > DEVIATION_MAX_CONSTATN)
                node.time_corection =
                    esp_timer_get_time() -
-                   (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTATN);
+                   (content + (uint64_t)get_rtt_avg() + DEVIATION_MAX_CONSTATN);
             else if (node.deviation_avg < -DEVIATION_MAX_CONSTATN)
                node.time_corection =
                    esp_timer_get_time() -
-                   (content + (uint64_t)get_rtt_avg() + DEVIATION_MAX_CONSTATN);
+                   (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTATN);
             else
                node.time_corection =
                    esp_timer_get_time() - (content + (uint64_t)get_rtt_avg() +

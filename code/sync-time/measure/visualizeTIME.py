@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-folder = "RTT_100_zoomed-K_100/"
+folder = "RTT_100_zoomed_reverse/"
 files = ["log_COM4.txt", "log_COM6.txt",
          "log_COM7.txt", "log_COM8.txt", "log_COM9.txt"]
 filenames = [folder+files[0], folder+files[1],
