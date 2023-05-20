@@ -7,17 +7,17 @@
 \def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
 
 \label[Algoritmus]
-\chap Algoritmus řešící konsenzus
+\chap Algoritmus
 
-Kapitola specifikuje požadavky na algoritmus, popisuje známé algoritmy vhodné pro daný problém, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro implementaci.
+Kapitola popisuje známé algoritmy vhodné pro daný problém, specifikuje požadavky na algoritmus, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro implementaci.
 
 \sec Požadavky na algoritmus
 
-Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive toho, v jakém pořadí byla tlačítka stisknuta.
+Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive shody celého systému na tom, v jakém pořadí byla tlačítka stisknuta.
 
 Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla být všechny zařízení na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
 
-{\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí bezdrátové technologie ESP-NOW.
+{\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí wifi technologie a komunikujících pomocí protokolu ESP-NOW.
 
 Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních nezávislých zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmeme distribuovaný systém je takový, v kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní užívaný počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
 
@@ -38,6 +38,64 @@ Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnou
 * {\sbf Uspořádání} - musí být dodrženo kauzální uspořádání v závislosti na čase, tj. musí být dodrženo pořadí.
 \enditems
 
+\label[AlgoritmyProLogy]
+\sec Srovnání známých algoritmů
+
+Distribuované systému jsou s námi už několik desítek let. Přesto se stále jedná o moderní obor, který se neustále rozvijí, a to například i s masivním příchodem {\em cloud computingu}. Pro horizontální škálování je třeba umět rozložit výpočetní sílu mezi více serverů. Proto existují algoritmy, které základní úlohy DS řeší. Jedná se především o problémy: detekce selhání, kauzality a času, globálního snapshotu, vyloučení procesů, volbu lídra a konsenzus. Ve vztahu k mé práci nejsou všechny relevantní, proto se zaměřím pouze na {\sbf kauzalitu a čas} a {\sbf konsenzus}, které budu ve svém projektu řešit.
+
+\secc Kauzalita a čas
+
+Problematiku {\sbf kauzality a času} je třeba v DS řešit především z toho důvodu, že ve většině případů nemáme garanci toho, že fyzické hodiny zařízení mají stejnou rychlost, že aktuální hodnota hodin je v různých zařízeních rozdílná, že přenos zprávy ze zařízení A do zařízení C bude trvat stejně dlouho jako ze zařízení B do zařízení C nebo že zprávy jsou přijaté ve stejném pořadí jako byly odeslány.
+
+První dvě zmiňované nejistoty, konkrétně {\sbf mimoběžnost hodin} ({\em clock skew}) a {\sbf drift hodin}, se řeší synchronizací času. Podle zdroje referenčního času rozlišujeme synchronizaci na interní a externí. {\sbf Interní} se snaží o minimalizaci časového rozdílu $\delta$ mezi dvěma zařízeními ($d_i$, $d_j$), tedy
+
+$$
+| T_i - T_j | \leq \delta, 
+$$
+
+kde $T_i$ je aktuální čas v zařízení $d_i$ a $T_j$ je aktuální čas v zařízení $d_j$. Druhou možností je užití {\sbf externí synchronizace}, kdy dochází minimalizaci časového rozdílu $\delta$ mezi externím zdrojem $E$ a lokálními hodinami $T_i$, tedy
+
+$$
+| T_i - E | \leq \delta.
+$$
+
+Příkladem interní synchronizace je například Berkeley algoritmus a externí NTP nebo Cristianův. \cite[mK78dAzoEPc6URCI, Jakob2021-1616]
+
+Důležitým pravidlem je, že nikdy nesmíme nastavit čas dozadu. Mohlo by se stát, že nastane víckrát situace se stejným časem. Proto je vhodnější čas zpomalit.
+
+Pro implementaci poměrně jednoduchý a v DS, kde se čas synchronizuje napřímo mezi zařízeními, je z pohledu latence vysoce efektivní {\sbf Cristianův algoritmus}. Algoritmus předpokládá, že je doba přenosu symetrická. Přesně funguje tak, že pokud zařízení $A$ chce synchronizovat čas od zařízení $B$,
+\begitems
+* pošle mu zprávu s žádostí o referenční čas a uloží si aktuální čas $T_{0}$ při odeslání zprávy.
+* Zařízení $B$ pošle zařízení $A$ zpět svůj čas.
+* Zařízení $A$ nastaví čas jako přijatou hodnotu s dobou přenosu, tedy
+$$
+T_A = T_B + {RTT\over2} = T_B + {T_B - T0\over2}.
+$$
+\enditems
+Pokud není komunikace plně symetrická, lze přesnost zlepšit odesláním více hodnot a~spočítáním průměru $RTT$. Autorem algoritmu je Flaviu Cristian. \cite[Cristian1989]
+
+Druhým algoritmem, který by šlo použít k synchronizaci času je v průmyslu často využívaný {\sbf protokol PTP} ({\em Precision Time Protocol}), který je definován standardem IEEE 1588. Algoritmus si klade především za cíl:
+\begitems
+* minimální požadavky na hardware zařízení,
+* použitelnost s minimální správou, a to i v malých sítích,
+* podporu i v levných a rozšířených sítích
+* a přesnost v řádu maximálně mikrosekund.
+\enditems
+
+Samotný princip PTP je založený na {\sbf pravidelném zasílání časových značek}, z kterých se následně určí časový posun hodin a zpoždění dané vlivem přenosu mezi jednotlivými zařízeními. V první verzi protokol nefunguje efektivně v hierarchických sítích z důvodu kumulace chyby. Pozdější verze chybu opravuje.
+
+V krátkosti PTP funguje tak, že si v první fázi zvolí zařízení, které bude v módu {\em MASTER} a to pomocí algoritmu BMC.\fnote{Best Master Clock Algorithm} Ostatní jsou v módu {\em SLAVE}. Po volbách každé ze {\em SLAVE} zařízení zjistí posun vlastních hodin, a to pomocí zpráv, které jsou pravidelně odesílány z nadřazeného zařízení. V druhém kroku zjistí chybu danou dobou přenosu a to tak, že nadřazenému zařízení odešle speciální zprávu $"Delay_Req"$. Následně za splnění předpokladů, že zpoždění způsobené dobou přenosu je symetrické v obou směrech, posun hodin je po dobu výměny zpráv konstantní a že {\em MASTER} a {\em SLAVE} mohou přesně určit čas přijetí a odeslání jsme schopni určit offset, tedy čas, o který se mají hodiny posunout, aby byly synchronizovány.\cite[Zezulka2010, 9120376]
+
+Kromě synchronizace času můžeme v DS řešit i {\sbf kauzalitu}. Tedy aby bylo zachování pořadí událostí. K této problematice může vyžít fyzických hodin se synchronizovaným časem nebo logických hodin. {\sbf Logické hodiny} jsou takové, které se inkrementují v případě nějaké události jako je přijmutí či odeslání zprávy. Jednotlivé události pak jsou mezi sebou ve vztahu {\em stalo se před}.
+
+Jejich využití v DS vypadá tak, že každé zařízení má svoje logické lokální hodiny. V případě přijmutí zprávy se lokální hodiny inkrementují o jedna. Pokud je hodnota lokálních hodin nižší než hodnota obsažená ve zprávě, nechá se nastavena lokální hodnota. Pokud je vyšší hodnota ve zprávě, bude nastavena jako lokální logický čas.
+
+Typů logických hodin je více. Pokud mají jednu dimenzi mluvíme o {\sbf Lamportových hodinách}. Ty respektují kauzalitu, ale nerozlišují současnou událost. Proto pokud přidáme do logických hodin dimenzi pro každé zařízení, můžeme mluvit tak o {\sbf vektorových hodinách}. Ty implikují kauzalitu a zajišťují i rozlišení současných událostí. Existují také {\sbf maticové hodiny}. Fungují jako vektorové, navíc krom lokálních hodin si udržují i~informace ostatních známých logických hodin.\cite[Jakob2021-1616, Lamport1978]
+
+\secc Konsenzus
+
+
+
 \sec Rozbor problému
 
 Abstrahujme síťovou vrstvu DS a předpokládejme, že jsou všechna zařízení DS propojena, komunikace mezi nimi může ale nemusí být spolehlivá, tj. po odeslání každé zprávy může odesílatel obdržet od adresáta potvrzení, zdali byl přenos úspěšný či nikoliv. Úkolem je při stisku periferie ({\em tlačítka}) rozdistribuovat informaci do ostatních zařízení DS a určit pořadí.
@@ -57,14 +115,6 @@ Z krátké úvodní analýzy problému vyplývá, že algoritmus musí v DS ře�
 * distribuci logů,
 * distribuci seznamu zařízení DS.
 \enditems
-
-
-\label[AlgoritmyProLogy]
-\sec Srovnání možných algoritmů
-
-\secc Synchronizace fyzických hodin (PTP, NTP)
-
-\secc Lamportovy vektorové hodiny
 
 \label[syncspecdetailstime]
 \sec Problematika synchronizace času
