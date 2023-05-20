@@ -20,7 +20,7 @@ Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla bý
 
 {\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí wifi technologie a komunikujících pomocí protokolu ESP-NOW.
 
-Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních nezávislých zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmeme distribuovaný systém je takový, v kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní užívaný počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
+Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních nezávislých zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmeme distribuovaný systém je označován takový, v kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní užívaný počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
 
 Literatura se v dané terminologii rozchází a také na každý z problémů v DS jsou kladeny jiné požadavky, obecně ale můžeme řici, že rozlišujeme dva základní požadavky na DS:
 
@@ -31,7 +31,7 @@ Literatura se v dané terminologii rozchází a také na každý z problémů v 
 
 Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnout současně živosti a bezpečnosti distribuovaného výpočtu, pokud může docházet k selháním.~\cite[Fischer1985] V praxi se proto spíše vyžaduje bezpečnost a díky částečné synchronicitě zařízení v DS lze předpokládat, že algoritmus doběhne, tj. dosáhne výsledků v konečném čase.\fnote{Takovýto požadavek označujeme jako tzv. {\sbf {\em konečnou} živost} ({\em eventual liveness}).}~\cite[Jakob2021-13]
 
-\secc Požadavky na distribuovaný systém
+\secc Obecné požadavky na distribuovaný systém
 
 \begitems
 * {\sbf Bezpečnost} - systém musí garantovat, že nedojde k nežádoucímu stavu, tj. stavu s kterým se nepočítá.
@@ -40,7 +40,7 @@ Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnou
 \enditems
 
 \label[AlgoritmyProLogy]
-\sec Srovnání známých algoritmů
+\sec Představení známých algoritmů
 
 Distribuované systému jsou s námi už několik desítek let. Přesto se stále jedná o moderní obor, který se neustále rozvijí, a to například i s masivním příchodem {\em cloud computingu}. Pro horizontální škálování je třeba umět rozložit výpočetní sílu mezi více serverů. Proto existují algoritmy, které základní úlohy DS řeší. Jedná se především o problémy: detekce selhání, kauzality a času, globálního snapshotu, vyloučení procesů, volbu lídra a konsenzus. Ve vztahu k mé práci nejsou všechny relevantní, proto se zaměřím pouze na {\sbf kauzalitu a čas} a {\sbf konsenzus}, které budu ve svém projektu řešit.
 
@@ -48,7 +48,7 @@ Distribuované systému jsou s námi už několik desítek let. Přesto se stál
 
 Problematiku {\sbf kauzality a času} je třeba v DS řešit především z toho důvodu, že ve většině případů nemáme garanci toho, že fyzické hodiny zařízení mají stejnou rychlost, že aktuální hodnota hodin je v různých zařízeních rozdílná, že přenos zprávy ze zařízení A do zařízení C bude trvat stejně dlouho jako ze zařízení B do zařízení C nebo že zprávy jsou přijaté ve stejném pořadí jako byly odeslány.
 
-První dvě zmiňované nejistoty, konkrétně {\sbf mimoběžnost hodin} ({\em clock skew}) a {\sbf drift hodin}, se řeší synchronizací času. Podle zdroje referenčního času rozlišujeme synchronizaci na interní a externí. {\sbf Interní} se snaží o minimalizaci časového rozdílu $\delta$ mezi dvěma zařízeními ($d_i$, $d_j$), tedy
+První tři zmiňované nejistoty, konkrétně {\sbf mimoběžnost hodin} ({\em clock skew}) a {\sbf drift hodin}, se řeší synchronizací času. Podle zdroje referenčního času rozlišujeme synchronizaci na interní a externí. {\sbf Interní} se snaží o minimalizaci časového rozdílu $\delta$ mezi dvěma zařízeními ($d_i$, $d_j$), tedy
 
 $$
 | T_i - T_j | \leq \delta, 
@@ -85,13 +85,13 @@ Druhým algoritmem, který by šlo použít k synchronizaci času je v průmyslu
 
 Samotný princip PTP je založený na {\sbf pravidelném zasílání časových značek}, z kterých se následně určí časový posun hodin a zpoždění dané vlivem přenosu mezi jednotlivými zařízeními. V první verzi protokol nefunguje efektivně v hierarchických sítích z důvodu kumulace chyby. Pozdější verze chybu opravuje.
 
-V krátkosti PTP funguje tak, že si v první fázi zvolí zařízení, které bude v módu {\em MASTER} a to pomocí algoritmu BMC.\fnote{Best Master Clock Algorithm} Ostatní jsou v módu {\em SLAVE}. Po volbách každé ze {\em SLAVE} zařízení zjistí posun vlastních hodin, a to pomocí zpráv, které jsou pravidelně odesílány z nadřazeného zařízení. V druhém kroku zjistí chybu danou dobou přenosu a to tak, že nadřazenému zařízení odešle speciální zprávu $"Delay_Req"$. Následně za splnění předpokladů, že zpoždění způsobené dobou přenosu je symetrické v obou směrech, posun hodin je po dobu výměny zpráv konstantní a že {\em MASTER} a {\em SLAVE} mohou přesně určit čas přijetí a odeslání jsme schopni určit offset, tedy čas, o který se mají hodiny posunout, aby byly synchronizovány.\cite[Zezulka2010, 9120376]
+V krátkosti PTP funguje tak, že si v první fázi zvolí zařízení, které bude v módu {\em MASTER} a to pomocí algoritmu BMC.\fnote{Best Master Clock Algorithm} Ostatní jsou v módu {\em SLAVE}. Po volbách každé ze {\em SLAVE} zařízení zjistí posun vlastních hodin, a to pomocí zpráv, které jsou pravidelně odesílány z nadřazeného zařízení. V druhém kroku zjistí chybu danou dobou přenosu a to tak, že nadřazenému zařízení odešle speciální zprávu $"Delay_Req"$. Následně za splnění předpokladů, že zpoždění způsobené dobou přenosu je symetrické v obou směrech, posun hodin je po dobu výměny zpráv konstantní a že {\em MASTER} a {\em SLAVE} mohou přesně určit čas přijetí a odeslání, jsme schopni určit offset, tedy čas, o který se mají hodiny posunout, aby byly synchronizovány.\cite[Zezulka2010, 9120376]
 
-Kromě synchronizace času můžeme v DS řešit i {\sbf kauzalitu}. Tedy aby bylo zachování pořadí událostí. K této problematice může vyžít fyzických hodin se synchronizovaným časem nebo logických hodin. {\sbf Logické hodiny} jsou takové, které se inkrementují v případě nějaké události jako je přijmutí či odeslání zprávy. Jednotlivé události pak jsou mezi sebou ve vztahu {\em stalo se před}.
+Kromě synchronizace času můžeme v DS řešit i {\sbf kauzalitu}. Tedy aby bylo zachováno pořadí událostí. K této problematice může vyžít fyzických hodin se synchronizovaným časem nebo logických hodin. {\sbf Logické hodiny} jsou takové, které se inkrementují v případě nějaké události jako je přijmutí či odeslání zprávy. Jednotlivé události pak jsou mezi sebou ve vztahu {\em stalo se před}.
 
 Jejich využití v DS vypadá tak, že každé zařízení má svoje logické lokální hodiny. V případě přijmutí zprávy se lokální hodiny inkrementují o jedna. Pokud je hodnota lokálních hodin nižší než hodnota obsažená ve zprávě, nechá se nastavena lokální hodnota. Pokud je vyšší hodnota ve zprávě, bude nastavena jako lokální logický čas.
 
-Typů logických hodin je více. Pokud mají jednu dimenzi mluvíme o {\sbf Lamportových hodinách}. Ty respektují kauzalitu, ale nerozlišují současnou událost. Proto pokud přidáme do logických hodin dimenzi pro každé zařízení, můžeme mluvit tak o {\sbf vektorových hodinách}. Ty implikují kauzalitu a zajišťují i rozlišení současných událostí. Existují také {\sbf maticové hodiny}. Fungují jako vektorové, navíc krom lokálních hodin si udržují i~informace ostatních známých logických hodin.\cite[Jakob2021-1616, Lamport1978]
+Typů logických hodin je více. Pokud mají jednu dimenzi mluvíme o {\sbf Lamportových hodinách}. Ty respektují kauzalitu, ale nerozlišují současnou událost. Proto pokud přidáme do logických hodin dimenzi pro každé zařízení, můžeme mluvit o {\sbf vektorových hodinách}. Ty implikují kauzalitu a zajišťují i rozlišení současných událostí. Existují také {\sbf maticové hodiny}. Fungují jako vektorové, navíc krom lokálních hodin si udržují i~informace ostatních známých logických hodin.\cite[Jakob2021-1616, Lamport1978]
 
 \secc Konsenzus
 
@@ -105,7 +105,7 @@ Aby byl algoritmus řešící konsenzus platný, musí splňovat následující 
 * Každé zařízení musí skončit běh algoritmu konsenzu v {\sbf konečném čase}.
 \enditems
 
-Problém konsenzu je v DS jedním z nejdůležitějších, a to proto, že {\sbf je ekvivalentem} k řešení dalších problémů DS jako je například {\em vyloučení procesů}, {\em volba lídra} či {\em totálně uspořádaný multicast}. Tuto záležitost naznačuje i četnost vědeckých článků právě na toto téma. Jeden z nich například řeší problematiku toho, že v posledních letech narůstá množství dat, která sbírají IoT zařízení. Data nám pomáhají pochopit procesy, jako bylo například chování a šíření COVID-19. Při sběru velikého množství občas i privátních dat je důležitá anonymita. Proto systémy využívají {\em privátního blockchainu} společně s {\em raft algoritmem}, který jim dopomáhá řešit problematiku právě problematiku konsenzu, respektive slučování informací dohromady. Pokud se ale jedná o moc veliké množství dat, vedoucí uzel je pak při běhu algoritmu enormně zatížen.~\cite[Yang2022]
+Problém konsenzu je v DS jedním z nejdůležitějších, a to proto, že {\sbf je ekvivalentem} k řešení dalších problémů DS jako je například {\em vyloučení procesů}, {\em volba lídra} či {\em totálně uspořádaný multicast}. Tuto záležitost naznačuje i četnost vědeckých článků právě na toto téma. Jeden z nich například řeší problematiku toho, že v posledních letech narůstá množství dat, která sbírají IoT zařízení. Data nám pomáhají pochopit procesy, jako bylo například chování a šíření COVID-19. Při sběru velikého množství občas i privátních dat je důležitá anonymita. Proto systémy využívají {\em privátního blockchainu} společně s {\em raft algoritmem}, který jim dopomáhá řešit problematiku konsenzu, respektive slučování informací dohromady. Pokud se ale jedná o moc veliké množství dat, vedoucí uzel je pak při běhu algoritmu enormně zatížen.~\cite[Yang2022]
 
 Obecně můžeme tvrdit, že konsenzus v synchronních i asynchronních systémech bez selhání a v synchronních systémech se selháním je řešitelný. Konsenzus ale nemůžeme vyřešit s garancí všech požadovaných vlastností pro platnost v případě, že je DS asynchronní a dochází k selhání. Tato skutečnost implikuje {\sbf FLP teorém}, kterému se detailněji věnuji v kapitole \ref[FLPtheorem].~\cite[Jakob2021-13]
 
@@ -128,11 +128,11 @@ Běh raftu se skládá z fází:
 * {\em NÁSLEDOVNÍK} je pasivní zařízení, které pouze reaguje na zprávy od jiných zařízení.
 * {\em KANDIDÁT} je přechodná role v průběhu volby lídra.
 \enditems
-Kdy platí, že za běžného provozu existuje pouze $1$ lídr a $N$ následovníků.
+Platí, že za běžného provozu existuje pouze $1$ lídr a $N$ následovníků.
 
 Celkový běh raftu se rozděluje do jednotlivých časových\fnote{Jedná se o {\em logický čas}.} období, tzv. {\sbf epoch}. Každá epocha má svoje ID číslo, které se vždy inkrementálně zvyšuje. Každé zařízení uchovává číslo epochy. Díky tomu se Raft umí vypořádat i s např. vypnutím. Epocha se skládá ze dvou částí: volby lídra a běžného chodu. Může nastat epocha bez lídra, jelikož se nepovede lídra zvolit.
 
-Na začátku volby lídra jsou všechna zařízení {\em následovníci}. Ti očekávají zprávu od {\em lídra} nebo od {\em kandidáta} na lídra. Lídři v průběhu své vlády posílají {\em heartbeats}, aby si udrželi autoritu. Jakmile {\em následník} neobdrží zprávu do určitého timeoutu, předpokládá že {\em lídr} havaroval a iniciuje volbu nového lídra. Zařízení, které spustí volbu nového lídra: zvýší číslo epochy, změní svůj stav na {\em kandidát}, zahlasuje pro sebe, pošle $"RequestVote"$ všem ostatním serverům a čeká na jeden z následujících stavů:
+Na začátku volby lídra jsou všechna zařízení {\em následovníci}. Ti očekávají zprávu od {\em lídra} nebo od {\em kandidáta} na lídra. Lídři v průběhu své vlády posílají {\em heartbeats}, aby si udrželi autoritu. Jakmile {\em následník} neobdrží zprávu do určitého timeoutu, předpokládá že {\em lídr} havaroval a iniciuje volbu nového lídra. Zařízení, které spustí volbu nového lídra: zvýší číslo epochy, změní svůj stav na {\em kandidát}, zahlasuje pro sebe, pošle $"RequestVote"$ všem ostatním zařízením a čeká na jeden z následujících stavů:
 \begitems
 * obdrží hlasy od většiny serverů -> změní se na {\em lídr} a pošle {\em heartbeat} ostatní procesům,
 * přijme zprávu od validního lídra (tedy jiný lídr byl zvolen dříve), vrátí se tedy do stavu {\em následovník}
@@ -194,7 +194,9 @@ K {\sbf opravě logu následovníků} dochází tak, že nový {\em lídr} musí
 
 {\sbf Pátá poslední fáze řeší interakci s klientem}. V ní je definován {\sbf protokol klienta}, kde {\em klienti} posílají příkaz {\em lídrovi}. Pokud zařízení není {\em lídrem}, pošle zařízení {\em klientovi} současného {\em lídra} a ten již ví na koho směřovat zprávu.
 
-Může se stát, že {\em lídr} havaruje poté, co už ale vykonal příkaz před odesláním odpovědi. Existuje tedy riziko opakovaného vykonání příkazu. Řešením je, že každý příkaz má jedinečné ID příkazu. Při přijmutí příkazu, pak vždy {\em lídr} zkontroluje zdali již ID není na zařízení uloženo.
+Může se stát, že {\em lídr} havaruje poté, co už ale vykonal příkaz před odesláním odpovědi. Existuje tedy riziko opakovaného vykonání příkazu. Řešením je, že každý příkaz má jedinečné ID příkazu. Při přijmutí příkazu, pak vždy {\em lídr} zkontroluje zdali již ID není na zařízení uloženo.~\cite[Jokob2021RAFT, OngaroMay202014, Kucera2022]
+
+Nevýhodou Raftu může být například vysoká výpočetní náročnost na lídra. To lze ale řešit například drobnou úpravou algoritmu, jak popisují Yang, Doh a Chae ve svém článku.~\cite[Yang2022]
 
 Algoritmus Raft je jeden z nejmodernějších (2014) a vysoce využívaných paralelních algoritmů. Je implementován např. v distribuovaných databázích, které dokážou běžet nad clusterem nebo se využívá v již zmiňované technologii blockchainu.\fnote{Pro hezké otestování a lepší pochopení algoritmu existuje hezká stránka s přehledem a vizualizací \url{raft.github.io.}}
 
@@ -206,7 +208,7 @@ Pro {\sbf určení pořadí} je třeba buďto znát {\em kauzalitu událostí}\f
 
 Systém tedy musí umět {\sbf synchronizovat hodiny} na každém zařízení. K tomuto problému by šlo využít známých protokolů, jako je například {\em Precision Time Protocol (PTP)}. V případě vhodné\fnote{Vhodnou implementací se myslí taková, která funguje jako pravý broadcast popisovaný v IEEE 8002.11, nikoli {\em pseudo broacast} popisovaný v kapitole \ref[PseudoBroadcast].} implementace broadcastu na síťové vrstvě by šlo synchronizaci značně zjednodušit. Mohla by fungovat tak, že by se v síti zvolil {\em MASTER OF TIME}, který by jednou za $n$ sekund rozeslal broadcastem čas všem zařízením v síti.
 
-Kromě distribuce a synchronizovaného času DS musí řešit problematiku {\sbf distribuce logů} s časovými značkami. Logy je myšlena struktura, které obsahuje časovou značku, typ události v DS a popis události. Pro distribuci těchto logů je možné využít několik algoritmů diskutovaných v kapitole \ref[AlgoritmyProLogy]. 
+Kromě distribuce a synchronizovaného času DS musí řešit problematiku {\sbf distribuce logů} s časovými značkami. Logy je myšlena struktura, které obsahuje časovou značku, typ události v DS a popis události. Pro distribuci těchto logů je možné využít část raft algoritmu diskutovaného v kapitole \ref[AlgoritmyProLogy]. 
 
 Pro efektivní fungování síťové vrstvy by bylo vhodné, aby DS implementoval i mechanismus, který by byl schopen {\sbf distribuovat} neustále aktualizovaný {\sbf seznam zařízení} v DS.
 
@@ -262,7 +264,7 @@ Průběh zprávy pro synchronizaci {\sbf doby přenosu} je takový, že:
 \begitems
 * {\sbf [A]} Z uzlu {\em MASTER} se odešle zpráva s lokálním časem do uzlu {\em SLAVE}.
 * {\sbf [B]} {\em SLAVE} uzel přijme zprávu a se stejným obsahem ji okamžitě odešle zpět do uzlu, z kterého zprávu obdržel. Tedy do uzlu typy {\em MASTER}.
-* {\sbf [C]} Po obdržení času se v uzlu {\em MASTER} se z přijaté hodnoty a aktuálního lokálního času vypočítá doba přenosu jako
+* {\sbf [C]} Po obdržení času se v uzlu {\em MASTER} z přijaté hodnoty a aktuálního lokálního času vypočítá doba přenosu jako
 $$
 D_n = {{T_B - T_A}\over{2}},
 $$
@@ -272,7 +274,7 @@ kde $T_A$ je čas odeslaný v situaci {\sbf [A]}, tedy na začátku celého proc
 
 Výpočet doby zpoždění předpokládá že je doba přenosu symetrická. Tedy, že průměrné odesílání z {\em MASTER} do {\em SLAVE} trvá stejnou dobu jako odesílání z {\em SLAVE} do {\em MASTER}.
 
-Průběh zprávu pro synchronizaci {\sbf času} je takový, že:
+Průběh zprávy pro synchronizaci {\sbf času} je takový, že:
 
 \medskip
 \clabel[SchemaSYNCtime]{Schéma synchronizace času}
@@ -325,10 +327,10 @@ V simulaci je možné {\sbf měnit parametry} nastavující:
 * konstantu pro určení maximální odchylky.
 \enditems
 
-Běh {\sbf simulace pak probíhá} jako smyčka omezená dobou. Běh jednoho cyklu představuje dobu 1 µs. V prvním kroku se nastaví náhodné zpoždění pro daný běh na všech uzlech. Druhý inkrementuje lokální hodiny na všech uzlech a realizuje připadnou chyby oscilátoru. Třetí krok na všech uzlech spustí funkci $"process_pipe()"$, která realizuje zpoždění při odesílání zpráv, resp. zkontroluje jestli nějaká ze zpráv nedosáhla požadované doby odesílání. Pokud ano, odešle ji do fronty na cílový uzel. Čtvrtý krok tvoří stavový automat, který se stará o odbavení příchozích zpráv na každém z uzlů. Tento proces funguje podle algoritmu pro synchronizaci času popsaného v předchozí kapitole \ref[DatilAlgDescrp]. Pátý krok odesílá inicializační zprávy pro konkrétní procesy, tedy synchronizaci doby přenosu a času. Synchronizace času se spouští jednou za 500 ms a synchronizace doby zpoždění jednou za 100 ms. V případě definovaní makra $"BUILD_REPORT"$ se v předposledním kroku vypíší hodnoty do log souboru, z kterého jsou následně generovaný grafy. Pro efektivitu velikosti logovacího souboru jsou vypisovány pouze cykly, které obsahují změnu. Pro každý uzel krom uzlu {\em MASTER} se vypisují se tři hodnoty, konkrétně průměrné zpoždění, velikost chyby a rozdíl času v uzlu {\em MASTER} a daného {\em SLAVE} uzlu. Na závěr každého běhy cyklu je inkrementovaný čas běhu simulace.
+Běh {\sbf simulace pak probíhá} jako smyčka omezená dobou. Běh jednoho cyklu představuje dobu 1 µs. V prvním kroku se nastaví náhodné zpoždění pro daný běh na všech uzlech. Druhý inkrementuje lokální hodiny na všech uzlech a realizuje připadnou chyby oscilátoru. Třetí krok na všech uzlech spustí funkci $"process_pipe()"$, která realizuje zpoždění při odesílání zpráv, resp. zkontroluje jestli nějaká ze zpráv nedosáhla požadované doby odesílání. Pokud ano, odešle ji do fronty na cílový uzel. Čtvrtý krok tvoří stavový automat, který se stará o odbavení příchozích zpráv na každém z uzlů. Tento proces funguje podle algoritmu pro synchronizaci času popsaného v předchozí kapitole \ref[DatilAlgDescrp]. Pátý krok odesílá inicializační zprávy pro konkrétní procesy, tedy synchronizaci doby přenosu a času. Synchronizace času se spouští jednou za 500 ms a synchronizace doby zpoždění jednou za 100 ms. V případě definovaní makra $"BUILD_REPORT"$ se v předposledním kroku vypíší hodnoty do log souboru, z kterého jsou následně generovaný grafy. Pro efektivitu velikosti logovacího souboru jsou vypisovány pouze cykly, které obsahují změnu. Pro každý uzel krom uzlu {\em MASTER} se vypisují tři hodnoty, konkrétně průměrné zpoždění, velikost chyby a rozdíl času v uzlu {\em MASTER} a daného {\em SLAVE} uzlu. Na závěr každého běhy cyklu je inkrementovaný čas běhu simulace.
 
 
-{\sbf Odesílání zpráv se zpožděním} je realizováno pomocí prioritní fronty nazývané {\em pipe} a fronty obsahující příchozí zprávy. Každý uzel má své tyto dvě struktury. Celý proces je ilustrován v schématu \ref[SchemaOdesilaniZpravVSimulaci]. Probíhá tak, že dojde k odeslání zprávy pomocí funkce $"send_message()"$. Tato funkce alokuje paměť pro novou zprávu a vloží zprávu do prioritní fronty {\em pipe}. Prioritu určuje doba odesílání, konkrétně čím nižší hodnota, tím dříve bude zpráva zpracována. Pokud už uplynula doba odesílání odesílání, zpráva je vyjmuta z {\em pipe} a vložena do {\em queue} na cílovém uzlu, na které jsou uchovávány příchozí zprávy.
+{\sbf Odesílání zpráv se zpožděním} je realizováno pomocí prioritní fronty nazývané {\em pipe} a fronty obsahující příchozí zprávy. Každý uzel má své tyto dvě struktury. Celý proces je ilustrován v schématu \ref[SchemaOdesilaniZpravVSimulaci]. Probíhá tak, že dojde k odeslání zprávy pomocí funkce $"send_message()"$. Tato funkce alokuje paměť pro novou zprávu a vloží zprávu do prioritní fronty {\em pipe}. Prioritu určuje doba odesílání, konkrétně čím nižší hodnota, tím dříve bude zpráva zpracována. Pokud už uplynula doba odesílání, zpráva je vyjmuta z {\em pipe} a vložena do {\em queue} na cílovém uzlu, na které jsou uchovávány příchozí zprávy.
 
 \medskip
 \clabel[SchemaOdesilaniZpravVSimulaci]{Schéma odesílání zpráv v simulaci}
@@ -336,7 +338,7 @@ Běh {\sbf simulace pak probíhá} jako smyčka omezená dobou. Běh jednoho cyk
 \caption/f Schéma odesílání zpráv v simulaci.
 \medskip
 
-Výsledky simulace je možné vizualizovat pomocí třech python skriptů, které se nescházejí v repozitáři simulace. 
+Výsledky simulace je možné vizualizovat pomocí třech python skriptů, které se nacházejí v repozitáři simulace. 
 
 První $"visualizeO.py"$ zobrazuje velikost chyby $\bar{O}$ v závislosti na čase pro 3 {\em SLAVE} uzly, umožňuje zobrazit maximální a minimální akceptovatelnou chybu a střední hodnotu všech vypsaných hodnot.
 
@@ -347,7 +349,7 @@ Třetí soubor se souborem $"visualizeTIME.py"$ zobrazuje rozdíl uzlu {\em MAST
 \label[getsimparameters]
 \secc Získání parametrů pro simulaci
 
-Pro spuštění simulace, je třeba znát latenci, resp. reálnou dobu odesílání zpráv mezi zařízeními. K tomu jsem připravil zapojení, které funguj tak, že propojuje ESP32 zařízení vodičem, který synchronizuje jejich vnitřní hodiny a je ho možné dohledat v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/main/code/esp-now-parameters}}
+Pro spuštění simulace, je třeba znát latenci, resp. reálnou dobu odesílání zpráv mezi zařízeními. K získání této hodnoty jsem připravil zapojení pro měření, které funguj tak, že propojuje ESP32 zařízení vodičem, který synchronizuje jejich vnitřní hodiny a je ho možné dohledat v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/main/code/esp-now-parameters}}
 
 Měřící sestava obsahuje 3 ESP32 zařízení a jedno STM32.\fnote{Konkrétně se jedná o STM32G431KB, které se na ČVUT FEL používá k výuce předmětu LPE. Schéma a realizace zapojení je dostupné v příloze \ref[latencyZapojeniSchematic] a \ref[latencyZapojeni].} STM32 generuje pomocí PWM pulz, který slouží k synchronizaci hodin v distribuovaném systému. ESP32 mezi sebou vysílají zprávy, pomocí nichž se spočítá doba latence.
 
@@ -402,7 +404,7 @@ Simulace byla prováděna s konfigurací, kdy
 * doba simulace byla 10 min (bylo provedeno 6000 synchronizací doby odesílání a 2000 synchronizací času),
 * pro simulaci byly užity 4 uzle,
 * {\em MASTER} uzel začínal v čase nula, ostatní uzly na náhodném čase v rozmezí 100~µs až 1500~µs,
-* doba zpoždění zpráv byla náhodně zvolena pro každé odesílání a to v rozsahu od 900 µs až po 1050 µs,
+* doba zpoždění zpráv byla náhodně zvolena pro každé odesílání a to v rozsahu od 900 µs až po 1050 µs
 * a chyba oscilátorů se pohybovala náhodně mezi maximální chybou ±1~ppm až ±10~ppm.
 \enditems
 

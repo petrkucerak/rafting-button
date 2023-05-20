@@ -81,7 +81,7 @@ Podle požadavků fungování IoT zařízení je vhodné volit danou technologii
 \caption/f Srovnání parametrů LPWAN technologií.~\cite[articleLPWAN]
 \medskip
 
-Technologie Sigfox vyniká dosahem, pokrytím a nízkou energetickou náročností. LoRa je stejně jako Sigfox vhodná pro aplikace s extrémně nízkou energetickou náročností. Navíc dokáže odeslat více zpráv. NB-IoT nevyniká v dosahu. Zvládne ale dosahovat mnohem větších přenosových rychlostí, kapacit a jeho latence je ze všech doposud zmiňovaných technologií, nejnižší.~\cite[articleLPWAN]
+Technologie Sigfox vyniká dosahem, pokrytím a nízkou energetickou náročností. LoRa je stejně jako Sigfox vhodná pro aplikace s požadavkem na extrémně nízkou energetickou náročnost. Navíc dokáže odeslat více zpráv. NB-IoT nevyniká v dosahu. Zvládne ale dosahovat mnohem větších přenosových rychlostí, kapacit a jeho latence je ze všech doposud zmiňovaných technologií, nejnižší.~\cite[articleLPWAN]
 
 Pokud jsou požadavky na IoT technologii takové, že vyžadujeme vysoce energeticky nenáročnou komunikaci, která je na malou vzdálenost, připadají v úvahu především technologie jako Bluetooth, ZigBee či Wifi, které jsou definovány v rodině standardů {\em IEEE 802}.~\cite[znAmft9kik4ksAas] Analogicky podel LPWAN bychom skupinu takových zařízení mohli pojmenovávat jako {\sbf Low~Power~Personal~Area~Network (LPPAN)}.
 
@@ -102,15 +102,15 @@ Jak uvádí autoři v úvodní části \cite[Hlaing2017], výzva je vybudovat ro
 
 \secc Low-Power Wifi
 
-Pokud se podíváme na vývoj verzí {\em IEEE 802.11}, je si vhodné položit otázku, jaká verze je pro IoT aplikace nejvíce vhodná. Dle článku~\cite[zFQYZ2ILyLdNVlwM] je {\em 802.11n} (Wifi-4) optimálnější pro aplikaci v IoT zařízení než {\em 802.11ac} (Wifi-5). Verze {\em 802.11n} totiž nabízí 2 pásma pro komunikaci (2,4 GHz a 5 GHz). Oproti tomu pozdější verze {\em 802.11ac} pouze jeden kanál na 5 GHz. Pro IoT aplikace je užitečnější 2,4 GHz, protože signál lépe proniká materiálem a má větší dosah. Navíc verze {\em 802.11ac} má vyšší energetická náročnost, která je způsobena komplikovanějším algoritmem sloužím k zrychlení přenosu, které je pro většinu IoT aplikací nepotřebné.
+Pokud se podíváme na vývoj verzí {\em IEEE 802.11}, je si vhodné položit otázku, jaká verze je pro IoT aplikace nejvíce vhodná. Dle článku~\cite[zFQYZ2ILyLdNVlwM] je {\em 802.11n} (Wifi-4) optimálnější pro aplikaci v IoT zařízení než {\em 802.11ac} (Wifi-5). Verze {\em 802.11n} totiž nabízí 2 pásma pro komunikaci (2,4 GHz a 5 GHz). Oproti tomu pozdější verze {\em 802.11ac} pouze jeden kanál na 5 GHz. Pro IoT aplikace je užitečnější 2,4 GHz, protože signál lépe proniká materiálem a má větší dosah. Navíc verze {\em 802.11ac} má vyšší energetickou náročnost, která je způsobena komplikovanějším algoritmem sloužím k zrychlení přenosu, které je pro většinu IoT aplikací nepotřebné.
 
 Nově do hry také přichází nejnovější verze {\sbf Wifi-6} definovaná ve standardu {\em 802.11ax}. Slibuje hned několik novinek, které by měli IoT zařízením rapidně pomoci.
 
-Nejčastější překážka, kterou v této práci zmiňuji, je úspora energie. Wifi-6 implementuje {\sbf Target Wait Time (TWT)} mechanismus, který umožňuje IoT zařízení při nečinnosti usnout a tak ušetřit značné množství energie (viz \ref[RezimCinnosti]).
+Nejčastější překážka, kterou v této práci zmiňuji, je úspora energie. Wifi-6 implementuje {\sbf Target Wait Time (TWT)} mechanismus, který umožňuje IoT zařízení při nečinnosti usnout, a tak ušetřit značné množství energie (viz \ref[RezimCinnosti]).
 
 Druhou novinkou je {\sbf OFDMA},\fnote{Orthogonal frequency-division multiple access} který umožňuje odesílat stejná data do více zařízení ve stejný čas.
 
-Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Service Set coloring} coloring}. Novinka umožňuje {\em obarvit} signál z různých {\em access points} a tak předejít překrývání signálů.~\cite[HarEvenJune25th2020]
+Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Service Set coloring} coloring}. Novinka umožňuje {\em obarvit} signál z různých {\em access points}, a tak předejít překrývání signálů.~\cite[HarEvenJune25th2020]
 
 \medskip
 \clabel[BSS-color-img]{Vizualizace fungování BSS barvení ve Wifi-6}
@@ -120,7 +120,7 @@ Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Servi
 
 \secc Optimalizace nízké spotřeby na zařízení
 
-Energii pro delší fungování zařízení lze především ušetřit správnou volbou MCU a vhodnou konfigurací. Existuje několik pravidel, které mohou pomoci snížit spotřebu energie a vytvořit umožnit, tak IoT zařízení fungovat lépe.
+Energii pro delší fungování zařízení lze především ušetřit správnou volbou MCU a vhodnou konfigurací. Existuje několik pravidel, které mohou pomoci snížit spotřebu energie a umožnit IoT zařízení fungovat lépe.
 
 \begitems
 * volba vhodného modulu či MCU
@@ -129,7 +129,7 @@ Energii pro delší fungování zařízení lze především ušetřit správnou
 * vhodná optimalizace kódu
 \enditems
 
-Na první pohled by se mohlo zdát, že se vyplatí použít všechna pravidla. To ale nemusí být vždy nejvhodnější řešení. Především kombinace vypínání WiFi a přecházení do {\em deep sleep} módu, jak ukázal experiment Přeučila a Martin Novotného.~\cite[9797138]
+Na první pohled by se mohlo zdát, že se vyplatí použít všechna pravidla. To ale nemusí být vždy nejvhodnější řešení. Především kombinace vypínání wifi a přecházení do {\em deep sleep} módu, jak ukázal experiment Přeučila a Martin Novotného.~\cite[9797138]
 
 \label[hieearchyStruct]
 \sec Struktura sítě
@@ -138,15 +138,15 @@ Pro IoT řešení je typická {\sbf hierarchická struktura sítě}. Tato povaha
 
 \begitems
 * embeded zařízení, senzory, akční členy
-* koncentrátory, routry a gateway
+* koncentrátory, routery a gateway
 * server, cloud computing
 \enditems
 
-{\sbf První úroveň} se stará o měření dat pomocí senzorů, která jsou zpracovávána v embeded zařízeních nebo o vykonávání činností na základě přijatých dat.\fnote{Například pomocí generovaného PWM signálu rozsvícení adresovatelné LED diody} V IoT scénářích se ale častěji jedná o měření. Tato úroveň následně informace odesílá do hierarchicky nadřazené struktury.
+{\sbf První úroveň} se stará o měření dat pomocí senzorů, která jsou zpracovávána v embeded zařízeních nebo o vykonávání činností na základě přijatých dat.\fnote{Například pomocí generovaného PWM signálu rozsvícení adresovatelné LED diody} V IoT scénářích se ale častěji jedná o měření. Tato úroveň následně odesílá informace do hierarchicky nadřazené struktury.
 
 {\sbf Druhá úroveň} sbírá data z více embeded zařízení a zprostředkovává odeslání do úrovně třetí. Data mohou být na této úrovni i předzpracována. Typické zařízení pro tuto úroveň je router, koncentrátor, které bývají vstupní bránou (gateway) do třetí úrovně.
 
-Na {\sbf třetí úrovni} typicky běží server, který může být onpermisového či cloudového charakteru. Výhodou onpremisu je to, že mám zařízení u sebe. To může přinášet ekonomickou či bezpečnostní výhodu. Výhodami cloudu je naopak možnost {\em horizontálního} a {\em vertikální škálování}\fnote{Horizontální škálování znamená přidávání nových instancí. Vertikálním se myslí navyšování a snižování výkonu.} či {\em Pay As You Go}\fnote{Zaplať jen to, co utratíš.} subskripce. Server data zpracovává. Ukládá a připravuje vizualizace pomocí nástrojů, jako jsou například open-source {\em Kibana}\fnote{\url{https://www.elastic.co/kibana/}} a {\em Grafana}\fnote{\url{https://grafana.com/}}. Kromě vizualizace jsou data na této úrovni analyzována pomocí algoritmů. Mezi ně může i patřit strojové učení. Cílem je přeměnit data na zanalost, aby je bylo možné interpretovat.
+Na {\sbf třetí úrovni} typicky běží server, který může být onpermisového či cloudového charakteru. Výhodou onpremisu je to, že mám zařízení u sebe. To může přinášet ekonomickou či bezpečnostní výhodu. Výhodami cloudu je naopak možnost {\em horizontálního} a {\em vertikální škálování}\fnote{Horizontální škálování znamená přidávání nových instancí. Vertikálním se myslí navyšování a snižování výkonu.} či {\em Pay As You Go}\fnote{Zaplať jen to, co utratíš.} subskripce. Server data zpracovává. Ukládá a připravuje vizualizace pomocí nástrojů, jako jsou například open-source {\em Kibana}\fnote{\url{https://www.elastic.co/kibana/}} a {\em Grafana}.\fnote{\url{https://grafana.com/}} Kromě vizualizace jsou data na této úrovni analyzována pomocí algoritmů. Mezi ně může i patřit strojové učení. Cílem je přeměnit data na zanalost, aby je bylo možné interpretovat.
 
 Data jsou přenášena skrz strukturu oběma směry. Pro IoT je ve většině případech spíše vytěžován směr nahoru, respektive z embeded zařízení na server.
 
