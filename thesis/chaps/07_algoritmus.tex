@@ -9,13 +9,13 @@
 \label[Algoritmus]
 \chap Algoritmus řešící konsenzus
 
-Kapitola specifikuje požadavky na algoritmus, popisuje známé algoritmy vhodné pro daný problém, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro budoucí implementaci.
+Kapitola specifikuje požadavky na algoritmus, popisuje známé algoritmy vhodné pro daný problém, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro implementaci.
 
 \sec Požadavky na algoritmus
 
 Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive toho, v jakém pořadí byla tlačítka stisknuta.
 
-Systém by měla být {\sbf distribuovaná}, tj. ve výchozím módu by měli být všechny zařízení na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
+Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla být všechny zařízení na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
 
 {\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí bezdrátové technologie ESP-NOW.
 
@@ -66,9 +66,10 @@ Z krátké úvodní analýzy problému vyplývá, že algoritmus musí v DS ře�
 
 \secc Lamportovy vektorové hodiny
 
+\label[syncspecdetailstime]
 \sec Problematika synchronizace času
 
-Požadavek na přesnost synchronizace času 1 ms. Tato hodnota vychází z reakční doby člověka, která se u špičkových atletů při startu pohybuje okolo 0,1 až 0,25~s.~\cite[HwQTLhbjN4E4TuBy] Pokud tedy stanovíme hodnotu o dva řády nižší, nemělo by dojít ke kolizím. V případě kolize, která je vysoce nepravděpodobná, rozhoduje hodnota uzle (TODO: viz popis algoritmu).
+Požadavek na přesnost synchronizace času je 1 ms. Tato hodnota vychází z reakční doby člověka, která se u špičkových atletů při startu pohybuje okolo 0,1 až 0,25~s.~\cite[HwQTLhbjN4E4TuBy] Pokud tedy stanovíme hodnotu o dva řády nižší, nemělo by dojít ke kolizím. V případě kolize, která je vysoce nepravděpodobná, rozhoduje hodnota uzle (TODO: viz popis algoritmu).
 
 \label[DatilAlgDescrp]
 \secc Detailní popis zvoleného algoritmu
@@ -172,14 +173,14 @@ V simulaci je možné {\sbf měnit parametry} nastavující:
 * konstantu pro určení maximální odchylky.
 \enditems
 
-Běh simulace pak probíhá jako smyčka omezená dobou. Běh jednoho cyklu představuje dobu 1 µs. V prvním kroku se nastaví náhodné zpoždění pro daný běh na všech uzlech. Druhý inkrementuje lokální hodiny na všech uzlech a realizuje připadnou chyby oscilátoru. Třetí krok na všech uzlech spustí funkci $"process_pipe()"$, která realizuje zpoždění při odesílání zpráv, resp. zkontroluje jestli nějaká ze zpráv nedosáhla požadované doby odesílání. Pokud ano, odešle ji do fronty na cílový uzel. Čtvrtý krok tvoří stavový automat, který se stará o odbavení příchozích zpráv na každém z uzlů. Tento proces funguje podle algoritmu pro synchronizaci času popsaného v předchozí kapitole \ref[DatilAlgDescrp]. Pátý krok odesílá inicializační zprávy pro konkrétní procesy, tedy synchronizaci doby přenosu a času. Synchronizace času se spouští jednou za 500 ms a synchronizace doby zpoždění jednou za 100 ms. V případě definovaní makra $"BUILD_REPORT"$ se v předposledním kroku vypíší hodnoty do log souboru, z kterého jsou následně generovaný grafy. Pro efektivitu velikosti logovacího souboru jsou vypisovány pouze cykly, které obsahují změnu. Pro každý uzel krom uzlu {\em MASTER} se vypisují se tři hodnoty, konkrétně průměrné zpoždění, velikost chyby a rozdíl času v uzlu {\em MASTER} a daného {\em SLAVE} uzlu. Na závěr každého běhy cyklu je inkrementovaný čas běhu simulace.
+Běh {\sbf simulace pak probíhá} jako smyčka omezená dobou. Běh jednoho cyklu představuje dobu 1 µs. V prvním kroku se nastaví náhodné zpoždění pro daný běh na všech uzlech. Druhý inkrementuje lokální hodiny na všech uzlech a realizuje připadnou chyby oscilátoru. Třetí krok na všech uzlech spustí funkci $"process_pipe()"$, která realizuje zpoždění při odesílání zpráv, resp. zkontroluje jestli nějaká ze zpráv nedosáhla požadované doby odesílání. Pokud ano, odešle ji do fronty na cílový uzel. Čtvrtý krok tvoří stavový automat, který se stará o odbavení příchozích zpráv na každém z uzlů. Tento proces funguje podle algoritmu pro synchronizaci času popsaného v předchozí kapitole \ref[DatilAlgDescrp]. Pátý krok odesílá inicializační zprávy pro konkrétní procesy, tedy synchronizaci doby přenosu a času. Synchronizace času se spouští jednou za 500 ms a synchronizace doby zpoždění jednou za 100 ms. V případě definovaní makra $"BUILD_REPORT"$ se v předposledním kroku vypíší hodnoty do log souboru, z kterého jsou následně generovaný grafy. Pro efektivitu velikosti logovacího souboru jsou vypisovány pouze cykly, které obsahují změnu. Pro každý uzel krom uzlu {\em MASTER} se vypisují se tři hodnoty, konkrétně průměrné zpoždění, velikost chyby a rozdíl času v uzlu {\em MASTER} a daného {\em SLAVE} uzlu. Na závěr každého běhy cyklu je inkrementovaný čas běhu simulace.
 
 
-Odesílání zpráv se zpožděním je realizováno pomocí prioritní fronty nazývané {\em pipe} a fronty obsahující příchozí zprávy. Každý uzel má své tyto dvě struktury. Celý proces je ilustrován v schématu \ref[SchemaOdesilaniZpravVSimulaci]. Probíhá tak, že dojde k odeslání zprávy pomocí funkce $"send_message()"$. Tato funkce alokuje paměť pro novou zprávu a vloží zprávu do prioritní fronty {\em pipe}. Prioritu určuje doba odesílání, konkrétně čím nižší hodnota, tím dříve bude zpráva zpracována. Pokud už uplynula doba odesílání odesílání, zpráva je vyjmuta z {\em pipe} a vložena do {\em queue} na cílovém uzlu, na které jsou uchovávány příchozí zprávy.
+{\sbf Odesílání zpráv se zpožděním} je realizováno pomocí prioritní fronty nazývané {\em pipe} a fronty obsahující příchozí zprávy. Každý uzel má své tyto dvě struktury. Celý proces je ilustrován v schématu \ref[SchemaOdesilaniZpravVSimulaci]. Probíhá tak, že dojde k odeslání zprávy pomocí funkce $"send_message()"$. Tato funkce alokuje paměť pro novou zprávu a vloží zprávu do prioritní fronty {\em pipe}. Prioritu určuje doba odesílání, konkrétně čím nižší hodnota, tím dříve bude zpráva zpracována. Pokud už uplynula doba odesílání odesílání, zpráva je vyjmuta z {\em pipe} a vložena do {\em queue} na cílovém uzlu, na které jsou uchovávány příchozí zprávy.
 
 \medskip
 \clabel[SchemaOdesilaniZpravVSimulaci]{Schéma odesílání zpráv v simulaci}
-\picw=16cm \cinspic img/schema-odesilani-zprav-v-simulaci.png
+\picw=15cm \cinspic img/schema-odesilani-zprav-v-simulaci.png
 \caption/f Schéma odesílání zpráv v simulaci.
 \medskip
 
