@@ -68,7 +68,7 @@ static void IRAM_ATTR gpio_handler_isr(void *)
    xQueueSendFromISR(print_data, &data, NULL);
 }
 
-static void measure_espnow_send_cb(const uint8_t *mac_addr,
+static void espnow_send_cb(const uint8_t *mac_addr,
                                    esp_now_send_status_t status)
 {
    espnow_event_t evt;
@@ -466,7 +466,7 @@ void app_main(void)
    wifi_init();
    ESP_ERROR_CHECK(esp_now_init());
    ESP_ERROR_CHECK(esp_now_register_recv_cb(espnow_recv_cb));
-   ESP_ERROR_CHECK(esp_now_register_send_cb(measure_espnow_send_cb));
+   ESP_ERROR_CHECK(esp_now_register_send_cb(espnow_send_cb));
 
    node.is_first_setup_deviation = 1;
    node.is_firts_setup_rtt = 1;
