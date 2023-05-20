@@ -11,11 +11,12 @@
 
 Kapitola popisuje známé algoritmy vhodné pro daný problém, specifikuje požadavky na algoritmus, které dává do kontextu a diskutuje jejich výhody a nevýhody. Následně detailně popisuje zvolený algoritmus pro implementaci.
 
+\label[FLPtheorem]
 \sec Požadavky na algoritmus
 
-Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až n procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive shody celého systému na tom, v jakém pořadí byla tlačítka stisknuta.
+Od algoritmu se očekává řešení {\sbf problému konsenzu},\fnote{Pojmem problém konsenzu je myšlený problém nutnosti najít shody dvou až $n$ procesů na specifické hodnotě. Ve vztahu k našemu tématu se jedná o shodě na logu určujícím pořadí.} respektive shody celého systému na tom, v jakém pořadí byla tlačítka stisknuta.
 
-Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla být všechny zařízení na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
+Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla být všechny zařízení\fnote{Literatura používá pojmenování proces a to z důvodu, že často může jít o DS v rámci jednoho zařízení. V této práci z důvodu smyslu na základě kontextu budu často místo pojmu {\em proces} používat pojem {\em zařízení}.} na stejné úrovni a žádné z nich by před spuštěním algoritmu nemělo vůči jinému být ve vztahu {\em master} - {\em slave}.
 
 {\sbf Systémem} je v kontextu této práce označován soubor hlasovací zařízení spojených pomocí wifi technologie a komunikujících pomocí protokolu ESP-NOW.
 
@@ -94,7 +95,108 @@ Typů logických hodin je více. Pokud mají jednu dimenzi mluvíme o {\sbf Lamp
 
 \secc Konsenzus
 
+{\sbf Problém konsenzu} je v DS označovaná situace, když se $N$ různých zařízení snaží {\sbf shodnout na výstupní hodnotě}. V kontextu zadání této práce se jedná především o shodě na pořadí hlasování.
 
+Aby byl algoritmus řešící konsenzus platný, musí splňovat následující vlastnosti.
+
+\begitems
+* Všechny zařízení, která nehavarovala, se musejí {\sbf shodnout na výstupu}.
+* Na všech zařízeních po skončení algoritmu musí být {\sbf výstup stejný}.
+* Každé zařízení musí skončit běh algoritmu konsenzu v {\sbf konečném čase}.
+\enditems
+
+Problém konsenzu je v DS jedním z nejdůležitějších, a to proto, že {\sbf je ekvivalentem} k řešení dalších problémů DS jako je například {\em vyloučení procesů}, {\em volba lídra} či {\em totálně uspořádaný multicast}. Tuto záležitost naznačuje i četnost vědeckých článků právě na toto téma. Jeden z nich například řeší problematiku toho, že v posledních letech narůstá množství dat, která sbírají IoT zařízení. Data nám pomáhají pochopit procesy, jako bylo například chování a šíření COVID-19. Při sběru velikého množství občas i privátních dat je důležitá anonymita. Proto systémy využívají {\em privátního blockchainu} společně s {\em raft algoritmem}, který jim dopomáhá řešit problematiku právě problematiku konsenzu, respektive slučování informací dohromady. Pokud se ale jedná o moc veliké množství dat, vedoucí uzel je pak při běhu algoritmu enormně zatížen.~\cite[Yang2022]
+
+Obecně můžeme tvrdit, že konsenzus v synchronních i asynchronních systémech bez selhání a v synchronních systémech se selháním je řešitelný. Konsenzus ale nemůžeme vyřešit s garancí všech požadovaných vlastností pro platnost v případě, že je DS asynchronní a dochází k selhání. Tato skutečnost implikuje {\sbf FLP teorém}, kterému se detailněji věnuji v kapitole \ref[FLPtheorem].~\cite[Jakob2021-13]
+
+Jedním z nejznámějších algoritmů řešící právě konsenzus je poměrně nový\fnote{2014} {\sbf RAFT}. Jedná se o paralelní algoritmus konsenzu pro správu a replikaci logů. Poskytuje stejný výsledek jako protokol {\em Paxos}. Jeho efektivita je stejná, ale {\sbf je srozumitelnější}. Proto poskytuje lepší funkcionalitu a snadnější implementaci v~různých systémech. Pro zvýšení srozumitelnosti, Raft odděluje jednotlivé klíčové prvky konsenzu.\fnote{Například volbu lídra, replikaci logů a bezpečnost.}
+
+Běh raftu se skládá z fází:
+
+\begitems
+* volby lídra,
+* běžného provozu (základní replikace logu),
+* bezpečnosti a konzistenci po změně lídra,
+* neutralizace starých lídrů,
+* a interakce s klienty.
+\enditems
+
+{\sbf První fází je volba lídra}. Ta probíhá tak, že každé zařízení může být právě v jednom z následujících stavů.
+
+\begitems
+* {\em LÍDR} obsahuje požadavky klientů a replikuje log.
+* {\em NÁSLEDOVNÍK} je pasivní zařízení, které pouze reaguje na zprávy od jiných zařízení.
+* {\em KANDIDÁT} je přechodná role v průběhu volby lídra.
+\enditems
+Kdy platí, že za běžného provozu existuje pouze $1$ lídr a $N$ následovníků.
+
+Celkový běh raftu se rozděluje do jednotlivých časových\fnote{Jedná se o {\em logický čas}.} období, tzv. {\sbf epoch}. Každá epocha má svoje ID číslo, které se vždy inkrementálně zvyšuje. Každé zařízení uchovává číslo epochy. Díky tomu se Raft umí vypořádat i s např. vypnutím. Epocha se skládá ze dvou částí: volby lídra a běžného chodu. Může nastat epocha bez lídra, jelikož se nepovede lídra zvolit.
+
+Na začátku volby lídra jsou všechna zařízení {\em následovníci}. Ti očekávají zprávu od {\em lídra} nebo od {\em kandidáta} na lídra. Lídři v průběhu své vlády posílají {\em heartbeats}, aby si udrželi autoritu. Jakmile {\em následník} neobdrží zprávu do určitého timeoutu, předpokládá že {\em lídr} havaroval a iniciuje volbu nového lídra. Zařízení, které spustí volbu nového lídra: zvýší číslo epochy, změní svůj stav na {\em kandidát}, zahlasuje pro sebe, pošle $"RequestVote"$ všem ostatním serverům a čeká na jeden z následujících stavů:
+\begitems
+* obdrží hlasy od většiny serverů -> změní se na {\em lídr} a pošle {\em heartbeat} ostatní procesům,
+* přijme zprávu od validního lídra (tedy jiný lídr byl zvolen dříve), vrátí se tedy do stavu {\em následovník}
+* nikdo nevyhraje volby, tj. vyprší {\em timeout} -> zvýší se ID epochy.
+\enditems
+
+Klíčová vlastnost {\em bezpečnosti} je splněna, jelikož může být pouze jeden lídr v každé epoše. Byla také splněna {\em živost}, protože jeden z kandidátů musí časem vyhrát.\fnote{Pro minimalizaci kolapsu při volbách -> timeouty jsou nastavovány individuálně v určitém intervalu.}
+
+\medskip
+\clabel[RAFTstavovydiagram]{Stavový diagram změny rolí při volbě nového lídra}
+\picw=16cm \cinspic img/raft-stavovy-diagram.png
+\caption/f Stavový diagram změny rolí při volbě nového lídra v algoritmu RAFT.~\cite[Jokob2021RAFT]
+\medskip
+
+{\sbf Druhou fází běhu raftu je běžný provoz}. Ten se stará o distribuci a konsenzus logu. Logy jsou seznamem, který v každé položce obsahuje:
+\begitems
+* index dané položky,
+* epochu, ve které daný příkaz vznikl,
+* a samotný příkaz.
+
+Logy jsou perzistentní, tedy přežijí havárii.\fnote{Pokud se zařízení vypnou.} Dále existuje tzv. potvrzený záznam ({\em commited}). To je takový záznam, který je již potvrzený, tedy uložený již na většině zařízení.
+
+Provoz pak probíhá tak, že {\em klient} pošle {\em lídrovy} příkaz, {\em lídr} přidá příkaz na konec svého logu. Následně {\em lídr} pošle zprávu $"AppendEntries"$ {\em následovníkům} a čeká na odpověď. Jakmile přijde nadpoloviční většina odpovědí, záznam je potvrzen ({\em commited}). Příkaz se vykoná a odpověď je předána {\em klientovi}. {\em Lídr} pošle informaci o potvrzení svým {\em následovníkům}, kteří vykonají daný příkaz.
+
+Havárie {\em následovníku} se neřeší. {\em Lídr} posílá opakovaně zprávu $"AppendEntries"$, dokud doručení neuspěje.
+
+Algoritmus raft je efektivní především díky konzistenci logů. Tedy pokud se záznamy shodují ve všech pozicích s indexy $1$ až $n$ obsahujících záznam se shodným číslem epochy a se shodným příkazem.
+
+Díky návrhu Raftu platí tzv. {\sbf invarianty raftu}.
+\begitems
+* Mají-li záznamy logů uložené na různých zařízeních stejný index a epochu, pak obsahují stejný příkaz a logy jsou identické ve všech předešlých záznamech.
+* Je-li daný příkaz potvrzený, pak jsou potvrzeny i všechny předchozí logy.
+\enditems
+
+Při odeslání zprávy $"AppendEntries"$ zpráva obsahuje i index a příkaz předchozího záznamu, který slouží k validaci. A pokud se záznam neshoduje, je zápis odmítnut.
+
+{\sbf Třetí fází je problematika bezpečnosti a změny lídra}. Během normálního fungování je zajištěna konzistence. Jakmile ale lídr havaruje, dochází k nové volbě. Je třeba ale efektivně ošetřit danou situaci, aby se předešlo nekonzistenci. Raft neimplementuje žádnou speciální úklidovou fázi. Nýbrž neustále posílá zprávy, přičemž zpráva je zpráva od {\em lídra}. Tedy {\em lídr} má vždy pravdu.
+
+Otázka tedy zní, jak ale tedy ošetřit vyskytlé havárie? Prvně si je třeba obecně stanovit, co to znamená {\sbf bezpečnost}. Obecně nutná bezpečnost pro garanci replikace je to, že jakmile je příkaz ze záznamu logu vykonán některým zařízením, nesmí žádné jiné zařízení vykonávat jiný příkaz pro stejný záznam. {\em Tedy než něco vykoná dané zařízení, musíme si být jisti, že jiné zařízení nevykoná místo tohoto příkazu něco jiného. Tohoto bezpečnostního požadavku dosáhneme pomocí tzv. {\sbf Bezpečnostního invariantu Raftu}}. Jakmile {\em lídr} prohlásí záznam v logu za potvrzený, jakýkoliv budoucí {\em lídr} bude mít tento záznam ve svém logu. Díky tomu platí, že:
+
+\begitems
+* lídři nikdy nepřepisují záznamy ve svých lozích, pouze je přidávají,
+* pouze záznamy v logu lídra mohou být potvrzeny,
+* a záznamy musí být v logu potvrzeny předtím, než jsou vykonány na daných zařízeních.
+\enditems
+
+Proto platí první podmínka říkající, že jelikož dosavadní logika fungování Raftu bezpečnostní invariant negarantuje, snaží se Raft zvolit lídra, který má nejúplnější log. Tj. epochu nejvyšší epochou případně pokud mají stejnou epochu, tak s nejvyšším indexem. A druhá, která říká, že aby lídr požadoval záznam za potvrzený musí být:
+
+\begitems
+* záznam uložený na většině serverů,\fnote{známe podmínku}
+* také alespoň jeden nový záznam z lídrovy aktuální epochy na většině serverů.\fnote{podmínka navíc}
+\enditems
+
+Jakmile je tato i předchozí podmínka splněna, již lze prohlásit invariant a bezpečnost za splněnou.
+
+K {\sbf opravě logu následovníků} dochází tak, že nový {\em lídr} musí udělat logy následovníků konzistentních se svým logem. Tj. smazat přebytečné záznamy a doplnit chybějící záznamy. V praxi se oprava implementuje tak, že {\em lídr} určuje proměnnou $"nextIndex"$ pro každého {\em následovníka} index další záznamu logu, který by měl být odeslán {\em následovníkovi}, inicializován na $1$ + index poslední záznam {\em lídra}. Pokud kontrola konzistence $"AppendEntries"$ selže, sníží $"nextIndex"$ o jednu a zkusí znovu. {\em V podstatě prvně zjistí, jak moc do historie se musí vrátit. Tam vše ustřihne a naplní zásobník novými logy.}
+
+{\sbf Čtvrtá fáze popisuje neutralizace starého lídra}, kterou je třeba řešit situaci kdy zhavaruje {\em lídr}. Např. se od něho opozdí zprávy. Později opět ožije. Jak ale zjistí, že již dále není lídrem? Řešením je to, že zařízení nepřijme zprávu s nižší epochou. Přesněji pokud zařízení zachytí zprávu s nižší epochou od starého {\em lídra}, pošle mu zpátky zprávu s informací, že si má zvýšit epochu a zrušit status {\em lídra}.
+
+{\sbf Pátá poslední fáze řeší interakci s klientem}. V ní je definován {\sbf protokol klienta}, kde {\em klienti} posílají příkaz {\em lídrovi}. Pokud zařízení není {\em lídrem}, pošle zařízení {\em klientovi} současného {\em lídra} a ten již ví na koho směřovat zprávu.
+
+Může se stát, že {\em lídr} havaruje poté, co už ale vykonal příkaz před odesláním odpovědi. Existuje tedy riziko opakovaného vykonání příkazu. Řešením je, že každý příkaz má jedinečné ID příkazu. Při přijmutí příkazu, pak vždy {\em lídr} zkontroluje zdali již ID není na zařízení uloženo.
+
+Algoritmus Raft je jeden z nejmodernějších (2014) a vysoce využívaných paralelních algoritmů. Je implementován např. v distribuovaných databázích, které dokážou běžet nad clusterem nebo se využívá v již zmiňované technologii blockchainu.\fnote{Pro hezké otestování a lepší pochopení algoritmu existuje hezká stránka s přehledem a vizualizací \url{raft.github.io.}}
 
 \sec Rozbor problému
 
