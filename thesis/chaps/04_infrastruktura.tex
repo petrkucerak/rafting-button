@@ -202,11 +202,24 @@ Navíc struktura $"QueueHandle_t"$ využívaná pro frontu je bezpečná. Díky 
 
 \sec Parametry síťové infrastruktury
 
-Pro možnost abstrakce síťové infrastruktury v další práci je nutné změřit a otestovat parametry, kterých daná síťová infrastruktura dosahuje, především vlastnosti modulu a protokolu ESP-NOW. Testování bylo prováděno na zařízeních ESP32-S2 v různých prostředích a za různé konfigurace.
+Pro možnost abstrakce síťové infrastruktury v další práci je nutné změřit a otestovat parametry, kterých daná síťová infrastruktura dosahuje, především vlastnosti modulu a protokolu ESP-NOW. Testování bylo prováděno na zařízeních ESP32-S2 v různých prostředích a za různé konfigurace. Testování mělo simulovat reálný provoz. Parametr, který mne zajímal byla velikost {\em Round Trip Time}, tedy doba přenosu informace na cílové zařízení a zpět.
 
+Měření jsem prováděl v různých scénářích a sledoval následující parametry:
 
-\sec Program pro testování round-time trip
+\begitems
+* prostředí, v němž bylo měření prováděno,
+* překážku mezi zařízeními,
+* vzdálenost mezi zařízeními,
+* velikost zprávy,\fnote{Někdy označováno také jako {\em payload}.} \fnote{Maximální velikost zprávy je 250 bajtů.}
+* počet odeslaných zpráv,
+* typ odesílání ({\em broadcast}/{\em unicast}),
+* počet chybných zpráv.\fnote{Měření tohoto parametru bylo přidáno od scénáře A, kde ovšem k žádné ztrátě nedocházelo.}
+\enditems
 
-V závěrečné části jsem navrhnu a implementoval program pro měření round-time tripu. Fungování je detailněji popsáno v kapitole \ref[UvodKMereni].
+Z měření vyplývá, že vzdálenost zařízení od sebe ovlivňuje ztrátovost zpráv a velikost zprávy ovlivňuje dobu odesílání. Ve výsledcích je také vidět speciální chování pro vysílání v módu {\em broadcastu}. Zde se děje situace popsaná v kapitole \ref[PseudoBroadcast].
 
-Kód pro měření včetně Python skriptu pro vizualizaci výsledků je dostupný ve~verzi~{\em 3.0.3}\fnote{\url{https://github.com/petrkucerak/rafting-button/tree/3.0.3}}.
+Zařízení jsou schopna efektivně fungovat v prostředí s rušením. Na otevřeném prostranství fungují i na vzdálenost více než 500 m bez nutnosti přídavné antény.
+
+Podrobné výsledky i měření včetně komentáře lze nalézt v příloze \ref[infrasmeasuredetails] nebo v repozitáří projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/}}
+
+Závěrem měření mohu konstatovat, že výsledky prokazují, že síťová infrastruktura splňuje očekávané požadavky a je vyhovující pro použití v implementaci.
