@@ -70,6 +70,7 @@ typedef struct espnow_send_param {
 
 typedef struct node_info {
    uint64_t time_corection;
+   uint64_t time_corection_real;
    uint32_t rtt_balancer[BALANCER_SIZE];
    uint16_t rtt_balancer_index;
    bool is_firts_setup_rtt;

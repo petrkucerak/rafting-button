@@ -34,7 +34,7 @@
 
 #define DEVIATION_MAX_CONSTANT 100
 
-#define TIME_ERROR_CONSTANT 1000
+#define TIME_ERROR_CONSTANT 300
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
@@ -317,18 +317,18 @@ void task_start_sync_rtt(void)
    while (1) {
       vTaskDelay(25 / portTICK_PERIOD_MS);
 
-      // Node 2
-      send_param->type = RTT_CAL_MASTER;
-      memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
-      send_param->content = get_time();
-      espnow_data_prepare(send_param);
+      // // Node 2
+      // send_param->type = RTT_CAL_MASTER;
+      // memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
+      // send_param->content = get_time();
+      // espnow_data_prepare(send_param);
 
-      ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                         send_param->data_len);
-      if (ret != ESP_OK)
-         handle_espnow_send_error(ret);
+      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
+      //                    send_param->data_len);
+      // if (ret != ESP_OK)
+      //    handle_espnow_send_error(ret);
 
-      vTaskDelay(25 / portTICK_PERIOD_MS);
+      // vTaskDelay(25 / portTICK_PERIOD_MS);
 
       // Node 3
       send_param->type = RTT_CAL_MASTER;
@@ -342,17 +342,17 @@ void task_start_sync_rtt(void)
          handle_espnow_send_error(ret);
       vTaskDelay(25 / portTICK_PERIOD_MS);
 
-      // // Node 4
-      // send_param->type = RTT_CAL_MASTER;
-      // memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
-      // send_param->content = get_time();
-      // espnow_data_prepare(send_param);
+      // Node 4
+      send_param->type = RTT_CAL_MASTER;
+      memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
 
-      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
-      //                    send_param->data_len);
-      // if (ret != ESP_OK)
-      //    handle_espnow_send_error(ret);
-      // vTaskDelay(25 / portTICK_PERIOD_MS);
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
+      vTaskDelay(25 / portTICK_PERIOD_MS);
 
       // // Node 5
       // send_param->type = RTT_CAL_MASTER;
@@ -392,15 +392,15 @@ void task_start_sync_time(void)
    vTaskDelay(500 / portTICK_PERIOD_MS);
    while (1) {
       // Node 2
-      vTaskDelay(125 / portTICK_PERIOD_MS);
-      send_param->type = TIME;
-      memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
-      send_param->content = get_time();
-      espnow_data_prepare(send_param);
-      ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                         send_param->data_len);
-      if (ret != ESP_OK)
-         handle_espnow_send_error(ret);
+      // vTaskDelay(125 / portTICK_PERIOD_MS);
+      // send_param->type = TIME;
+      // memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
+      // send_param->content = get_time();
+      // espnow_data_prepare(send_param);
+      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
+      //                    send_param->data_len);
+      // if (ret != ESP_OK)
+      //    handle_espnow_send_error(ret);
 
       // Node 3
       vTaskDelay(125 / portTICK_PERIOD_MS);
@@ -413,16 +413,16 @@ void task_start_sync_time(void)
       if (ret != ESP_OK)
          handle_espnow_send_error(ret);
 
-      // // Node 4
-      // vTaskDelay(125 / portTICK_PERIOD_MS);
-      // send_param->type = TIME;
-      // memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
-      // send_param->content = get_time();
-      // espnow_data_prepare(send_param);
-      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
-      //                    send_param->data_len);
-      // if (ret != ESP_OK)
-      //    handle_espnow_send_error(ret);
+      // Node 4
+      vTaskDelay(125 / portTICK_PERIOD_MS);
+      send_param->type = TIME;
+      memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
+      send_param->content = get_time();
+      espnow_data_prepare(send_param);
+      ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                         send_param->data_len);
+      if (ret != ESP_OK)
+         handle_espnow_send_error(ret);
 
       // // Node 5
       // vTaskDelay(125 / portTICK_PERIOD_MS);
@@ -489,21 +489,21 @@ void app_main(void)
    if (!esp_now_is_peer_exist(mac_addr_1)) {
       ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_1));
    }
-   esp_now_peer_info_t peer_info_2 = {};
-   memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
-   if (!esp_now_is_peer_exist(mac_addr_2)) {
-      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
-   }
+   // esp_now_peer_info_t peer_info_2 = {};
+   // memcpy(&peer_info_2.peer_addr, mac_addr_2, 6);
+   // if (!esp_now_is_peer_exist(mac_addr_2)) {
+   //    ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_2));
+   // }
    esp_now_peer_info_t peer_info_3 = {};
    memcpy(&peer_info_3.peer_addr, mac_addr_3, 6);
    if (!esp_now_is_peer_exist(mac_addr_3)) {
       ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_3));
    }
-   // esp_now_peer_info_t peer_info_4 = {};
-   // memcpy(&peer_info_4.peer_addr, mac_addr_4, 6);
-   // if (!esp_now_is_peer_exist(mac_addr_4)) {
-   //    ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_4));
-   // }
+   esp_now_peer_info_t peer_info_4 = {};
+   memcpy(&peer_info_4.peer_addr, mac_addr_4, 6);
+   if (!esp_now_is_peer_exist(mac_addr_4)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&peer_info_4));
+   }
    // esp_now_peer_info_t peer_info_5 = {};
    // memcpy(&peer_info_5.peer_addr, mac_addr_5, 6);
    // if (!esp_now_is_peer_exist(mac_addr_5)) {
