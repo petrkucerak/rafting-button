@@ -45,6 +45,7 @@ typedef union espnow_event_info {
 typedef struct espnow_event {
    espnow_event_id_t id;
    espnow_event_info_t info;
+   uint64_t timestamp;
 } espnow_event_t;
 
 typedef enum message_type {
@@ -70,12 +71,10 @@ typedef struct espnow_send_param {
 
 typedef struct node_info {
    uint64_t time_corection;
-   uint64_t time_corection_real;
    uint32_t rtt_balancer[BALANCER_SIZE];
    uint16_t rtt_balancer_index;
    bool is_firts_setup_rtt;
    bool is_first_setup_deviation;
-   bool is_time_synced;
    int32_t deviation_avg;
 } node_info_t;
 

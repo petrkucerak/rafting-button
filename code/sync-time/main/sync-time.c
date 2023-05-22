@@ -61,6 +61,11 @@ static uint64_t get_time(void)
    return esp_timer_get_time() - node.time_corection;
 }
 
+static uint64_t get_time_with_timer(uint64_t esp_time)
+{
+   return esp_time - node.time_corection;
+}
+
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
    print_data_t data;
@@ -74,6 +79,8 @@ static void espnow_send_cb(const uint8_t *mac_addr,
                            esp_now_send_status_t status)
 {
    espnow_event_t evt;
+   // mark event by timestamp
+   evt.timestamp = esp_timer_get_time();
    espnow_event_send_cb_t *send_cb = &evt.info.send_cb;
 
    // Check arg error
@@ -96,6 +103,8 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
                            const uint8_t *data, int data_len)
 {
    espnow_event_t evt;
+   // mark event by timestamp
+   evt.timestamp = esp_timer_get_time();
    espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
    uint8_t *mac_addr = esp_now_info->src_addr;
 
@@ -221,7 +230,7 @@ void espnow_handler_task(void)
             break;
          case RTT_CAL_SLAVE:
             // calcule RTT and send it back to slave with type RTT_VAL
-            send_param->content = (get_time() - content) / 2;
+            send_param->content = (evt.timestamp - content) / 2;
             send_param->type = RTT_VAL;
             memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
             espnow_data_prepare(send_param);
@@ -247,35 +256,32 @@ void espnow_handler_task(void)
          case TIME:
             // calcule deviation O~
             if (node.is_first_setup_deviation) {
-               node.deviation_avg = (int32_t)get_time() - (int32_t)content -
-                                    (int32_t)get_rtt_avg();
+               node.deviation_avg =
+                   (int32_t)get_time_with_timer(evt.timestamp) -
+                   (int32_t)content - (int32_t)get_rtt_avg();
                node.is_first_setup_deviation = 0;
             } else {
                node.deviation_avg =
-                   (node.deviation_avg + (int32_t)get_time() -
+                   (node.deviation_avg +
+                    (int32_t)get_time_with_timer(evt.timestamp) -
                     (int32_t)content - (int32_t)get_rtt_avg()) /
                    2;
             }
 
             // set time
-            if (node.deviation_avg < TIME_ERROR_CONSTANT ||
-                node.is_time_synced == 0) {
-               if (node.deviation_avg > DEVIATION_MAX_CONSTANT)
-                  node.time_corection = esp_timer_get_time() -
-                                        (content + (uint64_t)get_rtt_avg() +
-                                         DEVIATION_MAX_CONSTANT);
-               else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
-                  node.time_corection = esp_timer_get_time() -
-                                        (content + (uint64_t)get_rtt_avg() -
-                                         DEVIATION_MAX_CONSTANT);
-               else
-                  node.time_corection = esp_timer_get_time() -
-                                        (content + (uint64_t)get_rtt_avg() +
-                                         (uint64_t)node.deviation_avg);
+            if (node.deviation_avg > DEVIATION_MAX_CONSTANT)
+               node.time_corection =
+                   esp_timer_get_time() -
+                   (content + (uint64_t)get_rtt_avg() + DEVIATION_MAX_CONSTANT);
+            else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
+               node.time_corection =
+                   esp_timer_get_time() -
+                   (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTANT);
+            else
+               node.time_corection =
+                   esp_timer_get_time() - (content + (uint64_t)get_rtt_avg() +
+                                           (uint64_t)node.deviation_avg);
 
-               if (node.deviation_avg < TIME_ERROR_CONSTANT)
-                  node.is_time_synced = 1;
-            }
             break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
@@ -320,7 +326,7 @@ void task_start_sync_rtt(void)
       // // Node 2
       // send_param->type = RTT_CAL_MASTER;
       // memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
-      // send_param->content = get_time();
+      // send_param->content = esp_timer_get_time();
       // espnow_data_prepare(send_param);
 
       // ret = esp_now_send(send_param->dest_mac, send_param->buf,
@@ -333,7 +339,7 @@ void task_start_sync_rtt(void)
       // Node 3
       send_param->type = RTT_CAL_MASTER;
       memcpy(send_param->dest_mac, mac_addr_3, ESP_NOW_ETH_ALEN);
-      send_param->content = get_time();
+      send_param->content = esp_timer_get_time();
       espnow_data_prepare(send_param);
 
       ret = esp_now_send(send_param->dest_mac, send_param->buf,
@@ -345,7 +351,7 @@ void task_start_sync_rtt(void)
       // Node 4
       send_param->type = RTT_CAL_MASTER;
       memcpy(send_param->dest_mac, mac_addr_4, ESP_NOW_ETH_ALEN);
-      send_param->content = get_time();
+      send_param->content = esp_timer_get_time();
       espnow_data_prepare(send_param);
 
       ret = esp_now_send(send_param->dest_mac, send_param->buf,
@@ -357,7 +363,7 @@ void task_start_sync_rtt(void)
       // // Node 5
       // send_param->type = RTT_CAL_MASTER;
       // memcpy(send_param->dest_mac, mac_addr_5, ESP_NOW_ETH_ALEN);
-      // send_param->content = get_time();
+      // send_param->content = esp_timer_get_time();
       // espnow_data_prepare(send_param);
 
       // ret = esp_now_send(send_param->dest_mac, send_param->buf,
@@ -479,7 +485,6 @@ void app_main(void)
    node.is_first_setup_deviation = 1;
    node.is_firts_setup_rtt = 1;
    node.rtt_balancer_index = 0;
-   node.is_time_synced = 0;
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 
