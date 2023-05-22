@@ -32,13 +32,12 @@
 #define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
-#define DEVIATION_MAX_CONSTANT 100
-
-#define TIME_ERROR_CONSTANT 300
+#define DEVIATION_LIMIT 50
+#define DEVIATION_MAX_CONSTANT 10
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
-// #define IS_MASTER
+#define IS_MASTER
 #define IS_SLAVE
 
 static const char *TAG = "MAIN";
@@ -255,32 +254,24 @@ void espnow_handler_task(void)
             break;
          case TIME:
             // calcule deviation O~
-            if (node.is_first_setup_deviation) {
-               node.deviation_avg =
-                   (int32_t)get_time_with_timer(evt.timestamp) -
-                   (int32_t)content - (int32_t)get_rtt_avg();
-               node.is_first_setup_deviation = 0;
-            } else {
-               node.deviation_avg =
-                   (node.deviation_avg +
-                    (int32_t)get_time_with_timer(evt.timestamp) -
-                    (int32_t)content - (int32_t)get_rtt_avg()) /
-                   2;
+            node.deviation_avg = (int32_t)get_time_with_timer(evt.timestamp) -
+                                 (int32_t)content - (int32_t)get_rtt_avg();
+
+            if (node.deviation_avg < DEVIATION_LIMIT &&
+                node.deviation_avg > -DEVIATION_LIMIT) {
+               node.is_time_synced = 1;
             }
 
             // set time
-            if (node.deviation_avg > DEVIATION_MAX_CONSTANT)
+            if (node.is_time_synced) {
+               if (node.deviation_avg > DEVIATION_MAX_CONSTANT)
+                  node.time_corection += DEVIATION_MAX_CONSTANT;
+               else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
+                  node.time_corection -= DEVIATION_MAX_CONSTANT;
+            } else {
                node.time_corection =
-                   esp_timer_get_time() -
-                   (content + (uint64_t)get_rtt_avg() + DEVIATION_MAX_CONSTANT);
-            else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
-               node.time_corection =
-                   esp_timer_get_time() -
-                   (content + (uint64_t)get_rtt_avg() - DEVIATION_MAX_CONSTANT);
-            else
-               node.time_corection =
-                   esp_timer_get_time() - (content + (uint64_t)get_rtt_avg() +
-                                           (uint64_t)node.deviation_avg);
+                   esp_timer_get_time() - (content + (uint64_t)get_rtt_avg());
+            }
 
             break;
          default:
@@ -482,9 +473,9 @@ void app_main(void)
    ESP_ERROR_CHECK(esp_now_register_recv_cb(espnow_recv_cb));
    ESP_ERROR_CHECK(esp_now_register_send_cb(espnow_send_cb));
 
-   node.is_first_setup_deviation = 1;
    node.is_firts_setup_rtt = 1;
    node.rtt_balancer_index = 0;
+   node.is_time_synced = 0;
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
 

@@ -74,7 +74,7 @@ typedef struct node_info {
    uint32_t rtt_balancer[BALANCER_SIZE];
    uint16_t rtt_balancer_index;
    bool is_firts_setup_rtt;
-   bool is_first_setup_deviation;
+   bool is_time_synced;
    int32_t deviation_avg;
 } node_info_t;
 

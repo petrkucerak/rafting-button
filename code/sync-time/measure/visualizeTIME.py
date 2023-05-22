@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-folder = "RTT_100V1/"
+folder = "RTT_100V2/"
 # files = ["log_COM4.txt", "log_COM6.txt",
 #          "log_COM7.txt", "log_COM8.txt", "log_COM9.txt"]
 files = ["log_COM4.txt", "log_COM6.txt",
