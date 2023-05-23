@@ -441,8 +441,6 @@ Tyto úpravy mi pomohli zajistit dostatečnou přesnost měření, jak vyplývá
 
 Měření bylo prováděno s téměř identickým zapojením\fnote{Schéma zapojení je dostupné v příloze \ref[syncSchema].} jako měření latence popsané v kapitole \ref[getsimparameters]. Přidal jsem pouze moduly a změnil velikost odporů na vstupu referenčního signálu. Reference generovaná ze STM32 byla použita pro sjednocení času výpisů. Zdrojové kódy využité pro měření včetně skriptů pro vizualizace jsou dostupné v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button}}
 
-
-
 \sec Distribuce logů a seznamu zařízení DS
 
 Z rozboru problému vyplývá, že vhodným způsobem pro určení pořadí stisku tlačítek je ke každé události přiřadit časovou značku ({\em timestamp}) a pomocí ní určit kauzalitu jednotlivých událostí. {\sbf Časová značka} bude vždy v celém DS systému {\sbf jedinečná}. To vyplývá z předpokladu z kapitoly \ref[syncspecdetailstime], že rozlišovací schopnost systémů je mnohem vyšší než reakční doba člověka. Pokud by přeci jenom ke konfliktu došlo, rozhodne v daném případě náhoda.
@@ -475,3 +473,30 @@ Každé ze zařízení bude uchovávat lokální {\sbf strukturu s logy}, které
 * {\em SLAVE} uzel si přijatou zprávu uloží do lokálního logu.
 \enditems
 
+Obdobně bude probíhat i distribuce seznamu sousedů. Bude k ní využíváno řídící zařízení z důvodu ušetření zpráv. V momentě, kdy {\em MASTER} obdrží zprávu se sousedy, rozešle ji na všechny známé zařízení, kteří si svůj seznam zaktualizují.
+
+\sec Návrh celkového algoritmu
+
+V předchozích kapitolách byly diskutovány dílčí problémy běhu celého systému a známé algoritmy, které lze aplikovat. Výsledný algoritmus spojuje dohromady Raft a již vyřešené úlohy týkající se synchronizace času a distribuce logů.
+
+Hlavní algoritmus tvoří tři {\sbf základní komponenty}:
+
+\begitems
+* registrace zařízení do DS,
+* běžný chod
+* a terminace zařízení registrovaného v DS. 
+\enditems
+
+\secc Registrace zařízení
+
+Jakmile se zařízení spustí, vyhledá zařízení ve svém okolí pomocí {\em BSSID skenování} a přidá si je na seznam sousedů. Poté pošle zprávu typu $"HELLO_DS"$ na všechny vyhledaná zařízení se seznamem známých sousedů. Zařízení v síti si ho přidají na svůj seznam a zpátky pošlou svůj aktuální seznam. Jakmile zařízení obdrží více jak polovinu odpovědí. Přechází do další fáze – běžného chodu DS.
+
+\secc Běžný chod
+
+Běžný chod se skládá z {\sbf epoch}. Každá epocha má svoje $"ID"$. Každá epocha je tvořena dvěma fázemi – {\em volbou lídra} a {\em distribucí logů}.
+
+Zařízení bude označovat stejně jako v Raftu.
+
+{}
+
+První fází každé epochy je vždy {\sbf volba lídra}.\fnote{Pojem {\em MASTER} a {\em lídr} v této práci vždy označuje stejný typ zařízení.} Volba lídra je vždy v každé epizodě, ovšem nemusí skončit úspěšně. Běh probíhá velice podobně jako volba lídra v algoritmu Raft. Oproti Raftu si {\em lídr} udržuje svoji pomocí pravidelného zasílání zpráv pro synchronizaci času. Pokud na zařízení nepřijde zpráva 
