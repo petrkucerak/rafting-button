@@ -12,7 +12,7 @@ Kapitola popisuje volbu vhodného modulu, návrh, realizaci a měření parametr
 
 \sec Volba vhodného modulu
 
-Požadavky na síťovou infrastrukturu jsou takové, že by měla zařízení komunikovat pomocí wifi technologie a drobných zpráv. Těmto parametrům je nutné podřídit volbu vhodného hardwaru. Pro něj navíc platí, že potřeba, aby zařízení mohlo fungovat minimálně po dobu 6 hodin pouze na baterie. Nedává smysl tedy přemýšlet o zařízeních s vyšším výkonem a větší spotřebou ale spíše se zaměřit na drobné moduly a mikrokontroléry splňující definované požadavky.
+Požadavky na síťovou infrastrukturu jsou takové, že by měla zařízení komunikovat pomocí wifi technologie a drobných zpráv. Těmto parametrům je nutné podřídit volbu vhodného hardwaru. Pro něj navíc potřeba, aby zařízení mohlo fungovat minimálně po dobu 6 hodin pouze na baterie. Nedává smysl tedy přemýšlet o zařízeních s vyšším výkonem a větší spotřebou ale spíše se zaměřit na drobné moduly a mikrokontrolery splňující definované požadavky.
 
 Zařízení by tedy mělo:
 
@@ -58,11 +58,11 @@ Síť by dle požadavků v kapitole \ref[functionsRequirements] měla komunikova
 
 \sec Protokol ESP-NOW
 
-Při studiu možností IEEE 802.11 pro IoT zařízení, jsem se setkal pouze s hierarchickou síťovou strukturou. Proto jsem se rozhodl pro distribuovanou síť, kde si budou všechna zapojená zařízení na počátku rovna. Toto rozhodnutí také podpořil požadavek, aby technologie fungovala nezávisle na jiné síťové infrastruktuře. To by v případě hierarchické struktury bylo třeba.
+Při studiu možností IEEE 802.11 pro IoT zařízení jsem se setkal pouze s hierarchickou síťovou strukturou. Proto jsem se rozhodl pro distribuovanou síť, kde si budou všechna zapojená zařízení na počátku rovna. Toto rozhodnutí také podpořil požadavek, aby technologie fungovala nezávisle na jiné síťové infrastruktuře, která by v případě aplikace hierarchické struktury byla potřebnou.
 
-Při tvorbě rešerše jsem objevil nemalé množství protokolů, s nimiž by mohla zařízení mezi sebou komunikovat. Nejvhodnější pro mou aplikaci byly MQTT protokol či klasický TCP/IP. Po diskusi s vedoucím práce jsem se rozhodl pro experimentálnější způsob. Nepoužiji žádný ze zmiňovaných protokolů, nýbrž se pokusím implementovat vlastní protokol, který by dle definice IEEE 802.11\fnote{Konkrétně 2 úrovně síťového modelu OSI (linkové).} posílal MAC frames. Celá síť by byla adresovaná na úrovní MAC adres.\fnote{Nepovedlo se mi totiž žádný takový existující protokol vyhledat. Ani po diskusi s odborníky na telekomunikační technologie z řad učitelů, jsem se nedozvěděl o jakémkoliv již funkčním způsobu posílání dat pouze na 2 úrovni síťového OSI modelu.}
+Při tvorbě rešerše jsem objevil nemalé množství protokolů, s nimiž by mohla zařízení mezi sebou komunikovat. Nejvhodnější pro mou aplikaci by byl MQTT protokol či klasický TCP/IP. Po diskusi s vedoucím práce jsem se rozhodl pro experimentálnější způsob. Nepoužiji žádný ze zmiňovaných protokolů, nýbrž se pokusím implementovat vlastní protokol, který by dle definice IEEE 802.11\fnote{Konkrétně druhé úrovně síťového modelu OSI (linkové).} posílal MAC frames. Celá síť by byla adresovaná na úrovní MAC adres.\fnote{Nepovedlo se mi totiž žádný takový existující protokol vyhledat. Ani po diskusi s odborníky na telekomunikační technologie z řad učitelů, jsem se nedozvěděl o jakémkoliv již funkčním způsobu posílání dat pouze na druhé úrovni síťového OSI modelu.}
 
-Po podrobnější analýze jsem zjistil, že implementovat vlastní protokol je zcela mimo rozsah této bakalářské práce. Objevil jsem ale protokol ESP-NOW, který je definovaný přímo pro mnou zvolené moduly, zajišťuje komunikaci pomocí malých zpráv s nízkou latencí, funguje na nízké vrstvě OSI modelu.
+Po podrobnější analýze jsem zjistil, že implementovat vlastní protokol je zcela mimo rozsah této bakalářské práce. Objevil jsem ale protokol ESP-NOW, který je definovaný přímo pro mnou zvolené moduly, zajišťuje komunikaci pomocí malých zpráv s nízkou latencí a funguje na nízké vrstvě OSI modelu.
 
 \secc Popis technologie
 
@@ -92,7 +92,7 @@ Výchozí přenosová rychlost ({\em bit rate}) ESP-NOW je 1 MBps. Rychlost lze 
     * {\sbf Organization Identifier} (3 bytes) stejná hodnota jako v nadřazeném rámci, do kterého je tento zapouzdřen. Jedná se o hodnotu "0x18fe34", která odpovídá prvním třem bajtům MAC adres příslušících firmě Espressif.
     * {\sbf Type} (1 byte) určuje typ action rámce od Espressifu. V případě užití ESP-NOW je hodnota rovna "4".
     * {\sbf Version} (1 byte) pole pro nastavení konkrétní verze.
-    * {\sbf Body} (0{\sim}250 bytes\fnote{V oficiální dokumentaci byla v době kdy jsem na práci pracoval chyba. Body bylo definované tak, že může dosahovat velikosti až 250 bajtů. To ale není možné, jelikož součet by přesáhl maximální povolenou velikost, tedy 255 bajtů pro {\em Vendor Specific Content}. Chybu jsem nahlásil a věřím, že bude co nejdříve opravena. \url{https://github.com/espressif/esp-now/issues/59}}) tělo samotného rámce obsahující zprávu.
+    * {\sbf Body} (0{\sim}250 bytes\fnote{V oficiální dokumentaci byla v době, kdy jsem na práci pracoval, chyba. Body bylo definované tak, že může dosahovat velikosti až 250 bajtů. To ale není možné, jelikož součet by přesáhl maximální povolenou velikost, tedy 255 bajtů pro {\em Vendor Specific Content}. Chybu jsem nahlásil a věřím, že bude co nejdříve opravena. \url{https://github.com/espressif/esp-now/issues/59}}) tělo samotného rámce obsahující zprávu.
     \enditems
 * {\sbf FCS} (4 bytes) frame check sequence
 \enditems
@@ -121,9 +121,9 @@ Protokol ESP-NOW je zabezpečen pomocí ECDH a AES128-CCM.\fnote{Definovaných v
 
 \secc Módy provozu wifi
 
-Moduly podporující ESP-NOW\fnote{ESP32 a ESP8266} umožňují dva módů provozu wifi technologie: Station mode a Access Point mode (Soft-AP mode).\fnote{Ve skutečnosti existuje více módů provozu wifi na ESP modulech. Jedná se ale o hybridy již zmíněných módů, proto se jim nebudu více do detaily věnovat.}
+Moduly podporující ESP-NOW\fnote{ESP32 a ESP8266} umožňují dva módy provozu wifi technologie: Station mode a Access Point mode (Soft-AP mode).\fnote{Ve skutečnosti existuje více módů provozu wifi na ESP modulech. Jedná se ale o hybridy již zmíněných módů, proto se jim nebudu více do detaily věnovat.}
 
-{\sbf Station mode} (STA) se na používá v případě, kdy se modul připojuje k access pointu jako je například router. Typickou aplikací je senzor, který například snímá teplotu v místnosti, je napojen na router, který poskytuje připojení k WLAN a v pravidelných intervalech odesílá data do clodu.
+{\sbf Station mode} (STA) se používá v případě, kdy se modul připojuje k access pointu, jako je například router. Typickou aplikací je senzor, který například snímá teplotu v místnosti, je napojen na router, který poskytuje připojení k WLAN a v pravidelných intervalech odesílá data do cloudu.
 
 Opakem je {\sbf Access Point mode} (Soft-AP mode někdy také označován pouze zkratkou AP mode), který funguje jako router v síti a může k němu být připojeno více zařízení. Typickou aplikací může být například spuštění wifi a webového serveru na modulu. V momentě, kdy se do sítě připojí nějaké zařízení, webový server vykreslí specifikovanou stránku.\fnote{Poměrně pěkně a detailně je implementace Wifi technologie na ESP zařízeních popsána v hlavičkovém souboru pro framework {\em ESP-IDF}, který je dostupný na adrese \url{https://raw.githubusercontent.com/espressif/esp-idf/4f0769d2ed074ef770c6432565d6e5610124e9ea/components/esp_wifi/include/esp_wifi.h}}
 Tento mód je v této práci vhodný pro využití implementaci stavu zařízení v módu {\em PRESENTER}.
@@ -171,18 +171,18 @@ Oficiální implementaci protokolu je možné aplikovat pouze s využitím {\sbf
 
 \begitems
 * Knihovna {\sbf vychází ze zastaralé verze} (ESP-NOW 1.0.0). Tudíž neobsahuje opravy a nové funkce, které přináší až druhá verze protokolu.
-* Knihovna implementuje {\sbf vlastní pseudo {\em {\sbf broadcast}}}. Ten funguje tak, že provede {\em BSSID}\fnote{Zkratka BSSID znamená {\sbf Basic Service Set Identifier} neboli 48-bitový identifikátor, pod kterým je zařízení identifikované v síti.~\cite[esBbWrhMVbvJ2grS]} skenování a na každé nalezné zařízení odešle zprávu pomocí {\em unicastu}. 
+* Knihovna implementuje {\sbf vlastní pseudo {\em {\sbf broadcast}}}. Ten funguje tak, že provede {\em BSSID}\fnote{Zkratka BSSID znamená {\sbf Basic Service Set Identifier} neboli 48-bitový identifikátor, pod kterým je zařízení identifikované v síti.~\cite[esBbWrhMVbvJ2grS]} skenování a na každé nalezené zařízení odešle zprávu pomocí {\em unicastu}. 
 \enditems
 
 Arduino Framework se nicméně těší vysoké oblibě. Z toho vyplývá, že většina veřejně dostupných návodů na internetu jsou nevhodné zdroje, protože popisují špatnou verzi.
 
 \sec Architektura síťové infrastruktury
 
-Komunikace mezi zařízeními je postavena na protokolu ESP-NOW. Ten hravě splňuje omezení 10 zařízení, drobných zpráv, i komunikace pomocí wifi na nízké úrovní OSI modelu. Pro zpracování je nutné využít pomocné struktury. Konkrétně se jedná o frontu, která pomáhá zpracovávat příchozí zprávy. Celý proces putování dat 
+Komunikace mezi zařízeními je postavena na protokolu ESP-NOW. Ten hravě splňuje omezení počtu 10 zařízení, drobných zpráv, i komunikace pomocí wifi na nízké úrovní OSI modelu. Pro zpracování je nutné využít pomocné struktury. Konkrétně se jedná o frontu, která pomáhá zpracovávat příchozí zprávy. Celý proces putování dat 
  během komunikace je ilustrován na obrázku \ref[InfraDataWorkflow] a probíhá tak, že:
 
 \begitems
-* před odesláním zprávy se připraví data, zkontroluje se zdali je cílové zařízení přidáno mezi známými destinacemi a dojde k odeslání pomocí $"send_message()"$,
+* před odesláním zprávy se připraví data, zkontroluje se, zdali je cílové zařízení přidáno mezi známými destinacemi a dojde k odeslání pomocí $"send_message()"$,
 * odesílatel obdrží status, který zachytí {\em call-back} funkcí $"espnow_send_cb()"$ a odešle informace do fronty
 * příjemce obdrží zprávu, kterou zachytí pomocí {\em call-back} funkce $"espnow_recv_cb()"$ a data odešle do fronty.
 \enditems
@@ -199,10 +199,10 @@ Postup byl zvolen z důvodu efektivity fungování, především prioritizace ta
 
 Navíc struktura $"QueueHandle_t"$ využívaná pro frontu je bezpečná. Díky ní není nutné pro zpracování událostí využívat více kritických sekcí.
 
-
+\label[measiureInfraas]
 \sec Parametry síťové infrastruktury
 
-Pro možnost abstrakce síťové infrastruktury v další práci je nutné změřit a otestovat parametry, kterých daná síťová infrastruktura dosahuje, především vlastnosti modulu a protokolu ESP-NOW. Testování bylo prováděno na zařízeních ESP32-S2 v různých prostředích a za různé konfigurace. Testování mělo simulovat reálný provoz. Parametr, který mne zajímal byla velikost {\em Round Trip Time}, tedy doba přenosu informace na cílové zařízení a zpět.
+Pro možnost abstrakce síťové infrastruktury v další práci je nutné změřit a otestovat parametry, kterých daná síťová infrastruktura dosahuje, především vlastnosti modulu a protokolu ESP-NOW. Testování bylo prováděno na zařízeních ESP32-S2 v různých prostředích a za různé konfigurace. Testování mělo simulovat reálný provoz. Parametr, který mne zajímal, byla velikost {\em Round Trip Time}, tedy doba přenosu informace na cílové zařízení a zpět.
 
 Při měření jsem sledoval následující parametry:
 
@@ -220,6 +220,6 @@ Z měření vyplývá, že vzdálenost zařízení od sebe ovlivňuje ztrátovos
 
 Zařízení jsou schopna efektivně fungovat v prostředí s rušením. Na otevřeném prostranství fungují i na vzdálenost více než 500 m bez nutnosti přídavné antény.
 
-Podrobné výsledky i měření včetně komentáře lze nalézt v příloze \ref[infrasmeasuredetails] nebo v repozitáří projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/}}
+Podrobné výsledky i měření včetně komentáře lze nalézt v příloze \ref[infrasmeasuredetails] nebo v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/}}
 
-Závěrem měření mohu konstatovat, že výsledky prokazují, že síťová infrastruktura splňuje očekávané požadavky, vhodnější je posílat zprávy pouze v módu {\em unicast} a infrastruktura je vyhovující pro použití v implementaci.
+Závěrem měření mohu konstatovat, že výsledky prokazují, že síťová infrastruktura splňuje očekávané požadavky. Je vhodnější posílat zprávy pouze v módu {\em unicast} a infrastruktura je vyhovující pro použití v implementaci.

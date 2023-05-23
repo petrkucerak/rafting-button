@@ -17,7 +17,7 @@
 \caption/f Vizualizace parametrů pro měření scénářů A.
 \medskip
 
-V scénářích typu A se snažím otestovat to, jak změna parametru typu odesílání, tj. přepínání mezi {\em brodacastem} a {\em unicastem}, ovlivní {\em round-time trip} v závislosti na velikosti zprávy. Měření se odehrává v prostředí bytu v činžovním domě, kde dochází k rušení několika okolními Wifi sítěmi.
+Ve scénářích typu A se snažím otestovat to, jak změna parametru typu odesílání, tj. přepínání mezi {\em brodacastem} a {\em unicastem}, ovlivní {\em round-time trip} v závislosti na velikosti zprávy. Měření se odehrává v prostředí bytu v činžovním domě, kde dochází k rušení několika okolními Wifi sítěmi.
 
 \midinsert \clabel[ScenariosA1-tab]{Přehled parametrů pro A1x scénáře}
 \ctable{lrrrrr}{
@@ -85,11 +85,11 @@ Sadou scénářů Cx se snažím pozorovat vlastnosti v signálově čistém pro
 \caption/t Přehled parametrů pro Cx scénáře.
 \endinsert
 
-Výsledky měření těchto scénáře si je možné prohlédnout v grafu \ref[ScenarioC-graph]. Zde se opět prokol chová dle očekávání. Nedochází k takovému zpoždění, jako například při měření scénářů typu A. Také si je možné povšimnou toho, že se jednou za čas nějaká zpráva opozdí.
+Výsledky měření těchto scénářů si je možné prohlédnout v grafu \ref[ScenarioC-graph]. Zde se opět protokol chová dle očekávání. Nedochází k takovému zpoždění jako například při měření scénářů typu A. Také si je možné povšimnou toho, že se jednou za čas nějaká zpráva opozdí.
 
 Při tomto měření jsem zaznamenával také chybovost počet chybných zpráv.\fnote{Chybnou zprávou se myslí taková zpráva, která nedorazí do specifikovaného deadlinu, tedy mimo graf.} Jejich četnost si ji možné prohlédnout v tabulce \ref[ScenariosC-tab].
 
-Během tohoto měření jsem zjistil, že je důležité, aby na větší vzdálenosti,\fnote{25 m a více} nestála signálu v cestě žádná překážka.
+Během tohoto měření jsem zjistil, že je důležité, aby na větší vzdálenosti\fnote{25 m a více} nestála signálu v cestě žádná překážka.
 
 Zajímavé je také srovnání scénáře A a C. Můžeme pozorovat, že {\sbf vliv vzdálenosti ovlivňuje především ztrátovost paketů. Naopak velikost ovlivňuje rychlost přenosu.}
 
@@ -108,7 +108,7 @@ Zajímavé je také srovnání scénáře A a C. Můžeme pozorovat, že {\sbf v
 \caption/f Vizualizace parametrů pro měření scénářů D.
 \medskip
 
-Scénář D byl oproti ostatním měřením odlišný v tom, že jsem se nejprve snažili stanovit hranici, kdy je zařízení ještě schopno přijímat zprávy a kdy už ne. Experimentálně jsem dospěl k hranici 580 m. Následně jsem odeslal 1000 zpráv s cílem zjistit, jak je veliká ztrátovost. Měření bylo realizováno na poli, přes které může procházet signál na 2,4 GHz.
+Scénář D byl oproti ostatním měřením odlišný v tom, že jsem se nejprve snažil stanovit hranici, kdy je zařízení ještě schopno přijímat zprávy a kdy už ne. Experimentálně jsem dospěl k hranici 580 m. Následně jsem odeslal 1000 zpráv s cílem zjistit, jak je veliká ztrátovost. Měření bylo realizováno na poli, přes které může procházet signál na 2,4 GHz.
 
 \midinsert \clabel[ScenariosD-tab]{Přehled parametrů pro D scénář}
 \ctable{lr}{
@@ -124,11 +124,11 @@ Scénář D byl oproti ostatním měřením odlišný v tom, že jsem se nejprve
 \caption/t Přehled parametrů pro D scénář.
 \endinsert
 
-Při měření jsme zjistil, že při odesílání na velikou vzdálenost je třeba dbát na orientaci čipu. Pokud nebylo zařízení správně natočeno, nešlo odeslat žádné zprávy.
+Při měření jsem zjistil, že při odesílání na velikou vzdálenost je třeba dbát na orientaci čipu. Pokud nebylo zařízení správně natočeno, nešlo odeslat žádné zprávy.
 
-Výsledek měření je vizualizován grafem \ref[ScenarioD-graph]. Při tomto scénáři bylo ovšem mnohem zajímavjěíš pozorovat četnost úplné ztráty dat.
+Výsledek měření je vizualizován grafem \ref[ScenarioD-graph]. Při tomto scénáři bylo ovšem mnohem zajímavější pozorovat četnost úplné ztráty dat.
 
-Při odeslání 1000 zpráv, se ztratilo 50. Můžeme tedy jednoduchým výpočtem zjistit jaká je procentuální ztrátovost na dlouhé vzdálenosti.
+Při odeslání 1000 zpráv, se ztratilo 50. Můžeme tedy jednoduchým výpočtem zjistit, jaká je procentuální ztrátovost na dlouhé vzdálenosti.
 
  $$
  loss = {error\over sent}

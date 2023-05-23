@@ -5,7 +5,7 @@
   (paper "A5")
 
   (title_block
-    (title "Zapojení pro měření sycnronizace času")
+    (title "Zapojení pro měření synchronizace času")
   )
 
   (lib_symbols
@@ -526,12 +526,12 @@
     (property "Datasheet" "" (at 45.72 25.4 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 1514acb2-bfec-47a1-b634-3f32059f6f7d))
-    (pin "" (uuid 2fa2a7ee-0c08-43cb-9e3d-4142b4366b43))
-    (pin "" (uuid 99728729-9fb0-4fca-a184-c5bb856c8e5a))
-    (pin "" (uuid 24518f0f-5718-4e4c-a27a-d213f5f40c0f))
-    (pin "" (uuid e6f5d405-55a4-469c-b5b7-b2c5907fcf66))
-    (pin "" (uuid 2c89c329-ed56-46b7-b092-87c8ee7ec50d))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
+    (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
     (pin "" (uuid f96a6481-ff6b-4d01-b567-46003ec36e3f))
     (instances
       (project "schematic"
@@ -583,9 +583,9 @@
     (property "Datasheet" "" (at 43.18 90.17 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bd))
-    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bd))
-    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bd))
+    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bf))
+    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bf))
+    (pin "" (uuid b39f7b21-f22d-427d-82f3-ed7ad2fe50bf))
     (instances
       (project "schematic"
         (path "/45f18a84-398e-42a6-95d7-dd095c0cf69c"
@@ -610,8 +610,8 @@
     (property "Datasheet" "" (at 171.45 17.78 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 5022ff36-2f03-41f0-afc0-a5e065805ff2))
-    (pin "" (uuid 5f9e5437-dafa-48cc-9cbf-32d98c3da467))
+    (pin "" (uuid 33376850-3ed4-449e-945a-29947271418f))
+    (pin "" (uuid 33376850-3ed4-449e-945a-29947271418f))
     (pin "" (uuid 33376850-3ed4-449e-945a-29947271418f))
     (instances
       (project "schematic"
@@ -714,8 +714,8 @@
     (property "Datasheet" "" (at 116.84 81.28 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid f09c37f1-a30f-41df-80d9-afda5f066274))
-    (pin "" (uuid 01162b2f-be88-4079-a5ff-4c6c32366e12))
+    (pin "" (uuid 93c63e2d-ea90-4cdf-bad1-4030e6319726))
+    (pin "" (uuid 93c63e2d-ea90-4cdf-bad1-4030e6319726))
     (pin "" (uuid 93c63e2d-ea90-4cdf-bad1-4030e6319726))
     (instances
       (project "schematic"
@@ -741,8 +741,8 @@
     (property "Datasheet" "" (at 116.84 17.78 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 7337b4e3-7a7a-4abe-828e-52a59ab0ea98))
-    (pin "" (uuid 3abedb47-cd4d-4d03-835b-f1eddc0e1fb1))
+    (pin "" (uuid 95025c54-7ae3-46ea-82bd-3a5c6dd32101))
+    (pin "" (uuid 95025c54-7ae3-46ea-82bd-3a5c6dd32101))
     (pin "" (uuid 95025c54-7ae3-46ea-82bd-3a5c6dd32101))
     (instances
       (project "schematic"
@@ -768,8 +768,8 @@
     (property "Datasheet" "" (at 168.91 52.07 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 79723b6f-d877-4a3c-85f9-4196d638e5b4))
-    (pin "" (uuid e632e7cb-b1c3-4480-887f-bfde0e59488f))
+    (pin "" (uuid a15788e2-7408-4a97-a78c-a9e74ee18f71))
+    (pin "" (uuid a15788e2-7408-4a97-a78c-a9e74ee18f71))
     (pin "" (uuid a15788e2-7408-4a97-a78c-a9e74ee18f71))
     (instances
       (project "schematic"
@@ -821,8 +821,8 @@
     (property "Datasheet" "" (at 116.84 52.07 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 87f06872-b678-44ca-bb2b-7a004a555be8))
-    (pin "" (uuid 79c7e784-0d74-42aa-9231-6241b23cf62d))
+    (pin "" (uuid 6579b303-42b5-4405-b26b-c59792453c38))
+    (pin "" (uuid 6579b303-42b5-4405-b26b-c59792453c38))
     (pin "" (uuid 6579b303-42b5-4405-b26b-c59792453c38))
     (instances
       (project "schematic"
