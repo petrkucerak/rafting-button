@@ -32,12 +32,12 @@
 #define ESPNOW_MAXDELAY 10
 #define STACK_SIZE 2048
 
-#define DEVIATION_LIMIT 50
-#define DEVIATION_MAX_CONSTANT 10
+#define DEVIATION_LIMIT 200
+#define DEVIATION_MAX_CONSTANT 25
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
-#define IS_MASTER
+// #define IS_MASTER
 #define IS_SLAVE
 
 static const char *TAG = "MAIN";
@@ -268,7 +268,9 @@ void espnow_handler_task(void)
                   node.time_corection += DEVIATION_MAX_CONSTANT;
                else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
                   node.time_corection -= DEVIATION_MAX_CONSTANT;
+               // ESP_LOGI(TAG, "S %ld", node.deviation_avg);
             } else {
+               // ESP_LOGI(TAG, "F %ld", node.deviation_avg);
                node.time_corection =
                    esp_timer_get_time() - (content + (uint64_t)get_rtt_avg());
             }
