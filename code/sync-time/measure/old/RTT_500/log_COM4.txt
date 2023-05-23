@@ -1,0 +1,2623 @@
+0,0,45187921
+# # [0;33mW (45746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (45766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (45806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,45287904
+# # [0;33mW (45826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (45846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (45906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,45387871
+# # [0;33mW (45926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (45946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (45986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,45487844
+# # [0;33mW (46066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,45587814
+# # [0;33mW (46146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46176) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,45687782
+# # [0;33mW (46226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (46296) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46316) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,45787746
+# # [0;33mW (46326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (46386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,45887730
+# # [0;33mW (46426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (46476) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46496) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,45987734
+# # [0;33mW (46546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46087757
+# # [0;33mW (46626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46187784
+# # [0;33mW (46716) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (46766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46287809
+# # [0;33mW (46866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (46916) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46387832
+# # [0;33mW (46946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (46966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46487861
+# # [0;33mW (47026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,46587874
+# # [0;33mW (47126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46687866
+# # [0;33mW (47246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47296) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46787853
+# # [0;33mW (47356) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47376) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47396) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,46887850
+# # [0;33mW (47426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,46987859
+# # [0;33mW (47526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47087860
+# # [0;33mW (47666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47187867
+# # [0;33mW (47726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47287851
+# # [0;33mW (47826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (47846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,47387823
+# # [0;33mW (47926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (47986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47487798
+# # [0;33mW (48066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47587781
+# # [0;33mW (48146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,47687771
+# # [0;33mW (48226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,47787765
+# # [0;33mW (48326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47887794
+# # [0;33mW (48466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,47987809
+# # [0;33mW (48546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48087827
+# # [0;33mW (48626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,48187863
+# # [0;33mW (48736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48287897
+# # [0;33mW (48826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (48866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48387931
+# # [0;33mW (48946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (48966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48487951
+# # [0;33mW (49026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,48587911
+# # [0;33mW (49126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48687875
+# # [0;33mW (49266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48787863
+# # [0;33mW (49346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,48887857
+# # [0;33mW (49426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,48987857
+# # [0;33mW (49526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49087844
+# # [0;33mW (49656) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49187845
+# # [0;33mW (49746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49287805
+# # [0;33mW (49826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (49846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,49387765
+# # [0;33mW (49926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (49986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49487757
+# # [0;33mW (50066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49587733
+# # [0;33mW (50126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49687722
+# # [0;33mW (50226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,49787684
+# # [0;33mW (50326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49887666
+# # [0;33mW (50466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,49987647
+# # [0;33mW (50546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50606) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,50087625
+# # [0;33mW (50626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,50187597
+# # [0;33mW (50726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (50786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50287555
+# # [0;33mW (50866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50387513
+# # [0;33mW (50946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (50966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50487464
+# # [0;33mW (51026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,50587406
+# # [0;33mW (51126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50687354
+# # [0;33mW (51226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50787309
+# # [0;33mW (51346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,50887269
+# # [0;33mW (51426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,50987234
+# # [0;33mW (51526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51087200
+# # [0;33mW (51666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51187185
+# # [0;33mW (51746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51287199
+# # [0;33mW (51826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (51846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,51387204
+# # [0;33mW (51926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (51986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51487190
+# # [0;33mW (52046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51587171
+# # [0;33mW (52146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51687179
+# # [0;33mW (52226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,51787204
+# # [0;33mW (52326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51887221
+# # [0;33mW (52466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,51987204
+# # [0;33mW (52526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52087176
+# # [0;33mW (52636) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,52187157
+# # [0;33mW (52726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (52786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52287136
+# # [0;33mW (52876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52387113
+# # [0;33mW (52946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (52966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,52487121
+# # [0;33mW (53036) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,52587118
+# # [0;33mW (53136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52687120
+# # [0;33mW (53266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52787122
+# # [0;33mW (53346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,52887097
+# # [0;33mW (53436) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,52987075
+# # [0;33mW (53526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53087039
+# # [0;33mW (53626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53676) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53186992
+# # [0;33mW (53756) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53286958
+# # [0;33mW (53826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53856) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,53386893
+# # [0;33mW (53926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (53966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (53986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53486838
+# # [0;33mW (54066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53586763
+# # [0;33mW (54146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53686701
+# # [0;33mW (54226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,53786676
+# # [0;33mW (54326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53886633
+# # [0;33mW (54446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54476) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,53986596
+# # [0;33mW (54546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54596) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54086569
+# # [0;33mW (54626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,54186569
+# # [0;33mW (54726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (54786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54286569
+# # [0;33mW (54876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54386530
+# # [0;33mW (54926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (54986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54486496
+# # [0;33mW (55026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,54586451
+# # [0;33mW (55126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54686408
+# # [0;33mW (55266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55296) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,54786366
+# # [0;33mW (55346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55406) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,54886323
+# # [0;33mW (55426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,54986275
+# # [0;33mW (55526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,55086238
+# # [0;33mW (55616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55186206
+# # [0;33mW (55746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55286179
+# # [0;33mW (55826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55896) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (55906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,55386150
+# # [0;33mW (55926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (55986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55486122
+# # [0;33mW (56026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55586135
+# # [0;33mW (56146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55686147
+# # [0;33mW (56226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,55786133
+# # [0;33mW (56326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55886112
+# # [0;33mW (56466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,55986118
+# # [0;33mW (56546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56086107
+# # [0;33mW (56626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,56186109
+# # [0;33mW (56726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56286123
+# # [0;33mW (56846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56386155
+# # [0;33mW (56946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (56966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (56986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56486180
+# # [0;33mW (57026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,56586205
+# # [0;33mW (57126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56686232
+# # [0;33mW (57266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56786245
+# # [0;33mW (57326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,56886220
+# # [0;33mW (57426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,56986188
+# # [0;33mW (57526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57086152
+# # [0;33mW (57666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57186122
+# # [0;33mW (57746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,57286095
+# # [0;33mW (57826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (57846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,57386064
+# # [0;33mW (57926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (57986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57486046
+# # [0;33mW (58066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57586023
+# # [0;33mW (58156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57686004
+# # [0;33mW (58226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,57785983
+# # [0;33mW (58326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58396) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57885917
+# # [0;33mW (58426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,57985889
+# # [0;33mW (58556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58085878
+# # [0;33mW (58626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,58185886
+# # [0;33mW (58726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58776) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58285891
+# # [0;33mW (58876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (58906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58385891
+# # [0;33mW (58946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (58966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58485881
+# # [0;33mW (59026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,58585850
+# # [0;33mW (59126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58685814
+# # [0;33mW (59246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58785789
+# # [0;33mW (59346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,58885766
+# # [0;33mW (59426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,58985730
+# # [0;33mW (59526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59085685
+# # [0;33mW (59666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59185656
+# # [0;33mW (59726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59285663
+# # [0;33mW (59826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (59846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,59385678
+# # [0;33mW (59926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (59986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59485659
+# # [0;33mW (60066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59585626
+# # [0;33mW (60146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,59685595
+# # [0;33mW (60226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,59785585
+# # [0;33mW (60326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59885627
+# # [0;33mW (60466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,59985651
+# # [0;33mW (60546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60085677
+# # [0;33mW (60626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,60185702
+# # [0;33mW (60726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,60285720
+# # [0;33mW (60816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60836) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (60866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60385735
+# # [0;33mW (60946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (60966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60485722
+# # [0;33mW (61036) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,60585714
+# # [0;33mW (61136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60685759
+# # [0;33mW (61266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60785800
+# # [0;33mW (61346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,60885833
+# # [0;33mW (61436) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,60985872
+# # [0;33mW (61536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61085849
+# # [0;33mW (61646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61185835
+# # [0;33mW (61746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61285817
+# # [0;33mW (61826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (61846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,61385807
+# # [0;33mW (61926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (61986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61485803
+# # [0;33mW (62066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61585799
+# # [0;33mW (62126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61685791
+# # [0;33mW (62226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,61785779
+# # [0;33mW (62326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61885770
+# # [0;33mW (62466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,61985785
+# # [0;33mW (62556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62606) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,62085789
+# # [0;33mW (62626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,62185799
+# # [0;33mW (62726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (62786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62285829
+# # [0;33mW (62866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62385857
+# # [0;33mW (62946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (62966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62485865
+# # [0;33mW (63026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,62585857
+# # [0;33mW (63126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62685855
+# # [0;33mW (63226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62785841
+# # [0;33mW (63346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,62885833
+# # [0;33mW (63426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,62985822
+# # [0;33mW (63526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63085811
+# # [0;33mW (63666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63185793
+# # [0;33mW (63746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63285783
+# # [0;33mW (63826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (63846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,63385771
+# # [0;33mW (63946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (63986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63485759
+# # [0;33mW (64046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63585763
+# # [0;33mW (64146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63685757
+# # [0;33mW (64226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,63785761
+# # [0;33mW (64326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63885760
+# # [0;33mW (64466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,63985749
+# # [0;33mW (64526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64085744
+# # [0;33mW (64626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,64185714
+# # [0;33mW (64726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (64786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64285706
+# # [0;33mW (64866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64385669
+# # [0;33mW (64946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (64966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,64485654
+# # [0;33mW (65026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,64585630
+# # [0;33mW (65126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64685581
+# # [0;33mW (65266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64785572
+# # [0;33mW (65346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,64885538
+# # [0;33mW (65426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,64985559
+# # [0;33mW (65526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65085577
+# # [0;33mW (65626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65185554
+# # [0;33mW (65746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65285551
+# # [0;33mW (65826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,65385549
+# # [0;33mW (65926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (65966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (65986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65485576
+# # [0;33mW (66066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65585613
+# # [0;33mW (66146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65685646
+# # [0;33mW (66226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,65785673
+# # [0;33mW (66326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65885705
+# # [0;33mW (66446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,65985732
+# # [0;33mW (66546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,66085768
+# # [0;33mW (66626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,66185775
+# # [0;33mW (66726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,66285799
+# # [0;33mW (66816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (66866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,66385838
+# # [0;33mW (66926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (66966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,66485875
+# # [0;33mW (67026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,66585910
+# # [0;33mW (67126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,66685939
+# # [0;33mW (67266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,66785940
+# # [0;33mW (67346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67406) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,66885935
+# # [0;33mW (67426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,66985924
+# # [0;33mW (67526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67085964
+# # [0;33mW (67666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67186000
+# # [0;33mW (67746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67285991
+# # [0;33mW (67826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (67906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,67385985
+# # [0;33mW (67926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (67986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67485988
+# # [0;33mW (68026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67585998
+# # [0;33mW (68146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67686000
+# # [0;33mW (68226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,67786017
+# # [0;33mW (68326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67886035
+# # [0;33mW (68466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,67986036
+# # [0;33mW (68546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68086021
+# # [0;33mW (68626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,68186007
+# # [0;33mW (68726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68286022
+# # [0;33mW (68846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68386032
+# # [0;33mW (68946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (68966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (68986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68486024
+# # [0;33mW (69026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,68586017
+# # [0;33mW (69126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,68686009
+# # [0;33mW (69216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68786001
+# # [0;33mW (69326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,68886002
+# # [0;33mW (69446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69476) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,68986007
+# # [0;33mW (69526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69086007
+# # [0;33mW (69666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69186042
+# # [0;33mW (69746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,69286086
+# # [0;33mW (69826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (69846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,69386090
+# # [0;33mW (69926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (69986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69486102
+# # [0;33mW (70066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69586084
+# # [0;33mW (70146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69686056
+# # [0;33mW (70226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,69786024
+# # [0;33mW (70326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69885987
+# # [0;33mW (70426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,69985971
+# # [0;33mW (70546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70085953
+# # [0;33mW (70626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70656) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,70185963
+# # [0;33mW (70726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70285965
+# # [0;33mW (70866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (70906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70385956
+# # [0;33mW (70946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (70966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70485946
+# # [0;33mW (71026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,70585956
+# # [0;33mW (71126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70685981
+# # [0;33mW (71246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70786014
+# # [0;33mW (71346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,70886049
+# # [0;33mW (71426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,70986079
+# # [0;33mW (71526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71086110
+# # [0;33mW (71666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71186134
+# # [0;33mW (71726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71286158
+# # [0;33mW (71826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (71846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,71386156
+# # [0;33mW (71926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (71986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71486147
+# # [0;33mW (72066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71586126
+# # [0;33mW (72146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,71686123
+# # [0;33mW (72226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,71786145
+# # [0;33mW (72326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71886141
+# # [0;33mW (72466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,71986152
+# # [0;33mW (72546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72086158
+# # [0;33mW (72626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,72186162
+# # [0;33mW (72726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72286129
+# # [0;33mW (72826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (72866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72386093
+# # [0;33mW (72946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (72966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72486066
+# # [0;33mW (73026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,72586021
+# # [0;33mW (73126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72685990
+# # [0;33mW (73266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72785954
+# # [0;33mW (73346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,72885933
+# # [0;33mW (73426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,72985904
+# # [0;33mW (73526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73085855
+# # [0;33mW (73646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73185829
+# # [0;33mW (73746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73285821
+# # [0;33mW (73826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (73846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,73385823
+# # [0;33mW (73926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (73986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73485832
+# # [0;33mW (74066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73585835
+# # [0;33mW (74126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73685862
+# # [0;33mW (74226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,73785896
+# # [0;33mW (74326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73885933
+# # [0;33mW (74466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,73985982
+# # [0;33mW (74546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74606) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,74086024
+# # [0;33mW (74626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,74186070
+# # [0;33mW (74726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (74786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74286093
+# # [0;33mW (74866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74386082
+# # [0;33mW (74946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (74966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74486070
+# # [0;33mW (75046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,74586033
+# # [0;33mW (75126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74685995
+# # [0;33mW (75226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74785967
+# # [0;33mW (75346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,74885960
+# # [0;33mW (75426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,74985948
+# # [0;33mW (75526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75085942
+# # [0;33mW (75666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75185945
+# # [0;33mW (75746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75285941
+# # [0;33mW (75826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (75846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,75385938
+# # [0;33mW (75926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (75986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75485937
+# # [0;33mW (76046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75585946
+# # [0;33mW (76146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75686002
+# # [0;33mW (76226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,75786036
+# # [0;33mW (76326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75886048
+# # [0;33mW (76466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,75986080
+# # [0;33mW (76526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76086080
+# # [0;33mW (76626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,76186076
+# # [0;33mW (76726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (76786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76286081
+# # [0;33mW (76866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76386091
+# # [0;33mW (76946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (76966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,76486130
+# # [0;33mW (77026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,76586182
+# # [0;33mW (77126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76686210
+# # [0;33mW (77266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76786266
+# # [0;33mW (77346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,76886318
+# # [0;33mW (77426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,76986378
+# # [0;33mW (77526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77086437
+# # [0;33mW (77626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77186484
+# # [0;33mW (77746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77286480
+# # [0;33mW (77826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,77386489
+# # [0;33mW (77926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (77966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (77986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77486488
+# # [0;33mW (78066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77586486
+# # [0;33mW (78146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77686482
+# # [0;33mW (78226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,77786482
+# # [0;33mW (78336) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77886487
+# # [0;33mW (78446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,77986488
+# # [0;33mW (78546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78086470
+# # [0;33mW (78626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,78186448
+# # [0;33mW (78726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (78786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78286435
+# # [0;33mW (78866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78386428
+# # [0;33mW (78926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (78966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78486430
+# # [0;33mW (79026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,78586417
+# # [0;33mW (79126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78686407
+# # [0;33mW (79266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,78786396
+# # [0;33mW (79346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79406) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,78886383
+# # [0;33mW (79426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,78986371
+# # [0;33mW (79526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79086372
+# # [0;33mW (79666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79186371
+# # [0;33mW (79746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79286366
+# # [0;33mW (79826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (79906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,79386357
+# # [0;33mW (79926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (79986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79486375
+# # [0;33mW (80026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79586407
+# # [0;33mW (80146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79686405
+# # [0;33mW (80226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,79786392
+# # [0;33mW (80326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79886381
+# # [0;33mW (80466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,79986369
+# # [0;33mW (80546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80086354
+# # [0;33mW (80626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80186335
+# # [0;33mW (80716) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80286328
+# # [0;33mW (80846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80386325
+# # [0;33mW (80946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (80966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (80986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80486308
+# # [0;33mW (81026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,80586290
+# # [0;33mW (81126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,80686269
+# # [0;33mW (81216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80786255
+# # [0;33mW (81326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,80886246
+# # [0;33mW (81436) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,80986216
+# # [0;33mW (81526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81086203
+# # [0;33mW (81666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81186191
+# # [0;33mW (81746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,81286176
+# # [0;33mW (81826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (81846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,81386180
+# # [0;33mW (81926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (81986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81486186
+# # [0;33mW (82066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81586189
+# # [0;33mW (82146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81686165
+# # [0;33mW (82226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,81786138
+# # [0;33mW (82326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81886101
+# # [0;33mW (82426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,81986059
+# # [0;33mW (82546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82086075
+# # [0;33mW (82626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,82186118
+# # [0;33mW (82726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82286157
+# # [0;33mW (82866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (82906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82386178
+# # [0;33mW (82946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (82966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82486182
+# # [0;33mW (83026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,82586180
+# # [0;33mW (83126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82686173
+# # [0;33mW (83246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82786174
+# # [0;33mW (83346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,82886159
+# # [0;33mW (83426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,82986150
+# # [0;33mW (83526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,83086148
+# # [0;33mW (83616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83186137
+# # [0;33mW (83726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83756) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83286119
+# # [0;33mW (83826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (83846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,83386096
+# # [0;33mW (83926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (83996) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83486107
+# # [0;33mW (84066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83586102
+# # [0;33mW (84146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,83686089
+# # [0;33mW (84226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,83786066
+# # [0;33mW (84326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83886070
+# # [0;33mW (84476) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84496) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,83986050
+# # [0;33mW (84546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84086024
+# # [0;33mW (84626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,84186001
+# # [0;33mW (84726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84285978
+# # [0;33mW (84826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (84876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84385956
+# # [0;33mW (84946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (84966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84485948
+# # [0;33mW (85026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,84585967
+# # [0;33mW (85126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,84685953
+# # [0;33mW (85216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85296) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84785978
+# # [0;33mW (85316) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,84886014
+# # [0;33mW (85426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,84986056
+# # [0;33mW (85526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,85086094
+# # [0;33mW (85616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85186137
+# # [0;33mW (85746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85286169
+# # [0;33mW (85826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85386166
+# # [0;33mW (85916) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (85926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (85986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,85486174
+# # [0;33mW (86016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85586206
+# # [0;33mW (86126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85686227
+# # [0;33mW (86226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85786257
+# # [0;33mW (86316) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86336) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85886256
+# # [0;33mW (86466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,85986241
+# # [0;33mW (86546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86086257
+# # [0;33mW (86616) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86636) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86656) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,86186292
+# # [0;33mW (86736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86756) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (86786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86286326
+# # [0;33mW (86866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86386368
+# # [0;33mW (86946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (86966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86486385
+# # [0;33mW (87036) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87056) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,86586414
+# # [0;33mW (87136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86686446
+# # [0;33mW (87226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86786477
+# # [0;33mW (87346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,86886480
+# # [0;33mW (87426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,86986463
+# # [0;33mW (87526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87086446
+# # [0;33mW (87666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87186466
+# # [0;33mW (87756) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87286484
+# # [0;33mW (87826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (87856) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,87386494
+# # [0;33mW (87926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (87986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87486486
+# # [0;33mW (88056) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88076) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87586432
+# # [0;33mW (88156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88176) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87686414
+# # [0;33mW (88226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,87786387
+# # [0;33mW (88326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87886328
+# # [0;33mW (88476) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,87986273
+# # [0;33mW (88526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88576) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88086233
+# # [0;33mW (88626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88676) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,88186209
+# # [0;33mW (88726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (88786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88286218
+# # [0;33mW (88876) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88386207
+# # [0;33mW (88946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (88966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,88486178
+# # [0;33mW (89026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,88586162
+# # [0;33mW (89126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88686138
+# # [0;33mW (89266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89296) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88786121
+# # [0;33mW (89346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,88886090
+# # [0;33mW (89426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,88986065
+# # [0;33mW (89536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,89086043
+# # [0;33mW (89616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89636) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89186040
+# # [0;33mW (89746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89286030
+# # [0;33mW (89826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,89386031
+# # [0;33mW (89926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (89966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (89996) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,89485987
+# # [0;33mW (90016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89585962
+# # [0;33mW (90116) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89685952
+# # [0;33mW (90226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,89785921
+# # [0;33mW (90326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89885872
+# # [0;33mW (90446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,89985837
+# # [0;33mW (90546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90085801
+# # [0;33mW (90626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,90185774
+# # [0;33mW (90726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (90786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90285741
+# # [0;33mW (90866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90385717
+# # [0;33mW (90926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (90966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90485691
+# # [0;33mW (91026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,90585694
+# # [0;33mW (91136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90685712
+# # [0;33mW (91266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,90785739
+# # [0;33mW (91346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91406) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,90885766
+# # [0;33mW (91426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,90985767
+# # [0;33mW (91526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,91085729
+# # [0;33mW (91616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91185720
+# # [0;33mW (91746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91285721
+# # [0;33mW (91826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (91906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,91385706
+# # [0;33mW (91926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (91986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91485688
+# # [0;33mW (92026) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91585688
+# # [0;33mW (92156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91685724
+# # [0;33mW (92226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,91785738
+# # [0;33mW (92326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91885756
+# # [0;33mW (92466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,91985764
+# # [0;33mW (92546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92085727
+# # [0;33mW (92626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,92185682
+# # [0;33mW (92726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92285640
+# # [0;33mW (92846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92385586
+# # [0;33mW (92946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (92966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (92986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92485541
+# # [0;33mW (93026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,92585506
+# # [0;33mW (93126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92685472
+# # [0;33mW (93276) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92785412
+# # [0;33mW (93326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93376) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,92885354
+# # [0;33mW (93426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93466) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,92985302
+# # [0;33mW (93526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93596) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93085271
+# # [0;33mW (93616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,93185263
+# # [0;33mW (93746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93285262
+# # [0;33mW (93826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (93846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93385245
+# # [0;33mW (93926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (93996) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93485240
+# # [0;33mW (94016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,93585205
+# # [0;33mW (94146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,93685188
+# # [0;33mW (94226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94286) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93785183
+# # [0;33mW (94316) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94336) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,93885164
+# # [0;33mW (94416) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,93985141
+# # [0;33mW (94546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94085089
+# # [0;33mW (94626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94185051
+# # [0;33mW (94716) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,94285034
+# # [0;33mW (94816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94385042
+# # [0;33mW (94916) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (94946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (94966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94485024
+# # [0;33mW (95026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,94585005
+# # [0;33mW (95126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94684977
+# # [0;33mW (95246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94784970
+# # [0;33mW (95346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,94884983
+# # [0;33mW (95426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,94984990
+# # [0;33mW (95536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,95085017
+# # [0;33mW (95616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95185008
+# # [0;33mW (95736) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95756) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95284974
+# # [0;33mW (95826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (95856) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,95384931
+# # [0;33mW (95926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (95986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95484906
+# # [0;33mW (96066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95584889
+# # [0;33mW (96156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,95684855
+# # [0;33mW (96226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96256) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,95784855
+# # [0;33mW (96326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95884845
+# # [0;33mW (96466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,95984813
+# # [0;33mW (96546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96084784
+# # [0;33mW (96626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96696) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,96184742
+# # [0;33mW (96706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96284708
+# # [0;33mW (96826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (96866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96384707
+# # [0;33mW (96946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (96966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96484714
+# # [0;33mW (97026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,96584717
+# # [0;33mW (97126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97176) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96684683
+# # [0;33mW (97266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96784616
+# # [0;33mW (97346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,96884530
+# # [0;33mW (97426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,96984446
+# # [0;33mW (97526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97084365
+# # [0;33mW (97646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97184293
+# # [0;33mW (97746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97284245
+# # [0;33mW (97826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97384228
+# # [0;33mW (97906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (97936) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (97996) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97484191
+# # [0;33mW (98066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98096) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97584147
+# # [0;33mW (98136) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98156) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97684081
+# # [0;33mW (98226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,97784018
+# # [0;33mW (98326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,97883967
+# # [0;33mW (98406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,97983909
+# # [0;33mW (98546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98083886
+# # [0;33mW (98606) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98183875
+# # [0;33mW (98706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,98283870
+# # [0;33mW (98806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (98866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98383835
+# # [0;33mW (98946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (98976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98483798
+# # [0;33mW (99026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99086) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,98583757
+# # [0;33mW (99116) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,98683723
+# # [0;33mW (99206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98783669
+# # [0;33mW (99346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,98883639
+# # [0;33mW (99426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,98983616
+# # [0;33mW (99536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99083616
+# # [0;33mW (99666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99706) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99183615
+# # [0;33mW (99746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99283581
+# # [0;33mW (99836) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (99856) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,99383550
+# # [0;33mW (99946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (99986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,99483514
+# # [0;33mW (100006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99583500
+# # [0;33mW (100146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99683453
+# # [0;33mW (100226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100256) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,99783438
+# # [0;33mW (100326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,99883440
+# # [0;33mW (100406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,99983442
+# # [0;33mW (100526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100083441
+# # [0;33mW (100626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100666) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,100183448
+# # [0;33mW (100726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (100786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100283448
+# # [0;33mW (100866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100383459
+# # [0;33mW (100956) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (100976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101006) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,100483432
+# # [0;33mW (101026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,100583395
+# # [0;33mW (101126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101146) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100683333
+# # [0;33mW (101276) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100783264
+# # [0;33mW (101346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101376) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,100883186
+# # [0;33mW (101426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101486) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,100983134
+# # [0;33mW (101526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101083080
+# # [0;33mW (101626) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101676) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101183046
+# # [0;33mW (101746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101283014
+# # [0;33mW (101826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,101382969
+# # [0;33mW (101926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (101966) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (101996) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,101482921
+# # [0;33mW (102016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102096) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101582894
+# # [0;33mW (102106) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101682879
+# # [0;33mW (102226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101782881
+# # [0;33mW (102306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,101882878
+# # [0;33mW (102416) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102446) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,101982819
+# # [0;33mW (102546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102586) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102082792
+# # [0;33mW (102626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102182764
+# # [0;33mW (102706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102282746
+# # [0;33mW (102806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (102866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102382688
+# # [0;33mW (102926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (102966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102482666
+# # [0;33mW (103026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103066) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102582635
+# # [0;33mW (103116) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,102682602
+# # [0;33mW (103216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102782563
+# # [0;33mW (103346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102882521
+# # [0;33mW (103416) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103436) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,102982486
+# # [0;33mW (103506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103536) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103546) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,103082443
+# # [0;33mW (103606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103182425
+# # [0;33mW (103746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103282391
+# # [0;33mW (103826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103886) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,103382404
+# # [0;33mW (103906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (103936) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (103986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,103482423
+# # [0;33mW (104006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104036) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104076) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103582436
+# # [0;33mW (104146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103682449
+# # [0;33mW (104236) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104256) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103782476
+# # [0;33mW (104306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104336) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103882466
+# # [0;33mW (104466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104506) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,103982453
+# # [0;33mW (104556) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104082440
+# # [0;33mW (104626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104656) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104182443
+# # [0;33mW (104706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104282441
+# # [0;33mW (104846) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104382442
+# # [0;33mW (104956) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (104976) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (104986) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104482429
+# # [0;33mW (105026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104582452
+# # [0;33mW (105106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,104682452
+# # [0;33mW (105206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104782436
+# # [0;33mW (105326) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105366) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105376) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104882428
+# # [0;33mW (105426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105476) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,104982425
+# # [0;33mW (105506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105082454
+# # [0;33mW (105676) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105696) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105182469
+# # [0;33mW (105746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105282457
+# # [0;33mW (105806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105382446
+# # [0;33mW (105906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (105926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (105986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105482417
+# # [0;33mW (106066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106096) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105582442
+# # [0;33mW (106146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105682426
+# # [0;33mW (106226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106296) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,105782423
+# # [0;33mW (106306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106396) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,105882442
+# # [0;33mW (106416) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106426) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106496) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,105982433
+# # [0;33mW (106546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106082416
+# # [0;33mW (106626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106646) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106182421
+# # [0;33mW (106706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106766) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106806) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,106282406
+# # [0;33mW (106816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106886) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106382367
+# # [0;33mW (106906) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (106946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (106966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106482338
+# # [0;33mW (107026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106582315
+# # [0;33mW (107116) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,106682308
+# # [0;33mW (107216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107246) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106782295
+# # [0;33mW (107346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107386) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106882273
+# # [0;33mW (107426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,106982249
+# # [0;33mW (107506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,107082205
+# # [0;33mW (107606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107182171
+# # [0;33mW (107726) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107282127
+# # [0;33mW (107826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107866) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107382072
+# # [0;33mW (107906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (107926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (107986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,107482021
+# # [0;33mW (108006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107581975
+# # [0;33mW (108146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107681923
+# # [0;33mW (108206) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108236) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107781854
+# # [0;33mW (108336) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108346) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,107881791
+# # [0;33mW (108416) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,107981724
+# # [0;33mW (108546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108081687
+# # [0;33mW (108636) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108656) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108686) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,108181614
+# # [0;33mW (108706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108736) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108786) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,108281535
+# # [0;33mW (108806) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108826) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (108866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108381504
+# # [0;33mW (108956) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (108966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108481480
+# # [0;33mW (109026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109056) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108581432
+# # [0;33mW (109106) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109126) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109166) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109186) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,108681381
+# # [0;33mW (109206) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109306) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108781330
+# # [0;33mW (109356) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109376) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108881313
+# # [0;33mW (109426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109456) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,108981313
+# # [0;33mW (109506) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,109081314
+# # [0;33mW (109606) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109646) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109676) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109181313
+# # [0;33mW (109746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109776) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109786) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109281309
+# # [0;33mW (109826) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109846) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109381315
+# # [0;33mW (109906) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (109926) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (109986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,109481289
+# # [0;33mW (110006) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110076) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110096) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109581253
+# # [0;33mW (110126) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110176) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109681212
+# # [0;33mW (110226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110266) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109781192
+# # [0;33mW (110306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,109881205
+# # [0;33mW (110406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110496) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,109981199
+# # [0;33mW (110606) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,110081150
+# # [0;33mW (110616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110636) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110656) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110676) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110181097
+# # [0;33mW (110706) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110726) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110746) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110796) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,110281056
+# # [0;33mW (110816) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (110866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110896) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110381055
+# # [0;33mW (110946) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (110966) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110481024
+# # [0;33mW (111026) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111046) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111096) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,110581008
+# # [0;33mW (111116) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111136) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111196) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,110680955
+# # [0;33mW (111216) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111226) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111266) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111286) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110780894
+# # [0;33mW (111346) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111366) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110880851
+# # [0;33mW (111426) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111446) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,110980843
+# # [0;33mW (111516) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111526) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111566) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111586) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,111080842
+# # [0;33mW (111616) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111666) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111686) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111180836
+# # [0;33mW (111716) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111746) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111766) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111280821
+# # [0;33mW (111866) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111876) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111380834
+# # [0;33mW (111926) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (111946) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (111986) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,111480827
+# # [0;33mW (112016) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (112046) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112066) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112086) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111580833
+# # [0;33mW (112146) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112166) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (112186) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111680844
+# # [0;33mW (112226) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112246) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111780862
+# # [0;33mW (112306) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112326) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (112386) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+0,0,111880876
+# # [0;33mW (112406) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+# # [0;33mW (112466) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112486) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,111980888
+# # [0;33mW (112526) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112546) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112566) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m
+0,0,112080883
+# # [0;33mW (112626) MAIN: Send to cc:db:a7:1d:c7:cc failed[0m
+# # [0;33mW (112656) MAIN: Send to 94:b5:55:f9:f2:f0 failed[0m

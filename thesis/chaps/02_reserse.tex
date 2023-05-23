@@ -12,7 +12,7 @@ Druhá kapitola se věnuje trendům technologií aplikovaných v IoT řešení. 
 
 \sec Vymezení základních pojmů
 
-Než přejdeme k samotné diskuzi problematiky domnívám se, že je důležité v rychlosti definovat základní pojmy jako je IoT či Industry 4.0 v kontextu tohoto projektu. 
+Než přejdeme k samotné diskuzi problematiky, domnívám se, že je důležité v rychlosti definovat základní pojmy jako je IoT či Industry 4.0 v kontextu tohoto projektu. 
 
 \secc Internet věcí
 
@@ -41,9 +41,9 @@ Pojem {\sbf bezdrátová komunikace} ({\em Wireless communication}) označuje p�
 
 \sec Trendy ve světě IoT
 
-Zavádění IoT zařízení do denního osobního života a fungování firem přináší výhody, jako je zvýšení efektivity, produktivity a nutnosti nedělat rutinní věci. Trendem je sbírat, co největší množství dat, aby bylo možné data efektivně vytěžit. S tímto trendem souvisí zvyšování množství IoT zařízení, jako jsou například drobné MCU se senzorem pro měření jednoho parametru a modulem pro bezdrátovou komunikaci. 
+Zavádění IoT zařízení do denního osobního života a fungování firem přináší výhody jako je zvýšení efektivity, produktivity a nutnosti nedělat rutinní věci. Trendem je sbírat co největší množství dat, aby bylo možné data efektivně vytěžit. S tímto trendem souvisí zvyšování množství IoT zařízení, jako jsou například drobné MCU se senzorem pro měření jednoho parametru a modulem pro bezdrátovou komunikaci. 
 
-Takovéto zařízení typicky funguje tak, že se jednou za určitou dobu vzbudí. Pomocí senzoru naměří data, která zpracuje do podoby, aby byla interpretovatelná.\fnote{Zpracováním dat je myšleno interpretovat data tak, aby dávala smysl i mimo kontext senzoru. Například při měření vzdálenosti pomocí vířivých proudů, je třeba naměřené napětí vyčistit {\em lock-in detekcí} a kalibrovat, aby vzdálenost byla v jednotkách délky.} Data uloží a pokračuje ve spánku. Po naměření a elementárním zpracování většího množství dat, dojde k odeslání do hierarchicky nadřazeného zařízení.\fnote{Gateway či router, které data odesílají dále nebo koncentrátor. Který data ukládá a dále zpracovává.} K odeslání se obvykle využívá bezdrátového spojení. Po odeslání dat zařízení opět usne a celý cyklus se opakuje.
+Takovéto zařízení typicky funguje tak, že se jednou za určitou dobu vzbudí. Pomocí senzoru naměří data, která zpracuje do podoby, aby byla interpretovatelná.\fnote{Zpracováním dat je myšleno interpretovat data tak, aby dávala smysl i mimo kontext senzoru. Například při měření vzdálenosti pomocí vířivých proudů je třeba naměřené napětí vyčistit {\em lock-in detekcí} a kalibrovat, aby vzdálenost byla v jednotkách délky.} Data uloží a pokračuje ve spánku. Po naměření a elementárním zpracování většího množství dat, dojde k odeslání do hierarchicky nadřazeného zařízení.\fnote{Gateway či router, které data odesílají dále nebo koncentrátor. Který data ukládá a dále zpracovává.} K odeslání se obvykle využívá bezdrátového spojení. Po odeslání dat zařízení opět usne a celý cyklus se opakuje.
 
 Takováto zařízení se těší veliké oblibě. Jsou drobná, lze je umístit na jakékoliv místo. Jsou optimalizována pro minimální spotřebu energie a jsou napájena z baterie. Díky tomu nezávisí na externím zdroji energie.
 
@@ -61,7 +61,7 @@ režim spánku (čekání vzbuzení) & $1 \mu A$\cr
 \caption/t Orientační hodnoty pro porovnání režimů činností dle spotřeby energie.
 \endinsert
 
-Je možné, že pokrok technologií nám přinese řešení napájení. Jedna z možných cest je, že MCU bude odebírat potřebou energii z vysílaného signálu.\fnote{\url{https://cdr.cz/clanek/intel-ukazal-iot-cip-ktery-si-vystaci-s-energii-z-radiovych-vln}} V současnosti není zvykem takováto zařízení využívat a ani se nedomnívám, že se jedná o univerzálně správné řešení. To především kvůli tomu, že IoT zařízení jsou umístěna i na místech, kde se nepředpokládá přítomnost dostatečně silného signálu.
+Je možné, že pokrok technologií nám přinese řešení napájení. Jedna z možných cest je, že MCU bude odebírat potřebnou energii z vysílaného signálu.\fnote{\url{https://cdr.cz/clanek/intel-ukazal-iot-cip-ktery-si-vystaci-s-energii-z-radiovych-vln}} V současnosti není zvykem takováto zařízení využívat a ani se nedomnívám, že se jedná o univerzálně správné řešení. To především kvůli tomu, že IoT zařízení jsou umístěna i na místech, kde se nepředpokládá přítomnost dostatečně silného signálu.
 
 \secc Problematika spotřeby energie při bezdrátové komunikaci
 
@@ -73,7 +73,7 @@ Podle požadavků fungování IoT zařízení je vhodné volit danou technologii
 
 {\sbf Sigfox} je francouzská společnost, která se věnuje komunikacím s nízkou spotřebou energie. Poskytují službu Sigfox, která podobně jako LoRaWAN slouží především k sbírání dat z IoT zařízení. Sigfox se v praxi používá například v elektroměrech či chytrých pračkách, které jednou za čas odesílají malé množství dat.~\cite[qmBBTvuXC4ZLpzBJ] Na rozdíl od technologie LoRa používá UNB ({\em Ultra Narrow-Band}). Řešení Sigfox se liší také v tom, že neumožňuje data odesílat do vlastní infrastruktury, nýbrž je třeba využívat unifikovaný cloud přímo od společnosti.~\cite[PE10ogpYg8hIftSH]
 
-{\sbf Narrowband IoT (NB-IoT)} je technika, kdy úzkopásmová síť využívá již vybudované síťové infrastruktury poskytovatelů mobilní signálu. Pásmo, v kterém NB-IoT může běžet, je veliké 200kHz.~\cite[nCK4SoA3nFdVlIqm] Přenosová rychlost se liší dle generace komunikace.\fnote{Detailní přehled jednotlivých typů NB-IoT s informací o přenosové rychlosti: \url{https://en.wikipedia.org/wiki/Narrowband_IoT\#3GPP_LPWAN_standards}.} Trendu užití již vybudovaných IoT síti se budu věnovat v další kapitole.~\cite[hw9pj8HRl8eVTddM]
+{\sbf Narrowband IoT (NB-IoT)} je technika, kdy úzkopásmová síť využívá již vybudované síťové infrastruktury poskytovatelů mobilní signálu. Pásmo, ve kterém NB-IoT může běžet, je veliké 200kHz.~\cite[nCK4SoA3nFdVlIqm] Přenosová rychlost se liší dle generace komunikace.\fnote{Detailní přehled jednotlivých typů NB-IoT s informací o přenosové rychlosti: \url{https://en.wikipedia.org/wiki/Narrowband_IoT\#3GPP_LPWAN_standards}.} Trendu užití již vybudovaných IoT síti se budu věnovat v další kapitole.~\cite[hw9pj8HRl8eVTddM]
 
 \medskip
 \clabel[PLWAN-img]{Srovnání parametrů LPWAN technologií}
@@ -81,13 +81,13 @@ Podle požadavků fungování IoT zařízení je vhodné volit danou technologii
 \caption/f Srovnání parametrů LPWAN technologií.~\cite[articleLPWAN]
 \medskip
 
-Technologie Sigfox vyniká dosahem, pokrytím a nízkou energetickou náročností. LoRa je stejně jako Sigfox vhodná pro aplikace s extrémně nízkou energetickou náročností. Navíc dokáže odeslat více zpráv. NB-IoT nevyniká v dosahu. Zvládne ale dosahovat mnohem větších přenosových rychlostí, kapacit a jeho latence je ze všech doposud zmiňovaných technologií, nejnižší.~\cite[articleLPWAN]
+Technologie Sigfox vyniká dosahem, pokrytím a nízkou energetickou náročností. LoRa je stejně jako Sigfox vhodná pro aplikace s požadavkem na extrémně nízkou energetickou náročnost. Navíc dokáže odeslat více zpráv. NB-IoT nevyniká v dosahu. Zvládne ale dosahovat mnohem větších přenosových rychlostí, kapacit a jeho latence je ze všech doposud zmiňovaných technologií, nejnižší.~\cite[articleLPWAN]
 
 Pokud jsou požadavky na IoT technologii takové, že vyžadujeme vysoce energeticky nenáročnou komunikaci, která je na malou vzdálenost, připadají v úvahu především technologie jako Bluetooth, ZigBee či Wifi, které jsou definovány v rodině standardů {\em IEEE 802}.~\cite[znAmft9kik4ksAas] Analogicky podel LPWAN bychom skupinu takových zařízení mohli pojmenovávat jako {\sbf Low~Power~Personal~Area~Network (LPPAN)}.
 
 Fyzická vrstva {\sbf ZigBee} je popsána standardem {\em IEEE 802.15.4}. Jedná se o bezdrátovou komunikaci, která funguje do dosahu 75 m na frekvencích ISM 868 MHz, 902 - 928 MHz a 2,4 GHz. Pro směrování používá multiskokové {\em ad-hoc} směrovací metody. Díky tomu zvládá dosahovat velkých vzdáleností. Na rozdíl od Bluetooth jsou jeho typickou aplikací průmyslové senzorové sítě.~\cite[DxrBsa2LTeitnHBJ]
 
-Technologie {\sbf Bluetooth} původně měla nahradit drátové sériové rozhraní {\em RS-232}. Je definovaná standardem {\em IEEE 802.15.1}. Pracuje v ISM pásmu na frekvenci 2,4 GHz. Nejnovější verze Bluetooth přenáší data rychlostí až 2 Mbit/s na vzdálenost 200 m a velikost zprávy může být až 255 bajtů. Bluetooth se těší veliké oblibě pro komunikaci s drobnou elektronikou, jako jsou například bezdrátová sluchátka. Domácími spotřebiči či elektrickými hudebními nástroji, u kterých umožňuje provádět konfiguraci.~\cite[ayF0F75gllpxRZfL]
+Technologie {\sbf Bluetooth} původně měla nahradit drátové sériové rozhraní {\em RS-232}. Je definovaná standardem {\em IEEE 802.15.1}. Pracuje v ISM pásmu na frekvenci 2,4 GHz. Nejnovější verze Bluetooth přenáší data rychlostí až 2 Mbit/s na vzdálenost 200 m a velikost zprávy může být až 255 bajtů. Bluetooth se těší veliké oblibě pro komunikaci s drobnou elektronikou, jako jsou například bezdrátová sluchátka, domácími spotřebiči či elektrickými hudebními nástroji, u kterých umožňuje provádět konfiguraci.~\cite[ayF0F75gllpxRZfL]
 
 {\sbf Wifi} technologie je skupina bezdrátových protokolů, která vychází ze standardu {\em IEEE 802.11}. V počátkách svého vývoje by se dala nazvat jako dvojče {\em IEEE 802.3} (Ethernet). V průběhu času nové verze Wifi přinášejí novinky, které v Ethernetu nejsou a z podstaty ani nikdy nebudou. Wifi funguje v pásmu ISM 2,4 GHz a 5 GHz.~\cite[KHttKelZqh26KWXd] Široká veřejnost zná Wifi jako nástroj, který slouží pro komunikaci s Internetem. V praxi má ale mnohem širší využití.
 
@@ -102,15 +102,15 @@ Jak uvádí autoři v úvodní části \cite[Hlaing2017], výzva je vybudovat ro
 
 \secc Low-Power Wifi
 
-Pokud se podíváme na vývoj verzí {\em IEEE 802.11}, je si vhodné položit otázku, jaká verze je pro IoT aplikace nejvíce vhodná. Dle článku~\cite[zFQYZ2ILyLdNVlwM] je {\em 802.11n} (Wifi-4) optimálnější pro aplikaci v IoT zařízení než {\em 802.11ac} (Wifi-5). Verze {\em 802.11n} totiž nabízí 2 pásma pro komunikaci (2,4 GHz a 5 GHz). Oproti tomu pozdější verze {\em 802.11ac} pouze jeden kanál na 5 GHz. Pro IoT aplikace je užitečnější 2,4 GHz, protože signál lépe proniká materiálem a má větší dosah. Navíc verze {\em 802.11ac} má vyšší energetická náročnost, která je způsobena komplikovanějším algoritmem sloužím k zrychlení přenosu, které je pro většinu IoT aplikací nepotřebné.
+Pokud se podíváme na vývoj verzí {\em IEEE 802.11}, je si vhodné položit otázku, jaká verze je pro IoT aplikace nejvíce vhodná. Dle článku~\cite[zFQYZ2ILyLdNVlwM] je {\em 802.11n} (Wifi-4) optimálnější pro aplikaci v IoT zařízení než {\em 802.11ac} (Wifi-5). Verze {\em 802.11n} totiž nabízí 2 pásma pro komunikaci (2,4 GHz a 5 GHz). Oproti tomu pozdější verze {\em 802.11ac} pouze jeden kanál na 5 GHz. Pro IoT aplikace je užitečnější 2,4 GHz, protože signál lépe proniká materiálem a má větší dosah. Navíc verze {\em 802.11ac} má vyšší energetickou náročnost, která je způsobena komplikovanějším algoritmem sloužím k zrychlení přenosu, které je pro většinu IoT aplikací nepotřebné.
 
-Nově do hry také přichází nejnovější verze {\sbf Wifi-6} definovaná ve standardu {\em 802.11ax}. Slibuje hned několik novinek, které by měli IoT zařízením rapidně pomoci.
+Nově do hry také přichází nejnovější verze {\sbf Wifi-6} definovaná ve standardu {\em 802.11ax}. Slibuje hned několik novinek, které by měly IoT zařízením rapidně pomoci.
 
-Nejčastější překážka, kterou v této práci zmiňuji, je úspora energie. Wifi-6 implementuje {\sbf Target Wait Time (TWT)} mechanismus, který umožňuje IoT zařízení při nečinnosti usnout a tak ušetřit značné množství energie (viz \ref[RezimCinnosti]).
+Nejčastější překážka, kterou v této práci zmiňuji, je úspora energie. Wifi-6 implementuje {\sbf Target Wait Time (TWT)} mechanismus, který umožňuje IoT zařízení při nečinnosti usnout, a tak ušetřit značné množství energie (viz \ref[RezimCinnosti]).
 
 Druhou novinkou je {\sbf OFDMA},\fnote{Orthogonal frequency-division multiple access} který umožňuje odesílat stejná data do více zařízení ve stejný čas.
 
-Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Service Set coloring} coloring}. Novinka umožňuje {\em obarvit} signál z různých {\em access points} a tak předejít překrývání signálů.~\cite[HarEvenJune25th2020]
+Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Service Set coloring} coloring}. Novinka umožňuje {\em obarvit} signál z různých {\em access points}, a tak předejít překrývání signálů.~\cite[HarEvenJune25th2020]
 
 \medskip
 \clabel[BSS-color-img]{Vizualizace fungování BSS barvení ve Wifi-6}
@@ -120,7 +120,7 @@ Poslední novinkou, na kterou bych rád upozornil je {\sbf BSS\fnote{Basic Servi
 
 \secc Optimalizace nízké spotřeby na zařízení
 
-Energii pro delší fungování zařízení lze především ušetřit správnou volbou MCU a vhodnou konfigurací. Existuje několik pravidel, které mohou pomoci snížit spotřebu energie a vytvořit umožnit, tak IoT zařízení fungovat lépe.
+Energii pro delší fungování zařízení lze především ušetřit správnou volbou MCU a vhodnou konfigurací. Existuje několik pravidel, které mohou pomoci snížit spotřebu energie a umožnit IoT zařízení fungovat lépe.
 
 \begitems
 * volba vhodného modulu či MCU
@@ -129,23 +129,24 @@ Energii pro delší fungování zařízení lze především ušetřit správnou
 * vhodná optimalizace kódu
 \enditems
 
-Na první pohled by se mohlo zdát, že se vyplatí použít všechna pravidla. To ale nemusí být vždy nejvhodnější řešení. Především kombinace vypínání WiFi a přecházení do {\em deep sleep} módu, jak ukázal experiment Přeučila a Martin Novotného.~\cite[9797138]
+Na první pohled by se mohlo zdát, že se vyplatí použít všechna pravidla. To ale nemusí být vždy nejvhodnější řešení. Především kombinace vypínání wifi a přecházení do {\em deep sleep} módu, jak ukázal experiment Přeučila a Martin Novotného.~\cite[9797138]
 
+\label[hieearchyStruct]
 \sec Struktura sítě
 
 Pro IoT řešení je typická {\sbf hierarchická struktura sítě}. Tato povaha je dána účelem řešení, nejtypičtěji vytěžování dat. Hierarchická struktura sítě je podobná architektuře internetu. \fnote{Popsaná struktura neplatí absolutně ve všech případech. Snaží se pouze popsat typický scénář IoT projektu.}
 
 \begitems
 * embeded zařízení, senzory, akční členy
-* koncentrátory, routry a gateway
+* koncentrátory, routery a gateway
 * server, cloud computing
 \enditems
 
-{\sbf První úroveň} se stará o měření dat pomocí senzorů, která jsou zpracovávána v embeded zařízeních nebo o vykonávání činností na základě přijatých dat.\fnote{Například pomocí generovaného PWM signálu rozsvícení adresovatelné LED diody} V IoT scénářích se ale častěji jedná o měření. Tato úroveň následně informace odesílá do hierarchicky nadřazené struktury.
+{\sbf První úroveň} se stará o měření dat pomocí senzorů, která jsou zpracovávána v embeded zařízeních nebo o vykonávání činností na základě přijatých dat.\fnote{Například pomocí generovaného PWM signálu rozsvícení adresovatelné LED diody} V IoT scénářích se ale častěji jedná o měření. Tato úroveň následně odesílá informace do hierarchicky nadřazené struktury.
 
 {\sbf Druhá úroveň} sbírá data z více embeded zařízení a zprostředkovává odeslání do úrovně třetí. Data mohou být na této úrovni i předzpracována. Typické zařízení pro tuto úroveň je router, koncentrátor, které bývají vstupní bránou (gateway) do třetí úrovně.
 
-Na {\sbf třetí úrovni} typicky běží server, který může být onpermisového či cloudového charakteru. Výhodou onpremisu je to, že mám zařízení u sebe. To může přinášet ekonomickou či bezpečnostní výhodu. Výhodami cloudu je naopak možnost {\em horizontálního} a {\em vertikální škálování}\fnote{Horizontální škálování znamená přidávání nových instancí. Vertikálním se myslí navyšování a snižování výkonu.} či {\em Pay As You Go}\fnote{Zaplať jen to, co utratíš.} subskripce. Server data zpracovává. Ukládá a připravuje vizualizace pomocí nástrojů, jako jsou například open-source {\em Kibana}\fnote{\url{https://www.elastic.co/kibana/}} a {\em Grafana}\fnote{\url{https://grafana.com/}}. Kromě vizualizace jsou data na této úrovni analyzována pomocí algoritmů. Mezi ně může i patřit strojové učení. Cílem je přeměnit data na zanalost, aby je bylo možné interpretovat.
+Na {\sbf třetí úrovni} typicky běží server, který může být onpermisového či cloudového charakteru. Výhodou onpremisu je to, že mám zařízení u sebe. To může přinášet ekonomickou či bezpečnostní výhodu. Výhodami cloudu je naopak možnost {\em horizontálního} a {\em vertikální škálování}\fnote{Horizontální škálování znamená přidávání nových instancí. Vertikálním se myslí navyšování a snižování výkonu.} či {\em Pay As You Go}\fnote{Zaplať jen to, co utratíš.} subskripce. Server data zpracovává, ukládá a připravuje vizualizace pomocí nástrojů, jako jsou například open-source {\em Kibana}\fnote{\url{https://www.elastic.co/kibana/}} a {\em Grafana}.\fnote{\url{https://grafana.com/}} Kromě vizualizace jsou data na této úrovni analyzována pomocí algoritmů. Mezi ně může i patřit strojové učení. Cílem je přeměnit data na znalost, aby je bylo možné interpretovat.
 
 Data jsou přenášena skrz strukturu oběma směry. Pro IoT je ve většině případech spíše vytěžován směr nahoru, respektive z embeded zařízení na server.
 

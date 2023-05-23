@@ -8,32 +8,35 @@
 
 \chap Úvod
 
-V první kapitole vysvětluji motivace, které mne vedli k volbě daného téma. Specifikuji očekávané výstupy a výsledky, kterých bych chtěl dosáhnout a v závěru navrhuji samotný postup.
+V první kapitole vysvětluji motivace, které mě vedly k volbě daného téma. Specifikuji cíl bakalářské práce a vysvětluji cíl v širší souvislosti. V závěru definuji jednotlivé kroky, podle kterých budu během práce postupovat.
 
 \sec Motivace
 
-Už od útlých dětských let jezdím na letní tábory a přes rok organizuji mládežnické akce. Na jedné z akcí, Hudebním týdnu, vždy hráváme hru, v které jsou různé týmy, jenž mezi sebou soutěží. Cílem je se jako první přihlásit o slovo a zodpovědět otázku. Doposud se nám nepovedlo vymyslet efektivní způsob, jak určit pořadí týmů. Ve výsledku vždy použijeme zvoneček, který při odpovědí více týmů ve stejný čas není vhodným řešením.
+Už od útlých dětských let jezdím na letní tábory a přes rok organizuji mládežnické akce. Na Hudebním týdnu, jedné z akcí pro mladé, tradičně hráváme hru, v které jsou různé týmy, jenž mezi sebou soutěží. Cílem je se jako první přihlásit o slovo a zodpovědět otázku. Doposud se nám nepovedlo vymyslet efektivní způsob, jak určit pořadí týmů. Ve výsledku vždy použijeme zvoneček, který při odpovědí více týmů ve stejný čas není vhodným řešením.
 
 
-\sec TODO: Popis cíle bakalářské práce
+\sec Popis cíle bakalářské práce
 
-Rád bych vytvořil hlasovací zařízení (tlačítko), které by fungovalo jako autonomní systém, který by společně s dalšími tlačítky tvořil distribuovanou síť. Síť by následně řešila problematiku konsenzu. Respektive pomocí vhodně navrženého a implementovaného algoritmu by bylo možné s určitostí tvrdit, jaké z tlačítek bylo stištěno první. 
+Cílem bakalářské práce je vytvořit koncept hlasovacího tlačítka, které bude fungovat jako autonomní zařízení v distribuovaném systému. Systém pomocí vhodných algoritmů bude řešit problematiku konsenzu, respektive určení pořadí stisku tlačítka.
 
-Představa uživatelského zážitku je taková, že uživatel zapne hlasovací zařízení, zařízení se spojí s dalšími zařízeními v distribuované síti, uživatel má na tlačítku možnost aktivovat lokální server pro zobrazení pořadí stisknutí.
+\label[ButtonConceptDescription]
+\sec Popis hlasovacího zařízení
 
-\sec TODO: Samostatný projekt
+Aby bylo jasné porozumět cíli, ke kterému koncept hlasovacího tlačítka směřuje, domnívám se, že je důležité si popsat ideální představu výsledného zařízení.\fnote{Následující specifikaci tedy zahrnuje i požadavky přesahující tuto bakalářskou práci.}
 
-Před navrhnutím samotného algoritmu pro řešení konsenzu je ale třeba specifikovat klíčové parametry, které bude muset síť zvládat. Proto jsem se v tomto samostatném projektu rozhodl vybudovat síťovou infrastrukturu pro následnou aplikaci při samotné bakalářské práci. 
+Z uživatelského pohledu by zařízení měla být kompaktní krabička, kterou si bude moci skupina položit před sebe na stůl.\fnote{Koncept odolné krabičky pro celou skupinu je dle výsledků drobné ankety popsané v kapitole \ref[Obal] více žádaný než hlasovací tlačítko, které budou uživatelé moci držet v ruce.} Krabička by na sobě měla mít tlačítko, které bude odolné i vůči veliké síle způsobené bouchnutí v zápalu hry. Zařízení bude možné přepínat mezi dvěma módy, tj. {\em PRESENTER} a {\em NORMAL}. V módu {\em NORMAL} bude zařízení řešit v jakém pořadí se týmy přihlásily o slovo. V módu {\em PRESENTER} navíc vykreslují výsledky.
 
+Samotná hra pak bude probíhat tak, že bude položena otázka, hráči se přihlásí o slovo stiskem tlačítka. Informace se rozdistribuuje v síti. A zařízení v módu {\em PRESENTER} zobrazí výsledky na webovém serveru. Hlasování se vyresetuje dlouhým stisknutím hlasovacího tlačítka na jakémkoliv zařízení.
 
-\sec TODO: Stanovení cílů a plánů
+\sec Stanovení cílů a plánů
 
-Jelikož se jedná o komplexní problém, který čítá mnoho oblastí problematik, rozhodli jsme se, po diskuzi s vedoucím práce, práci rozdělit na několik fází.
-
+Problém řešený v této bakalářské práci je poměrně komplexní, proto jsem se ho rozhodl rozložit na následující dílčí úkoly, podle kterých jsem také postupoval.
 
 \begitems
 * Proveďte rešerši využití Wifi technologie pro IoT aplikace.
-* Definujte kritické vlastností Wifi sítě (spolehlivost, odezva, propustnost sítě, …).
-* Zvolte vhodný Wifi modul pro implementaci.
-* Experimentálně ověřte dosažení výše definovaných kritických parametrů.
+* Definujte funkční a další požadavky na systém a zvolte vhodné hardwarové řešení.
+* Navrhněte síťovou infrastrukturu řešení, zjistěte její parametry a ty následně experimentálně ověřte.
+* Navrhněte algoritmické řešení, které následně experimentálně ověříte.
+* Realizujte řešení na reálném hardwaru. 
+
 \enditems
