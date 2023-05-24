@@ -58,6 +58,16 @@ uint32_t get_rtt_avg()
    return (uint32_t)(avg / BALANCER_SIZE);
 }
 
+uint8_t get_count_active_peers(void)
+{
+   uint8_t ret = 0;
+   for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+      if (node.neighbour[i].info.status == ACTIVE)
+         ++ret;
+   }
+   return ret;
+}
+
 static uint64_t get_time(void)
 {
    return esp_timer_get_time() - node.time_corection;
@@ -131,7 +141,7 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 }
 
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
-                      uint64_t *content)
+                      uint64_t *content, uint32_t *epoch_id)
 {
    message_data_t *buf = (message_data_t *)data;
 
@@ -142,6 +152,7 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
 
    *type = buf->type;
    *content = buf->content;
+   *epoch_id = buf->epoch_id;
    return buf->type;
 }
 
@@ -151,6 +162,7 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
 
    send_param->data_len = sizeof(message_data_t);
    buf->type = send_param->type;
+   buf->epoch_id = send_param->epoch_id;
    buf->content = send_param->content;
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
@@ -180,6 +192,7 @@ void espnow_handler_task(void)
    espnow_event_t evt;
    uint64_t content = 0;
    message_type_t type;
+   uint32_t epoch_id;
    int ret;
 
    espnow_send_param_t *send_param = NULL;
@@ -216,8 +229,10 @@ void espnow_handler_task(void)
          // handle recv
          espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
          ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
-                                 &content);
+                                 &content, &epoch_id);
          free(recv_cb->data);
+         if (epoch_id < node.epoch_id)
+            ESP_LOGE(TAG, "Wrong number of epoch ID");
          switch (ret) {
          case HELLO_DS:
             // get Hello DS message
@@ -225,7 +240,7 @@ void espnow_handler_task(void)
             // If peer doesn't exists, create it
             if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
                uint8_t i = 0;
-               while (node.neighbour[i].status != NOT_INITIALIZED &&
+               while (node.neighbour[i].info.status != NOT_INITIALIZED &&
                       i < NEIGHBOURS_COUNT)
                   ++i;
                if (i >= NEIGHBOURS_COUNT) {
@@ -237,9 +252,23 @@ void espnow_handler_task(void)
                }
                memcpy(&node.neighbour[i], recv_cb->mac_addr, 6);
                ESP_ERROR_CHECK(esp_now_add_peer(&node.neighbour[i]));
-               node.neighbour[i].status = ACTIVE;
-               node.neighbour[i].title = SLAVE;
+               node.neighbour[i].info.status = ACTIVE;
+               node.neighbour[i].info.title = SLAVE;
             }
+            // send back epoch ID, device and device status
+            // TODO: without neighbours list, send only count of active devices
+            send_param->type = NEIGHBOURS;
+            send_param->epoch_id = node.epoch_id;
+            send_param->content = (uint64_t)get_count_active_peers();
+            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
+            espnow_data_prepare(send_param);
+            if (esp_now_send(send_param->dest_mac, send_param->buf,
+                             send_param->data_len) != ESP_OK) {
+               ESP_LOGW(TAG, "Send NEIGHBOURS error");
+            }
+            break;
+         case NEIGHBOURS:
+            ESP_LOGI(TAG, "Receive NEIGHBOURS message");
 
             break;
          case RTT_CAL_MASTER:
@@ -369,6 +398,7 @@ void send_register_message(void)
    }
    memset(send_param, 0, sizeof(espnow_send_param_t));
    send_param->content = 0;
+   send_param->epoch_id = node.epoch_id;
    send_param->type = HELLO_DS;
    send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
    send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
@@ -467,9 +497,12 @@ void app_main(void)
    // Prepare node strucutre
    node.is_firts_setup_rtt = 1;
    node.rtt_balancer_index = 0;
+   node.epoch_id = 0;
    node.is_time_synced = 0;
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i)
-      node.neighbour[i].status = NOT_INITIALIZED;
+      node.neighbour[i].info.status = NOT_INITIALIZED;
+   ESP_LOGI(TAG, "SIZE OF N: %d %d", sizeof(neighbour_t),
+            sizeof(neighbour_info_t));
    // Create a broadcast peer
    memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
    if (!esp_now_is_peer_exist(s_broadcast_mac)) {

@@ -56,6 +56,7 @@ typedef enum message_type {
 
 typedef struct message {
    message_type_t type;
+   uint32_t epoch_id;
    uint64_t content;
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
@@ -63,15 +64,21 @@ typedef struct message {
 typedef struct espnow_send_param {
    message_type_t type;
    uint64_t content;
+   uint32_t epoch_id;
    int data_len;
    uint8_t *buf;
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
 
-typedef struct neighbour {
-   esp_now_peer_info_t peer_info;
+typedef struct neighbour_info {
    device_title_t title;
    device_status_t status;
+   uint8_t mac_addr[ESP_NOW_ETH_ALEN];
+} neighbour_info_t;
+
+typedef struct neighbour {
+   esp_now_peer_info_t peer_info;
+   neighbour_info_t info;
 } neighbour_t;
 
 typedef struct node_info {
@@ -82,6 +89,7 @@ typedef struct node_info {
    bool is_time_synced;
    int32_t deviation_avg;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
+   uint32_t epoch_id;
 } node_info_t;
 
 typedef struct print_data {
