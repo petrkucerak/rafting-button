@@ -1,4 +1,4 @@
-idf_component_register(SRCS "sync-time.c"
+idf_component_register(SRCS "rafting-button.c"
                     INCLUDE_DIRS "."
                     REQUIRES espnow_utils peripheral)
 

@@ -80,6 +80,17 @@
           "command": "idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py monitor"
         }
       ]
+    },
+    "files.associations": {
+      "rafting-button.h": "c",
+      "esp_now.h": "c",
+      "espnow.h": "c",
+      "espnow_utils.h": "c",
+      "esp_err.h": "c",
+      "esp_wifi_types.h": "c",
+      "assert.h": "c",
+      "sdkconfig.h": "c",
+      "stdlib.h": "c"
     }
   }
 }
