@@ -2,24 +2,10 @@
 #define RAFTING_BUTTON_H
 
 #define BALANCER_SIZE 100
+#define NEIGHBOURS_COUNT 9
 
 #include <espnow.h>
 #include <inttypes.h>
-
-// Device 1 <70:b8:f6:5b:d3:24>
-static uint8_t mac_addr_1[] = {0x70, 0xb8, 0xf6, 0x5b, 0xd3, 0x24};
-
-// Device 2 <cc:db:a7:1d:c4:08>
-static uint8_t mac_addr_2[] = {0xcc, 0xdb, 0xa7, 0x1d, 0xc4, 0x08};
-
-// Device 3 <c8:f0:9e:7b:10:8c>
-static uint8_t mac_addr_3[] = {0xc8, 0xf0, 0x9e, 0x7b, 0x10, 0x8c};
-
-// Device 4 <cc:db:a7:1d:c7:cc>
-static uint8_t mac_addr_4[] = {0xcc, 0xdb, 0xa7, 0x1d, 0xc7, 0xcc};
-
-// Device 5 <c8:f0:9e:7b:10:8c>
-static uint8_t mac_addr_5[] = {0x94, 0xb5, 0x55, 0xf9, 0xf2, 0xf0};
 
 typedef enum device_title {
    MASTER, // lidr
@@ -27,8 +13,9 @@ typedef enum device_title {
 } device_title_t;
 
 typedef enum device_status {
-   ACTIVE,  // device is active in DS
-   INACTIVE // device was active in DS
+   ACTIVE,          // device is active in DS
+   INACTIVE,        // device was active in DS
+   NOT_INITIALIZED, // device wasn't initialized
 } device_status_t;
 
 typedef enum espnow_event_id {
@@ -81,6 +68,12 @@ typedef struct espnow_send_param {
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
 
+typedef struct neighbour {
+   esp_now_peer_info_t peer_info;
+   device_title_t title;
+   device_status_t status;
+} neighbour_t;
+
 typedef struct node_info {
    uint64_t time_corection;
    uint32_t rtt_balancer[BALANCER_SIZE];
@@ -88,6 +81,7 @@ typedef struct node_info {
    bool is_firts_setup_rtt;
    bool is_time_synced;
    int32_t deviation_avg;
+   neighbour_t neighbour[NEIGHBOURS_COUNT];
 } node_info_t;
 
 typedef struct print_data {
@@ -95,11 +89,5 @@ typedef struct print_data {
    int32_t deviation;
    uint64_t time;
 } print_data_t;
-
-typedef struct neighbour {
-   esp_now_peer_info_t peer_info;
-   device_title_t title;
-   device_status_t status;
-} neighbour_t;
 
 #endif // RAFTING_BUTTON_H
