@@ -58,16 +58,6 @@ uint32_t get_rtt_avg()
    return (uint32_t)(avg / BALANCER_SIZE);
 }
 
-uint8_t get_count_active_peers(void)
-{
-   uint8_t ret = 0;
-   for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
-      if (node.neighbour[i].info.status == ACTIVE)
-         ++ret;
-   }
-   return ret;
-}
-
 static uint64_t get_time(void)
 {
    return esp_timer_get_time() - node.time_corection;
@@ -235,100 +225,6 @@ void espnow_handler_task(void)
             ESP_LOGE(TAG, "Wrong number of epoch ID");
          switch (ret) {
          case HELLO_DS:
-            // get Hello DS message
-            ESP_LOGI(TAG, "Receive HELLO DS message");
-            // If peer doesn't exists, create it
-            if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
-               uint8_t i = 0;
-               while (node.neighbour[i].info.status != NOT_INITIALIZED &&
-                      i < NEIGHBOURS_COUNT)
-                  ++i;
-               if (i >= NEIGHBOURS_COUNT) {
-                  ESP_LOGE(TAG, "Not space in neighbours list");
-                  free(send_param->buf);
-                  free(send_param);
-                  vSemaphoreDelete(espnow_queue);
-                  return;
-               }
-               memcpy(&node.neighbour[i], recv_cb->mac_addr, 6);
-               ESP_ERROR_CHECK(esp_now_add_peer(&node.neighbour[i]));
-               node.neighbour[i].info.status = ACTIVE;
-               node.neighbour[i].info.title = SLAVE;
-            }
-            // send back epoch ID, device and device status
-            // TODO: without neighbours list, send only count of active devices
-            send_param->type = NEIGHBOURS;
-            send_param->epoch_id = node.epoch_id;
-            send_param->content = (uint64_t)get_count_active_peers();
-            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
-            espnow_data_prepare(send_param);
-            if (esp_now_send(send_param->dest_mac, send_param->buf,
-                             send_param->data_len) != ESP_OK) {
-               ESP_LOGW(TAG, "Send NEIGHBOURS error");
-            }
-            break;
-         case NEIGHBOURS:
-            ESP_LOGI(TAG, "Receive NEIGHBOURS message");
-
-            break;
-         case RTT_CAL_MASTER:
-            // send value back to master with type RTT_CAL_SLAVE
-            send_param->content = content;
-            send_param->type = RTT_CAL_SLAVE;
-            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
-            espnow_data_prepare(send_param);
-            if (esp_now_send(send_param->dest_mac, send_param->buf,
-                             send_param->data_len) != ESP_OK) {
-               ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
-            }
-            break;
-         case RTT_CAL_SLAVE:
-            // calcule RTT and send it back to slave with type RTT
-            send_param->content = (evt.timestamp - content) / 2;
-            send_param->type = RTT;
-            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
-            espnow_data_prepare(send_param);
-            if (esp_now_send(send_param->dest_mac, send_param->buf,
-                             send_param->data_len) != ESP_OK) {
-               ESP_LOGW(TAG, "Send RTT_CAL_SLAVE error");
-            }
-            break;
-         case RTT:
-            // set RTT value into the array
-            if (node.is_firts_setup_rtt) {
-               for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
-                  node.rtt_balancer[i] = content;
-               }
-               node.is_firts_setup_rtt = 0;
-            } else {
-               node.rtt_balancer[node.rtt_balancer_index] = content;
-               ++node.rtt_balancer_index;
-               if (node.rtt_balancer_index == BALANCER_SIZE)
-                  node.rtt_balancer_index = 0;
-            }
-            break;
-         case TIME:
-            // calcule deviation O~
-            node.deviation_avg = (int32_t)get_time_with_timer(evt.timestamp) -
-                                 (int32_t)content - (int32_t)get_rtt_avg();
-
-            if (node.deviation_avg < DEVIATION_LIMIT &&
-                node.deviation_avg > -DEVIATION_LIMIT) {
-               node.is_time_synced = 1;
-            }
-
-            // set time
-            if (node.is_time_synced) {
-               if (node.deviation_avg > DEVIATION_MAX_CONSTANT)
-                  node.time_corection += DEVIATION_MAX_CONSTANT;
-               else if (node.deviation_avg < -DEVIATION_MAX_CONSTANT)
-                  node.time_corection -= DEVIATION_MAX_CONSTANT;
-               // ESP_LOGI(TAG, "S %ld", node.deviation_avg);
-            } else {
-               // ESP_LOGI(TAG, "F %ld", node.deviation_avg);
-               node.time_corection =
-                   esp_timer_get_time() - (content + (uint64_t)get_rtt_avg());
-            }
 
             break;
          default:
@@ -345,115 +241,6 @@ void espnow_handler_task(void)
    free(send_param->buf);
    free(send_param);
    vSemaphoreDelete(espnow_queue);
-}
-
-void task_start_sync_rtt(void)
-{
-   espnow_send_param_t *send_param = NULL;
-   send_param = malloc(sizeof(espnow_send_param_t));
-   if (send_param == NULL) {
-      ESP_LOGE(TAG, "Malloc send parametr fail");
-      vTaskDelete(NULL);
-   }
-   memset(send_param, 0, sizeof(espnow_send_param_t));
-   send_param->content = 0;
-   // send_param->dest_mac;
-   // send_param->type;
-   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-   if (send_param->buf == NULL) {
-      ESP_LOGE(TAG, "Malloc send buffer fail");
-      free(send_param);
-      vTaskDelete(NULL);
-   }
-   esp_err_t ret;
-   vTaskDelay(500 / portTICK_PERIOD_MS);
-   while (1) {
-      vTaskDelay(25 / portTICK_PERIOD_MS);
-
-      // // Node 2
-      // send_param->type = RTT_CAL_MASTER;
-      // memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
-      // send_param->content = esp_timer_get_time();
-      // espnow_data_prepare(send_param);
-
-      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
-      //                    send_param->data_len);
-      // if (ret != ESP_OK)
-      //    handle_espnow_send_error(ret);
-
-      // vTaskDelay(25 / portTICK_PERIOD_MS);
-   }
-   free(send_param);
-   vTaskDelete(NULL);
-}
-
-void send_register_message(void)
-{
-   espnow_send_param_t *send_param = NULL;
-   send_param = malloc(sizeof(espnow_send_param_t));
-   if (send_param == NULL) {
-      ESP_LOGE(TAG, "Malloc send parametr fail");
-      vTaskDelete(NULL);
-   }
-   memset(send_param, 0, sizeof(espnow_send_param_t));
-   send_param->content = 0;
-   send_param->epoch_id = node.epoch_id;
-   send_param->type = HELLO_DS;
-   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-   if (send_param->buf == NULL) {
-      ESP_LOGE(TAG, "Malloc send buffer fail");
-      free(send_param);
-      return;
-   }
-   esp_err_t ret;
-   memcpy(send_param->dest_mac, s_broadcast_mac, ESP_NOW_ETH_ALEN);
-   espnow_data_prepare(send_param);
-   ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                      send_param->data_len);
-   if (ret != ESP_OK)
-      handle_espnow_send_error(ret);
-   free(send_param);
-   ESP_LOGI(TAG, "HELLO_DS has been sent");
-}
-
-void task_start_sync_time(void)
-{
-   espnow_send_param_t *send_param = NULL;
-   send_param = malloc(sizeof(espnow_send_param_t));
-   if (send_param == NULL) {
-      ESP_LOGE(TAG, "Malloc send parametr fail");
-      vTaskDelete(NULL);
-   }
-   memset(send_param, 0, sizeof(espnow_send_param_t));
-   send_param->content = 0;
-   // send_param->dest_mac;
-   // send_param->type;
-   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-   if (send_param->buf == NULL) {
-      ESP_LOGE(TAG, "Malloc send buffer fail");
-      free(send_param);
-      vTaskDelete(NULL);
-   }
-   esp_err_t ret;
-   vTaskDelay(500 / portTICK_PERIOD_MS);
-   while (1) {
-      // // Node 2
-      // vTaskDelay(125 / portTICK_PERIOD_MS);
-      // send_param->type = TIME;
-      // memcpy(send_param->dest_mac, mac_addr_2, ESP_NOW_ETH_ALEN);
-      // send_param->content = get_time();
-      // espnow_data_prepare(send_param);
-      // ret = esp_now_send(send_param->dest_mac, send_param->buf,
-      //                    send_param->data_len);
-      // if (ret != ESP_OK)
-      //    handle_espnow_send_error(ret);
-      // vTaskDelay(25 / portTICK_PERIOD_MS);
-   }
-   free(send_param);
-   vTaskDelete(NULL);
 }
 
 void app_main(void)
@@ -515,19 +302,6 @@ void app_main(void)
    handler_task =
        xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
                    STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
-
-#ifdef IS_MASTER
-   // Init MASTER tasks
-   BaseType_t start_rtt_sync_task;
-   start_rtt_sync_task =
-       xTaskCreate((TaskFunction_t)task_start_sync_rtt, "start_sync_rtt",
-                   STACK_SIZE, NULL, PRIORITY_RTT_START, NULL);
-
-   BaseType_t start_time_sync_task;
-   start_time_sync_task =
-       xTaskCreate((TaskFunction_t)task_start_sync_time, "start_sync_time",
-                   STACK_SIZE, NULL, PRIORITY_TIME_START, NULL);
-#endif // IS_MASTER
 
    // REGISTER NODE TO DS
    send_register_message();
