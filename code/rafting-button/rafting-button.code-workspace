@@ -90,7 +90,8 @@
       "esp_wifi_types.h": "c",
       "assert.h": "c",
       "sdkconfig.h": "c",
-      "stdlib.h": "c"
+      "stdlib.h": "c",
+      "inttypes.h": "c"
     }
   }
 }

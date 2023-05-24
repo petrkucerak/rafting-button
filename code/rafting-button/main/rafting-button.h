@@ -21,6 +21,16 @@ static uint8_t mac_addr_4[] = {0xcc, 0xdb, 0xa7, 0x1d, 0xc7, 0xcc};
 // Device 5 <c8:f0:9e:7b:10:8c>
 static uint8_t mac_addr_5[] = {0x94, 0xb5, 0x55, 0xf9, 0xf2, 0xf0};
 
+typedef enum device_title {
+   MASTER, // lidr
+   SLAVE   // nasledovnik
+} device_title_t;
+
+typedef enum device_status {
+   ACTIVE,  // device is active in DS
+   INACTIVE // device was active in DS
+} device_status_t;
+
 typedef enum espnow_event_id {
    ESPNOW_SEND_CB,
    ESPNOW_RECV_CB,
@@ -83,5 +93,11 @@ typedef struct print_data {
    int32_t deviation;
    uint64_t time;
 } print_data_t;
+
+typedef struct neighbour {
+   esp_now_peer_info_t peer_info;
+   device_title_t title;
+   device_status_t status;
+} neighbour_t;
 
 #endif // RAFTING_BUTTON_H
