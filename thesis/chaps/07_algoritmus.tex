@@ -223,7 +223,7 @@ Z krátké úvodní analýzy problému vyplývá, že algoritmus musí v DS ře�
 \label[syncspecdetailstime]
 \sec Problematika synchronizace času
 
-Požadavek na přesnost synchronizace času je 1 ms. Tato hodnota vychází z reakční doby člověka, která se u špičkových atletů při startu pohybuje okolo 0,1 až 0,25~s.~\cite[HwQTLhbjN4E4TuBy] Pokud tedy stanovíme hodnotu o dva řády nižší, nemělo by dojít ke kolizím. V případě kolize, která je vysoce nepravděpodobná, rozhoduje hodnota uzle (TODO: viz popis algoritmu).
+Požadavek na přesnost synchronizace času je 1 ms. Tato hodnota vychází z reakční doby člověka, která se u špičkových atletů při startu pohybuje okolo 0,1 až 0,25~s.~\cite[HwQTLhbjN4E4TuBy] Pokud tedy stanovíme hodnotu o dva řády nižší, nemělo by dojít ke kolizím. V případě kolize, která je vysoce nepravděpodobná, rozhoduje náhoda.
 
 \label[DatilAlgDescrp]
 \secc Detailní popis zvoleného algoritmu
@@ -441,8 +441,7 @@ Tyto úpravy mi pomohli zajistit dostatečnou přesnost měření, jak vyplývá
 
 Měření bylo prováděno s téměř identickým zapojením\fnote{Schéma zapojení je dostupné v příloze \ref[syncSchema].} jako měření latence popsané v kapitole \ref[getsimparameters]. Přidal jsem pouze moduly a změnil velikost odporů na vstupu referenčního signálu. Reference generovaná ze STM32 byla použita pro sjednocení času výpisů. Zdrojové kódy využité pro měření včetně skriptů pro vizualizace jsou dostupné v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button}}
 
-
-
+\label[logDistributionDesc]
 \sec Distribuce logů a seznamu zařízení DS
 
 Z rozboru problému vyplývá, že vhodným způsobem pro určení pořadí stisku tlačítek je ke každé události přiřadit časovou značku ({\em timestamp}) a pomocí ní určit kauzalitu jednotlivých událostí. {\sbf Časová značka} bude vždy v celém DS systému {\sbf jedinečná}. To vyplývá z předpokladu z kapitoly \ref[syncspecdetailstime], že rozlišovací schopnost systémů je mnohem vyšší než reakční doba člověka. Pokud by přeci jenom ke konfliktu došlo, rozhodne v daném případě náhoda.
@@ -475,3 +474,65 @@ Každé ze zařízení bude uchovávat lokální {\sbf strukturu s logy}, které
 * {\em SLAVE} uzel si přijatou zprávu uloží do lokálního logu.
 \enditems
 
+Obdobně bude probíhat i distribuce seznamu sousedů. Bude k ní využíváno řídící zařízení z důvodu ušetření zpráv. V momentě, kdy {\em MASTER} obdrží zprávu se sousedy, rozešle ji na všechny známé zařízení, kteří si svůj seznam zaktualizují.
+
+\sec Návrh celkového algoritmu
+
+V předchozích kapitolách byly diskutovány dílčí problémy běhu celého systému a známé algoritmy, které lze aplikovat. Výsledný algoritmus spojuje dohromady Raft a již vyřešené úlohy týkající se synchronizace času a distribuce logů.
+
+Hlavní algoritmus tvoří tři {\sbf základní komponenty}:
+
+\begitems
+* registrace zařízení do DS,
+* běžný chod
+* a terminace zařízení registrovaného v DS. 
+\enditems
+
+\secc Registrace zařízení
+
+Jakmile se zařízení spustí, vyhledá zařízení ve svém okolí pomocí {\em BSSID skenování} a přidá si je na seznam sousedů. Poté pošle zprávu typu $"HELLO_DS"$ na všechny vyhledaná zařízení se seznamem známých sousedů. Zařízení v síti si ho přidají na svůj seznam a zpátky pošlou svůj aktuální seznam. Také přiloží základní informace o DS, jako je {\em ID epochy}. Jakmile zařízení obdrží více jak polovinu odpovědí. Přechází do další fáze – běžného chodu DS.
+
+\secc Běžný chod
+
+Běžný chod se skládá z {\sbf epoch}. Každá epocha má svoje $"ID"$ a tvoří ji dvě fáze – {\em volba lídra} a {\em běžný provoz}.
+
+Zařízení bude označovat stejně jako v Raftu.
+
+\begitems
+* {\em Lídr} ({\em MASTER}) funguje jako centrální prvek, který rozesílá logy událostí DS, seznamy sousedů a synchronizuje čas.
+* {\em Následovník} ({\em SLAVE}) je pasivní zařízení, které se chová běžným způsobem.
+* {\em Kandidát} je přechodná role v průběhu volby lídra.
+\enditems
+
+První fází každé epochy je vždy {\sbf volba lídra}. Volba lídra se koná v každé epizodě, ovšem nemusí skončit úspěšně. Probíhá velice podobně jako volba lídra v algoritmu Raft. {\em Lídr} si udržuje svoji autoritu pomocí rozesílání zprávy pro synchronizaci času $"TIME"$. Pokud zařízení neobdrží zprávu do {\em timeoutu} $t_{sync}$, zařízení zvýší číslo epochy a spustí nové volby. Ty probíhají tak, že rozešle na všechny známé aktivní sousedy zprávu $"REQUEST_VOTE"$, tedy žádost o to, že chce být {\em lídrem}. Poté může nastat jedna ze těchto tří situací:
+
+\begitems
+* zařízení dostane {\sbf potvrzení od většiny} $"GIVE_VOTE"$ aktivních sousedů a stane se novým {\em lídrem}
+* nebo {\sbf přijme zprávu synchronizující čas} $"TIME"$, novým {\em lídrem} se stalo nějaké zařízení rychleji
+* nebo budou {\sbf volby neúspěšné} do {\em timeoutu} $t_{election}$, volby skončí neúspěchem a začne nová epocha.
+\enditems
+
+Po úspěšných volbách probíhá fáze {\sbf běžného provozu}. Pokud nejsou volby úspěšné, nemusí k ní dojít. Během ní DS distribuuje logy událostí pomocí mechanismu popsaného v kapitole \ref[logDistributionDesc]. Při registraci zařízení do DS nebo terminaci rozesílá seznam sousedů. A lídr posílá synchronizační zprávy $"TIME"$ pro udržení autority {\em lídra} a synchronizaci času v DS.
+
+Pokud v této aplikaci dojde k selhání zařízení, neexistuje žádná opravná rutina a to z podstaty systému a navrženého algoritmu. Respektive neexistuje stav, který by algoritmus neřešil a šlo ho softwarově opravit. Pokud dojde k selhání zařízení, uživatel bude informován pomocí stavu zařízení.
+
+Chyba ožití starého {\em lídra} je ošetřena mechanismem {\em ID} epochy. Zařízení akceptuje pouze zprávy s aktuálním nebo vyšším {\em ID} epochy.
+
+\secc Terminace zařízení
+
+Jako {\sbf neaktivní zařízení} je označeno každé, které nepřijme více jak tři zprávy úspěšně. Pokud neodpovídá, je terminováno z DS. Respektive je v seznamu sousedů označeno jako neaktivní a tato informace je pak rozeslána přes {\em lídra} do celého DS.
+
+\secc Seznam typů zpráv
+
+DS mezi sebou komunikuje pomocí následujících typů zpráv:
+
+\begitems
+* $"HELLO_DS"$ je zpráva s žádostí o zaslání seznamu sousedů,
+* $"NEIGHBOURS"$ je zpráva se seznamem sousedů a informacemi o stavu DS,
+* $"REQUEST_VOTE"$ je žádost o hlas,
+* $"GIVE_VOTE"$ uděluje hlas {\em lídrovi},
+* $"TIME"$ je zpráva s referenčním časem užívaná i pro udržení autority,
+* $"RTT"$ je zpráva s průměrnou dobou přenosu,
+* $"RTT_CAL_MASTER"$ je zpráva pro výpočet doby přenosu putující z {\em lídra} do {\em následovníka},
+* $"RTT_CAL_SLAVE"$ je zpráva pro výpočet doby přenosu putující z {\em následovníka} do {\em lídra}.
+\enditems
