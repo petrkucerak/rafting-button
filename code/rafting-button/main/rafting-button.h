@@ -61,8 +61,10 @@ typedef struct espnow_event {
 typedef enum message_type {
    RTT_CAL_MASTER, // time used to calculate the RTT (master -> slave)
    RTT_CAL_SLAVE,  // time used to calculate the RTT (slave -> master)
-   RTT_VAL,        // calculated value of RTT
-   TIME            // time to synchronize the time
+   RTT,            // calculated value of RTT
+   TIME,           // time to synchronize the time
+   HELLO_DS,
+   NEIGHBOURS
 } message_type_t;
 
 typedef struct message {

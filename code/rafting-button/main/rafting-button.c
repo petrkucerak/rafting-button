@@ -228,9 +228,9 @@ void espnow_handler_task(void)
             }
             break;
          case RTT_CAL_SLAVE:
-            // calcule RTT and send it back to slave with type RTT_VAL
+            // calcule RTT and send it back to slave with type RTT
             send_param->content = (evt.timestamp - content) / 2;
-            send_param->type = RTT_VAL;
+            send_param->type = RTT;
             memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
             espnow_data_prepare(send_param);
             if (esp_now_send(send_param->dest_mac, send_param->buf,
@@ -238,7 +238,7 @@ void espnow_handler_task(void)
                ESP_LOGW(TAG, "Send RTT_CAL_SLAVE error");
             }
             break;
-         case RTT_VAL:
+         case RTT:
             // set RTT value into the array
             if (node.is_firts_setup_rtt) {
                for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
