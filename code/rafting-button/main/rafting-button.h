@@ -23,6 +23,16 @@ typedef enum espnow_event_id {
    ESPNOW_RECV_CB,
 } espnow_event_id_t;
 
+typedef enum message_type {
+   RTT_CAL_MASTER, // time used to calculate the RTT (master -> slave)
+   RTT_CAL_SLAVE,  // time used to calculate the RTT (slave -> master)
+   RTT,            // calculated value of RTT
+   TIME,           // time to synchronize the time
+   HELLO_DS,
+   NEIGHBOURS,
+   LOG
+} message_type_t;
+
 typedef struct espnow_event_send_cb {
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
    esp_now_send_status_t status;
@@ -45,31 +55,6 @@ typedef struct espnow_event {
    uint64_t timestamp;
 } espnow_event_t;
 
-typedef enum message_type {
-   RTT_CAL_MASTER, // time used to calculate the RTT (master -> slave)
-   RTT_CAL_SLAVE,  // time used to calculate the RTT (slave -> master)
-   RTT,            // calculated value of RTT
-   TIME,           // time to synchronize the time
-   HELLO_DS,
-   NEIGHBOURS
-} message_type_t;
-
-typedef struct message {
-   message_type_t type;
-   uint32_t epoch_id;
-   uint64_t content;
-   uint8_t payload[0];
-} __attribute__((packed)) message_data_t;
-
-typedef struct espnow_send_param {
-   message_type_t type;
-   uint64_t content;
-   uint32_t epoch_id;
-   int data_len;
-   uint8_t *buf;
-   uint8_t dest_mac[ESP_NOW_ETH_ALEN];
-} espnow_send_param_t;
-
 typedef struct neighbour_info {
    device_title_t title;
    device_status_t status;
@@ -80,6 +65,24 @@ typedef struct neighbour {
    esp_now_peer_info_t peer_info;
    neighbour_info_t info;
 } neighbour_t;
+
+typedef struct message_data {
+   message_type_t type;
+   uint32_t epoch_id;
+   uint64_t content;
+   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
+   uint8_t payload[0];
+} __attribute__((packed)) message_data_t;
+
+typedef struct espnow_send_param {
+   message_type_t type;
+   uint64_t content;
+   uint32_t epoch_id;
+   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
+   int data_len;
+   uint8_t *buf;
+   uint8_t dest_mac[ESP_NOW_ETH_ALEN];
+} espnow_send_param_t;
 
 typedef struct node_info {
    uint64_t time_corection;

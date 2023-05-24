@@ -131,7 +131,8 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 }
 
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
-                      uint64_t *content, uint32_t *epoch_id)
+                      uint64_t *content, uint32_t *epoch_id,
+                      neighbour_info_t *neighbour_info)
 {
    message_data_t *buf = (message_data_t *)data;
 
@@ -143,6 +144,7 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    *type = buf->type;
    *content = buf->content;
    *epoch_id = buf->epoch_id;
+   *neighbour_info = buf->neighbour_info[0];
    return buf->type;
 }
 
@@ -154,6 +156,9 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->type = send_param->type;
    buf->epoch_id = send_param->epoch_id;
    buf->content = send_param->content;
+   // TODO: continue here
+   memcpy(&buf->neighbour_info, buf->neighbour_info,
+          sizeof(neighbour_info_t) * NEIGHBOURS_COUNT);
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
@@ -183,6 +188,7 @@ void espnow_handler_task(void)
    uint64_t content = 0;
    message_type_t type;
    uint32_t epoch_id;
+   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
    int ret;
 
    espnow_send_param_t *send_param = NULL;
@@ -219,7 +225,7 @@ void espnow_handler_task(void)
          // handle recv
          espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
          ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
-                                 &content, &epoch_id);
+                                 &content, &epoch_id, &neighbour_info);
          free(recv_cb->data);
          if (epoch_id < node.epoch_id)
             ESP_LOGE(TAG, "Wrong number of epoch ID");
@@ -288,8 +294,7 @@ void app_main(void)
    node.is_time_synced = 0;
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i)
       node.neighbour[i].info.status = NOT_INITIALIZED;
-   ESP_LOGI(TAG, "SIZE OF N: %d %d", sizeof(neighbour_t),
-            sizeof(neighbour_info_t));
+   
    // Create a broadcast peer
    memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
    if (!esp_now_is_peer_exist(s_broadcast_mac)) {
@@ -302,9 +307,6 @@ void app_main(void)
    handler_task =
        xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
                    STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
-
-   // REGISTER NODE TO DS
-   send_register_message();
 
    print_data = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(print_data_t));
 
