@@ -88,6 +88,7 @@ typedef struct node_info {
    int32_t deviation_avg;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint32_t epoch_id;
+   device_title_t title;
 } node_info_t;
 
 typedef struct print_data {
