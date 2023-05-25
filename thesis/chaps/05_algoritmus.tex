@@ -22,11 +22,11 @@ Systém by měl být {\sbf distribuovaný}, tj. ve výchozím módu by měla bý
 
 Pojmem {\sbf distribuovaná síť}, obecně {\sbf distribuovaný systém} (DS)\fnote{Pojem {\sbf distribuovaný systém} je dále označován i zkratkou {\sbf DS}.} označujeme soubor autonomních nezávislých zařízení, která spolu komunikují skrze síť a jejich dorozumívacím prostředkem jsou zprávy. Dle Andrewa Tanenbauma se v ideálním případě celý distribuovaný systém jeví jako koherentní systém. Leslie Lamport je naopak kritičtější a říká, že pojmem distribuovaný systém je označován takový, ve kterém selhání počítače, o kterém jste nevěděli, že funguje, učiní užívaný počítač nepoužitelným.~\cite[DocIngCyrilKlimesCSc2014, fiRjEXokpUGbjPGS, Jakob2021-08]
 
-Literatura se v dané terminologii rozchází a také na každý z problémů v DS jsou kladeny jiné požadavky, obecně ale můžeme říci, že rozlišujeme dva základní požadavky na DS:
+Literatura se v následující terminologii rozchází a také na každý z problémů v DS jsou kladeny jiné požadavky, obecně ale můžeme říci, že rozlišujeme dva základní požadavky na DS:
 
 \begitems
-* {\sbf živost} ({\em safety}) - časem v DS bude dosažen žádoucí vztah,
-* {\sbf bezpečnost} ({\em liveness}) - nedojde k nežádoucímu stavu.
+* {\sbf živost} ({\em liveness}) - časem v DS bude dosažen žádoucí vztah,
+* {\sbf bezpečnost} ({\em safety}) - nedojde k nežádoucímu stavu.
 \enditems
 
 Dle {\sbf FLP teorému} v asynchronním distribuovaném systému nelze dosáhnout současně živosti a bezpečnosti distribuovaného výpočtu, pokud může docházet k selháním.~\cite[Fischer1985] V praxi se proto spíše vyžaduje bezpečnost a díky částečné synchronicitě zařízení v DS lze předpokládat, že algoritmus doběhne, tj. dosáhne výsledků v konečném čase.\fnote{Takovýto požadavek označujeme jako tzv. {\sbf {\em konečnou} živost} ({\em eventual liveness}).}~\cite[Jakob2021-13]
@@ -80,12 +80,12 @@ Druhým algoritmem, který by šlo použít k synchronizaci času je v průmyslu
 * minimální požadavky na hardware zařízení,
 * použitelnost s minimální zprávou, a to i v malých sítích,
 * podporu i v levných a rozšířených sítích
-* a přesnost v řádu maximálně mikrosekund.
+* a přesnost v řádu maximálně mikrosekund.\fnote{Neplatí vždy. Záleží na vrstvě, ve které je protokol implementován. Typicky se jedná o druhou (v lokální síti), pak je možné dosáhnout uvedené přesnosti. Pokud se ale PTP implementuje ve vyšší vrstvě, například je součástí UDP, pak je téměř nemožné dosáhnout požadované rychlosti.}
 \enditems
 
 Samotný princip PTP je založený na {\sbf pravidelném zasílání časových značek}, ze kterých se následně určí časový posun hodin a zpoždění dané vlivem přenosu mezi jednotlivými zařízeními. V první verzi protokol nefunguje efektivně v hierarchických sítích z důvodu kumulace chyby. Pozdější verze chybu opravuje.
 
-V krátkosti PTP funguje tak, že si v první fázi zvolí zařízení, které bude v módu {\em MASTER} a to pomocí algoritmu BMC.\fnote{Best Master Clock Algorithm} Ostatní jsou v módu {\em SLAVE}. Po volbách každé ze {\em SLAVE} zařízení zjistí posun vlastních hodin, a to pomocí zpráv, které jsou pravidelně odesílány z nadřazeného zařízení. V druhém kroku zjistí chybu danou dobou přenosu a to tak, že nadřazenému zařízení odešle speciální zprávu $"Delay_Req"$. Následně za splnění předpokladů, že zpoždění způsobené dobou přenosu je symetrické v obou směrech, posun hodin je po dobu výměny zpráv konstantní a že {\em MASTER} a {\em SLAVE} mohou přesně určit čas přijetí a odeslání, jsme schopni určit offset, tedy čas, o který se mají hodiny posunout, aby byly synchronizovány.\cite[Zezulka2010, 9120376]
+V krátkosti PTP funguje tak, že si v první fázi zvolí zařízení, které bude v módu {\em MASTER} a to pomocí algoritmu BMC.\fnote{Best Master Clock Algorithm} Ostatní jsou v módu {\em SLAVE}. Po volbách každé ze {\em SLAVE} zařízení zjistí posun vlastních hodin, a to pomocí zpráv, které jsou pravidelně odesílány z nadřazeného zařízení. V druhém kroku zjistí chybu danou dobou přenosu a to tak, že nadřazenému zařízení odešle speciální zprávu $"Delay_Req"$. Následně za splnění předpokladů, že zpoždění způsobené dobou přenosu je symetrické v obou směrech, posun hodin je po dobu výměny zpráv konstantní a že {\em MASTER} a {\em SLAVE} mohou přesně určit čas přijetí a odeslání, jsme schopni určit offset, tedy čas, o který se mají hodiny posunout, aby byly synchronizovány.~\cite[Zezulka2010, 9120376]
 
 Kromě synchronizace času můžeme v DS řešit i {\sbf kauzalitu}. Tedy aby bylo zachováno pořadí událostí. K této problematice můžeme vyžít fyzických hodin se synchronizovaným časem nebo logických hodin. {\sbf Logické hodiny} jsou takové, které se inkrementují v případě nějaké události jako je přijmutí či odeslání zprávy. Jednotlivé události pak jsou mezi sebou ve vztahu {\em stalo se před}.
 
@@ -143,7 +143,7 @@ Klíčová vlastnost {\em bezpečnosti} je splněna, jelikož může být pouze 
 
 \medskip
 \clabel[RAFTstavovydiagram]{Stavový diagram změny rolí při volbě nového lídra}
-\picw=16cm \cinspic img/raft-stavovy-diagram.png
+\picw=14cm \cinspic img/raft-stavovy-diagram.png
 \caption/f Stavový diagram změny rolí při volbě nového lídra v algoritmu RAFT.~\cite[Jokob2021RAFT]
 \medskip
 
@@ -390,7 +390,7 @@ Měření jsem spustil ve dvou scénářích. Lišily se pouze časem běhu. Sc�
 \caption/t Parametry měření latence.
 \endinsert
 
-Pokud se na naměřená data chceme podívat z pohledu četnosti pro jednotlivé zpoždění, bude nejlepší využít histogramů \ref[latencyA] a \ref[latencyB]. Histogram zobrazuje oblast od 900 µs až po 1200 µs. Počet zpráv pro vyšší zpoždění je oproti tomuto intervalu zanedbatelný, proto vyšší zpoždění není zobrazeno.
+Pokud se na naměřená data chceme podívat z pohledu četnosti pro jednotlivé zpoždění, bude nejlepší využít histogramů v příloze \ref[latencyA] a \ref[latencyB]. Histogram zobrazuje oblast od 900 µs až po 1200 µs. Počet zpráv pro vyšší zpoždění je oproti tomuto intervalu zanedbatelný, proto vyšší zpoždění není zobrazeno.
 
 Zajímavé jsou vždy 2 oblasti vyšší četnosti. Ty si i na základě detailního studování logů\fnote{Možné dohledat v repozitáři projektu.} vysvětluji tak, že vždy první odeslání trvá delší dobu. Testovací vysílání totiž funguje tak, že z uzlu {\em MASTER} vždy odešle 3x2 zprávy, resp. 3x odešle zprávu do uzlu COM6 a COM7. První odesílání je vždy do uzlu COM6. Poté se počká na synchronizaci času a měření se opakuje.
 
@@ -402,15 +402,21 @@ Simulace byla prováděna s konfigurací, kdy
 
 \begitems
 * doba simulace byla 10 min (bylo provedeno 6000 synchronizací doby odesílání a 2000 synchronizací času),
-* pro simulaci byly užity 4 uzle,
+* pro simulaci byly užity 4 uzly,
 * {\em MASTER} uzel začínal v čase nula, ostatní uzly na náhodném čase v rozmezí 100~µs až 1500~µs,
 * doba zpoždění zpráv byla náhodně zvolena pro každé odesílání a to v rozsahu od 900 µs až po 1050 µs
 * a chyba oscilátorů se pohybovala náhodně mezi maximální chybou ±1~ppm až ±10~ppm.
 \enditems
 
-Jsem si vědom, že simulace nezohledňuje veškerou problematiku. To především, že rozdělení odesílání zprávy není náhodné, nýbrž se chová dle výsledků kapitoly \ref[getsimparameters]. Teoreticky při běhu může také dojít k tomu, že jedna situace nastane vícekrát. To v případě, kdy během synchronizace bude čas nastaven dozadu. Jsem si této chyby vědom. Nicméně se v mém případě nejedná o kritickou aplikaci a synchronizace dosahuje takových výsledků přesnosti, že je vysoce nepravděpodobné, že by k této chybě došlo.
+Jsem si vědom, že simulace nezohledňuje veškerou problematiku. Rozdělení odesílání zprávy není náhodné, nýbrž se chová dle výsledků kapitoly \ref[getsimparameters]. Teoreticky při běhu může také dojít k tomu, že jedna situace nastane vícekrát. To v případě, kdy během synchronizace bude čas nastaven dozadu. Jsem si této chyby vědom. Nicméně se v mém případě nejedná o kritickou aplikaci a synchronizace dosahuje takových výsledků přesnosti, že je vysoce nepravděpodobné, že by k této chybě došlo.
 
-Výsledky chování simulace zobrazují 3 grafy. První z nich \ref[latencyO] ukazuje průměrnou chybu $\bar{O}$ v závislosti na čase a střední hodnotu chyb. Ty se pohybuji v blízkém okolí nuly, jak bychom očekávali. Druhý graf \ref[latencyRTT] zobrazuje průměrnou hodnotu doby přenosu $\bar{D}$ v závislosti na čase. Vidíme, že k synchronizaci dojde poměrně rychle. Třetí a pro splnění stanovených parametrů nejvíce důležitý graf \ref[latencyTIME] zobrazuje rozdíl času mezi {\em MASTER} uzlem a {\em SLAVE} uzlem. Střední hodnota tohoto ukazatele je okolo nuly a simulace dosahuje maximální odchylky do ±0,25 ms, což hravě splňuje náš limit 1 ms.
+\medskip
+\clabel[latencyTIMEtext]{Simulace fungování algoritmu pro synchronizaci času - rozdíl čas}
+\picw=16cm \cinspic img/latency-TIME.png
+\caption/f Simulace fungování algoritmu pro synchronizaci času - rozdíl času.
+\medskip
+
+Výsledky chování simulace zobrazují 3 grafy. První z nich v příloze \ref[latencyO] ukazuje průměrnou chybu $\bar{O}$ v závislosti na čase a střední hodnotu chyb. Ty se pohybuji v blízkém okolí nuly, jak bychom očekávali. Druhý graf, také dostupný v příloze \ref[latencyRTT], zobrazuje průměrnou hodnotu doby přenosu $\bar{D}$ v závislosti na čase. Vidíme, že k synchronizaci dojde poměrně rychle. Třetí a pro splnění stanovených parametrů nejvíce důležitý graf \ref[latencyTIMEtext] zobrazuje rozdíl času mezi {\em MASTER} uzlem a {\em SLAVE} uzlem. Střední hodnota tohoto ukazatele je okolo nuly a simulace dosahuje maximální odchylky do ±0,25 ms, což hravě splňuje náš limit 1 ms.
 
 Ze simulace vyplývá, že navržený algoritmus dle simulace {\sbf splňuje stanovený požadavek přesnosti synchronizace času}, tedy 1~ms.
 
@@ -490,7 +496,7 @@ Hlavní algoritmus tvoří tři {\sbf základní komponenty}:
 
 \secc Registrace zařízení
 
-Jakmile se zařízení spustí, vyhledá zařízení ve svém okolí pomocí {\em BSSID skenování} a přidá si je na seznam sousedů. Poté pošle zprávu typu $"HELLO_DS"$ na všechny vyhledaná zařízení se seznamem známých sousedů. Zařízení v síti si ho přidají na svůj seznam a zpátky pošlou svůj aktuální seznam. Také přiloží základní informace o DS, jako je {\em ID epochy}. Jakmile zařízení obdrží více jak polovinu odpovědí. Přechází do další fáze – běžného chodu DS.
+Jakmile se zařízení spustí, pošle {\em broadcast} zprávu typu $"HELLO_DS"$. Zařízení v síti, která zprávu přijmou, si ho přidají na svůj seznam sousedů a zpět odešlou zprávou typu $"NEIGHBOURS"$. Do ní také přiloží základní informace o DS, jako je {\em ID epochy}. Jakmile zařízení obdrží více jak polovinu odpovědí. Přechází do další fáze – běžného chodu DS.
 
 \secc Běžný chod
 
@@ -512,7 +518,7 @@ První fází každé epochy je vždy {\sbf volba lídra}. Volba lídra se koná
 * nebo budou {\sbf volby neúspěšné} do {\em timeoutu} $t_{election}$, volby skončí neúspěchem a začne nová epocha.
 \enditems
 
-Po úspěšných volbách probíhá fáze {\sbf běžného provozu}. Pokud nejsou volby úspěšné, nemusí k ní dojít. Během ní DS distribuuje logy událostí pomocí mechanismu popsaného v kapitole \ref[logDistributionDesc]. Při registraci zařízení do DS nebo terminaci rozesílá seznam sousedů. A lídr posílá synchronizační zprávy $"TIME"$ pro udržení autority {\em lídra} a synchronizaci času v DS.
+Po úspěšných volbách probíhá fáze {\sbf běžného provozu}. Pokud nejsou volby úspěšné, nemusí k ní dojít. Během ní DS distribuuje logy událostí pomocí mechanismu popsaného v kapitole \ref[logDistributionDesc] a zprávy typu $"LOG"$. Při registraci zařízení do DS nebo terminaci rozesílá seznam sousedů. A lídr posílá synchronizační zprávy $"TIME"$ pro udržení autority {\em lídra} a synchronizaci času v DS.
 
 Pokud v této aplikaci dojde k selhání zařízení, neexistuje žádná opravná rutina a to z podstaty systému a navrženého algoritmu. Respektive neexistuje stav, který by algoritmus neřešil a šlo ho softwarově opravit. Pokud dojde k selhání zařízení, uživatel bude informován pomocí stavu zařízení.
 
@@ -534,5 +540,6 @@ DS mezi sebou komunikuje pomocí následujících typů zpráv:
 * $"TIME"$ je zpráva s referenčním časem užívaná i pro udržení autority,
 * $"RTT"$ je zpráva s průměrnou dobou přenosu,
 * $"RTT_CAL_MASTER"$ je zpráva pro výpočet doby přenosu putující z {\em lídra} do {\em následovníka},
-* $"RTT_CAL_SLAVE"$ je zpráva pro výpočet doby přenosu putující z {\em následovníka} do {\em lídra}.
+* $"RTT_CAL_SLAVE"$ je zpráva pro výpočet doby přenosu putující z {\em následovníka} do {\em lídra},
+* $"LOG"$ je zpráva s událostí DS.
 \enditems

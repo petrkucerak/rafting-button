@@ -12,21 +12,21 @@ V první kapitole vysvětluji motivace, které mě vedly k volbě daného téma.
 
 \sec Motivace
 
-Už od útlých dětských let jezdím na letní tábory a přes rok organizuji mládežnické akce. Na Hudebním týdnu, jedné z akcí pro mladé, tradičně hráváme hru, v které jsou různé týmy, jenž mezi sebou soutěží. Cílem je se jako první přihlásit o slovo a zodpovědět otázku. Doposud se nám nepovedlo vymyslet efektivní způsob, jak určit pořadí týmů. Ve výsledku vždy použijeme zvoneček, který při odpovědí více týmů ve stejný čas není vhodným řešením.
+Už od útlých dětských let jezdím na letní tábory a přes rok organizuji mládežnické akce. Na Hudebním týdnu, jedné z akcí pro mladé, tradičně hráváme hru, ve které jsou různé týmy, které mezi sebou soutěží. Cílem je se jako první přihlásit o slovo a zodpovědět otázku. Doposud se nám nepovedlo vymyslet efektivní způsob, jak určit pořadí týmů. Ve výsledku vždy použijeme zvoneček, který při odpovědí více týmů ve stejný čas není vhodným řešením.
 
 
 \sec Popis cíle bakalářské práce
 
-Cílem bakalářské práce je vytvořit koncept hlasovacího tlačítka, které bude fungovat jako autonomní zařízení v distribuovaném systému. Systém pomocí vhodných algoritmů bude řešit problematiku konsenzu, respektive určení pořadí stisku tlačítka.
+Cílem bakalářské práce je vytvořit koncept hlasovacího tlačítka, které bude fungovat jako autonomní zařízení v distribuovaném systému. Systém pomocí vhodných algoritmů bude řešit problematiku konsenzu, respektive určení pořadí stisku tlačítek.
 
 \label[ButtonConceptDescription]
 \sec Popis hlasovacího zařízení
 
 Aby bylo jasné porozumět cíli, ke kterému koncept hlasovacího tlačítka směřuje, domnívám se, že je důležité si popsat ideální představu výsledného zařízení.\fnote{Následující specifikaci tedy zahrnuje i požadavky přesahující tuto bakalářskou práci.}
 
-Z uživatelského pohledu by zařízení měla být kompaktní krabička, kterou si bude moci skupina položit před sebe na stůl.\fnote{Koncept odolné krabičky pro celou skupinu je dle výsledků drobné ankety popsané v kapitole \ref[Obal] více žádaný než hlasovací tlačítko, které budou uživatelé moci držet v ruce.} Krabička by na sobě měla mít tlačítko, které bude odolné i vůči veliké síle způsobené bouchnutí v zápalu hry. Zařízení bude možné přepínat mezi dvěma módy, tj. {\em PRESENTER} a {\em NORMAL}. V módu {\em NORMAL} bude zařízení řešit v jakém pořadí se týmy přihlásily o slovo. V módu {\em PRESENTER} navíc vykreslují výsledky.
+Z uživatelského pohledu by zařízení měla být kompaktní krabička, kterou si bude moci skupina položit před sebe na stůl.\fnote{Koncept odolné krabičky pro celou skupinu je dle výsledků drobné ankety popsané v kapitole \ref[Obal] více žádaný než hlasovací tlačítko, které budou uživatelé moci držet v ruce.} Krabička by na sobě měla mít tlačítko, které bude odolné i vůči veliké síle způsobené bouchnutí v zápalu hry. Zařízení bude možné přepínat mezi dvěma módy, tj. {\em PRESENTER} a {\em NORMAL}. V módu {\em NORMAL} bude zařízení řešit, v jakém pořadí se týmy přihlásily o slovo. V módu {\em PRESENTER} navíc pomocí webového serveru vykreslují výsledky.
 
-Samotná hra pak bude probíhat tak, že bude položena otázka, hráči se přihlásí o slovo stiskem tlačítka. Informace se rozdistribuuje v síti. A zařízení v módu {\em PRESENTER} zobrazí výsledky na webovém serveru. Hlasování se vyresetuje dlouhým stisknutím hlasovacího tlačítka na jakémkoliv zařízení.
+Samotná hra pak bude probíhat tak, že bude položena otázka, hráči se přihlásí o slovo stiskem tlačítka. Informace se rozdistribuuje v síti a zařízení v módu {\em PRESENTER} zobrazí výsledky. Hlasování se vyresetuje dlouhým stisknutím hlasovacího tlačítka na jakémkoliv zařízení.
 
 \sec Stanovení cílů a plánů
 
