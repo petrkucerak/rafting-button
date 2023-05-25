@@ -1,6 +1,13 @@
-# Code
-
 Softwarová implementace.
+
+## Seznam projektů
+
+- `esp-now-parameters` - měření latence ESP-NOW na ESP32
+- `hello-world` - testovací kód na ESP32S2
+- `measure-esp-now` - měření síťové infratruktury na ESP32S2
+- `rafting-button` - výsledný kód
+- `simulation` - simulace synchronizace času
+- `sync-time` - měření synchronizace času
 
 ## Snippets
 
