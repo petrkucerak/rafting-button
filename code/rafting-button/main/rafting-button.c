@@ -132,7 +132,7 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      neighbour_info_t *neighbour_info)
+                      neighbour_t *neighbour)
 {
    message_data_t *buf = (message_data_t *)data;
 
@@ -144,7 +144,7 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    *type = buf->type;
    *content = buf->content;
    *epoch_id = buf->epoch_id;
-   *neighbour_info = buf->neighbour_info[0];
+   *neighbour = buf->neighbour[0];
    return buf->type;
 }
 
@@ -156,9 +156,8 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->type = send_param->type;
    buf->epoch_id = send_param->epoch_id;
    buf->content = send_param->content;
-   // TODO: continue here
-   memcpy(&buf->neighbour_info, buf->neighbour_info,
-          sizeof(neighbour_info_t) * NEIGHBOURS_COUNT);
+   memcpy(&buf->neighbour[0], &send_param->neighbour[0],
+          sizeof(neighbour_t) * NEIGHBOURS_COUNT);
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
@@ -182,13 +181,29 @@ void handle_espnow_send_error(esp_err_t code)
       ESP_LOGE(TAG, "Current WiFi interface doesn't match that of peer");
 }
 
+void handle_espnow_add_peer_error(esp_err_t code)
+{
+   if (code == ESP_ERR_ESPNOW_NOT_INIT)
+      ESP_LOGE(TAG, "ESPNOW is not initialized");
+   else if (code == ESP_ERR_ESPNOW_ARG)
+      ESP_LOGE(TAG, "invalid argument");
+   else if (code == ESP_ERR_ESPNOW_FULL)
+      ESP_LOGE(TAG, "peer list is full");
+   else if (code == ESP_ERR_ESPNOW_NO_MEM)
+      ESP_LOGE(TAG, "out of memory");
+   else if (code == ESP_ERR_ESPNOW_EXIST)
+      ESP_LOGE(TAG, "peer has existed");
+   else if (code == ESP_OK)
+      ESP_LOGI(TAG, "succeed adding peer");
+}
+
 void espnow_handler_task(void)
 {
    espnow_event_t evt;
    uint64_t content = 0;
    message_type_t type;
    uint32_t epoch_id;
-   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
+   neighbour_t neighbour_info[NEIGHBOURS_COUNT];
    int ret;
 
    espnow_send_param_t *send_param = NULL;
@@ -230,9 +245,32 @@ void espnow_handler_task(void)
          if (epoch_id < node.epoch_id)
             ESP_LOGE(TAG, "Wrong number of epoch ID");
          switch (ret) {
-         case HELLO_DS:
-
-            break;
+         case HELLO_DS: {
+            // add device to my list or make it ACTIVE
+            if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
+               uint8_t i = 0;
+               while (node.neighbour[i].status != INACTIVE)
+                  ++i;
+               esp_now_peer_info_t peer_info = {};
+               memcpy(&peer_info.peer_addr, recv_cb->mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+               node.neighbour[i].status = ACTIVE;
+               node.neighbour[i].title = SLAVE;
+               memcpy(&node.neighbour[i].mac_addr, recv_cb->mac_addr,
+                      ESP_NOW_ETH_ALEN);
+            } else {
+               for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+                  if (memcmp(&node.neighbour[i].mac_addr, recv_cb->mac_addr,
+                             ESP_NOW_ETH_ALEN) == 0) {
+                     node.neighbour[i].status = ACTIVE;
+                     break;
+                  }
+               }
+            }
+            // send back: neighbour list, epoch id
+            
+         } break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
             break;
@@ -247,6 +285,38 @@ void espnow_handler_task(void)
    free(send_param->buf);
    free(send_param);
    vSemaphoreDelete(espnow_queue);
+}
+
+void send_hello_ds_message(void)
+{
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail [Hello DS]");
+      return;
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+
+   // type | epoch ID | target
+   send_param->epoch_id = node.epoch_id;
+   memcpy(send_param->dest_mac, s_broadcast_mac, ESP_NOW_ETH_ALEN);
+   send_param->type = HELLO_DS;
+
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail [Hello DS]");
+      free(send_param);
+      return;
+   }
+   esp_err_t ret;
+   espnow_data_prepare(send_param);
+   ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                      send_param->data_len);
+   if (ret != ESP_OK)
+      handle_espnow_send_error(ret);
+   free(send_param);
+   return;
 }
 
 void app_main(void)
@@ -292,9 +362,10 @@ void app_main(void)
    node.rtt_balancer_index = 0;
    node.epoch_id = 0;
    node.is_time_synced = 0;
-   for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i)
-      node.neighbour[i].info.status = NOT_INITIALIZED;
-   
+   for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+      node.neighbour[i].status = NOT_INITIALIZED;
+   }
+
    // Create a broadcast peer
    memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
    if (!esp_now_is_peer_exist(s_broadcast_mac)) {
@@ -307,6 +378,8 @@ void app_main(void)
    handler_task =
        xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
                    STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
+
+   send_hello_ds_message();
 
    print_data = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(print_data_t));
 

@@ -55,22 +55,17 @@ typedef struct espnow_event {
    uint64_t timestamp;
 } espnow_event_t;
 
-typedef struct neighbour_info {
+typedef struct neighbour {
    device_title_t title;
    device_status_t status;
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
-} neighbour_info_t;
-
-typedef struct neighbour {
-   esp_now_peer_info_t peer_info;
-   neighbour_info_t info;
 } neighbour_t;
 
 typedef struct message_data {
    message_type_t type;
    uint32_t epoch_id;
    uint64_t content;
-   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
+   neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
 
@@ -78,7 +73,7 @@ typedef struct espnow_send_param {
    message_type_t type;
    uint64_t content;
    uint32_t epoch_id;
-   neighbour_info_t neighbour_info[NEIGHBOURS_COUNT];
+   neighbour_t neighbour[NEIGHBOURS_COUNT];
    int data_len;
    uint8_t *buf;
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
