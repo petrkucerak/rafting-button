@@ -365,7 +365,7 @@ void espnow_handler_task(void)
             }
             print_neighbours();
          } break;
-         case RTT_CAL_MASTER:
+         case RTT_CAL_MASTER: {
             // send value back to master with type RTT_CAL_SLAVE
             send_param->content = content;
             send_param->type = RTT_CAL_SLAVE;
@@ -375,8 +375,8 @@ void espnow_handler_task(void)
                              send_param->data_len) != ESP_OK) {
                ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
             }
-            break;
-         case RTT_CAL_SLAVE:
+         } break;
+         case RTT_CAL_SLAVE: {
             // calcule RTT and send it back to slave with type RTT_VAL
             send_param->content = (evt.timestamp - content) / 2;
             send_param->type = RTT;
@@ -386,8 +386,8 @@ void espnow_handler_task(void)
                              send_param->data_len) != ESP_OK) {
                ESP_LOGW(TAG, "Send RTT_CAL_SLAVE error");
             }
-            break;
-         case RTT:
+         } break;
+         case RTT: {
             // set RTT value into the array
             if (node.is_firts_setup_rtt) {
                for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
@@ -400,8 +400,8 @@ void espnow_handler_task(void)
                if (node.rtt_balancer_index == BALANCER_SIZE)
                   node.rtt_balancer_index = 0;
             }
-            break;
-         case TIME:
+         } break;
+         case TIME: {
             // calcule deviation O~
             node.deviation_avg = (int32_t)get_time_with_timer(evt.timestamp) -
                                  (int32_t)content - (int32_t)get_rtt_avg();
@@ -423,7 +423,10 @@ void espnow_handler_task(void)
                node.time_corection =
                    esp_timer_get_time() - (content + (uint64_t)get_rtt_avg());
             }
-            break;
+
+            // set timestampt to calcule new election
+            node.timeout_sync = evt.timestamp;
+         } break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
             break;
@@ -513,6 +516,21 @@ void send_rtt_cal_master_task(void)
    }
    free(send_param);
    vTaskDelete(NULL);
+}
+
+void send_request_vote_task(void)
+{
+   // check timeout sync, longer than 2s, new elecetion
+   if (node.title == MASTER &&
+       (esp_timer_get_time() - node.timeout_sync) > 2000000) {
+      ++node.epoch_id;
+      // send give request vote
+      // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů a
+      // stane se novým lídrem
+      // . nebo přijme zprávu synchronizující čas TIME, novým lídrem se stalo
+      // nějaké zařízení rychleji . nebo budou volby neúspěšné do timeoutu
+      // 𝑡𝑒𝑙𝑒𝑐𝑡𝑖𝑜𝑛, volby skončí neúspěchem a začne nová epocha.
+   }
 }
 
 void send_time_task(void)

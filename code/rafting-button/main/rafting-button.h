@@ -89,6 +89,7 @@ typedef struct node_info {
    neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint32_t epoch_id;
    device_title_t title;
+   uint64_t timeout_sync; // represents timestamp
 } node_info_t;
 
 typedef struct print_data {
