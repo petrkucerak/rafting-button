@@ -30,7 +30,7 @@
 #define PRINT_QUEUE_SIZE 4
 
 #define ESPNOW_MAXDELAY 10
-#define STACK_SIZE 2048
+#define STACK_SIZE 4096
 
 #define DEVIATION_LIMIT 200
 #define DEVIATION_MAX_CONSTANT 25
@@ -203,7 +203,7 @@ void espnow_handler_task(void)
    uint64_t content = 0;
    message_type_t type;
    uint32_t epoch_id;
-   neighbour_t neighbour_info[NEIGHBOURS_COUNT];
+   neighbour_t neighbours[NEIGHBOURS_COUNT];
    int ret;
 
    espnow_send_param_t *send_param = NULL;
@@ -240,12 +240,13 @@ void espnow_handler_task(void)
          // handle recv
          espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
          ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
-                                 &content, &epoch_id, &neighbour_info);
+                                 &content, &epoch_id, &neighbours);
          free(recv_cb->data);
          if (epoch_id < node.epoch_id)
             ESP_LOGE(TAG, "Wrong number of epoch ID");
          switch (ret) {
          case HELLO_DS: {
+            ESP_LOGI(TAG, "Receive HELLO_DS");
             // add device to my list or make it ACTIVE
             if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
                uint8_t i = 0;
@@ -269,7 +270,50 @@ void espnow_handler_task(void)
                }
             }
             // send back: neighbour list, epoch id
-            
+            ESP_LOGI(TAG, "Send NEIGHBOUR message");
+            send_param->type = NEIGHBOURS;
+            send_param->epoch_id = node.epoch_id;
+            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
+            memcpy(&send_param->neighbour[0], &node.neighbour[0],
+                   sizeof(neighbour_t) * NEIGHBOURS_COUNT);
+            espnow_data_prepare(send_param);
+
+            ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                               send_param->data_len);
+            if (ret != ESP_OK)
+               handle_espnow_send_error(ret);
+
+         } break;
+         case NEIGHBOURS: {
+            ESP_LOGI(TAG, "Receive NEIGHBOUR message");
+            // save neighbours
+            for (uint8_t j = 0; j < NEIGHBOURS_COUNT; ++j) {
+               if (!is_device_mac(&neighbours[j].mac_addr)) {
+                  if (!esp_now_is_peer_exist(&neighbours[j].mac_addr)) {
+                     uint8_t i = 0;
+                     while (node.neighbour[i].status != INACTIVE)
+                        ++i;
+                     esp_now_peer_info_t peer_info = {};
+                     memcpy(&peer_info.peer_addr, &neighbours[j].mac_addr,
+                            ESP_NOW_ETH_ALEN);
+                     ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+                     node.neighbour[i].status = neighbours[j].status;
+                     node.neighbour[i].title = neighbours[j].title;
+                     memcpy(&node.neighbour[i].mac_addr,
+                            &neighbours[j].mac_addr, ESP_NOW_ETH_ALEN);
+                  } else {
+                     for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+                        if (memcmp(&node.neighbour[i].mac_addr,
+                                   &neighbours[j].mac_addr,
+                                   ESP_NOW_ETH_ALEN) == 0) {
+                           node.neighbour[i].status = neighbours[j].status;
+                           node.neighbour[i].title = neighbours[j].title;
+                           break;
+                        }
+                     }
+                  }
+               }
+            }
          } break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
@@ -289,6 +333,7 @@ void espnow_handler_task(void)
 
 void send_hello_ds_message(void)
 {
+   ESP_LOGI(TAG, "Send HELLO_DS");
    espnow_send_param_t *send_param = NULL;
    send_param = malloc(sizeof(espnow_send_param_t));
    if (send_param == NULL) {
@@ -316,7 +361,6 @@ void send_hello_ds_message(void)
    if (ret != ESP_OK)
       handle_espnow_send_error(ret);
    free(send_param);
-   return;
 }
 
 void app_main(void)
