@@ -3,12 +3,13 @@
 
 #define BALANCER_SIZE 100
 #define NEIGHBOURS_COUNT 9
+#define EVENT_HISTORY 20
 
 #include <espnow.h>
 #include <inttypes.h>
 
 typedef enum device_title {
-   SLAVE, // nasledovnik
+   SLAVE,     // nasledovnik
    CANDIDATE, // kandidat na lidra
    MASTER,    // lidr
 } device_title_t;
@@ -24,6 +25,18 @@ typedef enum espnow_event_id {
    ESPNOW_RECV_CB,
 } espnow_event_id_t;
 
+typedef enum ds_task {
+   SEND2MASTER,
+   SEND2SLAVES,
+   SAVE,
+} ds_task_t;
+
+typedef enum ds_event {
+   PUSH,
+   RESET,
+   EMPTY,
+} ds_event_t;
+
 typedef enum message_type {
    RTT_CAL_MASTER, // time used to calculate the RTT (master -> slave)
    RTT_CAL_SLAVE,  // time used to calculate the RTT (slave -> master)
@@ -31,7 +44,8 @@ typedef enum message_type {
    TIME,           // time to synchronize the time
    HELLO_DS,
    NEIGHBOURS,
-   LOG,
+   LOG2MASTER,
+   LOG2SLAVES,
    REQUEST_VOTE,
    GIVE_VOTE,
 } message_type_t;
@@ -68,6 +82,9 @@ typedef struct message_data {
    message_type_t type;
    uint32_t epoch_id;
    uint64_t content;
+   ds_event_t event_type;
+   uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   ds_task_t event_task;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
@@ -77,10 +94,20 @@ typedef struct espnow_send_param {
    uint64_t content;
    uint32_t epoch_id;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
+   ds_event_t event_type;
+   uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   ds_task_t event_task;
    int data_len;
    uint8_t *buf;
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
+
+typedef struct log_event {
+   uint64_t timestamp;
+   ds_event_t type;
+   uint8_t mac_addr[ESP_NOW_ETH_ALEN];
+   ds_task_t task;
+} log_event_t;
 
 typedef struct node_info {
    uint64_t time_corection;
@@ -96,12 +123,7 @@ typedef struct node_info {
    uint64_t timeout_sync; // represents timestamp
    uint64_t timeout_vote; // represents by timestamp
    uint8_t count_of_vote;
+   log_event_t events[EVENT_HISTORY];
 } node_info_t;
-
-typedef struct print_data {
-   uint32_t rtt;
-   int32_t deviation;
-   uint64_t time;
-} print_data_t;
 
 #endif // RAFTING_BUTTON_H
