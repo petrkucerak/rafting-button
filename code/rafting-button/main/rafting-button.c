@@ -25,6 +25,7 @@
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
 #define PRIORITY_HANDLER 3
+#define PRIORITY_HANDLE_DS_EVENT 2
 #define PRIORITY_REQUEST_TASK 2
 
 #define ESPNOW_QUEUE_SIZE 10
@@ -962,7 +963,7 @@ void app_main(void)
    BaseType_t handle_ds_event_task_v;
    handle_ds_event_task_v =
        xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
-                   STACK_SIZE, NULL, PRIORITY_REQUEST_TASK, NULL);
+                   STACK_SIZE, NULL, PRIORITY_HANDLE_DS_EVENT, NULL);
 
    send_hello_ds_message();
 
