@@ -6,5 +6,6 @@ Repozitář s veškerou prací na samostatném a bakalářském projektu, který
 
 - [samostatny-projekt](/samostatny-projekt/) - složka obsahující veškeré soubory týkající se samostatného projektu
 - [thesis](/thesis/) - složka s bakalářskou prací
-- [code](/code/) - složka s seftwarovými implementacemi
+- [code](/code/) - složka s softwarovými implementacemi
+- [assets](/assets/) - složka s relevantními zdroji
 
