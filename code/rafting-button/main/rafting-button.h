@@ -82,6 +82,9 @@ typedef struct message_data {
    message_type_t type;
    uint32_t epoch_id;
    uint64_t content;
+   ds_event_t event_type;
+   uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   ds_task_t event_task;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
@@ -91,6 +94,9 @@ typedef struct espnow_send_param {
    uint64_t content;
    uint32_t epoch_id;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
+   ds_event_t event_type;
+   uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   ds_task_t event_task;
    int data_len;
    uint8_t *buf;
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];

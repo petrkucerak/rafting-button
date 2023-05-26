@@ -111,6 +111,7 @@ static void IRAM_ATTR gpio_handler_isr(void *)
    data.timestamp = get_time();
    data.type = PUSH;
    data.task = SEND2MASTER;
+   ESP_ERROR_CHECK(esp_read_mac(&data.mac_addr, ESP_MAC_BASE));
    xQueueSendFromISR(log_event, &data, NULL);
 }
 
@@ -169,7 +170,7 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      neighbour_t *neighbour)
+                      neighbour_t *neighbour, log_event_t *event)
 {
    message_data_t *buf = (message_data_t *)data;
 
@@ -181,6 +182,11 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    *type = buf->type;
    *content = buf->content;
    *epoch_id = buf->epoch_id;
+   *event->mac_addr = buf->event_mac_addr;
+   event->task = buf->event_task;
+   event->type = buf->event_type;
+   event->timestamp = buf->content;
+
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       neighbour[i] = buf->neighbour[i];
    }
@@ -195,6 +201,9 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->type = send_param->type;
    buf->epoch_id = send_param->epoch_id;
    buf->content = send_param->content;
+   buf->event_task = send_param->event_task;
+   buf->event_type = send_param->event_type;
+   memcpy(buf->event_mac_addr, send_param->event_mac_addr, ESP_NOW_ETH_ALEN);
    memcpy(&buf->neighbour[0], &send_param->neighbour[0],
           sizeof(neighbour_t) * NEIGHBOURS_COUNT);
    /* Fill all remaining bytes after the data with random values */
@@ -243,6 +252,7 @@ void espnow_handler_task(void)
    message_type_t type;
    uint32_t epoch_id;
    neighbour_t neighbours[NEIGHBOURS_COUNT];
+   log_event_t event;
    int ret;
 
    espnow_send_param_t *send_param = NULL;
@@ -319,7 +329,7 @@ void espnow_handler_task(void)
          // handle recv
          espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
          ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
-                                 &content, &epoch_id, &neighbours);
+                                 &content, &epoch_id, &neighbours, &event);
          free(recv_cb->data);
          if (epoch_id < node.epoch_id)
             ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
@@ -400,7 +410,8 @@ void espnow_handler_task(void)
                                       ESP_NOW_ETH_ALEN) == 0) {
                               node.neighbour[i].status = neighbours[j].status;
                               node.neighbour[i].title = neighbours[j].title;
-                              ESP_LOGI(TAG, "Set %d. neighbour as INACTIVE", i);
+                              // ESP_LOGI(TAG, "Set %d. neighbour as INACTIVE",
+                              // i);
                               break;
                            }
                         }
@@ -544,8 +555,9 @@ void espnow_handler_task(void)
          } break;
          case LOG2MASTER: {
             log_event_t data;
-            data.timestamp = content;
-            data.type = PUSH;
+            data.timestamp = event.timestamp;
+            data.type = event.type;
+            memcpy(data.mac_addr, event.mac_addr, ESP_NOW_ETH_ALEN);
             data.task = SEND2SLAVES;
             if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
                ESP_LOGE(TAG, "Can't push data into the lo_event");
@@ -553,15 +565,17 @@ void espnow_handler_task(void)
          } break;
          case LOG2SLAVES: {
             log_event_t data;
-            data.timestamp = content;
-            data.type = PUSH;
+            data.timestamp = event.timestamp;
+            data.type = event.type;
+            memcpy(data.mac_addr, event.mac_addr, ESP_NOW_ETH_ALEN);
             data.task = SAVE;
             if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
                ESP_LOGE(TAG, "Can't push data into the lo_event");
             };
-         }
+         } break;
          default:
-            ESP_LOGE(TAG, "Receive unknown message type");
+            ESP_LOGE(TAG, "Receive unknown message type, %d message_type_t",
+                     ret);
             break;
          }
          break;
@@ -807,6 +821,10 @@ void handle_ds_event_task(void)
          }
       }
       // distribute data
+      send_param->epoch_id = node.epoch_id;
+      memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+      send_param->event_type = data.type;
+      send_param->content = data.timestamp;
       switch (data.task) {
       case SEND2MASTER:
          uint8_t i = 0;
@@ -819,9 +837,7 @@ void handle_ds_event_task(void)
          }
          memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                 ESP_NOW_ETH_ALEN);
-         send_param->epoch_id = node.epoch_id;
          send_param->type = LOG2MASTER;
-         send_param->content = data.timestamp;
          espnow_data_prepare(send_param);
          ret = esp_now_send(send_param->dest_mac, send_param->buf,
                             send_param->data_len);
@@ -829,9 +845,7 @@ void handle_ds_event_task(void)
             handle_espnow_send_error(ret);
          break;
       case SEND2SLAVES:
-         send_param->epoch_id = node.epoch_id;
          send_param->type = LOG2SLAVES;
-         send_param->content = data.timestamp;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
@@ -915,6 +929,7 @@ void app_main(void)
    }
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
+   log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
 
    BaseType_t handler_task;
    handler_task =
@@ -935,9 +950,12 @@ void app_main(void)
        (TaskFunction_t)send_request_vote_task, "send_request_vote_task",
        STACK_SIZE, NULL, PRIORITY_REQUEST_TASK, NULL);
 
-   send_hello_ds_message();
+   BaseType_t handle_ds_event_task_v;
+   handle_ds_event_task_v =
+       xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
+                   STACK_SIZE, NULL, PRIORITY_REQUEST_TASK, NULL);
 
-   log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
+   send_hello_ds_message();
 
    vTaskDelay(1000 / portTICK_PERIOD_MS);
 
