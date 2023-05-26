@@ -16,7 +16,7 @@ Ne všechny funkční požadavky jsou v této bakalářské práci realizované.
 \label[functionsRequirements]
 \sec Funkční požadavky na systém
 
-Výsledný systém by měl sloužit k {\sbf určení pořadí} toho, jak se jednotlivé týmy přihlásily o slovo, respektive seřazení událostí stisku tlačítek na jednotlivých zařízení v systému. Zařízení by měla být kompaktní ale zároveň odolná, a to i proti silným nárazům. Měla by fungovat minimálně 6 hodin v kuse.
+Výsledný systém by měl sloužit k {\sbf určení pořadí} toho, jak se jednotlivé týmy přihlásily o slovo, respektive seřazení událostí stisku tlačítek na jednotlivých zařízení v systému. Zařízení by měla být kompaktní ale zároveň odolná, a to i proti silným nárazům. Měla by fungovat minimálně 6 hodin v kuse.\fnote{Minimální doba 6 hodin byla stanovena na základě úvahy možných aplikací. Pokud by měl systém sloužit například pro realizaci večerního hospodského kvízu, bude nutné udržet zařízení při hře po celý večer, tedy od 18 do 24 hodin.}
 
 Systém bude tvořen maximálně deseti zařízeními, a to z důvodu toho, že při podobných typech her nebývá více než 6 týmů. Měl by tedy limit deseti vyhovovat.
 
@@ -35,20 +35,20 @@ Stav hlasování bude signalizován LED diodami, přičemž může být ve dvou 
 
 Zařízení se ovládají pomocí hlasovacího tlačítka, které by mělo být odolné i vůči silným nárazům.\fnote{Koncept odolné krabičky pro celou skupinu je dle výsledků drobné ankety popsané v kapitole \ref[Obal] více žádaný než hlasovací tlačítko, které budou uživatelé moci držet v ruce.}
 
-Zařízení v systému budou komunikovat pomocí drobných zpráv.\fnote{V řádech desítek Bajtů.}
+Zařízení v systému budou komunikovat pomocí krátkých zpráv.\fnote{V řádech desítek Bajtů.}
 
 Požadavky na přesnost rozlišení jsou takové, aby bylo možné zaručit správnost pořadí.\fnote{Daná problematika přesnosti je dále diskutovaná v kapitole \ref[syncspecdetailstime], která se podrobně stanovuje požadavky na algoritmus, konkrétně na synchronizaci času.}
 
-Celý systém by měl fungovat v prostředí hospody, kde může být rušen cizím signálem. Musí také fungovat bez jakékoliv jiné infrastruktury například v lese.
+Celý systém by měl fungovat v prostředí hospody, kde může být rušen cizím signálem. Musí také fungovat bez jakékoliv jiné infrastruktury, například v lese.
 
 Bezdrátová komunikace musí fungovat pomocí wifi technologie,\fnote{Wifi technologií se myslí {\em IEEE 802.11}.} která bude užívaná na co nejnižší úrovni.\fnote{Ideálně adresovat pomocí MAC adres a nevyužívat nic vyššího nad druhou spojovou vrstvu OSI modelu.}
 
 \sec Popis užití systému v praxi
 
-Workflow hry se systémem by měl být následující.
+Průběh hry se systémem by měl být následující.
 
 Moderátor hry položí otázku. Zařízení jsou na stolech před jednotlivými týmy. Týmy~se poradí. Jakmile~se domnívají, že znají správnou odpověď, stisknou tlačítko a~přihlásí se tak o slovo.
 
 V ten moment se zaznamená daná událost, algoritmus ji zpracuje a v rámci celého distribuovaného systému určí její pořadí v daném kole. Výsledky jsou průběžně zobrazované na zařízení v módu {\em PRESENTER}.
 
-Pro ukončení kola se na jakémkoliv zařízení stiskne tlačítko po delší dobu.\fnote{Například 10 s. Tato hodnota musí být později doladěna podle uživatelského zážitku, což není obsahem této bakalářské práce.} Tím se na všech zařízeních vymaže historie a systém je připrav pro další kolo.
+Pro ukončení kola se na zařízení {\em PRESENTER} stiskne tlačítko po delší dobu.\fnote{Například 10 s. Tato hodnota musí být později doladěna podle uživatelského zážitku, což není obsahem této bakalářské práce.} Tím se na všech zařízeních vymaže historie a systém je připrav pro další kolo.
