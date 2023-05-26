@@ -21,17 +21,17 @@ Z důvodu více jader procesoru a~využití {\em callback} funkcí v implementac
 
 \begitems
 * Rodičovský proces $"app_main"$ inicializuje nutné komponenty a~stará se o správu celého systému. Také se využívá pro vypisování pravidelných hlášení o stavu systému.
-* Proces $"espnow_handler_task"$ slouží k zpracování {\em ESP-NOW eventů}. To jsou události vyvolané {\em callbacky}, které signalizují odeslání nebo přijmutí zprávy, o nich více v kapitole \ref[aboutCallBakcsc]. Proces funguje jako stavový automat a~je detailněji popsán v další kapitole.
+* Proces $"espnow_handler_task"$ slouží k zpracování {\em ESP-NOW udláostí}. To jsou události vyvolané {\em callbacky}, které signalizují odeslání nebo přijmutí zprávy, o nich více v kapitole \ref[aboutCallBakcsc]. Proces funguje jako stavový automat a~je detailněji popsán v další kapitole.
 * Pokud je zařízení {\em lídrem}, pak proces $"send_rtt_cal_master_task"$ rozesílá zprávu inicializující výpočet doby přenosu $D$. Pokud lídrem není, nic neprovádí.
 * Proces $"send_time_task"$ funguje podobně jako předchozí proces. Tedy pokud je zařízení {\em lídrem}, pak rozesílá zprávy synchronizující čas. Tím si {\em lídr} udržuje svoji autoritu.
 * Pokud zařízení po dobu $t_{sync}$ neobdrželo zprávu s časem od {\em lídra}, proces  $"send_request_vote_task"$ inicializuje nové volby a~následně je obslouží.
-* Posledním uživatelsky zavedením procesem je $"handle_ds_event_task"$. Ten se stará o distribuci logů mezi zařízeními.
+* Posledním uživatelsky zavedeným procesem je $"handle_ds_event_task"$. Ten se stará o distribuci logů mezi zařízeními.
 * V systému probíhají i jiné systémové obslužné rutiny, například zajišťující chod wifi.
 \enditems
 
 Software implementuje 3 {\sbf přerušení}, respektive dvě obsluhy přerušení a~jedno přerušení. Konkrétně se jedná o {\em callback} funkce $"espnow_send_cb"$ a~$"espnow_recv_cb"$ obsluhující přerušení ESP-NOW a~přerušení $"gpio_handler_isr"$ pro obsluhu hardwarového tlačítka připojeného na~bránu $"GPIO_NUM_23"$.
 
-{\sbf Priorita} jednotlivých procesů je popsána tabulkou \ref[TaskPriorities]. Nejvyšší prioritu má mají přerušení a~rutiny obsluhující přerušení. Po nich následuje $"espnow_handler_task"$, protože se stará o časově kritické procesy jako je synchronizace času. Střední prioritu mají všechny ostatní procesy krom rodičovského, který má prioritu nejnižší.
+{\sbf Priorita} jednotlivých procesů je popsána tabulkou \ref[TaskPriorities]. Nejvyšší prioritu mají přerušení a~rutiny obsluhující přerušení. Po nich následuje $"espnow_handler_task"$, protože se stará o časově kritické procesy jako je synchronizace času. Střední prioritu mají všechny ostatní procesy krom rodičovského, který má prioritu nejnižší.
 
 \midinsert \clabel[TaskPriorities]{Priority procesů}
 \ctable{lr}{
@@ -51,11 +51,11 @@ $"handle_ds_event_task"$ & 2\cr
 
 Z měření síťové infrastruktury vyplývá,\fnote{Možné dohledat v kapitole \ref[measiureInfraas].} že {\sbf velikost zprávy má vliv na~dobu odeslání}. Algoritmus v ideálním případě očekává symetrickou dobu odesílání zpráv. Proto jsem při implementaci využil maximální velikost rámce a~nevyužité místo jsem zaplnil náhodnými daty. Díky tomu nebude mít rozdílná velikost vliv na~případnou asymetričnost.
 
-Z důvodu zjednodušení využívám pouze {\sbf jediný typ rámce} pro všechny typy zpráv. Rámce se s skládají z následujících části, které jsou vizualizovány obrázky \ref[StrukturaRamce01] a~\ref[StrukturaRamce02].
+Z důvodu zjednodušení využívám pouze {\sbf jediný typ rámce} pro všechny typy zpráv. Rámce se skládají z následujících částí, které jsou vizualizovány obrázky \ref[StrukturaRamce01] a~\ref[StrukturaRamce02].
 
 \begitems
 * {\sbf Typ zprávy} ($"message_type_t"$) ovlivňuje stavový automat v procesu, který zpracovává příchozí zprávy.
-* {\sbf ID epochy} ($"uint32_t"$) říká o jakou epochy se jedná, a~tak zajišťuje bezpečnost.
+* {\sbf ID epochy} ($"uint32_t"$) říká o jakou epochu se jedná, a~tak zajišťuje bezpečnost.
 * {\sbf Číselný obsah}  ($"uint64_t"$) používá se k přenášení různých typů zpráv. Ve většině případů obsahuje časovou značku.
 * {\sbf Typ události DS} ($"ds_event_t"$) specifikuje, zdali se jednalo o stisk nebo reset. Využívá se k distribuování logu.
 * {\sbf Mac adresa události} ($"uint8_t[ESP_NOW_ETH_ALEN]"$) se využívá k distribuování logu, konkrétně ke zdrojové adrese dané události.
@@ -83,9 +83,9 @@ Z důvodu zjednodušení využívám pouze {\sbf jediný typ rámce} pro všechn
 
 \secc Proces zpracování zpráv
 
-Jak již bylo uvedeno v kapitole \ref[messagesStructs], zprávy zpracovává speciální mechanismus. To tak, že {\em callback} funkce zaznamená novou zprávu, pošle ji jako události do fronty a~z~ní proces $"espnow_handler_task"$ vyjme událost a~tu následně odbaví.
+Jak již bylo uvedeno v kapitole \ref[messagesStructs], zprávy zpracovává speciální mechanismus. To tak, že {\em callback} funkce zaznamená novou zprávu, pošle ji jako událost do fronty a~z~ní proces $"espnow_handler_task"$ vyjme událost a~tu následně odbaví.
 
-Tento {\sbf proces je klíčovým} pro fungování celého systému. Funguje jako stavový automat. Přijatou událost, respektive zprávu zpracuje podle jejího typu. A to tak, že pokud se jedná o zprávy typu:
+Tento {\sbf proces je klíčovým} pro fungování celého systému. Funguje jako stavový automat. Přijatou událost, respektive zprávu zpracuje podle jejího typu. Pokud se jedná o zprávy typu:
 
 \begitems
 * $"HELLO_DS"$ zařízení ověří, zdali se jedná o neznámé zařízení. Pokud ano, přidá ho do svého seznamu. Pokud již zařízení zná, pouze nastaví jeho status jako aktivní. Jako odpověď mu pošle seznam všech zařízení v sítí.
@@ -97,15 +97,15 @@ Tento {\sbf proces je klíčovým} pro fungování celého systému. Funguje jak
 
 Zpráva tohoto typu se využívá i k tomu, aby si {\em lídr} udržel svoji autoritu. Pokud je tedy zařízení ve stavu {\em kandidáta} a~přijme daný typ zprávy, ukončí svoji kandidaturu a~přepne se do stavu {\em následovník}. 
 
-Při každém zpracování této zprávy ukládá časová značka. Ta se následně využívá k výpočtu {\em timeoutu} $t_{sync}$. Pokud je delší než stanovená konstanta, zařízení přechází do stavu {\em kandidát}, zvyšuje číslo epochy ({\em epoch ID}) a~inicializuje volby.
+Při každém zpracování této zprávy se ukládá časová značka. Ta se následně využívá k výpočtu {\em timeoutu} $t_{sync}$. Pokud je delší než stanovená konstanta, zařízení přechází do stavu {\em kandidát}, zvyšuje číslo epochy ({\em epoch ID}) a~inicializuje volby.
 
 * $"REQUEST_VOTE"$ zařízení odešle odesílateli zprávu s hlasem.
 * $"GIVE_VOTE"$ zařízení zprávu uloží. Pokud má více odpovědí, než je polovina aktivních zařízení v síti, prohlásí se za {\em lídra} a~ostatní zařízení za {\em následovníky}.
-* $"LOG2MASTER"$ zařízení pošle log do fronty, která předává tento typ událostí procesu $"handle_ds_event_task"$. Log je uložen a~rozeslán na~všechny {\em následovníky}.
+* $"LOG2MASTER"$ zařízení pošle log do fronty, která předává tento typ událostí procesu $"handle_ds_event_task"$. Log je uložen a~rozeslán všem {\em následovníkům}.
 * $"LOG2SLAVES"$ zařízení pošle log do fronty, která předává tento typ událostí procesu $"handle_ds_event_task"$. Log je uložen.
 \enditems
 
-V případě, že proces obdrží události s informací o {\sbf neúspěchu odeslání zprávy}, se inkrementuje součet neodeslaných zpráv do daného zařízení. Pokud jich je více než počet povolený konstantou $"COUNT_ERROR_MESSAGE_TO_INACTIVE"$, proces je prohlášen za neaktivní a~tato informace je rozdistribuována na~všechny aktivní sousedy.
+V případě, že proces obdrží události s informací o {\sbf neúspěchu odeslání zprávy}, se inkrementuje součet neodeslaných zpráv v daném zařízení. Pokud jich je více než počet povolený konstantou $"COUNT_ERROR_MESSAGE_TO_INACTIVE"$, proces je prohlášen za neaktivní a~tato informace je rozdistribuována na~všechny aktivní sousedy.
 
 \secc Poznámky k implementaci
 
@@ -118,7 +118,7 @@ Veškerý kód je dostupný v repozitáři projektu.\fnote{\url{https://github.c
 
 {\sbf Základní komponenty} algoritmu pro synchronizaci času, doby přenosu a~velikosti chyby byly otestovány v kapitole \ref[syncResolutionChapt]. Systém je schopen synchronizovat čas s minimální přesností 1 ms.
 
-Ve {\sbf výsledné implementaci} jsem prováděl testování pro dílčí problémy jako je nalezení zařízení v okolí, distribuce seznamu sousedů, volby lídra a~synchronizace času. K~testování jsem využil ladících výpisů a~zkoušel všechny možné scénáře. Testování bylo prováděno maximálně s 5 zařízeními.\fnote{Historie testování i s komentáři je dostupná v repozitáři projektu.} Z testování vyplývá, že {\sbf systmém je úspěšně schopný}:
+Ve {\sbf výsledné implementaci} jsem prováděl testování pro dílčí problémy, jako je nalezení zařízení v okolí, distribuce seznamu sousedů, volby lídra a~synchronizace času. K~testování jsem využil ladících výpisů a~zkoušel všechny možné scénáře. Testování bylo prováděno maximálně s 5 zařízeními.\fnote{Historie testování i s komentáři je dostupná v repozitáři projektu.} Z testování vyplývá, že {\sbf systém je úspěšně schopný}:
 
 \begitems
 * najít zařízení v okolí,
@@ -129,7 +129,7 @@ Ve {\sbf výsledné implementaci} jsem prováděl testování pro dílčí probl
 * synchronizovat čas v celém DS s přesností 1 ms.
 \enditems
 
-{\sbf Kompletní otestování systému} včetně distribuce logu při reálné hře jsem z časových důvodů v této práci nestihl. V nejbližší době tento test provedu a~jeho výsledky představím při obhajobě práce a~přidám je do repozitáře projektu.
+{\sbf Kompletní otestování systému}, včetně distribuce logu při reálné hře, jsem z časových důvodů v této práci nestihl. V nejbližší době tento test provedu a~jeho výsledky představím při obhajobě práce a~přidám je do repozitáře projektu.
 
-Testování plánuji provádět tak, že za pomocí zařízení STM32G431KB, používaného již v předchozích měřeních, budu simulovat stisky tlačítek. Testování bude obsahovat několik scénářů. První bude mít za úkol otestovat normální průběh hry. V druhém se budu snažit stanovit časový limit, při kterém je zařízení stále schopno správně rozeznat kauzalitu dvou událostí, které nastanou bezprostřední blízkosti. Třetí scénář bude testovat potenciálně problematické situace. To především vliv odpojení zařízení ze sítě a~rušení sítě jiným signálem.
+Testování plánuji provádět pomocí zařízení STM32G431KB, používaného již v~předchozích měřeních. Pomocí něj budu simulovat stisky tlačítek. Testování bude obsahovat několik scénářů. První bude mít za úkol otestovat normální průběh hry. V druhém se budu snažit stanovit časový limit, při kterém je zařízení stále schopno správně rozeznat kauzalitu dvou událostí, které nastanou v bezprostřední blízkosti. Třetí scénář bude testovat potenciálně problematické situace. To především vliv odpojení zařízení ze sítě a~rušení sítě jiným signálem.
 

@@ -80,7 +80,7 @@ Druhým algoritmem, který by šlo použít k synchronizaci času je v průmyslu
 * minimální požadavky na~hardware zařízení,
 * použitelnost s minimální zprávou, a~to i v malých sítích,
 * podporu i v levných a~rozšířených sítích
-* a~přesnost v řádu maximálně mikrosekund.\fnote{Neplatí vždy. Záleží na~vrstvě, ve které je protokol implementován. Typicky se jedná o druhou (v lokální síti), pak je možné dosáhnout uvedené přesnosti. Pokud se ale PTP implementuje ve vyšší vrstvě, například je součástí UDP, pak je téměř nemožné dosáhnout požadované rychlosti.}
+* a~přesnost v řádu maximálně mikrosekund.\fnote{Neplatí vždy. Záleží na~vrstvě, ve které je protokol implementován. Typicky se jedná o druhou (v~lokální síti), pak je možné dosáhnout uvedené přesnosti. Pokud se ale PTP implementuje ve vyšší vrstvě, například je součástí UDP, pak je téměř nemožné dosáhnout požadované rychlosti.}
 \enditems
 
 Samotný princip PTP je založený na~{\sbf pravidelném zasílání časových značek}, ze kterých se následně určí časový posun hodin a~zpoždění dané vlivem přenosu mezi jednotlivými zařízeními. V první verzi protokol nefunguje efektivně v~hierarchických sítích z~důvodu kumulace chyby. Pozdější verze chybu opravuje.
