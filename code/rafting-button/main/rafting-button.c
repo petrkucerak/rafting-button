@@ -25,6 +25,7 @@
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
 #define PRIORITY_HANDLER 3
+#define PRIORITY_REQUEST_TASK 2
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
@@ -36,6 +37,9 @@
 #define DEVIATION_MAX_CONSTANT 25
 
 #define CONFIG_ESPNOW_SEND_LEN 250
+
+#define VOTE_TIMEOUT 1000000
+#define MASTER_TIMEOUT 2000000
 
 // #define IS_MASTER
 #define IS_SLAVE
@@ -70,11 +74,22 @@ static uint64_t get_time_with_timer(uint64_t esp_time)
 
 void print_neighbours(void)
 {
+   printf("\n");
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       ESP_LOGI("NEIGBOURS", MACSTR " | status: %d | title: %d",
                MAC2STR(node.neighbour[i].mac_addr), node.neighbour[i].status,
                node.neighbour[i].title);
    }
+}
+
+uint8_t get_cout_active_devices(void)
+{
+   uint8_t ret = 0;
+   for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+      if (node.neighbour[i].status == ACTIVE)
+         ++ret;
+   }
+   return ret;
 }
 
 static void IRAM_ATTR gpio_handler_isr(void *)
@@ -255,9 +270,11 @@ void espnow_handler_task(void)
          free(recv_cb->data);
          if (epoch_id < node.epoch_id)
             ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
+         else if (epoch_id > node.epoch_id)
+            node.epoch_id = epoch_id;
          switch (ret) {
          case HELLO_DS: {
-            ESP_LOGI(TAG, "Receive HELLO_DS");
+            // ESP_LOGI(TAG, "Receive HELLO_DS");
             // add device to my list or make it ACTIVE
             if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
                uint8_t i = 0;
@@ -284,9 +301,9 @@ void espnow_handler_task(void)
                   }
                }
             }
-            print_neighbours();
+            // print_neighbours();
             // send back: neighbour list, epoch id
-            ESP_LOGI(TAG, "Send NEIGHBOUR message");
+            // ESP_LOGI(TAG, "Send NEIGHBOUR message");
             send_param->type = NEIGHBOURS;
             send_param->epoch_id = node.epoch_id;
             memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
@@ -301,7 +318,7 @@ void espnow_handler_task(void)
 
          } break;
          case NEIGHBOURS: {
-            ESP_LOGI(TAG, "Receive NEIGHBOUR message");
+            // ESP_LOGI(TAG, "Receive NEIGHBOUR message");
             // save neighbours from peer_list
             for (uint8_t j = 0; j < NEIGHBOURS_COUNT; ++j) {
                if (neighbours[j].status != INACTIVE) {
@@ -363,9 +380,10 @@ void espnow_handler_task(void)
                   }
                }
             }
-            print_neighbours();
+            // print_neighbours();
          } break;
          case RTT_CAL_MASTER: {
+            // ESP_LOGI(TAG, "Receive RTT_CAL_MASTER");
             // send value back to master with type RTT_CAL_SLAVE
             send_param->content = content;
             send_param->epoch_id = node.epoch_id;
@@ -376,9 +394,11 @@ void espnow_handler_task(void)
                              send_param->data_len) != ESP_OK) {
                ESP_LOGW(TAG, "Send RTT_CAL_MASTER error");
             }
+            // ESP_LOGI(TAG, "Send RTT_CAL_SLAVE");
          } break;
          case RTT_CAL_SLAVE: {
             // calcule RTT and send it back to slave with type RTT_VAL
+            // ESP_LOGI(TAG, "Receive RTT_CAL_SALVE");
             send_param->content = (evt.timestamp - content) / 2;
             send_param->type = RTT;
             send_param->epoch_id = node.epoch_id;
@@ -388,9 +408,11 @@ void espnow_handler_task(void)
                              send_param->data_len) != ESP_OK) {
                ESP_LOGW(TAG, "Send RTT_CAL_SLAVE error");
             }
+            // ESP_LOGI(TAG, "Send RTT");
          } break;
          case RTT: {
             // set RTT value into the array
+            // ESP_LOGI(TAG, "Receive RTT");
             if (node.is_firts_setup_rtt) {
                for (uint16_t i = 0; i < BALANCER_SIZE; ++i) {
                   node.rtt_balancer[i] = content;
@@ -425,9 +447,46 @@ void espnow_handler_task(void)
                node.time_corection =
                    esp_timer_get_time() - (content + (uint64_t)get_rtt_avg());
             }
+            // ESP_LOGI(TAG, "Receive TIME");
 
             // set timestampt to calcule new election
             node.timeout_sync = evt.timestamp;
+            node.title = SLAVE;
+
+            // set MASTER node
+            for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+               if (memcmp(recv_cb->mac_addr, &node.neighbour[i].mac_addr,
+                          ESP_NOW_ETH_ALEN) == 0) {
+                  node.neighbour[i].title = MASTER;
+               } else {
+                  node.neighbour[i].title = SLAVE;
+               }
+            }
+         } break;
+         case REQUEST_VOTE: {
+            // ESP_LOGI(TAG, "Receive REQUEST_VOTE");
+            // send value back to master with type GIVE_VOTE
+            send_param->epoch_id = node.epoch_id;
+            send_param->type = GIVE_VOTE;
+            memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
+            espnow_data_prepare(send_param);
+            if (esp_now_send(send_param->dest_mac, send_param->buf,
+                             send_param->data_len) != ESP_OK) {
+               ESP_LOGW(TAG, "Send REQUEST_VOTE error");
+            }
+            // ESP_LOGI(TAG, "Send GIVE_VOTE");
+         } break;
+         case GIVE_VOTE: {
+            // ESP_LOGI(TAG, "Receive GIVE_VOTE");
+            if (node.title == CANDIDATE) {
+               ++node.count_of_vote;
+               if (node.count_of_vote >=
+                   ((get_cout_active_devices() + 1) / 2)) {
+                  node.title = MASTER;
+                  for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i)
+                     node.neighbour[i].title = SLAVE;
+               }
+            }
          } break;
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
@@ -447,7 +506,7 @@ void espnow_handler_task(void)
 
 void send_hello_ds_message(void)
 {
-   ESP_LOGI(TAG, "Send HELLO_DS");
+   // ESP_LOGI(TAG, "Send HELLO_DS");
    espnow_send_param_t *send_param = NULL;
    send_param = malloc(sizeof(espnow_send_param_t));
    if (send_param == NULL) {
@@ -499,8 +558,9 @@ void send_rtt_cal_master_task(void)
    esp_err_t ret;
    while (1) {
       if (node.title == MASTER) {
+         // ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
-            if (node.neighbour[i].status != INACTIVE) {
+            if (node.neighbour[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                send_param->epoch_id = node.epoch_id;
@@ -542,12 +602,15 @@ void send_request_vote_task(void)
    esp_err_t ret;
    while (1) {
       // check timeout sync, longer than 2s, new elecetion
-      if (node.title == MASTER &&
-          (esp_timer_get_time() - node.timeout_sync) > 2000000) {
+      if (node.title == SLAVE &&
+          (esp_timer_get_time() - node.timeout_sync) > MASTER_TIMEOUT) {
+         // ESP_LOGI(TAG, "Send REQUEST_VOTE");
          ++node.epoch_id;
+         node.count_of_vote = 0;
+         node.title = CANDIDATE;
          // send give request vote
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
-            if (node.neighbour[i].status != INACTIVE) {
+            if (node.neighbour[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                send_param->epoch_id = node.epoch_id;
@@ -559,12 +622,22 @@ void send_request_vote_task(void)
                   handle_espnow_send_error(ret);
             }
          }
-         // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů a
-         // stane se novým lídrem
          node.timeout_vote = esp_timer_get_time();
-         // . nebo přijme zprávu synchronizující čas TIME, novým lídrem se stalo
-         // nějaké zařízení rychleji . nebo budou volby neúspěšné do timeoutu
-         // 𝑡𝑒𝑙𝑒𝑐𝑡𝑖𝑜𝑛, volby skončí neúspěchem a začne nová epocha.
+         while (1) {
+            // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů
+            // a stane se novým lídrem nebo přijme zprávu synchronizující čas
+            // TIME, novým lídrem se stalo
+            if (node.title != CANDIDATE) {
+               break;
+            }
+            // nebo budou volby neúspěšné do timeoutu, volby skončí neúspěchem a
+            // začne nová epocha
+            if (esp_timer_get_time() - node.timeout_vote > VOTE_TIMEOUT) {
+               node.title = SLAVE;
+               break;
+            }
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+         }
       }
       vTaskDelay(2000 / portTICK_PERIOD_MS);
    }
@@ -594,8 +667,9 @@ void send_time_task(void)
    esp_err_t ret;
    while (1) {
       if (node.title == MASTER) {
+         // ESP_LOGI(TAG, "Send TIME");
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
-            if (node.neighbour[i].status != INACTIVE) {
+            if (node.neighbour[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                send_param->epoch_id = node.epoch_id;
@@ -685,6 +759,11 @@ void app_main(void)
        xTaskCreate((TaskFunction_t)send_time_task, "send_time_task", STACK_SIZE,
                    NULL, PRIORITY_TIME_START, NULL);
 
+   BaseType_t send_request_vote_task_v;
+   send_request_vote_task_v = xTaskCreate(
+       (TaskFunction_t)send_request_vote_task, "send_request_vote_task",
+       STACK_SIZE, NULL, PRIORITY_REQUEST_TASK, NULL);
+
    send_hello_ds_message();
 
    print_data = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(print_data_t));
@@ -693,9 +772,14 @@ void app_main(void)
 
    vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-   while (xQueueReceive(print_data, &data, portMAX_DELAY) == pdTRUE) {
-      printf("%ld,%ld,%lld\n", data.rtt, data.deviation, data.time);
+   while (1) {
+      print_neighbours();
+      vTaskDelay(5000 / portTICK_PERIOD_MS);
    }
+
+   // while (xQueueReceive(print_data, &data, portMAX_DELAY) == pdTRUE) {
+   //    printf("%ld,%ld,%lld\n", data.rtt, data.deviation, data.time);
+   // }
 
    // Ending rutine
    printf("Restarting now!\n");
