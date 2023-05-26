@@ -557,20 +557,20 @@ void espnow_handler_task(void)
             log_event_t data;
             data.timestamp = event.timestamp;
             data.type = event.type;
-            memcpy(data.mac_addr, event.mac_addr, ESP_NOW_ETH_ALEN);
+            memcpy(&data.mac_addr, &event.mac_addr, ESP_NOW_ETH_ALEN);
             data.task = SEND2SLAVES;
             if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
-               ESP_LOGE(TAG, "Can't push data into the lo_event");
+               ESP_LOGE(TAG, "Can't push data into the log_event");
             };
          } break;
          case LOG2SLAVES: {
             log_event_t data;
             data.timestamp = event.timestamp;
             data.type = event.type;
-            memcpy(data.mac_addr, event.mac_addr, ESP_NOW_ETH_ALEN);
+            memcpy(&data.mac_addr, &event.mac_addr, ESP_NOW_ETH_ALEN);
             data.task = SAVE;
             if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
-               ESP_LOGE(TAG, "Can't push data into the lo_event");
+               ESP_LOGE(TAG, "Can't push data into the log_event");
             };
          } break;
          default:
@@ -800,18 +800,25 @@ void handle_ds_event_task(void)
    // jen nizkou prioritu
    while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
       uint8_t i;
+      ESP_LOGI(TAG, "EVENT %d " MACSTR, data.task, MAC2STR(data.mac_addr));
       for (i = 0; i < EVENT_HISTORY; ++i) {
          if (node.events[i].type == EMPTY) {
             node.events[i].timestamp = data.timestamp;
             node.events[i].type = data.type;
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            ESP_LOGI(TAG, "FIRST");
             break;
          }
          if (node.events[i].timestamp < data.timestamp) {
-
+            ESP_LOGI(TAG, "SECOND");
             // shift data
-            memcpy(&node.events[i + 1], &node.events[i],
-                   sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
+            for (uint8_t j = EVENT_HISTORY - 1; j != i; --j) {
+               node.events[j - 1].task = node.events[j].task;
+               node.events[j - 1].timestamp = node.events[j].timestamp;
+               node.events[j - 1].type = node.events[j].type;
+               memcpy(&node.events[j - 1].mac_addr, node.events[j].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+            }
 
             // save date
             node.events[i].timestamp = data.timestamp;
@@ -827,23 +834,25 @@ void handle_ds_event_task(void)
       send_param->content = data.timestamp;
       switch (data.task) {
       case SEND2MASTER:
-         uint8_t i = 0;
-         while (node.neighbour[i].title != MASTER) {
-            for (i = 0; i < NEIGHBOURS_COUNT; ++i) {
-               if (node.neighbour[i].title == MASTER)
-                  break;
+         if (node.title != MASTER) {
+            uint8_t i = 0;
+            while (node.neighbour[i].title != MASTER) {
+               for (i = 0; i < NEIGHBOURS_COUNT; ++i) {
+                  if (node.neighbour[i].title == MASTER)
+                     break;
+               }
+               vTaskDelay(100 / portTICK_PERIOD_MS);
             }
-            vTaskDelay(100 / portTICK_PERIOD_MS);
+            memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
+                   ESP_NOW_ETH_ALEN);
+            send_param->type = LOG2MASTER;
+            espnow_data_prepare(send_param);
+            ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                               send_param->data_len);
+            if (ret != ESP_OK)
+               handle_espnow_send_error(ret);
+            break;
          }
-         memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
-                ESP_NOW_ETH_ALEN);
-         send_param->type = LOG2MASTER;
-         espnow_data_prepare(send_param);
-         ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                            send_param->data_len);
-         if (ret != ESP_OK)
-            handle_espnow_send_error(ret);
-         break;
       case SEND2SLAVES:
          send_param->type = LOG2SLAVES;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
