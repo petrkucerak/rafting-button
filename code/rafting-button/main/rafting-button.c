@@ -31,6 +31,7 @@
 #define PRINT_QUEUE_SIZE 4
 
 #define ESPNOW_MAXDELAY 10
+#define DS_MAXDELAY 100
 #define STACK_SIZE 4096
 
 #define DEVIATION_LIMIT 200
@@ -53,7 +54,7 @@ esp_now_peer_info_t broadcast_peer;
 
 node_info_t node;
 static QueueHandle_t espnow_queue;
-static QueueHandle_t print_data;
+static QueueHandle_t log_event;
 
 uint32_t get_rtt_avg()
 {
@@ -84,6 +85,16 @@ void print_neighbours(void)
    }
 }
 
+void print_log(void)
+{
+   printf("\n");
+   for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
+      if (node.events[i].type != EMPTY) {
+         ESP_LOGI(TAG, "%d. " MACSTR, i, MAC2STR(node.events[i].mac_addr));
+      }
+   }
+}
+
 uint8_t get_cout_active_devices(void)
 {
    uint8_t ret = 0;
@@ -96,11 +107,11 @@ uint8_t get_cout_active_devices(void)
 
 static void IRAM_ATTR gpio_handler_isr(void *)
 {
-   print_data_t data;
-   data.rtt = get_rtt_avg();
-   data.deviation = node.deviation_avg;
-   data.time = get_time();
-   xQueueSendFromISR(print_data, &data, NULL);
+   log_event_t data;
+   data.timestamp = get_time();
+   data.type = PUSH;
+   data.task = SEND2MASTER;
+   xQueueSendFromISR(log_event, &data, NULL);
 }
 
 static void espnow_send_cb(const uint8_t *mac_addr,
@@ -531,6 +542,24 @@ void espnow_handler_task(void)
                }
             }
          } break;
+         case LOG2MASTER: {
+            log_event_t data;
+            data.timestamp = content;
+            data.type = PUSH;
+            data.task = SEND2SLAVES;
+            if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
+               ESP_LOGE(TAG, "Can't push data into the lo_event");
+            };
+         } break;
+         case LOG2SLAVES: {
+            log_event_t data;
+            data.timestamp = content;
+            data.type = PUSH;
+            data.task = SAVE;
+            if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
+               ESP_LOGE(TAG, "Can't push data into the lo_event");
+            };
+         }
          default:
             ESP_LOGE(TAG, "Receive unknown message type");
             break;
@@ -732,6 +761,101 @@ void send_time_task(void)
    vTaskDelete(NULL);
 }
 
+void handle_ds_event_task(void)
+{
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vTaskDelete(NULL);
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   // send_param->type = TIME;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vTaskDelete(NULL);
+   }
+   esp_err_t ret;
+   log_event_t data;
+   // neni idelani implementace, bude se muset prerovnavat, mam ale taky, dam
+   // jen nizkou prioritu
+   while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
+      uint8_t i;
+      for (i = 0; i < EVENT_HISTORY; ++i) {
+         if (node.events[i].type == EMPTY) {
+            node.events[i].timestamp = data.timestamp;
+            node.events[i].type = data.type;
+            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            break;
+         }
+         if (node.events[i].timestamp < data.timestamp) {
+
+            // shift data
+            memcpy(&node.events[i + 1], &node.events[i],
+                   sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
+
+            // save date
+            node.events[i].timestamp = data.timestamp;
+            node.events[i].type = data.type;
+            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            break;
+         }
+      }
+      // distribute data
+      switch (data.task) {
+      case SEND2MASTER:
+         uint8_t i = 0;
+         while (node.neighbour[i].title != MASTER) {
+            for (i = 0; i < NEIGHBOURS_COUNT; ++i) {
+               if (node.neighbour[i].title == MASTER)
+                  break;
+            }
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+         }
+         memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
+                ESP_NOW_ETH_ALEN);
+         send_param->epoch_id = node.epoch_id;
+         send_param->type = LOG2MASTER;
+         send_param->content = data.timestamp;
+         espnow_data_prepare(send_param);
+         ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                            send_param->data_len);
+         if (ret != ESP_OK)
+            handle_espnow_send_error(ret);
+         break;
+      case SEND2SLAVES:
+         send_param->epoch_id = node.epoch_id;
+         send_param->type = LOG2SLAVES;
+         send_param->content = data.timestamp;
+         for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+            if (node.neighbour[i].status == ACTIVE) {
+               memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               espnow_data_prepare(send_param);
+
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
+            }
+         }
+         break;
+      case SAVE:
+         // do nothing
+         break;
+      default:
+         ESP_LOGE(TAG, "Unknown task type");
+         break;
+      }
+   }
+   vTaskDelete(NULL);
+}
+
 void app_main(void)
 {
    // Init NVS
@@ -780,6 +904,9 @@ void app_main(void)
       node.neighbour[i].status = NOT_INITIALIZED;
       node.neighbour_error_count[i] = 0;
    }
+   for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
+      node.events[i].type = EMPTY;
+   }
 
    // Create a broadcast peer
    memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
@@ -810,20 +937,15 @@ void app_main(void)
 
    send_hello_ds_message();
 
-   print_data = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(print_data_t));
-
-   print_data_t data;
+   log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
 
    vTaskDelay(1000 / portTICK_PERIOD_MS);
 
    while (1) {
       print_neighbours();
+      print_log();
       vTaskDelay(5000 / portTICK_PERIOD_MS);
    }
-
-   // while (xQueueReceive(print_data, &data, portMAX_DELAY) == pdTRUE) {
-   //    printf("%ld,%ld,%lld\n", data.rtt, data.deviation, data.time);
-   // }
 
    // Ending rutine
    printf("Restarting now!\n");
