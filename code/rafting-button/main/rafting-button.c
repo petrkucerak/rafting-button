@@ -38,6 +38,8 @@
 
 #define CONFIG_ESPNOW_SEND_LEN 250
 
+#define COUNT_ERROR_MESSAGE_TO_INACTIVE 5
+
 #define VOTE_TIMEOUT 1000000
 #define MASTER_TIMEOUT 2000000
 
@@ -257,9 +259,49 @@ void espnow_handler_task(void)
       case ESPNOW_SEND_CB: {
          // handle send
          espnow_event_send_cb_t *send_cb = &evt.info.send_cb;
-         if (send_cb->status != ESP_OK)
+         if (send_cb->status != ESP_OK) {
             ESP_LOGW(TAG, "Send to " MACSTR " failed",
                      MAC2STR(send_cb->mac_addr));
+            // increase inactive status
+            for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+               if (memcmp(send_cb->mac_addr, &node.neighbour[i].mac_addr,
+                          ESP_NOW_ETH_ALEN) == 0) {
+                  ++node.neighbour_error_count[i];
+                  // if device is inactive
+                  if (node.neighbour_error_count[i] >=
+                      COUNT_ERROR_MESSAGE_TO_INACTIVE) {
+                     // mark as inactive
+                     node.neighbour[i].status = INACTIVE;
+                     // send this infromation into all DS
+                     send_param->type = NEIGHBOURS;
+                     memcpy(&send_param->neighbour[0], &node.neighbour[0],
+                            sizeof(neighbour_t) * NEIGHBOURS_COUNT);
+                     for (uint8_t j = 0; j < NEIGHBOURS_COUNT; ++j) {
+                        if (node.neighbour[j].status == ACTIVE) {
+                           send_param->epoch_id = node.epoch_id;
+                           memcpy(send_param->dest_mac,
+                                  &node.neighbour[j].mac_addr,
+                                  ESP_NOW_ETH_ALEN);
+                           espnow_data_prepare(send_param);
+
+                           ret = esp_now_send(send_param->dest_mac,
+                                              send_param->buf,
+                                              send_param->data_len);
+                           if (ret != ESP_OK)
+                              handle_espnow_send_error(ret);
+                        }
+                     }
+                  }
+               }
+            }
+         } else {
+            for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+               if (memcmp(send_cb->mac_addr, &node.neighbour[i].mac_addr,
+                          ESP_NOW_ETH_ALEN) == 0) {
+                  node.neighbour_error_count[i] = 0;
+               }
+            }
+         }
          break;
       }
       case ESPNOW_RECV_CB: {
@@ -321,7 +363,7 @@ void espnow_handler_task(void)
             // ESP_LOGI(TAG, "Receive NEIGHBOUR message");
             // save neighbours from peer_list
             for (uint8_t j = 0; j < NEIGHBOURS_COUNT; ++j) {
-               if (neighbours[j].status != INACTIVE) {
+               if (neighbours[j].status != NOT_INITIALIZED) {
                   if (!is_device_mac(&neighbours[j].mac_addr)) {
                      if (!esp_now_is_peer_exist(&neighbours[j].mac_addr)) {
                         uint8_t i = 0;
@@ -347,6 +389,7 @@ void espnow_handler_task(void)
                                       ESP_NOW_ETH_ALEN) == 0) {
                               node.neighbour[i].status = neighbours[j].status;
                               node.neighbour[i].title = neighbours[j].title;
+                              ESP_LOGI(TAG, "Set %d. neighbour as INACTIVE", i);
                               break;
                            }
                         }
@@ -735,6 +778,7 @@ void app_main(void)
    node.title = SLAVE;
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       node.neighbour[i].status = NOT_INITIALIZED;
+      node.neighbour_error_count[i] = 0;
    }
 
    // Create a broadcast peer

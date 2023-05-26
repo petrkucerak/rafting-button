@@ -90,6 +90,7 @@ typedef struct node_info {
    bool is_time_synced;
    int32_t deviation_avg;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
+   uint8_t neighbour_error_count[NEIGHBOURS_COUNT];
    uint32_t epoch_id;
    device_title_t title;
    uint64_t timeout_sync; // represents timestamp
