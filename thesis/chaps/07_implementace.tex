@@ -1,0 +1,135 @@
+% Lokální makra patří do hlavního souboru, ne sem.
+% Tady je mám výjimečně proto, že chci nechat hlavní soubor bez maker,
+% která jsou jen pro tento dokument. Uživatelé si pravděpodobně budou
+% hlavní soubor kopírovat do svého dokumentu.
+
+\def\ctustyle{{\ssr CTUstyle}}
+\def\ttb{\tt\char`\\} % pro tisk kontrolních sekvencí v tabulkách
+
+\label[ImplementatonAndTesting]
+\chap Implementace a testování
+
+V této kapitole nastíním implementaci a shrnu výsledky testování.
+
+\sec Implementace
+
+Kód jsem implementoval v jazyce C s použitím {\sbf ESP-IDF}.\fnote{Espressif IoT Development Framework} Jedná se o oficiální vývojový framework pro procesory ze sérií ESP32, ESP32-S, ESP32-C a ESP32-H. Framework se skládá z jednotlivých komponent, jako je například RTOS kernel, který využívá {\em FreeRTOS}, ovladače periferií, wifi či komponenta pro optimalizaci spotřeby energie. Většina komponent je vyvíjena jako {\em open-source}. ESP-IDF také podporuje balíčkový systém,\fnote{Balíčkový systém se nazývá {\em IDF Component Registry}.} který umožňuje pokročilé verzování a efektivní zacházení s jednotlivými komponenty.
+
+Jedním z požadavků na zařízení bylo, aby se jednalo o {\sbf autonomní systém}. Výsledný software je tedy na všech zařízeních z počátku ve stejné konfiguraci.
+
+Z důvodu více jader procesoru a využití {\em callback} funkcí v implementaci využívám {\sbf multitaskové infrastruktury}, kterou zajišťuje {\em FreeRTOS}. Běh systému je složen z následujících procesů.
+
+\begitems
+* Rodičovský proces $"app_main"$ inicializuje nutné komponenty a stará se o správu celého systému. Také se využívá pro vypisování pravidelných hlášení o stavu systému.
+* Proces $"espnow_handler_task"$ slouží k zpracování {\em ESP-NOW eventů}. To jsou události vyvolané {\em callbacky}, které signalizují odeslání nebo přijmutí zprávy, o nich více v kapitole \ref[aboutCallBakcsc]. Proces funguje jako stavový automat a je detailněji popsán v další kapitole.
+* Pokud je zařízení {\em lídrem}, pak proces $"send_rtt_cal_master_task"$ rozesílá zprávu inicializující výpočet doby přenosu $D$. Pokud lídrem není, nic neprovádí.
+* Proces $"send_time_task"$ funguje podobně jako předchozí proces. Tedy pokud je zařízení {\em lídrem}, pak rozesílá zprávy synchronizující čas. Tím si {\em lídr} udržuje svoji autoritu.
+* Pokud zařízení po dobu $t_{sync}$ neobdrželo zprávu s časem od {\em lídra}, proces  $"send_request_vote_task"$ inicializuje nové volby a následně je obslouží.
+* Posledním uživatelsky zavedením procesem je $"handle_ds_event_task"$. Ten se stará o distribuci logů mezi zařízeními.
+* V systému probíhají i jiné systémové obslužné rutiny, například zajišťující chod wifi.
+\enditems
+
+Software implementuje 3 {\sbf přerušení}, respektive dvě obsluhy přerušení a jedno přerušení. Konkrétně se jedná o {\em callback} funkce $"espnow_send_cb"$ a $"espnow_recv_cb"$ obsluhující přerušení ESP-NOW a přerušení $"gpio_handler_isr"$ pro obsluhu hardwarového tlačítka připojeného na bránu $"GPIO_NUM_23"$.
+
+{\sbf Priorita} jednotlivých procesů je popsána tabulkou \ref[TaskPriorities]. Nejvyšší prioritu má mají přerušení a rutiny obsluhující přerušení. Po nich následuje $"espnow_handler_task"$, protože se stará o časově kritické procesy jako je synchronizace času. Střední prioritu mají všechny ostatní procesy krom rodičovského, který má prioritu nejnižší.
+
+\midinsert \clabel[TaskPriorities]{Priority procesů}
+\ctable{lr}{
+\hfil {\sbf proces} & {\sbf priorita} \crl
+$"app_main"$ & 1\cr
+$"espnow_handler_task"$ & 3\cr
+$"send_rtt_cal_master_task"$ & 2\cr
+$"send_time_task"$ & 2\cr
+$"send_request_vote_task"$ & 2\cr
+$"handle_ds_event_task"$ & 2\cr
+}
+\caption/t Priority procesů.
+\endinsert
+
+\label[messagesStructs]
+\secc Struktura rámce zprávy
+
+Z měření síťové infrastruktury vyplývá,\fnote{Možné dohledat v kapitole \ref[measiureInfraas].} že {\sbf velikost zprávy má vliv na dobu odeslání}. Algoritmus v ideálním případě očekává symetrickou dobu odesílání zpráv. Proto jsem při implementaci využil maximální velikost rámce a nevyužité místo jsem zaplnil náhodnými daty. Díky tomu nebude mít rozdílná velikost vliv na případnou asymetričnost.
+
+Z důvodu zjednodušení využívám pouze {\sbf jediný typ rámce} pro všechny typy zpráv. Rámce se s skládají z následujících části, které jsou vizualizovány obrázky \ref[StrukturaRamce01] a \ref[StrukturaRamce02].
+
+\begitems
+* {\sbf Typ zprávy} ($"message_type_t"$) ovlivňuje stavový automat v procesu, který zpracovává příchozí zprávy.
+* {\sbf ID epochy} ($"uint32_t"$) říká o jakou epochy se jedná, a tak zajišťuje bezpečnost.
+* {\sbf Číselný obsah}  ($"uint64_t"$) používá se k přenášení různých typů zpráv. Ve většině případů obsahuje časovou značku.
+* {\sbf Typ události DS} ($"ds_event_t"$) specifikuje zdali se jednalo o stisk nebo reset. Využívá se k distribuování logu.
+* {\sbf Mac adresa události} ($"uint8_t[ESP_NOW_ETH_ALEN]"$) se využívá k distribuování logu, konkrétně ke zdrojové adrese dané události.
+* {\sbf Úkol události} ($"ds_task_t"$) se využívá k distribuci logů.
+* {\sbf Sousedé} ($"neighbour_t[NEIGHBOURS_COUNT]"$) je pole obsahující seznam sousedů. Požadavek na systém definuje maximálně 10 připojených zařízení. Do pole se neukládá informace o zařízení, kterému seznam náleží. Proto je velikost pole 9. Schéma struktury souseda je zobrazeno obrázkem \ref[StrukturaRamce02].
+    \begitems
+    * {\sbf Titul} ($"device_title_t"$) určuje, zdali je zařízení {\em lídr} nebo {\em následovník}.
+    * {\sbf Status} ($"device_status_t"$) je informace o stavu zařízení, tj. zdali je aktivní či nikoli.
+    * {\sbf Mac adresa} ($"uint8_t[ESP_NOW_ETH_ALEN]"$) identifikuje souseda pomocí jeho mac adresy.
+    \enditems
+* {\sbf Výplň} ($"uint8_t"$) neboli payload vyplňuj nevyužitý prostor náhodnými daty.
+\enditems
+
+\medskip
+\clabel[StrukturaRamce01]{Struktura rámce zprávy}
+\picw=14cm \cinspic img/Struktura-ramce-zpravy01.png
+\caption/f Struktura rámce zprávy.
+\medskip
+
+\medskip
+\clabel[StrukturaRamce02]{Struktura rámce zprávy - sousedé}
+\picw=14cm \cinspic img/Struktura-ramce-zpravy02.png
+\caption/f Struktura rámce zprávy - sousedé.
+\medskip
+
+\secc Procesu zpracování zpráv
+
+Jak již bylo uvedeno v kapitole \ref[messagesStructs], zprávy zpracovává speciální. To tak, že {\em callback} funkce zaznamená novou zprávu, pošle ji jako události do fronty a z ní proces $"espnow_handler_task"$ vyjme událost a tu následně odbaví.
+
+Tento {\sbf proces je klíčovým} pro fungování celého systému. Funguje jako stavový automat. Přijatou událost, respektive zprávu zpracuje podel jejího typu. A to tak, že pokud se jedná o zprávy typu:
+
+\begitems
+* $"HELLO_DS"$ zařízení ověří, zdali se jedná o neznámé zařízení. Pokud ano, přidá ho do svého seznamu. Pokud již zařízení zná, pouze nastaví jeho status jako aktivní. Jako odpověď mu pošle seznam všech zařízení v sítí.
+* $"NEIGHBOURS"$ zařízení si přidá všechny neznámé sousedy do svého listu a aktualizuje status a titul u jednotlivých zařízení.
+* $"RTT_CAL_MASTER"$ zařízení odešle zprávy zpět odesílateli se stejným obsahem. Tato zpráva se využívá k výpočtu doby přenosu $D$.\fnote{Více informací o dané problematice je dostupné v kapitole \ref[DatilAlgDescrp].}
+* $"RTT_CAL_SLAVE"$ zařízení vypočítá dobu přenosu a odešle ji odesílateli zprávy.\fnote{Více informací o dané problematice je dostupné v kapitole \ref[DatilAlgDescrp].}
+* $"RTT"$ zařízení uloží hodnotu přenosu do pole, aby bylo možné vypočítat průměrnou dobu přenosu. Pokud se jedná o první takovou informaci, pole se touto hodnotou vyplní celé.
+* $"TIME"$ zařízení spočítá chybu synchronizace času $O$ a nastaví proměnou konstantu $c$ pro výpočet času $T_{DS}$ podle algoritmu popsaného v kapitole \ref[syncResolutionChapt].
+
+Zpráva tohoto typu se využívá i k tomu, aby si {\em lídr} udržel svoji autoritu. Pokud je tedy zařízení ve stavu {\em kandidáta} a přijme daný typ zprávy, ukončí svoji kandidaturu a přepne se do stavu {\em následovník}. 
+
+Při každém zpracování této zprávy ukládá časová značka. Ta se následně využívá k výpočtu {\em timeoutu} $t_{sync}$. Pokud je delší než stanovená konstanta, zařízení přechází do stavu {\em kandidát}, zvyšuje číslo epochy ({\em epoch ID}) a inicializuje volby.
+
+* $"REQUEST_VOTE"$ zařízení odešle odesílateli zprávu s hlasem.
+* $"GIVE_VOTE"$ zařízení zprávu uloží. Pokud má více odpovědí než je polovina aktivních zařízení v síti, prohlásí se za {\em lídra} a ostatní zařízení za {\em následovníky}.
+* $"LOG2MASTER"$ zařízení pošle log do fronty, která předává tento typ událostí procesu $"handle_ds_event_task"$. Log je uložen a rozeslán na všechny {\em následovníky}.
+* $"LOG2SLAVES"$ zařízení pošle log do fronty, která předává tento typ událostí procesu $"handle_ds_event_task"$. Log je uložen.
+\enditems
+
+V případě, že proces obdrží události s informací o {\sbf neúspěchu odeslání zprávy}, se inkrementuje součet neodeslaných zpráv do daného zařízení. Pokud jich je více než počet povolený konstantou $"COUNT_ERROR_MESSAGE_TO_INACTIVE"$, proces je prohlášen za neaktivní a tato informace je rozdistribuována na všechny aktivní sousedy.
+
+\secc Poznámky k implementaci
+
+Kód je doplněn o ladící výpisy definované v ESP-IDF. Konkrétně se jedná o aplikaci funkcí $"ESP_LOGI"$, $"ESP_LOGW"$ a $"ESP_LOGE"$.
+
+Veškerý kód je dostupný v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button/}} Kód je částečně komentován. V nejbližší době také doplním podporu pro generování Doxygen dokumentace.
+
+\label[testingforever]
+\sec Testování
+
+{\sbf Základní komponenty} algoritmu pro synchronizaci času, doby přenosu a velikosti chyby byly otestovány v kapitole \ref[syncResolutionChapt]. Systém je schopen synchronizovat čas s minimální přesností 1 ms.
+
+Ve {\sbf výsledné implementaci} jsem prováděl testování pro dílčí problémy jako je nalezení zařízení v okolí, distribuce seznamu sousedů, volby lídra a synchronizace času. K testování jsem využil ladících výpisů a zkoušel všechny možné scénáře. Testování bylo prováděno maximálně s 5 zařízeními.\fnote{Historie testování i s komentáři je dostupná v repozitáři projektu.} Z testování vyplývá, že {\sbf systmém je úspěšně schopný}:
+
+\begitems
+* najít zařízení v okolí,
+* distribuovat seznam sousedů, který je možné plně aktualizovat,
+* zvolit lídra,
+* řešit problematiku pozdního připojení zařízení do sítě,
+* vyřešit problém, když zařízení přestane odpovídat, respektive vypne se,
+* synchronizovat čas v celém DS s přesností 1 ms.
+\enditems
+
+{\sbf Kompletní otestování systému} včetně distribuce logu při reálné hře jsem z časových důvodů v této práci nestihl. V nejbližší době tento test provedu a jeho výsledky představím při obhajobě práce a přidám je do repozitáře projektu.
+
+Testování plánuji provádět tak, že za pomocí zařízení STM32G431KB, používaného již v předchozích měřeních, budu simulovat stisky tlačítek. Testování bude obsahovat několik scénářů. První bude mít za úkol otestovat normální průběh hry. V druhém se budu snažit stanovit časový limit, při kterém je zařízení stále schopno správně rozeznat kauzalitu dvou událostí, které nastanou bezprostřední blízkosti. Třetí scénář bude testovat potenciálně problematické situace. To především vliv odpojení zařízení ze sítě a rušení sítě jiným signálem.
+

@@ -420,6 +420,7 @@ Výsledky chování simulace zobrazují 3 grafy. První z nich v příloze \ref[
 
 Ze simulace vyplývá, že navržený algoritmus dle simulace {\sbf splňuje stanovený požadavek přesnosti synchronizace času}, tedy 1~ms.
 
+\label[syncResolutionChapt]
 \secc Měření přesnosti synchronizace času
 
 Při ověřování modelu algoritmu na reálném hardwaru jsem narazil na nepřesnost, která byla způsobena režií FreeRTOS, kterou jsem v simulaci nezohlednil.\fnote{Výsledky měření bez úpravy algoritmu si je možné prohlédnout v příloze \ref[SYNCPRogress].} Proto jsem provedl následující {\sbf modifikace algoritmu} a způsobu zpracování ESP-NOW událostí s cílem dosáhnout požadované přesnosti.
@@ -443,9 +444,15 @@ kde $T_{DS}$ je čas DS na daném zařízení, $t_{local}$ je doba běhu zaříz
 * Při přijmutí ESP-NOW události je událost označena {\sbf časovou značkou} ({\em timestamp}), která se následně využívá k výpočtu. Toto minimalizuje chyby způsobenou během FreeRTOS.
 \enditems
 
-Tyto úpravy mi pomohli zajistit dostatečnou přesnost měření, jak vyplývá z naměřených dat, které si je možné prohlédnout v příloze \ref[measureSyncTimeHardwareDetails]. {\sbf Algoritmus pro synchronizaci času splňuje požadované parametry je vhodný pro využití v implementaci}. 
+Tyto úpravy mi pomohli zajistit dostatečnou přesnost měření, jak vyplývá z naměřených dat, které si je možné prohlédnout na obrázku \ref[syncTIMEMeasuremetTEXT] a v příloze \ref[measureSyncTimeHardwareDetails]. {\sbf Algoritmus pro synchronizaci času splňuje požadované parametry je vhodný pro využití v implementaci}. 
 
 Měření bylo prováděno s téměř identickým zapojením\fnote{Schéma zapojení je dostupné v příloze \ref[syncSchema].} jako měření latence popsané v kapitole \ref[getsimparameters]. Přidal jsem pouze moduly a změnil velikost odporů na vstupu referenčního signálu. Reference generovaná ze STM32 byla použita pro sjednocení času výpisů. Zdrojové kódy využité pro měření včetně skriptů pro vizualizace jsou dostupné v repozitáři projektu.\fnote{\url{https://github.com/petrkucerak/rafting-button}}
+
+\medskip
+\clabel[syncTIMEMeasuremetTEXT]{Měření synchronizace času - rozdíl času}
+\picw=16cm \cinspic img/syncTIME.png
+\caption/f Měření synchronizace času - rozdíl času.
+\medskip
 
 \label[logDistributionDesc]
 \sec Distribuce logů a seznamu zařízení DS
@@ -527,19 +534,3 @@ Chyba ožití starého {\em lídra} je ošetřena mechanismem {\em ID} epochy. Z
 \secc Terminace zařízení
 
 Jako {\sbf neaktivní zařízení} je označeno každé, které nepřijme více jak tři zprávy úspěšně. Pokud neodpovídá, je terminováno z DS. Respektive je v seznamu sousedů označeno jako neaktivní a tato informace je pak rozeslána přes {\em lídra} do celého DS.
-
-\secc Seznam typů zpráv
-
-DS mezi sebou komunikuje pomocí následujících typů zpráv:
-
-\begitems
-* $"HELLO_DS"$ je zpráva s žádostí o zaslání seznamu sousedů,
-* $"NEIGHBOURS"$ je zpráva se seznamem sousedů a informacemi o stavu DS,
-* $"REQUEST_VOTE"$ je žádost o hlas,
-* $"GIVE_VOTE"$ uděluje hlas {\em lídrovi},
-* $"TIME"$ je zpráva s referenčním časem užívaná i pro udržení autority,
-* $"RTT"$ je zpráva s průměrnou dobou přenosu,
-* $"RTT_CAL_MASTER"$ je zpráva pro výpočet doby přenosu putující z {\em lídra} do {\em následovníka},
-* $"RTT_CAL_SLAVE"$ je zpráva pro výpočet doby přenosu putující z {\em následovníka} do {\em lídra},
-* $"LOG"$ je zpráva s událostí DS.
-\enditems
