@@ -254,7 +254,7 @@ void espnow_handler_task(void)
                                  &content, &epoch_id, &neighbours);
          free(recv_cb->data);
          if (epoch_id < node.epoch_id)
-            ESP_LOGE(TAG, "Wrong number of epoch ID");
+            ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
          switch (ret) {
          case HELLO_DS: {
             ESP_LOGI(TAG, "Receive HELLO_DS");
@@ -368,6 +368,7 @@ void espnow_handler_task(void)
          case RTT_CAL_MASTER: {
             // send value back to master with type RTT_CAL_SLAVE
             send_param->content = content;
+            send_param->epoch_id = node.epoch_id;
             send_param->type = RTT_CAL_SLAVE;
             memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
             espnow_data_prepare(send_param);
@@ -380,6 +381,7 @@ void espnow_handler_task(void)
             // calcule RTT and send it back to slave with type RTT_VAL
             send_param->content = (evt.timestamp - content) / 2;
             send_param->type = RTT;
+            send_param->epoch_id = node.epoch_id;
             memcpy(send_param->dest_mac, recv_cb->mac_addr, ESP_NOW_ETH_ALEN);
             espnow_data_prepare(send_param);
             if (esp_now_send(send_param->dest_mac, send_param->buf,
@@ -486,7 +488,7 @@ void send_rtt_cal_master_task(void)
    memset(send_param, 0, sizeof(espnow_send_param_t));
    send_param->content = 0;
    // send_param->dest_mac;
-   // send_param->type;
+   send_param->type = RTT_CAL_MASTER;
    send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
    send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
    if (send_param->buf == NULL) {
@@ -499,9 +501,9 @@ void send_rtt_cal_master_task(void)
       if (node.title == MASTER) {
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status != INACTIVE) {
-               send_param->type = RTT_CAL_MASTER;
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
+               send_param->epoch_id = node.epoch_id;
                send_param->content = esp_timer_get_time();
                espnow_data_prepare(send_param);
 
@@ -520,17 +522,54 @@ void send_rtt_cal_master_task(void)
 
 void send_request_vote_task(void)
 {
-   // check timeout sync, longer than 2s, new elecetion
-   if (node.title == MASTER &&
-       (esp_timer_get_time() - node.timeout_sync) > 2000000) {
-      ++node.epoch_id;
-      // send give request vote
-      // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů a
-      // stane se novým lídrem
-      // . nebo přijme zprávu synchronizující čas TIME, novým lídrem se stalo
-      // nějaké zařízení rychleji . nebo budou volby neúspěšné do timeoutu
-      // 𝑡𝑒𝑙𝑒𝑐𝑡𝑖𝑜𝑛, volby skončí neúspěchem a začne nová epocha.
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vTaskDelete(NULL);
    }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   send_param->type = REQUEST_VOTE;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vTaskDelete(NULL);
+   }
+   esp_err_t ret;
+   while (1) {
+      // check timeout sync, longer than 2s, new elecetion
+      if (node.title == MASTER &&
+          (esp_timer_get_time() - node.timeout_sync) > 2000000) {
+         ++node.epoch_id;
+         // send give request vote
+         for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+            if (node.neighbour[i].status != INACTIVE) {
+               memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               send_param->epoch_id = node.epoch_id;
+               espnow_data_prepare(send_param);
+
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
+            }
+         }
+         // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů a
+         // stane se novým lídrem
+         node.timeout_vote = esp_timer_get_time();
+         // . nebo přijme zprávu synchronizující čas TIME, novým lídrem se stalo
+         // nějaké zařízení rychleji . nebo budou volby neúspěšné do timeoutu
+         // 𝑡𝑒𝑙𝑒𝑐𝑡𝑖𝑜𝑛, volby skončí neúspěchem a začne nová epocha.
+      }
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
+   }
+   free(send_param);
+   vTaskDelete(NULL);
 }
 
 void send_time_task(void)
@@ -544,7 +583,7 @@ void send_time_task(void)
    memset(send_param, 0, sizeof(espnow_send_param_t));
    send_param->content = 0;
    // send_param->dest_mac;
-   // send_param->type;
+   send_param->type = TIME;
    send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
    send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
    if (send_param->buf == NULL) {
@@ -557,9 +596,9 @@ void send_time_task(void)
       if (node.title == MASTER) {
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status != INACTIVE) {
-               send_param->type = TIME;
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
+               send_param->epoch_id = node.epoch_id;
                send_param->content = esp_timer_get_time();
                espnow_data_prepare(send_param);
 

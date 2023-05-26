@@ -30,7 +30,8 @@ typedef enum message_type {
    TIME,           // time to synchronize the time
    HELLO_DS,
    NEIGHBOURS,
-   LOG
+   LOG,
+   REQUEST_VOTE
 } message_type_t;
 
 typedef struct espnow_event_send_cb {
@@ -90,6 +91,7 @@ typedef struct node_info {
    uint32_t epoch_id;
    device_title_t title;
    uint64_t timeout_sync; // represents timestamp
+   uint64_t timeout_vote; // represents by timestamp
 } node_info_t;
 
 typedef struct print_data {
