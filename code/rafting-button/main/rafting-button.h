@@ -3,7 +3,7 @@
 
 #define BALANCER_SIZE 100
 #define NEIGHBOURS_COUNT 9
-#define EVENT_HISTORY 20
+#define EVENT_HISTORY 50
 
 #include <espnow.h>
 #include <inttypes.h>

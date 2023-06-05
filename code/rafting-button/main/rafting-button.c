@@ -815,23 +815,19 @@ void handle_ds_event_task(void)
             ESP_LOGI(TAG, "FIRST");
             break;
          }
-         // if (node.events[i].timestamp < data.timestamp) {
-         //    ESP_LOGI(TAG, "SECOND");
-         //    // shift data
-         //    for (uint8_t j = EVENT_HISTORY - 1; j != i; --j) {
-         //       node.events[j - 1].task = node.events[j].task;
-         //       node.events[j - 1].timestamp = node.events[j].timestamp;
-         //       node.events[j - 1].type = node.events[j].type;
-         //       memcpy(&node.events[j - 1].mac_addr, node.events[j].mac_addr,
-         //              ESP_NOW_ETH_ALEN);
-         //    }
-
-         //    // save date
-         //    node.events[i].timestamp = data.timestamp;
-         //    node.events[i].type = data.type;
-         //    memcpy(&node.events[i].mac_addr, &data.mac_addr,
-         //    ESP_NOW_ETH_ALEN); break;
-         // }
+         if (node.events[i].timestamp > data.timestamp) {
+            // shift to the right
+            ESP_LOGI(TAG, "Shift audio");
+            memcpy(&node.events[i + 1], &node.events[i],
+                   sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
+            // save date
+            node.events[i].timestamp = data.timestamp;
+            node.events[i].type = data.type;
+            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            break;
+         }
+         if ((i + 1) == EVENT_HISTORY)
+            ESP_LOGE(TAG, "Log is full");
       }
       // distribute data
       send_param->epoch_id = node.epoch_id;
