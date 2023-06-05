@@ -65,3 +65,12 @@ uint8_t is_device_mac(uint8_t *mac_addr)
    }
    return 1;
 }
+
+uint8_t is_same_mac(uint8_t *mac_1, uint8_t *mac_2)
+{
+   for (uint8_t i = 0; i < ESP_NOW_ETH_ALEN; ++i) {
+      if (mac_1[i] != mac_2[i])
+         return 0;
+   }
+   return 1;
+}

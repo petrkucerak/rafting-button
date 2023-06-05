@@ -32,5 +32,6 @@ esp_err_t custom_espnow_deinit(void);
 
 void print_mac_address();
 uint8_t is_device_mac(uint8_t *mac_addr);
+uint8_t is_same_mac(uint8_t *mac_1, uint8_t *mac_2);
 
 #endif // ESPNOW_UTILS_H

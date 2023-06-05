@@ -812,38 +812,38 @@ void handle_ds_event_task(void)
             node.events[i].timestamp = data.timestamp;
             node.events[i].type = data.type;
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            // ESP_LOGI(TAG, "FIRST");
+            ESP_LOGI(TAG, "FIRST");
             break;
          }
-         if (node.events[i].timestamp < data.timestamp) {
-            // ESP_LOGI(TAG, "SECOND");
-            // shift data
-            for (uint8_t j = EVENT_HISTORY - 1; j != i; --j) {
-               node.events[j - 1].task = node.events[j].task;
-               node.events[j - 1].timestamp = node.events[j].timestamp;
-               node.events[j - 1].type = node.events[j].type;
-               memcpy(&node.events[j - 1].mac_addr, node.events[j].mac_addr,
-                      ESP_NOW_ETH_ALEN);
-            }
+         // if (node.events[i].timestamp < data.timestamp) {
+         //    ESP_LOGI(TAG, "SECOND");
+         //    // shift data
+         //    for (uint8_t j = EVENT_HISTORY - 1; j != i; --j) {
+         //       node.events[j - 1].task = node.events[j].task;
+         //       node.events[j - 1].timestamp = node.events[j].timestamp;
+         //       node.events[j - 1].type = node.events[j].type;
+         //       memcpy(&node.events[j - 1].mac_addr, node.events[j].mac_addr,
+         //              ESP_NOW_ETH_ALEN);
+         //    }
 
-            // save date
-            node.events[i].timestamp = data.timestamp;
-            node.events[i].type = data.type;
-            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            break;
-         }
+         //    // save date
+         //    node.events[i].timestamp = data.timestamp;
+         //    node.events[i].type = data.type;
+         //    memcpy(&node.events[i].mac_addr, &data.mac_addr,
+         //    ESP_NOW_ETH_ALEN); break;
+         // }
       }
       // distribute data
       send_param->epoch_id = node.epoch_id;
       memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
       send_param->event_type = data.type;
       send_param->content = data.timestamp;
-      ESP_LOGI(TAG, "Mac: " MACSTR " Timestamp %lld Event type %d",
-               MAC2STR(send_param->event_mac_addr), send_param->content,
-               send_param->event_type);
+      // ESP_LOGI(TAG, "Mac: " MACSTR " Timestamp %lld Event type %d",
+      // MAC2STR(send_param->event_mac_addr), send_param->content,
+      // send_param->event_type);
       switch (data.task) {
       case SEND2MASTER:
-         ESP_LOGI(TAG, "SEND2MASTER");
+         // ESP_LOGI(TAG, "SEND2MASTER");
          if (node.title != MASTER) {
             uint8_t i = 0;
             while (node.neighbour[i].title != MASTER) {
@@ -864,10 +864,13 @@ void handle_ds_event_task(void)
             break;
          }
       case SEND2SLAVES:
-         ESP_LOGI(TAG, "SEND2SLAVES");
+         // ESP_LOGI(TAG, "SEND2SLAVES");
          send_param->type = LOG2SLAVES;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status == ACTIVE) {
+               // exclude the node source mac address
+               if (is_same_mac(&node.neighbour[i].mac_addr, &data.mac_addr))
+                  break;
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                espnow_data_prepare(send_param);
