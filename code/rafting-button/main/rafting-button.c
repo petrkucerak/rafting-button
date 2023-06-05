@@ -91,7 +91,7 @@ void print_log(void)
    printf("\n");
    for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
       if (node.events[i].type != EMPTY) {
-         ESP_LOGI(TAG, "%d. " MACSTR, i, MAC2STR(node.events[i].mac_addr));
+         ESP_LOGI("LOG", "%d. " MACSTR, i, MAC2STR(node.events[i].mac_addr));
       }
    }
 }
@@ -180,14 +180,19 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
       return -1;
    }
 
+   // Administration variables
    *type = buf->type;
    *content = buf->content;
    *epoch_id = buf->epoch_id;
-   *event->mac_addr = buf->event_mac_addr;
+
+   // DS event varibales
+   // *event->mac_addr = buf->event_mac_addr;
+   memcpy(event->mac_addr, buf->event_mac_addr, ESP_NOW_ETH_ALEN);
    event->task = buf->event_task;
    event->type = buf->event_type;
    event->timestamp = buf->content;
 
+   // Neighbor list
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       neighbour[i] = buf->neighbour[i];
    }
@@ -807,11 +812,11 @@ void handle_ds_event_task(void)
             node.events[i].timestamp = data.timestamp;
             node.events[i].type = data.type;
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            ESP_LOGI(TAG, "FIRST");
+            // ESP_LOGI(TAG, "FIRST");
             break;
          }
          if (node.events[i].timestamp < data.timestamp) {
-            ESP_LOGI(TAG, "SECOND");
+            // ESP_LOGI(TAG, "SECOND");
             // shift data
             for (uint8_t j = EVENT_HISTORY - 1; j != i; --j) {
                node.events[j - 1].task = node.events[j].task;
@@ -833,8 +838,12 @@ void handle_ds_event_task(void)
       memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
       send_param->event_type = data.type;
       send_param->content = data.timestamp;
+      ESP_LOGI(TAG, "Mac: " MACSTR " Timestamp %lld Event type %d",
+               MAC2STR(send_param->event_mac_addr), send_param->content,
+               send_param->event_type);
       switch (data.task) {
       case SEND2MASTER:
+         ESP_LOGI(TAG, "SEND2MASTER");
          if (node.title != MASTER) {
             uint8_t i = 0;
             while (node.neighbour[i].title != MASTER) {
@@ -855,6 +864,7 @@ void handle_ds_event_task(void)
             break;
          }
       case SEND2SLAVES:
+         ESP_LOGI(TAG, "SEND2SLAVES");
          send_param->type = LOG2SLAVES;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status == ACTIVE) {
