@@ -5,6 +5,7 @@
 #include <driver/gpio.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
+#include <esp_http_server.h>
 #include <esp_intr_alloc.h>
 #include <esp_log.h>
 #include <esp_mac.h>
@@ -49,6 +50,9 @@
 
 #define VOTE_TIMEOUT 1000000
 #define MASTER_TIMEOUT 2000000
+
+#define WIFI_SSID "Rafting button"
+#define WIFI_PASS "12345678"
 
 // #define IS_MASTER
 #define IS_SLAVE
@@ -947,18 +951,54 @@ void handle_ds_event_task(void)
    vTaskDelete(NULL);
 }
 
+void web_server_runner_task(void)
+{
+   // Config web server
+   wifi_config_t wifi_config = {
+       .ap = {.ssid = WIFI_SSID,
+              .ssid_len = strlen(WIFI_SSID),
+              .password = WIFI_PASS,
+              .authmode = WIFI_AUTH_WPA_WPA2_PSK},
+   };
+   if (strlen(WIFI_PASS) == 0) {
+      wifi_config.ap.authmode = WIFI_AUTH_OPEN;
+   }
+   ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+
+   vTaskDelete(NULL);
+}
+
 void web_server_task(void)
 {
-   ESP_LOGI("WEB SERVER", "run");
+   ESP_LOGI("WEB SERVER", "Task run");
+   BaseType_t web_server_runner_task_v = NULL;
    while (1) {
       if (!gpio_get_level(GPIO_NUM_23)) {
          if (node.is_web_server_running) {
+
+            ESP_LOGI("WEB SERVER", "remove server");
+            // delete task
+            // vTaskDelete(web_server_runner_task_v);
+            // set default AP configuration
+            wifi_config_t wifi_config = {
+                .ap =
+                    {
+                        .password = WIFI_PASS,
+                        .authmode = WIFI_AUTH_WPA_WPA2_PSK,
+                        .ssid_hidden = 1,
+                    },
+            };
+            ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+
             ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 0));
-            ESP_LOGI("WEB SERVER", "low");
             node.is_web_server_running = false;
          } else {
+            ESP_LOGI("WEB SERVER", "start server");
+            web_server_runner_task_v =
+                xTaskCreate((TaskFunction_t)web_server_runner_task,
+                            "web_server_runner_task", STACK_SIZE, NULL,
+                            PRIORITY_WEB_SERVER, NULL);
             ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 1));
-            ESP_LOGI("WEB SERVER", "high");
             node.is_web_server_running = true;
          }
          while (!gpio_get_level(GPIO_NUM_23))
@@ -1014,6 +1054,7 @@ void app_main(void)
    }
    // buildin led
    gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
+   gpio_set_level(GPIO_NUM_2, 0);
 
    // Print device MAC address
    print_mac_address();
