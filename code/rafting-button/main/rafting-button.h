@@ -13,11 +13,11 @@
 #ifndef RAFTING_BUTTON_H
 #define RAFTING_BUTTON_H
 
-/// @brief Size of the array used for calculation round trip time.
+/// @brief Size of the array used for calculating round trip time.
 #define BALANCER_SIZE 100
-/// @brief The count of possible used devices is 10. Therefore the count of
+/// @brief The count of possible used devices is 10, therefore the count of
 /// neighbors is 9 devices.
-#define NEIGHBOURS_COUNT 9
+#define NEIGHBORS_COUNT 9
 /// @brief Size of the array used for storing logs with DS events.
 #define EVENT_HISTORY 50
 
@@ -34,53 +34,67 @@
 /// @brief Priority for the task that handles ISR events.
 #define PRIORITY_HANDLE_ISR_EVENT 3
 
-/// @brief Define the size of the queue used to handle ESP-NOW events.
+/// @brief Defines the size of the queue used to handle ESP-NOW events.
 #define ESPNOW_QUEUE_SIZE 10
-/// @brief Define the queue size used to handle DS events, specifically logs.
-/// Max size should be 10. DS is limited to 10 devices.
+/// @brief Defines the queue size used to handle DS events, specifically logs.
+/// The max size should be 10. DS is limited to 10 devices.
 #define LOG_QUEUE_SIZE 10
-/// @brief Define the queue size used to send timestamps from ISR.
+/// @brief Defines the queue size used to send timestamps from the ISR.
 #define ISR_QUEUE_SIZE 1
 
 /// @brief Maximum processor tick count deadline for ESP-NOW events.
-#define ESPNOW_MAXDELAY 10
-/// @brief Maximum processor tick count deadline for reparetly sending timestamp
-/// from ISR.
+#define ESPNOW_MAX_DELAY 10
+/// @brief Maximum processor tick count deadline for repeatedly sending
+/// timestamps from the ISR.
 #define CLEANING_DELAY 1
 /// @brief Maximum processor tick count deadline for DS events, specifically log
 /// distribution.
-#define DS_MAXDELAY 100
-/// @brief Define stack size for tasks.
+#define DS_MAX_DELAY 100
+/// @brief Defines the stack size for tasks.
 #define STACK_SIZE 4096
 
 /// @brief Deviation limit used in time synchronization.
 #define DEVIATION_LIMIT 200
-/// @brief Deviation maximum constant used in time synchronization.
+/// @brief Maximum deviation constant used in time synchronization.
 #define DEVIATION_MAX_CONSTANT 25
-/// @brief Config universal ESP-NOW message length.
+/// @brief Configures the universal ESP-NOW message length.
 #define CONFIG_ESPNOW_SEND_LEN 250
-/// @brief Define the limit of undelivered messages that indicates inactive
+/// @brief Defines the limit of undelivered messages that indicates inactive
 /// devices.
 #define COUNT_ERROR_MESSAGE_TO_INACTIVE 5
 
-/// @brief Defines the vote timeout. The current value is 1s.
+/// @brief Defines the vote timeout in microseconds. The current value is 1
+/// second.
 #define VOTE_TIMEOUT 1000000
-/// @brief Defines the inactive master timeout. The current value is 2s.
+/// @brief Defines the inactive master timeout in microseconds. The current
+/// value is 2 seconds.
 #define MASTER_TIMEOUT 2000000
 
 #include <espnow.h>
 #include <inttypes.h>
 
+/**
+ * @brief Enumeration representing the title of a device.
+ */
 typedef enum device_title {
-   SLAVE,     // nasledovnik
-   CANDIDATE, // kandidat na lidra
-   MASTER,    // lidr
+   /// @brief Represents a slave device (následovník).
+   SLAVE,
+   /// @brief Represents a master candidate device (kandidát na lídra).
+   CANDIDATE,
+   /// @brief Represents a master device (lídr).
+   MASTER,
 } device_title_t;
 
+/**
+ * @brief Enumeration representing the status of a device.
+ */
 typedef enum device_status {
-   NOT_INITIALIZED, // device wasn't initialized
-   INACTIVE,        // device was active in DS
-   ACTIVE,          // device is active in DS
+   /// @brief Device is not initialized.
+   NOT_INITIALIZED,
+   /// @brief Device is inactive in the distributed system (DS).
+   INACTIVE,
+   /// @brief Device is active in the distributed system (DS).
+   ACTIVE,
 } device_status_t;
 
 typedef enum espnow_event_id {
