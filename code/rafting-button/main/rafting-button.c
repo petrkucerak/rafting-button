@@ -961,7 +961,8 @@ void web_server_task(void)
             ESP_LOGI("WEB SERVER", "high");
             node.is_web_server_running = true;
          }
-         vTaskDelay(100 / portTICK_PERIOD_MS);
+         while (!gpio_get_level(GPIO_NUM_23))
+            vTaskDelay(50 / portTICK_PERIOD_MS);
       }
       vTaskDelay(100 / portTICK_PERIOD_MS);
    }
