@@ -902,13 +902,18 @@ void app_main(void)
 
    // SET UP INTERRUPT
    // Reset pint
+   ESP_LOGI(TAG, "Reset");
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
-   // Set intr type
-   ESP_ERROR_CHECK(gpio_set_intr_type(GPIO_NUM_21, GPIO_INTR_POSEDGE));
-   // Eneable intr
-   ESP_ERROR_CHECK(gpio_intr_enable(GPIO_NUM_21));
-   // Set gpio direction
-   ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_21, GPIO_MODE_INPUT));
+   assert(GPIO_IS_VALID_GPIO(GPIO_NUM_21));
+   gpio_config_t cfg = {
+       .pin_bit_mask = BIT64(GPIO_NUM_21),
+       .mode = GPIO_MODE_INPUT,
+       .pull_up_en = GPIO_PULLUP_DISABLE,
+       .pull_down_en = GPIO_PULLDOWN_ENABLE,
+       .intr_type = GPIO_INTR_POSEDGE,
+   };
+   gpio_config(&cfg);
+
    // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
    // Add isr handler
