@@ -106,11 +106,13 @@ void print_log(void)
    for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
       if (node.events[i].type != EMPTY) {
          if (node.events[i].type == PUSH)
-            ESP_LOGI("LOG", "%d. " MACSTR " | push", i,
-                     MAC2STR(node.events[i].mac_addr));
+            ESP_LOGI("LOG", "%2d. " MACSTR " | push  | %lld", i,
+                     MAC2STR(node.events[i].mac_addr),
+                     node.events[i].timestamp);
          if (node.events[i].type == RESET)
-            ESP_LOGI("LOG", "%d. " MACSTR " | reset", i,
-                     MAC2STR(node.events[i].mac_addr));
+            ESP_LOGI("LOG", "%2d. " MACSTR " | reset | %lld", i,
+                     MAC2STR(node.events[i].mac_addr),
+                     node.events[i].timestamp);
       }
    }
 }
@@ -850,12 +852,30 @@ void handle_ds_event_task(void)
          if (node.events[i].timestamp > data.timestamp) {
             // shift to the right
             ESP_LOGI(TAG, "Array reorder");
-            memcpy(&node.events[i + 1], &node.events[i],
-                   sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
-            // save date
-            node.events[i].timestamp = data.timestamp;
-            node.events[i].type = data.type;
-            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            log_event_t tmp;
+
+            while (i < EVENT_HISTORY) {
+               // tmp = node.events[i]
+               tmp.task = node.events[i].task;
+               tmp.timestamp = node.events[i].timestamp;
+               tmp.type = node.events[i].type;
+               memcpy(&tmp.mac_addr, &node.events[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // node.events[i] = data
+               node.events[i].task = data.task;
+               node.events[i].timestamp = data.timestamp;
+               node.events[i].type = data.type;
+               memcpy(&node.events[i].mac_addr, &data.mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // data = tmp
+               data.task = tmp.task;
+               data.timestamp = tmp.timestamp;
+               data.type = tmp.type;
+               memcpy(&data.mac_addr, &tmp.mac_addr, ESP_NOW_ETH_ALEN);
+               ++i;
+            }
             break;
          }
          if ((i + 1) == EVENT_HISTORY)
