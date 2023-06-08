@@ -5,9 +5,12 @@
 #include <driver/gpio.h>
 #include <esp_chip_info.h>
 #include <esp_flash.h>
+#include <esp_http_server.h>
 #include <esp_intr_alloc.h>
 #include <esp_log.h>
 #include <esp_mac.h>
+#include <esp_netif.h>
+#include <esp_netif_ip_addr.h>
 #include <esp_now.h>
 #include <esp_random.h>
 #include <esp_timer.h>
@@ -28,6 +31,7 @@
 #define PRIORITY_HANDLE_DS_EVENT 2
 #define PRIORITY_REQUEST_TASK 2
 #define PRIORITY_HANDLE_ISR_EVENT 3
+#define PRIORITY_WEB_SERVER 1
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
@@ -48,6 +52,9 @@
 
 #define VOTE_TIMEOUT 1000000
 #define MASTER_TIMEOUT 2000000
+
+#define WIFI_SSID "Rafting button"
+#define WIFI_PASS "12345678"
 
 // #define IS_MASTER
 #define IS_SLAVE
@@ -946,6 +953,139 @@ void handle_ds_event_task(void)
    vTaskDelete(NULL);
 }
 
+static esp_err_t web_server_get_handler(httpd_req_t *req)
+{
+   /* Send a simple response */
+   const char resp[] = "<h1>Hello World</h1>";
+   ESP_LOGI("WEB SERVER", "Get request");
+   httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
+   return ESP_OK;
+}
+
+/* URI handler structure for GET /uri */
+static httpd_uri_t uri_get = {.uri = "/hello",
+                              .method = HTTP_GET,
+                              .handler = web_server_get_handler,
+                              .user_ctx = NULL};
+static esp_err_t stop_webserver(httpd_handle_t server)
+{
+   // Stop the httpd server
+   return httpd_stop(server);
+}
+static httpd_handle_t start_webserver(void)
+{
+   httpd_handle_t server = NULL;
+   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+   config.lru_purge_enable = true;
+
+   // Start the httpd server
+   ESP_LOGI(TAG, "Starting server on port: '%d'", config.server_port);
+   if (httpd_start(&server, &config) == ESP_OK) {
+      // Set URI handlers
+      ESP_LOGI(TAG, "Registering URI handlers");
+      httpd_register_uri_handler(server, &uri_get);
+      return server;
+   }
+
+   ESP_LOGI(TAG, "Error starting server!");
+   return NULL;
+}
+static void disconnect_handler(void *arg, esp_event_base_t event_base,
+                               int32_t event_id, void *event_data)
+{
+   httpd_handle_t *server = (httpd_handle_t *)arg;
+   if (*server) {
+      ESP_LOGI("WEB SERVER", "Stopping webserver");
+      if (stop_webserver(*server) == ESP_OK) {
+         *server = NULL;
+      } else {
+         ESP_LOGE(TAG, "Failed to stop http server");
+      }
+   }
+}
+
+static void connect_handler(void *arg, esp_event_base_t event_base,
+                            int32_t event_id, void *event_data)
+{
+   httpd_handle_t *server = (httpd_handle_t *)arg;
+   if (*server == NULL) {
+      ESP_LOGI("WEB SERVER", "Starting webserver");
+      *server = start_webserver();
+   }
+}
+void web_server_task(void)
+{
+   ESP_LOGI("WEB SERVER", "Task run");
+   /* Generate default configuration */
+   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
+
+   /* Empty handle to esp_http_server */
+   httpd_handle_t server = NULL;
+   while (1) {
+      if (!gpio_get_level(GPIO_NUM_23)) {
+         if (node.is_web_server_running) {
+            // STOP SERVER
+            ESP_LOGI("WEB SERVER", "remove server");
+            ESP_ERROR_CHECK(httpd_stop(server));
+            // set default AP configuration
+            wifi_config_t wifi_config = {
+                .ap =
+                    {
+                        .password = WIFI_PASS,
+                        .authmode = WIFI_AUTH_WPA_WPA2_PSK,
+                        .ssid_hidden = 1,
+                    },
+            };
+            ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+
+            ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 0));
+            node.is_web_server_running = false;
+         } else {
+            // START SERVER
+            ESP_LOGI("WEB SERVER", "Starting server on port: '%d'",
+                     config.server_port);
+            // Config web server
+            wifi_config_t wifi_config = {
+                .ap = {.ssid = WIFI_SSID,
+                       .ssid_len = strlen(WIFI_SSID),
+                       .password = WIFI_PASS,
+                       .authmode = WIFI_AUTH_WPA_WPA2_PSK,
+                       .max_connection = 4},
+            };
+            ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+
+            ESP_ERROR_CHECK(esp_event_handler_register(
+                IP_EVENT, IP_EVENT_STA_GOT_IP, &connect_handler, &server));
+            ESP_ERROR_CHECK(esp_event_handler_register(
+                WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED, &disconnect_handler,
+                &server));
+
+            // /* Start the httpd server */
+            // if (httpd_start(&server, &config) == ESP_OK) {
+            //    /* Register URI handlers */
+            //    ESP_ERROR_CHECK(httpd_register_uri_handler(server, &uri_get));
+            // } else {
+            //    ESP_LOGE("WEB SERVER", "Server can not start");
+            // }
+            server = start_webserver();
+
+            esp_netif_t *p_netif = esp_netif_create_default_wifi_ap();
+            esp_netif_ip_info_t if_info;
+            ESP_ERROR_CHECK(esp_netif_get_ip_info(p_netif, &if_info));
+            ESP_LOGI(TAG, "ESP32 IP:" IPSTR, IP2STR(&if_info.ip));
+
+            // Turn on build in LED
+            ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 1));
+            node.is_web_server_running = true;
+         }
+         while (!gpio_get_level(GPIO_NUM_23))
+            vTaskDelay(50 / portTICK_PERIOD_MS);
+      }
+      vTaskDelay(100 / portTICK_PERIOD_MS);
+   }
+   vTaskDelete(NULL);
+}
+
 void app_main(void)
 {
    // Init NVS
@@ -961,24 +1101,40 @@ void app_main(void)
    // Reset pint
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
    // Config GPIO
-   gpio_config_t cfg = {
-       .pin_bit_mask = BIT64(GPIO_NUM_21),
-       .mode = GPIO_MODE_INPUT,
-       .pull_up_en = GPIO_PULLUP_DISABLE,
-       .pull_down_en = GPIO_PULLDOWN_ENABLE,
-       .intr_type = GPIO_INTR_POSEDGE,
-   };
-   gpio_config(&cfg);
+   {
+      gpio_config_t cfg = {
+          .pin_bit_mask = BIT64(GPIO_NUM_21),
+          .mode = GPIO_MODE_INPUT,
+          .pull_up_en = GPIO_PULLUP_DISABLE,
+          .pull_down_en = GPIO_PULLDOWN_ENABLE,
+          .intr_type = GPIO_INTR_POSEDGE,
+      };
+      gpio_config(&cfg);
+   }
    // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
+   // Config GPIOs for web server
+   // input
+   ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_23));
+   {
+      gpio_config_t cfg = {
+          .pin_bit_mask = BIT64(GPIO_NUM_23),
+          .mode = GPIO_MODE_INPUT,
+          .pull_up_en = GPIO_PULLUP_ENABLE,
+          .pull_down_en = GPIO_PULLDOWN_DISABLE,
+          .intr_type = GPIO_INTR_DISABLE,
+      };
+      gpio_config(&cfg);
+   }
+   // buildin led
+   gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
+   gpio_set_level(GPIO_NUM_2, 0);
+
    // Print device MAC address
    print_mac_address();
-
-   // Set up GPIO_NUM_23 for LED blink
-   config_led(GPIO_NUM_23);
 
    // Init Wifi
    wifi_init();
@@ -992,6 +1148,7 @@ void app_main(void)
    node.rtt_balancer_index = 0;
    node.epoch_id = 0;
    node.is_time_synced = 0;
+   node.is_web_server_running = false;
    node.title = SLAVE;
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       node.neighbour[i].status = NOT_INITIALIZED;
@@ -1039,6 +1196,11 @@ void app_main(void)
    handle_isr_event_task_v = xTaskCreate((TaskFunction_t)handle_isr_event_task,
                                          "handle_isr_event_task", STACK_SIZE,
                                          NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
+
+   BaseType_t web_server_task_v;
+   web_server_task_v =
+       xTaskCreate((TaskFunction_t)web_server_task, "web_server_task",
+                   STACK_SIZE, NULL, PRIORITY_WEB_SERVER, NULL);
 
    send_hello_ds_message();
 

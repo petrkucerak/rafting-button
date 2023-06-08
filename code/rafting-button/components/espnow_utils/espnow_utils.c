@@ -10,6 +10,8 @@
 #define TRUE 1
 #define FALSE 0
 
+#define WIFI_PASS "eC9hvLZQdpTv8a"
+
 static const char *TAG = "ESPNOW_UTILS";
 
 void wifi_init(void)
@@ -27,7 +29,18 @@ void wifi_init(void)
    // Set current WiFi power save type
    ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
 
-   ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+   ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_APSTA));
+
+   wifi_config_t wifi_config = {
+       .ap =
+           {
+               .password = WIFI_PASS,
+               .authmode = WIFI_AUTH_WPA_WPA2_PSK,
+               .ssid_hidden = 1,
+           },
+   };
+   ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
+
    ESP_ERROR_CHECK(esp_wifi_start());
    // ESP_ERROR_CHECK(esp_wifi_set_channel())
 }

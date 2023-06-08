@@ -113,6 +113,7 @@ typedef struct node_info {
    uint16_t rtt_balancer_index;
    bool is_firts_setup_rtt;
    bool is_time_synced;
+   bool is_web_server_running;
    int32_t deviation_avg;
    neighbour_t neighbour[NEIGHBOURS_COUNT];
    uint8_t neighbour_error_count[NEIGHBOURS_COUNT];

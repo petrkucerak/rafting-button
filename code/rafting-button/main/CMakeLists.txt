@@ -1,6 +1,6 @@
 idf_component_register(SRCS "rafting-button.c"
                     INCLUDE_DIRS "."
-                    REQUIRES espnow_utils peripheral)
+                    REQUIRES espnow_utils peripheral esp_http_server)
 
 # If some components are kept in a third git repository
 # (not the project repository or ESP-IDF repository),
