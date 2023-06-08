@@ -31,6 +31,7 @@
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
+#define LOG_QUEUE_SIZE 10 // min, device count
 #define ISR_QUEUE_SIZE 1
 
 #define ESPNOW_MAXDELAY 10
@@ -87,11 +88,9 @@ void print_neighbours(void)
    uint8_t mac_addr[6];
    ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
    if (node.title == MASTER)
-      ESP_LOGI("NEIGBOURS", MACSTR " | title: M  | current",
-               MAC2STR(mac_addr));
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: M  | current", MAC2STR(mac_addr));
    if (node.title == SLAVE)
-      ESP_LOGI("NEIGBOURS", MACSTR " | title: S  | current",
-               MAC2STR(mac_addr));
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: S  | current", MAC2STR(mac_addr));
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       if (node.neighbour[i].status == NOT_INITIALIZED)
          continue;
@@ -117,9 +116,11 @@ void print_neighbours(void)
 void print_log_event(log_event_t data)
 {
    if (data.type == PUSH)
-      ESP_LOGI("LOG", "Type PUSH | Source " MACSTR, MAC2STR(data.mac_addr));
+      ESP_LOGI("LOG", "Type PUSH  | Source " MACSTR " | %lld",
+               MAC2STR(data.mac_addr), data.timestamp);
    if (data.type == RESET)
-      ESP_LOGI("LOG", "Type RESET | Source " MACSTR, MAC2STR(data.mac_addr));
+      ESP_LOGI("LOG", "Type RESET | Source " MACSTR " | %lld",
+               MAC2STR(data.mac_addr), data.timestamp);
 }
 
 void print_log(void)
@@ -873,10 +874,24 @@ void handle_ds_event_task(void)
          }
          if (node.events[i].timestamp > data.timestamp) {
             // shift to the right
-            ESP_LOGI(TAG, "Array reorder");
+            ESP_LOGI(TAG, "Array reorder, i: %d, timestampes: o %lld, n %lld",
+                     i, node.events[i].timestamp, data.timestamp);
             log_event_t tmp;
+            log_event_t data_tmp;
+            data_tmp.task = data.task;
+            data_tmp.timestamp = data.timestamp;
+            data_tmp.type = data.type;
+            memcpy(&data_tmp.mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+            ++i;
 
             while (i < EVENT_HISTORY) {
+               if (node.events[i].type == EMPTY) {
+                  node.events[i].timestamp = data_tmp.timestamp;
+                  node.events[i].type = data_tmp.type;
+                  memcpy(&node.events[i].mac_addr, &data_tmp.mac_addr,
+                         ESP_NOW_ETH_ALEN);
+                  break;
+               }
                // tmp = node.events[i]
                tmp.task = node.events[i].task;
                tmp.timestamp = node.events[i].timestamp;
@@ -884,18 +899,18 @@ void handle_ds_event_task(void)
                memcpy(&tmp.mac_addr, &node.events[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
 
-               // node.events[i] = data
-               node.events[i].task = data.task;
-               node.events[i].timestamp = data.timestamp;
-               node.events[i].type = data.type;
-               memcpy(&node.events[i].mac_addr, &data.mac_addr,
+               // node.events[i] = data_tmp
+               node.events[i].task = data_tmp.task;
+               node.events[i].timestamp = data_tmp.timestamp;
+               node.events[i].type = data_tmp.type;
+               memcpy(&node.events[i].mac_addr, &data_tmp.mac_addr,
                       ESP_NOW_ETH_ALEN);
 
-               // data = tmp
-               data.task = tmp.task;
-               data.timestamp = tmp.timestamp;
-               data.type = tmp.type;
-               memcpy(&data.mac_addr, &tmp.mac_addr, ESP_NOW_ETH_ALEN);
+               // data_tmp = tmp
+               data_tmp.task = tmp.task;
+               data_tmp.timestamp = tmp.timestamp;
+               data_tmp.type = tmp.type;
+               memcpy(&data_tmp.mac_addr, &tmp.mac_addr, ESP_NOW_ETH_ALEN);
                ++i;
             }
             break;
@@ -997,7 +1012,7 @@ void app_main(void)
    }
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
-   log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
+   log_event = xQueueCreate(LOG_QUEUE_SIZE, sizeof(log_event_t));
    isr_event = xQueueCreate(ISR_QUEUE_SIZE, sizeof(log_event_t));
 
    BaseType_t handler_task;
