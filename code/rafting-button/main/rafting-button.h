@@ -129,16 +129,53 @@ typedef enum ds_event {
    EMPTY,
 } ds_event_t;
 
+/**
+ * @brief Enumeration representing the types of ESP-NOW event messages.
+ *
+ * @note Comments type of messages is only translated from the bachelor's
+ * thesis.
+ *
+ */
 typedef enum message_type {
-   RTT_CAL_MASTER, // time used to calculate the RTT (master -> slave)
-   RTT_CAL_SLAVE,  // time used to calculate the RTT (slave -> master)
-   RTT,            // calculated value of RTT
-   TIME,           // time to synchronize the time
+   /// @brief HELLO_DS: The device verifies if the sender is an unknown device.
+   /// If it is, the device adds it to its list. If the device is already known,
+   /// it only sets its status as active. As a response, it sends a list of all
+   /// devices in the network.
    HELLO_DS,
+   /// @brief NEIGHBOURS: The device adds all unknown neighbors to its list and
+   /// updates the status and title of each device.
    NEIGHBOURS,
-   LOG,
+   /// @brief RTT_CAL_MASTER: The device sends back messages to the sender with
+   /// the same content. This message is used for calculating the round trip
+   /// time.
+   RTT_CAL_MASTER,
+   /// @brief RTT_CAL_SLAVE: The device calculates the round trip time and sends
+   /// it to the sender.
+   RTT_CAL_SLAVE,
+   /// @brief RTT: The device stores the transmission time value in an array to
+   /// calculate the average round trip time. If it is the first such
+   /// information, the array is filled with this value.
+   RTT,
+   /// @brief TIME: The device calculates the time synchronization error 𝑂 and
+   /// sets the constant 𝑐 for calculating the 𝑇𝐷𝑆 time according to the
+   /// algorithm described in Chapter 5.4.5 bachelor's thesis. This message is
+   /// also used to
+   /// maintain the leader's authority. If a device in candidate state receives
+   /// this type of message, it ends its candidacy and switches to follower
+   /// state. A timestamp is stored with each processing of this message, which
+   /// is subsequently used to calculate the timeout 𝑡𝑠𝑦𝑛𝑐. If it exceeds a
+   /// specified constant, the device transitions to the candidate state,
+   /// increases the epoch ID, and initializes the elections.
+   TIME,
+   /// @brief REQUEST_VOTE: The device sends a message to the sender with a
+   /// vote.
    REQUEST_VOTE,
+   /// @brief GIVE_VOTE: The device stores the message. If it receives more
+   /// responses than half of the active devices in the network, it declares
+   /// itself as the leader and the other devices as followers.
    GIVE_VOTE,
+   /// @brief LOG: The log is saved and distributed to all devices in the DS.
+   LOG,
 } message_type_t;
 
 typedef struct espnow_event_send_cb {
@@ -176,7 +213,7 @@ typedef struct message_data {
    ds_event_t event_type;
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
    ds_task_t event_task;
-   neighbour_t neighbour[NEIGHBOURS_COUNT];
+   neighbour_t neighbour[NEIGHBORS_COUNT];
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
 
@@ -184,7 +221,7 @@ typedef struct espnow_send_param {
    message_type_t type;
    uint64_t content;
    uint32_t epoch_id;
-   neighbour_t neighbour[NEIGHBOURS_COUNT];
+   neighbour_t neighbour[NEIGHBORS_COUNT];
    ds_event_t event_type;
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
    ds_task_t event_task;
@@ -207,8 +244,8 @@ typedef struct node_info {
    bool is_firts_setup_rtt;
    bool is_time_synced;
    int32_t deviation_avg;
-   neighbour_t neighbour[NEIGHBOURS_COUNT];
-   uint8_t neighbour_error_count[NEIGHBOURS_COUNT];
+   neighbour_t neighbour[NEIGHBORS_COUNT];
+   uint8_t neighbour_error_count[NEIGHBORS_COUNT];
    uint32_t epoch_id;
    device_title_t title;
    uint64_t timeout_sync; // represents timestamp
