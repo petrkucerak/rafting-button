@@ -28,6 +28,7 @@
 #define PRIORITY_HANDLE_DS_EVENT 2
 #define PRIORITY_REQUEST_TASK 2
 #define PRIORITY_HANDLE_ISR_EVENT 3
+#define PRIORITY_WEB_SERVER 1
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
@@ -946,6 +947,27 @@ void handle_ds_event_task(void)
    vTaskDelete(NULL);
 }
 
+void web_server_task(void)
+{
+   ESP_LOGI("WEB SERVER", "run");
+   while (1) {
+      if (!gpio_get_level(GPIO_NUM_23)) {
+         if (node.is_web_server_running) {
+            ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 0));
+            ESP_LOGI("WEB SERVER", "low");
+            node.is_web_server_running = false;
+         } else {
+            ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_2, 1));
+            ESP_LOGI("WEB SERVER", "high");
+            node.is_web_server_running = true;
+         }
+         vTaskDelay(100 / portTICK_PERIOD_MS);
+      }
+      vTaskDelay(100 / portTICK_PERIOD_MS);
+   }
+   vTaskDelete(NULL);
+}
+
 void app_main(void)
 {
    // Init NVS
@@ -961,24 +983,39 @@ void app_main(void)
    // Reset pint
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
    // Config GPIO
-   gpio_config_t cfg = {
-       .pin_bit_mask = BIT64(GPIO_NUM_21),
-       .mode = GPIO_MODE_INPUT,
-       .pull_up_en = GPIO_PULLUP_DISABLE,
-       .pull_down_en = GPIO_PULLDOWN_ENABLE,
-       .intr_type = GPIO_INTR_POSEDGE,
-   };
-   gpio_config(&cfg);
+   {
+      gpio_config_t cfg = {
+          .pin_bit_mask = BIT64(GPIO_NUM_21),
+          .mode = GPIO_MODE_INPUT,
+          .pull_up_en = GPIO_PULLUP_DISABLE,
+          .pull_down_en = GPIO_PULLDOWN_ENABLE,
+          .intr_type = GPIO_INTR_POSEDGE,
+      };
+      gpio_config(&cfg);
+   }
    // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
    // Add isr handler
    ESP_ERROR_CHECK(gpio_isr_handler_add(GPIO_NUM_21, gpio_handler_isr, NULL));
 
+   // Config GPIOs for web server
+   // input
+   ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_23));
+   {
+      gpio_config_t cfg = {
+          .pin_bit_mask = BIT64(GPIO_NUM_23),
+          .mode = GPIO_MODE_INPUT,
+          .pull_up_en = GPIO_PULLUP_ENABLE,
+          .pull_down_en = GPIO_PULLDOWN_DISABLE,
+          .intr_type = GPIO_INTR_DISABLE,
+      };
+      gpio_config(&cfg);
+   }
+   // buildin led
+   gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
+
    // Print device MAC address
    print_mac_address();
-
-   // Set up GPIO_NUM_23 for LED blink
-   config_led(GPIO_NUM_23);
 
    // Init Wifi
    wifi_init();
@@ -992,6 +1029,7 @@ void app_main(void)
    node.rtt_balancer_index = 0;
    node.epoch_id = 0;
    node.is_time_synced = 0;
+   node.is_web_server_running = false;
    node.title = SLAVE;
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       node.neighbour[i].status = NOT_INITIALIZED;
@@ -1039,6 +1077,11 @@ void app_main(void)
    handle_isr_event_task_v = xTaskCreate((TaskFunction_t)handle_isr_event_task,
                                          "handle_isr_event_task", STACK_SIZE,
                                          NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
+
+   BaseType_t web_server_task_v;
+   web_server_task_v =
+       xTaskCreate((TaskFunction_t)web_server_task, "web_server_task",
+                   STACK_SIZE, NULL, PRIORITY_WEB_SERVER, NULL);
 
    send_hello_ds_message();
 
