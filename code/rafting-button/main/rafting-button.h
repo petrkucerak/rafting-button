@@ -98,37 +98,34 @@ typedef enum device_status {
 } device_status_t;
 
 /**
- * @brief Enumeration of representing the ESP-NOW event ID.
- *
+ * @brief Enumeration representing the ESP-NOW event ID.
  */
 typedef enum espnow_event_id {
-   /// @brief ESP-NOW event type is send
+   /// @brief Event type for ESP-NOW send callback.
    ESPNOW_SEND_CB,
-   /// @brief ESP-NOW event type is receive
+   /// @brief Event type for ESP-NOW receive callback.
    ESPNOW_RECV_CB,
 } espnow_event_id_t;
 
 /**
- * @brief Enumeration of representing the DS task
- *
+ * @brief Enumeration representing the DS task.
  */
 typedef enum ds_task {
-   /// @brief Instruction to send log to all nodes
+   /// @brief Instruction to send log to all nodes.
    SEND,
-   /// @brief Only save log to log memory
+   /// @brief Only save log to log memory.
    SAVE,
 } ds_task_t;
 
 /**
- * @brief Enumeration of representing the DS event type
- *
+ * @brief Enumeration representing the DS event type.
  */
 typedef enum ds_event {
-   /// @brief DS event type short push
+   /// @brief DS event type: short push.
    PUSH,
-   /// @brief DS event type long push, means reset
+   /// @brief DS event type: long push, means reset.
    RESET,
-   /// @brief DS event is an empyt
+   /// @brief Empty DS event.
    EMPTY,
 } ds_event_t;
 
