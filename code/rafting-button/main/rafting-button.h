@@ -531,4 +531,14 @@ void send_time_task(void);
  */
 void handle_ds_event_task(void);
 
+/**
+ * @brief Main function of the application.
+ *
+ * This function is the entry point of the application and serves as the main
+ * execution loop. It initializes various components, sets up interrupts,
+ * configures GPIO pins, initializes Wi-Fi and ESP-NOW, and creates multiple
+ * tasks for handling different functionalities.
+ */
+void app_main(void);
+
 #endif // RAFTING_BUTTON_H
