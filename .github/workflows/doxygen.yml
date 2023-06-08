@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: mattnotmitt/doxygen-action@v1.9.5
-        with:
-          working-directory: './code/rafting-button/doc/'
-          doxyfile-path: './code/rafting-button/doc/Doxygen'
+      - run: |
+          sudo apt install doxygen
+          sudo apt install graphviz
+          cd code/rafting-button/doc
+          doxygen Doxyfile
+          
