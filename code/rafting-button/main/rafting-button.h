@@ -178,27 +178,58 @@ typedef enum message_type {
    LOG,
 } message_type_t;
 
+/**
+ * @brief Structure representing the ESP-NOW event callback for send operations.
+ *
+ */
 typedef struct espnow_event_send_cb {
+   /// @brief Target MAC address
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
+   /// @brief Send status of the ESP-NOW operation
    esp_now_send_status_t status;
 } espnow_event_send_cb_t;
 
+/**
+ * @brief Structure representing the ESP-NOW event callback for receive
+ * operations.
+ *
+ */
 typedef struct espnow_event_recv_cb {
+   /// @brief Source MAC address
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
+   /// @brief Pointer to the received data
    uint8_t *data;
+   /// @brief Length of the received data
+   /// @note In this project, the length of data for all ESP-NOW messages is
+   /// CONFIG_ESPNOW_SEND_LEN (250 bytes).
    int data_len;
 } espnow_event_recv_cb_t;
 
+/**
+ * @brief Structure defining the ESP-NOW event information.
+ *
+ */
 typedef union espnow_event_info {
+   /// @brief ESP-NOW event callback structure for send operations
    espnow_event_send_cb_t send_cb;
+   /// @brief ESP-NOW event callback structure for receive operations
    espnow_event_recv_cb_t recv_cb;
 } espnow_event_info_t;
 
+/**
+ * @brief Structure defining an ESP-NOW event.
+ *
+ */
 typedef struct espnow_event {
+   /// @brief ESP-NOW event ID
    espnow_event_id_t id;
+   /// @brief ESP-NOW event information
    espnow_event_info_t info;
+   /// @brief Timestamp of the ESP-NOW event, created upon receiving in the
+   /// callback
    uint64_t timestamp;
 } espnow_event_t;
+
 
 typedef struct neighbour {
    device_title_t title;
