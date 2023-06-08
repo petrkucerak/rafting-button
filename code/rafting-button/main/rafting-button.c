@@ -83,12 +83,34 @@ static uint64_t get_time_with_timer(uint64_t esp_time)
 void print_neighbours(void)
 {
    printf("\n");
+   // get device mac
+   uint8_t mac_addr[6];
+   ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
+   if (node.title == MASTER)
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: M  | current",
+               MAC2STR(mac_addr));
+   if (node.title == SLAVE)
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: S  | current",
+               MAC2STR(mac_addr));
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
       if (node.neighbour[i].status == NOT_INITIALIZED)
          continue;
-      ESP_LOGI("NEIGBOURS", MACSTR " | status: %d | title: %d",
-               MAC2STR(node.neighbour[i].mac_addr), node.neighbour[i].status,
-               node.neighbour[i].title);
+      if (node.neighbour[i].status == INACTIVE) {
+         if (node.neighbour[i].title == MASTER)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: I | title: M",
+                     MAC2STR(node.neighbour[i].mac_addr));
+         if (node.neighbour[i].title == SLAVE)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: I | title: S",
+                     MAC2STR(node.neighbour[i].mac_addr));
+      }
+      if (node.neighbour[i].status == ACTIVE) {
+         if (node.neighbour[i].title == MASTER)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: A | title: M",
+                     MAC2STR(node.neighbour[i].mac_addr));
+         if (node.neighbour[i].title == SLAVE)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: A | title: S",
+                     MAC2STR(node.neighbour[i].mac_addr));
+      }
    }
 }
 
