@@ -1,3 +1,14 @@
+/**
+ * @file peripheral.c
+ * @author Petr Kucera (kucerp28@fel.cvut.cz)
+ * @brief The file defines functions to basic manipulation with peripherals.
+ * @version 1.0
+ * @date 2023-06-08
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
+
 #include "peripheral.h"
 #include <driver/gpio.h>
 #include <freertos/FreeRTOS.h>
