@@ -24,14 +24,18 @@
 
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
-#define PRIORITY_HANDLER 3
+#define PRIORITY_HANDLER 4
 #define PRIORITY_HANDLE_DS_EVENT 2
 #define PRIORITY_REQUEST_TASK 2
+#define PRIORITY_HANDLE_ISR_EVENT 3
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
+#define LOG_QUEUE_SIZE 10 // min, device count
+#define ISR_QUEUE_SIZE 1
 
 #define ESPNOW_MAXDELAY 10
+#define CLEANING_DELAY 1
 #define DS_MAXDELAY 100
 #define STACK_SIZE 4096
 
@@ -56,6 +60,7 @@ esp_now_peer_info_t broadcast_peer;
 node_info_t node;
 static QueueHandle_t espnow_queue;
 static QueueHandle_t log_event;
+static QueueHandle_t isr_event;
 
 uint32_t get_rtt_avg()
 {
@@ -79,11 +84,43 @@ static uint64_t get_time_with_timer(uint64_t esp_time)
 void print_neighbours(void)
 {
    printf("\n");
+   // get device mac
+   uint8_t mac_addr[6];
+   ESP_ERROR_CHECK(esp_read_mac(mac_addr, ESP_MAC_BASE));
+   if (node.title == MASTER)
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: M  | current", MAC2STR(mac_addr));
+   if (node.title == SLAVE)
+      ESP_LOGI("NEIGBOURS", MACSTR " | title: S  | current", MAC2STR(mac_addr));
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
-      ESP_LOGI("NEIGBOURS", MACSTR " | status: %d | title: %d",
-               MAC2STR(node.neighbour[i].mac_addr), node.neighbour[i].status,
-               node.neighbour[i].title);
+      if (node.neighbour[i].status == NOT_INITIALIZED)
+         continue;
+      if (node.neighbour[i].status == INACTIVE) {
+         if (node.neighbour[i].title == MASTER)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: I | title: M",
+                     MAC2STR(node.neighbour[i].mac_addr));
+         if (node.neighbour[i].title == SLAVE)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: I | title: S",
+                     MAC2STR(node.neighbour[i].mac_addr));
+      }
+      if (node.neighbour[i].status == ACTIVE) {
+         if (node.neighbour[i].title == MASTER)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: A | title: M",
+                     MAC2STR(node.neighbour[i].mac_addr));
+         if (node.neighbour[i].title == SLAVE)
+            ESP_LOGI("NEIGBOURS", MACSTR " | status: A | title: S",
+                     MAC2STR(node.neighbour[i].mac_addr));
+      }
    }
+}
+
+void print_log_event(log_event_t data)
+{
+   if (data.type == PUSH)
+      ESP_LOGI("LOG", "Type PUSH  | Source " MACSTR " | %lld",
+               MAC2STR(data.mac_addr), data.timestamp);
+   if (data.type == RESET)
+      ESP_LOGI("LOG", "Type RESET | Source " MACSTR " | %lld",
+               MAC2STR(data.mac_addr), data.timestamp);
 }
 
 void print_log(void)
@@ -91,7 +128,14 @@ void print_log(void)
    printf("\n");
    for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
       if (node.events[i].type != EMPTY) {
-         ESP_LOGI("LOG", "%d. " MACSTR, i, MAC2STR(node.events[i].mac_addr));
+         if (node.events[i].type == PUSH)
+            ESP_LOGI("LOG", "%2d. " MACSTR " | push  | %lld", i,
+                     MAC2STR(node.events[i].mac_addr),
+                     node.events[i].timestamp);
+         if (node.events[i].type == RESET)
+            ESP_LOGI("LOG", "%2d. " MACSTR " | reset | %lld", i,
+                     MAC2STR(node.events[i].mac_addr),
+                     node.events[i].timestamp);
       }
    }
 }
@@ -110,10 +154,34 @@ static void IRAM_ATTR gpio_handler_isr(void *)
 {
    log_event_t data;
    data.timestamp = get_time();
-   data.type = PUSH;
-   data.task = SEND2MASTER;
    ESP_ERROR_CHECK(esp_read_mac(&data.mac_addr, ESP_MAC_BASE));
-   xQueueSendFromISR(log_event, &data, NULL);
+   xQueueSendFromISR(isr_event, &data, NULL);
+}
+
+void handle_isr_event_task(void)
+{
+   // wait to button releases
+   // to prevent rebounced and get time of push
+   log_event_t data;
+   while (xQueueReceive(isr_event, &data, portMAX_DELAY) == pdTRUE) {
+      uint64_t time = 0;
+      while (gpio_get_level(GPIO_NUM_21)) {
+         vTaskDelay(10 / portTICK_PERIOD_MS);
+         ++time;
+      }
+      // for long push (grather then 5s) reset log
+      if (time > 500)
+         data.type = RESET;
+      else
+         data.type = PUSH;
+      data.task = SEND;
+      if (xQueueSend(log_event, &data, ESPNOW_MAXDELAY) != pdTRUE)
+         ESP_LOGW(TAG, "Send log event into the queue fail");
+
+      // remove bounced interrupts
+      while (xQueueReceive(isr_event, &data, CLEANING_DELAY) == pdTRUE)
+         ;
+   }
 }
 
 static void espnow_send_cb(const uint8_t *mac_addr,
@@ -559,17 +627,7 @@ void espnow_handler_task(void)
                }
             }
          } break;
-         case LOG2MASTER: {
-            log_event_t data;
-            data.timestamp = event.timestamp;
-            data.type = event.type;
-            memcpy(&data.mac_addr, &event.mac_addr, ESP_NOW_ETH_ALEN);
-            data.task = SEND2SLAVES;
-            if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
-               ESP_LOGE(TAG, "Can't push data into the log_event");
-            };
-         } break;
-         case LOG2SLAVES: {
+         case LOG: {
             log_event_t data;
             data.timestamp = event.timestamp;
             data.type = event.type;
@@ -579,10 +637,10 @@ void espnow_handler_task(void)
                ESP_LOGE(TAG, "Can't push data into the log_event");
             };
          } break;
-         default:
+         default: {
             ESP_LOGE(TAG, "Receive unknown message type, %d message_type_t",
                      ret);
-            break;
+         } break;
          }
          break;
       }
@@ -806,21 +864,9 @@ void handle_ds_event_task(void)
    // jen nizkou prioritu
    while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
       uint8_t i;
-      ESP_LOGI(TAG, "EVENT %d " MACSTR, data.task, MAC2STR(data.mac_addr));
+      print_log_event(data);
       for (i = 0; i < EVENT_HISTORY; ++i) {
          if (node.events[i].type == EMPTY) {
-            node.events[i].timestamp = data.timestamp;
-            node.events[i].type = data.type;
-            memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            ESP_LOGI(TAG, "FIRST");
-            break;
-         }
-         if (node.events[i].timestamp > data.timestamp) {
-            // shift to the right
-            ESP_LOGI(TAG, "Shift audio");
-            memcpy(&node.events[i + 1], &node.events[i],
-                   sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
-            // save date
             node.events[i].timestamp = data.timestamp;
             node.events[i].type = data.type;
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
@@ -829,44 +875,55 @@ void handle_ds_event_task(void)
          if ((i + 1) == EVENT_HISTORY)
             ESP_LOGE(TAG, "Log is full");
       }
-      // distribute data
-      send_param->epoch_id = node.epoch_id;
-      memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-      send_param->event_type = data.type;
-      send_param->content = data.timestamp;
-      // ESP_LOGI(TAG, "Mac: " MACSTR " Timestamp %lld Event type %d",
-      // MAC2STR(send_param->event_mac_addr), send_param->content,
-      // send_param->event_type);
-      switch (data.task) {
-      case SEND2MASTER:
-         // ESP_LOGI(TAG, "SEND2MASTER");
-         if (node.title != MASTER) {
-            uint8_t i = 0;
-            while (node.neighbour[i].title != MASTER) {
-               for (i = 0; i < NEIGHBOURS_COUNT; ++i) {
-                  if (node.neighbour[i].title == MASTER)
-                     break;
-               }
-               vTaskDelay(100 / portTICK_PERIOD_MS);
-            }
-            memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            send_param->type = LOG2MASTER;
-            espnow_data_prepare(send_param);
-            ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                               send_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
+      // sort data
+      // naive bubble sort
+      for (uint8_t i = 0; i < EVENT_HISTORY - 1; ++i) {
+         if (node.events[i].type == EMPTY)
             break;
+         bool swapped = false;
+         for (uint8_t j = 0; j < EVENT_HISTORY - 1 - i; ++j) {
+            if (node.events[j].timestamp > node.events[j + 1].timestamp) {
+               if (node.events[j].type == EMPTY)
+                  break;
+               log_event_t tmp;
+               // tmp = j
+               tmp.task = node.events[j].task;
+               tmp.timestamp = node.events[j].timestamp;
+               tmp.type = node.events[j].type;
+               memcpy(&tmp.mac_addr, &node.events[j].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // j = j+1
+               node.events[j].task = node.events[j + 1].task;
+               node.events[j].timestamp = node.events[j + 1].timestamp;
+               node.events[j].type = node.events[j + 1].type;
+               memcpy(&node.events[j].mac_addr, &node.events[j + 1].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // j+1 = tmp
+               node.events[j + 1].task = tmp.task;
+               node.events[j + 1].timestamp = tmp.timestamp;
+               node.events[j + 1].type = tmp.type;
+               memcpy(&node.events[j + 1].mac_addr, &tmp.mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               swapped = true;
+            }
          }
-      case SEND2SLAVES:
-         // ESP_LOGI(TAG, "SEND2SLAVES");
-         send_param->type = LOG2SLAVES;
+         if (swapped == false)
+            break;
+      }
+
+      // data disitribution
+      switch (data.task) {
+      case SEND:
+         send_param->epoch_id = node.epoch_id;
+         memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+         send_param->event_type = data.type;
+         send_param->content = data.timestamp;
+         send_param->type = LOG;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status == ACTIVE) {
-               // exclude the node source mac address
-               if (is_same_mac(&node.neighbour[i].mac_addr, &data.mac_addr))
-                  break;
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                espnow_data_prepare(send_param);
@@ -903,12 +960,15 @@ void app_main(void)
    // SET UP INTERRUPT
    // Reset pint
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
-   // Set intr type
-   ESP_ERROR_CHECK(gpio_set_intr_type(GPIO_NUM_21, GPIO_INTR_POSEDGE));
-   // Eneable intr
-   ESP_ERROR_CHECK(gpio_intr_enable(GPIO_NUM_21));
-   // Set gpio direction
-   ESP_ERROR_CHECK(gpio_set_direction(GPIO_NUM_21, GPIO_MODE_INPUT));
+   // Config GPIO
+   gpio_config_t cfg = {
+       .pin_bit_mask = BIT64(GPIO_NUM_21),
+       .mode = GPIO_MODE_INPUT,
+       .pull_up_en = GPIO_PULLUP_DISABLE,
+       .pull_down_en = GPIO_PULLDOWN_ENABLE,
+       .intr_type = GPIO_INTR_POSEDGE,
+   };
+   gpio_config(&cfg);
    // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
    // Add isr handler
@@ -948,7 +1008,8 @@ void app_main(void)
    }
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
-   log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
+   log_event = xQueueCreate(LOG_QUEUE_SIZE, sizeof(log_event_t));
+   isr_event = xQueueCreate(ISR_QUEUE_SIZE, sizeof(log_event_t));
 
    BaseType_t handler_task;
    handler_task =
@@ -973,6 +1034,11 @@ void app_main(void)
    handle_ds_event_task_v =
        xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
                    STACK_SIZE, NULL, PRIORITY_HANDLE_DS_EVENT, NULL);
+
+   BaseType_t handle_isr_event_task_v;
+   handle_isr_event_task_v = xTaskCreate((TaskFunction_t)handle_isr_event_task,
+                                         "handle_isr_event_task", STACK_SIZE,
+                                         NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
 
    send_hello_ds_message();
 
