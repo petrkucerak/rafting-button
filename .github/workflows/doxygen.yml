@@ -7,6 +7,7 @@ jobs:
     name: "Doxygen Documentation"
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: mattnotmitt/doxygen-action@v1.9.5
         with:
           working-directory: './code/rafting-button/doc/'
