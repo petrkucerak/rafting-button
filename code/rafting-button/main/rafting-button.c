@@ -84,6 +84,8 @@ void print_neighbours(void)
 {
    printf("\n");
    for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
+      if (node.neighbour[i].status == NOT_INITIALIZED)
+         continue;
       ESP_LOGI("NEIGBOURS", MACSTR " | status: %d | title: %d",
                MAC2STR(node.neighbour[i].mac_addr), node.neighbour[i].status,
                node.neighbour[i].title);
@@ -839,12 +841,11 @@ void handle_ds_event_task(void)
             node.events[i].timestamp = data.timestamp;
             node.events[i].type = data.type;
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            ESP_LOGI(TAG, "FIRST");
             break;
          }
          if (node.events[i].timestamp > data.timestamp) {
             // shift to the right
-            ESP_LOGI(TAG, "Shift audio");
+            ESP_LOGI(TAG, "Array reorder");
             memcpy(&node.events[i + 1], &node.events[i],
                    sizeof(log_event_t) * (EVENT_HISTORY - i - 1));
             // save date
@@ -929,9 +930,8 @@ void app_main(void)
 
    // SET UP INTERRUPT
    // Reset pint
-   ESP_LOGI(TAG, "Reset");
    ESP_ERROR_CHECK(gpio_reset_pin(GPIO_NUM_21));
-   assert(GPIO_IS_VALID_GPIO(GPIO_NUM_21));
+   // Config GPIO
    gpio_config_t cfg = {
        .pin_bit_mask = BIT64(GPIO_NUM_21),
        .mode = GPIO_MODE_INPUT,
@@ -940,7 +940,6 @@ void app_main(void)
        .intr_type = GPIO_INTR_POSEDGE,
    };
    gpio_config(&cfg);
-
    // Install isr service
    ESP_ERROR_CHECK(gpio_install_isr_service(0));
    // Add isr handler
