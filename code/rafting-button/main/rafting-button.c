@@ -24,14 +24,17 @@
 
 #define PRIORITY_RTT_START 2
 #define PRIORITY_TIME_START 2
-#define PRIORITY_HANDLER 3
+#define PRIORITY_HANDLER 4
 #define PRIORITY_HANDLE_DS_EVENT 2
 #define PRIORITY_REQUEST_TASK 2
+#define PRIORITY_HANDLE_ISR_EVENT 3
 
 #define ESPNOW_QUEUE_SIZE 10
 #define PRINT_QUEUE_SIZE 4
+#define ISR_QUEUE_SIZE 1
 
 #define ESPNOW_MAXDELAY 10
+#define CLEANING_DELAY 1
 #define DS_MAXDELAY 100
 #define STACK_SIZE 4096
 
@@ -56,6 +59,7 @@ esp_now_peer_info_t broadcast_peer;
 node_info_t node;
 static QueueHandle_t espnow_queue;
 static QueueHandle_t log_event;
+static QueueHandle_t isr_event;
 
 uint32_t get_rtt_avg()
 {
@@ -113,7 +117,30 @@ static void IRAM_ATTR gpio_handler_isr(void *)
    data.type = PUSH;
    data.task = SEND2MASTER;
    ESP_ERROR_CHECK(esp_read_mac(&data.mac_addr, ESP_MAC_BASE));
-   xQueueSendFromISR(log_event, &data, NULL);
+   xQueueSendFromISR(isr_event, &data, NULL);
+}
+
+void handle_isr_event_task(void)
+{
+   // wait to button releases
+   // to prevent rebounced and get time of push
+   log_event_t data;
+   while (xQueueReceive(isr_event, &data, portMAX_DELAY) == pdTRUE) {
+      uint64_t time = 0;
+      while (gpio_get_level(GPIO_NUM_21)) {
+         vTaskDelay(10 / portTICK_PERIOD_MS);
+         ++time;
+      }
+      // for long push (grather then 5s) reset log
+      if (time > 500)
+         data.type = RESET;
+      if (xQueueSend(log_event, &data, ESPNOW_MAXDELAY) != pdTRUE)
+         ESP_LOGW(TAG, "Send log event into the queue fail");
+
+      // remove bounced interrupts
+      while (xQueueReceive(isr_event, &data, CLEANING_DELAY) == pdTRUE)
+         ;
+   }
 }
 
 static void espnow_send_cb(const uint8_t *mac_addr,
@@ -954,6 +981,7 @@ void app_main(void)
 
    espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
    log_event = xQueueCreate(PRINT_QUEUE_SIZE, sizeof(log_event_t));
+   isr_event = xQueueCreate(ISR_QUEUE_SIZE, sizeof(log_event_t));
 
    BaseType_t handler_task;
    handler_task =
@@ -978,6 +1006,11 @@ void app_main(void)
    handle_ds_event_task_v =
        xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
                    STACK_SIZE, NULL, PRIORITY_HANDLE_DS_EVENT, NULL);
+
+   BaseType_t handle_isr_event_task_v;
+   handle_isr_event_task_v = xTaskCreate((TaskFunction_t)handle_isr_event_task,
+                                         "handle_isr_event_task", STACK_SIZE,
+                                         NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
 
    send_hello_ds_message();
 
