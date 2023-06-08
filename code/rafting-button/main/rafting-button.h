@@ -1,9 +1,48 @@
+/**
+ * @file rafting-button.h
+ * @author Petr Kucera (kucerp28@fel.cvut.cz)
+ * @brief The main file defines the program structure. The parent function is
+ * app_main. Detail description is in the :
+ * @version 1.0
+ * @date 2023-06-08
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
+
 #ifndef RAFTING_BUTTON_H
 #define RAFTING_BUTTON_H
 
 #define BALANCER_SIZE 100
 #define NEIGHBOURS_COUNT 9
 #define EVENT_HISTORY 50
+
+#define PRIORITY_RTT_START 2
+#define PRIORITY_TIME_START 2
+#define PRIORITY_HANDLER 4
+#define PRIORITY_HANDLE_DS_EVENT 2
+#define PRIORITY_REQUEST_TASK 2
+#define PRIORITY_HANDLE_ISR_EVENT 3
+
+#define ESPNOW_QUEUE_SIZE 10
+#define PRINT_QUEUE_SIZE 4
+#define LOG_QUEUE_SIZE 10 // min, device count
+#define ISR_QUEUE_SIZE 1
+
+#define ESPNOW_MAXDELAY 10
+#define CLEANING_DELAY 1
+#define DS_MAXDELAY 100
+#define STACK_SIZE 4096
+
+#define DEVIATION_LIMIT 200
+#define DEVIATION_MAX_CONSTANT 25
+
+#define CONFIG_ESPNOW_SEND_LEN 250
+
+#define COUNT_ERROR_MESSAGE_TO_INACTIVE 5
+
+#define VOTE_TIMEOUT 1000000
+#define MASTER_TIMEOUT 2000000
 
 #include <espnow.h>
 #include <inttypes.h>
