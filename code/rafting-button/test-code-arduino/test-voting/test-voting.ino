@@ -1,13 +1,19 @@
 #define DEVICE_1 2
 #define DEVICE_2 3
 #define DEVICE_3 4
-// #define DEVICE_4 ?
-#define DEVICE_5 5
+// #define DEVICE_4 5
+#define DEVICE_5 6
 
 
 void pushButton(uint8_t device) {
   digitalWrite(device, HIGH);
-  delay(100);
+  delay(10);
+  digitalWrite(device, LOW);
+}
+
+void longPushButton(uint8_t device) {
+  digitalWrite(device, HIGH);
+  delay(6000);
   digitalWrite(device, LOW);
 }
 
@@ -51,6 +57,22 @@ void loop() {
     case '5':
       pushButton(DEVICE_5);
       Serial.println("DEVICE_5");
+      break;
+    case 'q':
+      longPushButton(DEVICE_1);
+      Serial.println("RESET DEVICE_1");
+      break;
+    case 'w':
+      longPushButton(DEVICE_2);
+      Serial.println("RESET DEVICE_2");
+      break;
+    case 'e':
+      longPushButton(DEVICE_3);
+      Serial.println("RESET DEVICE_3");
+      break;
+    case 't':
+      longPushButton(DEVICE_5);
+      Serial.println("RESET DEVICE_5");
       break;
   }
 }
