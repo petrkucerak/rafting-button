@@ -872,52 +872,48 @@ void handle_ds_event_task(void)
             memcpy(&node.events[i].mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
             break;
          }
-         if (node.events[i].timestamp > data.timestamp) {
-            // shift to the right
-            ESP_LOGI(TAG, "Array reorder, i: %d, timestampes: o %lld, n %lld",
-                     i, node.events[i].timestamp, data.timestamp);
-            log_event_t tmp;
-            log_event_t data_tmp;
-            data_tmp.task = data.task;
-            data_tmp.timestamp = data.timestamp;
-            data_tmp.type = data.type;
-            memcpy(&data_tmp.mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-            ++i;
-
-            while (i < EVENT_HISTORY) {
-               if (node.events[i].type == EMPTY) {
-                  node.events[i].timestamp = data_tmp.timestamp;
-                  node.events[i].type = data_tmp.type;
-                  memcpy(&node.events[i].mac_addr, &data_tmp.mac_addr,
-                         ESP_NOW_ETH_ALEN);
-                  break;
-               }
-               // tmp = node.events[i]
-               tmp.task = node.events[i].task;
-               tmp.timestamp = node.events[i].timestamp;
-               tmp.type = node.events[i].type;
-               memcpy(&tmp.mac_addr, &node.events[i].mac_addr,
-                      ESP_NOW_ETH_ALEN);
-
-               // node.events[i] = data_tmp
-               node.events[i].task = data_tmp.task;
-               node.events[i].timestamp = data_tmp.timestamp;
-               node.events[i].type = data_tmp.type;
-               memcpy(&node.events[i].mac_addr, &data_tmp.mac_addr,
-                      ESP_NOW_ETH_ALEN);
-
-               // data_tmp = tmp
-               data_tmp.task = tmp.task;
-               data_tmp.timestamp = tmp.timestamp;
-               data_tmp.type = tmp.type;
-               memcpy(&data_tmp.mac_addr, &tmp.mac_addr, ESP_NOW_ETH_ALEN);
-               ++i;
-            }
-            break;
-         }
          if ((i + 1) == EVENT_HISTORY)
             ESP_LOGE(TAG, "Log is full");
       }
+      // sort data
+      // naive bubble sort
+      for (uint8_t i = 0; i < EVENT_HISTORY - 1; ++i) {
+         if (node.events[i].type == EMPTY)
+            break;
+         bool swapped = false;
+         for (uint8_t j = 0; j < EVENT_HISTORY - 1 - i; ++j) {
+            if (node.events[j].timestamp > node.events[j + 1].timestamp) {
+               if (node.events[j].type == EMPTY)
+                  break;
+               log_event_t tmp;
+               // tmp = j
+               tmp.task = node.events[j].task;
+               tmp.timestamp = node.events[j].timestamp;
+               tmp.type = node.events[j].type;
+               memcpy(&tmp.mac_addr, &node.events[j].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // j = j+1
+               node.events[j].task = node.events[j + 1].task;
+               node.events[j].timestamp = node.events[j + 1].timestamp;
+               node.events[j].type = node.events[j + 1].type;
+               memcpy(&node.events[j].mac_addr, &node.events[j + 1].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               // j+1 = tmp
+               node.events[j + 1].task = tmp.task;
+               node.events[j + 1].timestamp = tmp.timestamp;
+               node.events[j + 1].type = tmp.type;
+               memcpy(&node.events[j + 1].mac_addr, &tmp.mac_addr,
+                      ESP_NOW_ETH_ALEN);
+
+               swapped = true;
+            }
+         }
+         if (swapped == false)
+            break;
+      }
+
       // data disitribution
       switch (data.task) {
       case SEND:
