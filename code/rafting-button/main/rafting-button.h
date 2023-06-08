@@ -142,9 +142,9 @@ typedef enum message_type {
    /// it only sets its status as active. As a response, it sends a list of all
    /// devices in the network.
    HELLO_DS,
-   /// @brief NEIGHBOURS: The device adds all unknown neighbors to its list and
+   /// @brief neighborS: The device adds all unknown neighbors to its list and
    /// updates the status and title of each device.
-   NEIGHBOURS,
+   NEIGHBORS,
    /// @brief RTT_CAL_MASTER: The device sends back messages to the sender with
    /// the same content. This message is used for calculating the round trip
    /// time.
@@ -230,59 +230,305 @@ typedef struct espnow_event {
    uint64_t timestamp;
 } espnow_event_t;
 
-
-typedef struct neighbour {
+/**
+ * @brief Structure defining a neighbor device.
+ *
+ */
+typedef struct neighbor {
+   /// @brief Device title in the distributed system (DS)
    device_title_t title;
+   /// @brief Device hardware status
    device_status_t status;
+   /// @brief Device MAC address
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
-} neighbour_t;
+} neighbor_t;
 
+/**
+ * @brief Structure defining a message.
+ *
+ */
 typedef struct message_data {
+   /// @brief ESP-NOW message type
    message_type_t type;
+   /// @brief Epoch ID
    uint32_t epoch_id;
+   /// @brief Content variable, used for distributing uint64_t number values
+   /// like time, round trip time, etc.
    uint64_t content;
+   /// @brief Array of device neighbors
    ds_event_t event_type;
+   /// @brief DS event MAC address
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   /// @brief DS event task
    ds_task_t event_task;
-   neighbour_t neighbour[NEIGHBORS_COUNT];
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_COUNT];
+   /// @brief Message payload
+   /// @note The message payload fills all remaining bytes after the data with
+   /// random values.
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
 
+/**
+ * @brief Structure defining parameters for ESP-NOW message transmission.
+ *
+ */
 typedef struct espnow_send_param {
+   /// @brief ESP-NOW message type
    message_type_t type;
+   /// @brief Content variable, used for distributing uint64_t number values
+   /// like time, round trip time, etc.
    uint64_t content;
+   /// @brief Epoch ID
    uint32_t epoch_id;
-   neighbour_t neighbour[NEIGHBORS_COUNT];
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_COUNT];
+   /// @brief DS event type
    ds_event_t event_type;
+   /// @brief DS event MAC address
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
+   /// @brief DS event task
    ds_task_t event_task;
+   /// @brief Data length
    int data_len;
+   /// @brief Data buffer
    uint8_t *buf;
+   /// @brief Target (destination) MAC address
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
 
+/**
+ * @brief Structure representing a distributed system (DS) event.
+ *
+ */
 typedef struct log_event {
+   /// @brief Timestamp of the DS event
    uint64_t timestamp;
+   /// @brief Type of the DS event
    ds_event_t type;
+   /// @brief MAC source address of the DS event
    uint8_t mac_addr[ESP_NOW_ETH_ALEN];
+   /// @brief Task associated with the DS event
    ds_task_t task;
 } log_event_t;
 
+/**
+ * @brief Metadata information about a device in the Distributed System (DS).
+ * @note In this project, the terms "node" and "device" are used
+ * interchangeably.
+ *
+ */
 typedef struct node_info {
-   uint64_t time_corection;
+   /// @brief Time correction value
+   /// @note Time correction is used for calculating DS time (𝑇𝐷𝑆 = 𝑡𝑙𝑜𝑐𝑎𝑙 − 𝑐)
+   uint64_t time_correction;
+   /// @brief Array used for calculating round trip time
    uint32_t rtt_balancer[BALANCER_SIZE];
+   /// @brief Index of the last inserted value into the round trip time array
    uint16_t rtt_balancer_index;
-   bool is_firts_setup_rtt;
+   /// @brief Boolean value indicating if round trip time is set up for the
+   /// first time
+   bool is_first_setup_rtt;
+   /// @brief Boolean value indicating if time is synced to the limit
    bool is_time_synced;
+   /// @brief Average deviation value
    int32_t deviation_avg;
-   neighbour_t neighbour[NEIGHBORS_COUNT];
-   uint8_t neighbour_error_count[NEIGHBORS_COUNT];
+   /// @brief List of device neighbors
+   neighbor_t neighbor[NEIGHBORS_COUNT];
+   /// @brief Counts of unsuccessful message sends to neighbor devices
+   uint8_t neighbor_error_count[NEIGHBORS_COUNT];
+   /// @brief Epoch ID of the device
    uint32_t epoch_id;
+   /// @brief Title of the device
    device_title_t title;
-   uint64_t timeout_sync; // represents timestamp
-   uint64_t timeout_vote; // represents by timestamp
+   /// @brief Synchronization time timeout
+   /// @note The value is represented by a timestamp
+   uint64_t timeout_sync;
+   /// @brief Voting timeout
+   /// @note The value is represented by a timestamp
+   uint64_t timeout_vote;
+   /// @brief Count of votes
    uint8_t count_of_vote;
+   /// @brief List of DS events
    log_event_t events[EVENT_HISTORY];
 } node_info_t;
+
+/**
+ * @brief Calculate the average value of the RTT (Round-Trip Time) balancer
+ * array.
+ *
+ * This function calculates the average value of the RTT balancer array by
+ * summing up all the elements and dividing the sum by the size of the array.
+ *
+ * @return The average value of the RTT balancer array.
+ */
+uint32_t get_rtt_avg(void);
+
+/**
+ * @brief Get the current time.
+ *
+ * This function retrieves the current time by calling `esp_timer_get_time()`
+ * and subtracting the time correction value from it.
+ *
+ * @return The current time.
+ */
+uint64_t get_time(void);
+
+/**
+ * @brief Get the time with a provided ESP timer value.
+ *
+ * This function calculates the time with the given ESP timer value by
+ * subtracting the time correction value from it.
+ *
+ * @param esp_time The ESP timer value.
+ * @return The calculated time.
+ */
+uint64_t get_time_with_timer(uint64_t esp_time);
+
+/**
+ * @brief Print the list of neighbors.
+ *
+ * This function prints the list of neighbors along with their statuses and
+ * titles. It retrieves the device MAC address and uses it to display the
+ * current device's title. The neighbors' statuses and titles are logged using
+ * ESP_LOGI.
+ */
+void print_neighbors(void);
+
+/**
+ * @brief Print a log event.
+ *
+ * This function prints a log event by logging its type, source MAC address, and
+ * timestamp using ESP_LOGI.
+ *
+ * @param data The log event data to be printed.
+ */
+void print_log_event(log_event_t data);
+
+/**
+ * @brief Print the log.
+ *
+ * This function prints the log by iterating over the events array and logging
+ * non-empty events along with their indices, MAC addresses, types, and
+ * timestamps using ESP_LOGI.
+ */
+void print_log(void);
+
+/**
+ * @brief Get the count of active devices in the neighbors array.
+ *
+ * This function counts the number of active devices in the neighbors array by
+ * iterating over it and incrementing the count for each device with the ACTIVE
+ * status.
+ *
+ * @return The count of active devices.
+ */
+uint8_t get_cout_active_devices(void);
+
+/**
+ * @brief Task to handle ISR events.
+ *
+ * This task waits for log events in the `isr_event` queue. It receives events,
+ * determines the type of event based on the button release time, sets the event
+ * type accordingly, and sends the event to the `log_event` queue. Bounced
+ * interrupts are removed from the `isr_event` queue.
+ */
+void handle_isr_event_task(void);
+
+/**
+ * @brief Parse ESP-NOW data and extract information.
+ *
+ * This function parses the received ESP-NOW data and extracts information such
+ * as message type, content, epoch ID, neighbor list, and log event. It
+ * populates the provided variables with the extracted data.
+ *
+ * @param data The received ESP-NOW data.
+ * @param data_len The length of the received data.
+ * @param type Pointer to a variable to store the message type.
+ * @param content Pointer to a variable to store the content.
+ * @param epoch_id Pointer to a variable to store the epoch ID.
+ * @param neighbor Pointer to an array to store the neighbor list.
+ * @param event Pointer to a log_event_t variable to store the log event.
+ * @return The message type extracted from the data.
+ */
+int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
+                      uint64_t *content, uint32_t *epoch_id,
+                      neighbor_t *neighbor, log_event_t *event);
+
+/**
+ * @brief Prepare ESP-NOW data for sending.
+ *
+ * This function prepares the ESP-NOW data to be sent by populating the
+ * send_param structure. It sets the message type, epoch ID, content, event
+ * task, event type, event MAC address, and neighbor list in the data buffer.
+ *
+ * @param send_param Pointer to the espnow_send_param_t structure.
+ */
+void espnow_data_prepare(espnow_send_param_t *send_param);
+
+/**
+ * @brief Handle ESP-NOW send error.
+ *
+ * This function handles the ESP-NOW send error by logging an appropriate error
+ * message based on the error code.
+ *
+ * @param code The ESP-NOW error code.
+ */
+void handle_espnow_send_error(esp_err_t code);
+
+/**
+ * @brief Handle ESP-NOW add peer error.
+ *
+ * This function handles the ESP-NOW add peer error by logging an appropriate
+ * error message based on the error code.
+ *
+ * @param code The ESP-NOW error code.
+ */
+void handle_espnow_add_peer_error(esp_err_t code);
+
+/**
+ * @brief Function for handling ESP-NOW events.
+ *
+ * This function is a task that receives events from the ESP-NOW queue and
+ * handles them accordingly. It performs various operations based on the type of
+ * event received, such as sending and receiving data, managing neighbors,
+ * calculating RTT, synchronizing time, and processing log events.
+ */
+void espnow_handler_task(void);
+
+/**
+ * @brief Sends a HELLO_DS message.
+ */
+void send_hello_ds_message(void);
+
+/**
+ * @brief Sends an RTT_CAL_MASTER message.
+ * This function runs as a task and continuously sends the message to active
+ * neighbors.
+ */
+void send_rtt_cal_master_task(void);
+
+/**
+ * @brief Sends a REQUEST_VOTE message.
+ * This function runs as a task and continuously sends the message to active
+ * neighbors. It also handles the voting process and updates the node's state
+ * accordingly.
+ */
+void send_request_vote_task(void);
+
+/**
+ * @brief Sends a TIME message.
+ * This function runs as a task and continuously sends the message to active
+ * neighbors.
+ */
+void send_time_task(void);
+
+/**
+ * @brief Handles DS events.
+ * This function runs as a task and processes incoming log events.
+ * It sorts the events based on timestamp and distributes the relevant
+ * information to active neighbors.
+ */
+void handle_ds_event_task(void);
 
 #endif // RAFTING_BUTTON_H
