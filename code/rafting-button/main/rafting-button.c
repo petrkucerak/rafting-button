@@ -92,6 +92,14 @@ void print_neighbours(void)
    }
 }
 
+void print_log_event(log_event_t data)
+{
+   if (data.type == PUSH)
+      ESP_LOGI("LOG", "Type PUSH | Source " MACSTR, MAC2STR(data.mac_addr));
+   if (data.type == RESET)
+      ESP_LOGI("LOG", "Type RESET | Source " MACSTR, MAC2STR(data.mac_addr));
+}
+
 void print_log(void)
 {
    printf("\n");
@@ -835,7 +843,7 @@ void handle_ds_event_task(void)
    // jen nizkou prioritu
    while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
       uint8_t i;
-      ESP_LOGI(TAG, "EVENT %d " MACSTR, data.task, MAC2STR(data.mac_addr));
+      print_log_event(data);
       for (i = 0; i < EVENT_HISTORY; ++i) {
          if (node.events[i].type == EMPTY) {
             node.events[i].timestamp = data.timestamp;
