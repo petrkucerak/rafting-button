@@ -124,8 +124,6 @@ static void IRAM_ATTR gpio_handler_isr(void *)
 {
    log_event_t data;
    data.timestamp = get_time();
-   data.type = PUSH;
-   data.task = SEND2MASTER;
    ESP_ERROR_CHECK(esp_read_mac(&data.mac_addr, ESP_MAC_BASE));
    xQueueSendFromISR(isr_event, &data, NULL);
 }
@@ -144,6 +142,9 @@ void handle_isr_event_task(void)
       // for long push (grather then 5s) reset log
       if (time > 500)
          data.type = RESET;
+      else
+         data.type = PUSH;
+      data.task = SEND;
       if (xQueueSend(log_event, &data, ESPNOW_MAXDELAY) != pdTRUE)
          ESP_LOGW(TAG, "Send log event into the queue fail");
 
@@ -596,17 +597,7 @@ void espnow_handler_task(void)
                }
             }
          } break;
-         case LOG2MASTER: {
-            log_event_t data;
-            data.timestamp = event.timestamp;
-            data.type = event.type;
-            memcpy(&data.mac_addr, &event.mac_addr, ESP_NOW_ETH_ALEN);
-            data.task = SEND2SLAVES;
-            if (xQueueSend(log_event, &data, DS_MAXDELAY) != pdTRUE) {
-               ESP_LOGE(TAG, "Can't push data into the log_event");
-            };
-         } break;
-         case LOG2SLAVES: {
+         case LOG: {
             log_event_t data;
             data.timestamp = event.timestamp;
             data.type = event.type;
@@ -616,10 +607,10 @@ void espnow_handler_task(void)
                ESP_LOGE(TAG, "Can't push data into the log_event");
             };
          } break;
-         default:
+         default: {
             ESP_LOGE(TAG, "Receive unknown message type, %d message_type_t",
                      ret);
-            break;
+         } break;
          }
          break;
       }
@@ -865,44 +856,16 @@ void handle_ds_event_task(void)
          if ((i + 1) == EVENT_HISTORY)
             ESP_LOGE(TAG, "Log is full");
       }
-      // distribute data
-      send_param->epoch_id = node.epoch_id;
-      memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
-      send_param->event_type = data.type;
-      send_param->content = data.timestamp;
-      // ESP_LOGI(TAG, "Mac: " MACSTR " Timestamp %lld Event type %d",
-      // MAC2STR(send_param->event_mac_addr), send_param->content,
-      // send_param->event_type);
+      // data disitribution
       switch (data.task) {
-      case SEND2MASTER:
-         // ESP_LOGI(TAG, "SEND2MASTER");
-         if (node.title != MASTER) {
-            uint8_t i = 0;
-            while (node.neighbour[i].title != MASTER) {
-               for (i = 0; i < NEIGHBOURS_COUNT; ++i) {
-                  if (node.neighbour[i].title == MASTER)
-                     break;
-               }
-               vTaskDelay(100 / portTICK_PERIOD_MS);
-            }
-            memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            send_param->type = LOG2MASTER;
-            espnow_data_prepare(send_param);
-            ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                               send_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
-            break;
-         }
-      case SEND2SLAVES:
-         // ESP_LOGI(TAG, "SEND2SLAVES");
-         send_param->type = LOG2SLAVES;
+      case SEND:
+         send_param->epoch_id = node.epoch_id;
+         memcpy(send_param->event_mac_addr, &data.mac_addr, ESP_NOW_ETH_ALEN);
+         send_param->event_type = data.type;
+         send_param->content = data.timestamp;
+         send_param->type = LOG;
          for (uint8_t i = 0; i < NEIGHBOURS_COUNT; ++i) {
             if (node.neighbour[i].status == ACTIVE) {
-               // exclude the node source mac address
-               if (is_same_mac(&node.neighbour[i].mac_addr, &data.mac_addr))
-                  break;
                memcpy(send_param->dest_mac, &node.neighbour[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                espnow_data_prepare(send_param);

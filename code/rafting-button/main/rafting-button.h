@@ -26,8 +26,7 @@ typedef enum espnow_event_id {
 } espnow_event_id_t;
 
 typedef enum ds_task {
-   SEND2MASTER,
-   SEND2SLAVES,
+   SEND,
    SAVE,
 } ds_task_t;
 
@@ -44,8 +43,7 @@ typedef enum message_type {
    TIME,           // time to synchronize the time
    HELLO_DS,
    NEIGHBOURS,
-   LOG2MASTER,
-   LOG2SLAVES,
+   LOG,
    REQUEST_VOTE,
    GIVE_VOTE,
 } message_type_t;
