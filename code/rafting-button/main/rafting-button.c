@@ -105,7 +105,12 @@ void print_log(void)
    printf("\n");
    for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
       if (node.events[i].type != EMPTY) {
-         ESP_LOGI("LOG", "%d. " MACSTR, i, MAC2STR(node.events[i].mac_addr));
+         if (node.events[i].type == PUSH)
+            ESP_LOGI("LOG", "%d. " MACSTR " | push", i,
+                     MAC2STR(node.events[i].mac_addr));
+         if (node.events[i].type == RESET)
+            ESP_LOGI("LOG", "%d. " MACSTR " | reset", i,
+                     MAC2STR(node.events[i].mac_addr));
       }
    }
 }
