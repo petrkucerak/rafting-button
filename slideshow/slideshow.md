@@ -279,7 +279,9 @@ header: "![w:200](CVUT-logo.jpg)"
 
 ---
 
-<!-- footer: "Petr Kučera | kucerp28@fel.cvut.cz | [github.com/petrkucerak/rafting-button](https://github.com/petrkucerak/rafting-button)" -->
+<!-- footer: "Petr Kučera | kucerp28@fel.cvut.cz | [github.com/petrkucerak/rafting-button](https://github.com/petrkucerak/rafting-button)"
+backgroundColor: ""
+-->
 
 ## Distribuovaný systém IoT zařízení řešící problém konsenzu
 ![w:220](qr.png)
