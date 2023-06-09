@@ -17,8 +17,8 @@ style: |
     background-image: url("background.jpg");
     background-size: 112%;
     background-position: top left;
-    padding-top: 150px;
-    padding-bottom: 150px;
+    padding-top: 160px;
+    padding-bottom: 120px;
     padding-left: 125px;
     padding-right: 125px;
   }
@@ -51,10 +51,16 @@ style: |
     top: 10px;
     height: 200px;
   }
+  footer {
+    font-size: .5rem;
+  }
+  footer strong {
+    color: black;
+  }
 
 
 header: "![w:200](CVUT-logo.jpg)"
-# footer: https://github.com/petrkucerak/AzureAI-Workshop
+# footer: 
 paginate: true
 # backgroundColor: "#FFF"
 size: 4:3
@@ -67,9 +73,105 @@ size: 4:3
 ---
 <!-- backgroundColor: "#FFF" -->
 
-# Obsah
-1. Motivace do práce
-2. Cíl práce
-3. Postup realiza
-4. Závěry
+# Postup
+1. Rešerše
+2. Požadavky
+3. Síťová infrastruktura
+4. Algoritmické řešení
+5. Realizace a testování
 ---
+
+# Rešerše
+
+- trendy
+- úspora energie
+- hirearchická struktura
+
+<!-- footer: "**REŠERŠE** | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
+
+---
+
+# Požadavky
+
+- určení pořadí
+- variabilita prostředí
+- autonomní a distribuovaný systém
+- přesnost 1 ms
+- bezdrátová komunikace
+
+<!-- footer: "REŠERŠE | **POŽADAVKY** | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
+
+---
+
+# Síťová infrastruktura
+
+- volba vhodného modulu
+
+![w:690](moduly.png)
+
+<!-- footer: "REŠERŠE | POŽADAVKY | **SÍŤOVÁ INFRA** | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
+
+---
+
+# Protokol ESP-NOW
+
+- 2. vrstva ISO/OSI modelu
+- *callback* funkce, broad/unicast 
+
+![w:690](callbacks.png)
+
+---
+
+# Protokol ESP-NOW
+
+- limity protokolu
+  - 250 bajtů
+  - 10 zařízení
+  - ESP-IDF / Arduino Framework
+  - nekvalitní dokumentace
+
+---
+
+# Protokol ESP-NOW
+
+- modifikovatelnost
+
+![w:700](infra.png)
+
+---
+
+# Protokol ESP-NOW
+
+- měření
+  - vzdálenost => chybovost
+  - velikost => rychlost přenosu
+
+---
+
+![w:700](infra-measurement.png)
+
+---
+
+<!-- footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | **ALGORITMUS** | REALIZCE A MĚŘENÍ" -->
+
+# Algoritmus
+
+- požadavky
+  - koncenzus - shoda na uspořádání
+- distribuovaný systém (DS)
+- kauzalita a čas, konsenzus
+
+---
+
+# Rozbor problému
+
+- kauzalita / **časová značka**
+- dílčí problémy
+  - synchronizace času DS
+  - distribuce logů
+  - distribuce senzamu zařízení DS
+
+---
+
+# Synchronizace času
+
