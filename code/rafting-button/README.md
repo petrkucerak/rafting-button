@@ -1,6 +1,6 @@
 ### Rafting button
 
-Dokumentace se věnuje pouze finální implementaci distribuovaného systému, která je v repositáři dostupná pod složkou [code/rafting-button](https://github.com/petrkucerak/rafting-button/tree/main/code/rafting-button).
+**Dokumentace se věnuje pouze finální implementaci distribuovaného systému, která je v repositáři dostupná pod složkou [code/rafting-button](https://github.com/petrkucerak/rafting-button/tree/main/code/rafting-button).**
 
 ## O projektu
 ### Motivace
@@ -15,32 +15,7 @@ bude řešit problematiku konsenzu, respektive kauzálního uspořádaání stis
 
 Z uživatelského pohledu by zařízení mělo být kompaktní krabička, kterou si bude moci skupina položit před sebe na stůl.2 Krabička by na sobě měla mít tlačítko, které bude odolné i vůči veliké síle způsobené bouchnutí v zápalu hry. Zařízení bude možné přepínat mezi dvěma módy, tj. *PRESENTER* a *NORMAL*. V módu *NORMAL* bude zařízení řešit,jakém pořadí se týmy přihlásily o slovo. V módu *PRESENTER* navíc pomocí webového serveru vykreslí výsledky.
 
-Samotná hra pak bude probíhat tak, že bude položena otázka, hráči se přihlásí o slovo
-stiskem tlačítka. Informace se rozdistribuujesíti a zařízenímódu *PRESENTER* zobrazí
-výsledky. Hlasování se vyresetuje dlouhým stisknutím hlasovacího tlačítka na jakémkoliv zařízení
-
-## Příkazy
-### Práce s ESP-IDF
-```
-idf.py build
-idf.py -p <PORT> flash
-idf.py monitor
-```
-### Export dokumentace
-```
-cd doc
-doxygen Doxyfile
-```
-
-## Seznam zarizeni
-  | NO  | type        | MAC address         | Note |
-  | --- | ----------- | ------------------- | ---- |
-  | 1   | ESP32 small | `70:b8:f6:5b:d3:24` | COM4 |
-  |     | STM32       |                     | COM5 |
-  | 2   | ESP32 small | `cc:db:a7:1d:c4:08` | COM6 |
-  | 3   | ESP32 large | `c8:f0:9e:7b:10:8c` | COM7 |
-  | 4   | ESP32 small | `cc:db:a7:1d:c7:cc` | COM8 |
-  | 5   | ESP32 large | `94:b5:55:f9:f2:f0` | COM9 |
+Samotná hra pak bude probíhat tak, že bude položena otázka, hráči se přihlásí o slovo stiskem tlačítka. Informace se rozdistribuujesíti a zařízenímódu *PRESENTER* zobrazí výsledky. Hlasování se vyresetuje dlouhým stisknutím hlasovacího tlačítka na jakémkoliv zařízení.
 
 ## Implementace
 
@@ -119,3 +94,26 @@ Kód je doplněn o ladící výpisy definované v ESP-IDF. Konkrétně se jedná
 Veškerý kód je dostupný v [repozitáři projektu](https://github.com/petrkucerak/rafting-button/).
 
 Dokumentace kódu je dostupná na adrese https://petrkucerak.github.io/rafting-button/.
+
+## Příkazy
+### Práce s ESP-IDF
+```
+idf.py build
+idf.py -p <PORT> flash
+idf.py monitor
+```
+### Export dokumentace
+```
+cd doc
+doxygen Doxyfile
+```
+
+## Seznam zarizeni
+  | NO  | type        | MAC address         | Note |
+  | --- | ----------- | ------------------- | ---- |
+  | 1   | ESP32 small | `70:b8:f6:5b:d3:24` | COM4 |
+  |     | STM32       |                     | COM5 |
+  | 2   | ESP32 small | `cc:db:a7:1d:c4:08` | COM6 |
+  | 3   | ESP32 large | `c8:f0:9e:7b:10:8c` | COM7 |
+  | 4   | ESP32 small | `cc:db:a7:1d:c7:cc` | COM8 |
+  | 5   | ESP32 large | `94:b5:55:f9:f2:f0` | COM9 |
