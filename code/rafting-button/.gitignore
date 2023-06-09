@@ -1,4 +1,6 @@
 .vscode/*
+doc/html/*
+doc/latex/*
 # Created by https://www.toptal.com/developers/gitignore/api/cmake
 # Edit at https://www.toptal.com/developers/gitignore?templates=cmake
 
