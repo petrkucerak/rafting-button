@@ -63,6 +63,10 @@ Z důvodu zjednodušení využívám pouze **jediný typ rámce** pro všechny t
     * **Mac adresa** (`uint8_t[ESP_NOW_ETH_ALEN]`) identifikuje souseda pomocí jeho mac adresy.
 * **Výplň** (`uint8_t`) neboli payload vyplňuj nevyužitý prostor náhodnými daty.
 
+![Struktura-ramce-zpravy](https://github.com/petrkucerak/rafting-button/blob/main/thesis/img/Struktura-ramce-zpravy01.png?raw=true)
+
+![Struktura-ramce-zpravy](https://github.com/petrkucerak/rafting-button/blob/main/thesis/img/Struktura-ramce-zpravy02.png?raw=true)
+
 ### Proces zpracování zpráv
 
 Zprávy zpracovává speciální mechanismus. To tak, že *callback* funkce zaznamená novou zprávu, pošle ji jako událost do fronty a z ní proces `espnow_handler_task` vyjme událost a tu následně odbaví.

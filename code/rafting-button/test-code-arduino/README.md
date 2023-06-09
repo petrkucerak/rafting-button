@@ -31,4 +31,4 @@ Během testování jsem se soustředil na 3 oblasti:
 
 ## Zapojení použité při měření
 
-![Zapojení použité pro měření](../../../slideshow/measure-set.jpg)
+![Zapojení použité pro měření](https://raw.githubusercontent.com/petrkucerak/rafting-button/main/slideshow/measure-set.jpg)
