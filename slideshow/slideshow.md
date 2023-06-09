@@ -261,6 +261,14 @@ footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚ�
 header: "![w:200](CVUT-logo.jpg)"
  -->
 
+# Shrnutí
+
+- uspořádání dle časové značky
+- při testování splněna rozlišovací schopnost 1 ms
+- ESP-NOW, ESP-IDF a FreeRTOS
+- poškození modulů a časová náročnost při práci s hardwarem
+
+---
 
 # Budoucnost projektu
 
