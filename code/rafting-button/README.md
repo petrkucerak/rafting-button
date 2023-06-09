@@ -97,13 +97,13 @@ Dokumentace kódu je dostupná na adrese https://petrkucerak.github.io/rafting-b
 
 ## Příkazy
 ### Práce s ESP-IDF
-```
+```sh
 idf.py build
 idf.py -p <PORT> flash
 idf.py monitor
 ```
 ### Export dokumentace
-```
+```sh
 cd doc
 doxygen Doxyfile
 ```
