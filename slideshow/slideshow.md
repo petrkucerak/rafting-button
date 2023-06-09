@@ -175,3 +175,44 @@ size: 4:3
 
 # Synchronizace času
 
+- ideální situace
+
+$$
+T_A = T_B + D_n + O_n,\:\:\: D_n = {RTT\over 2}
+$$
+
+- realita (předpoklad symetrie)
+
+$$
+T_A = T_B + \bar{D} + \bar{O}
+$$
+
+---
+
+![w:700](time-simulation.png)
+
+---
+
+# Synchronizace času
+
+- reálný hardware
+  - časová značka
+  - změna výpočtu
+
+$$
+T = T \pm K
+$$
+
+---
+
+![w:700](time-measure.png)
+
+---
+
+# Distribuce logů
+
+$$
+L= N(N-1) \:\: | \:\: L=2(N-1)
+$$
+
+![w:726](distribution.png)
