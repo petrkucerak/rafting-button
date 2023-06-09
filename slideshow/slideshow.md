@@ -41,9 +41,6 @@ style: |
     text-align: left;
 
   }
-  li{
-    font-size: rem;
-  }
   ul {
     margin: 0;
   }
@@ -216,3 +213,65 @@ L= N(N-1) \:\: | \:\: L=2(N-1)
 $$
 
 ![w:726](distribution.png)
+
+---
+
+# Celkový alogritmus
+
+1. Registrace zařízení do DS
+2. Běžný chod (epochy)
+   1. volby
+   2. běžný provoz (logy, čas)
+3. Terminace zařízení z DS
+
+---
+
+<!-- footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | **REALIZCE A MĚŘENÍ**" -->
+
+# Zařízení z pohledu UX
+
+![w:650](UX.png)
+
+---
+
+# Realizace
+
+- FreeRTOS, ESP-IDF
+- základem je *espnow_handler_task*
+- unifikovaná velikost zprávy
+- Doxygen dokumentace
+
+---
+
+# Testované scénáře
+- běžný chod
+- kauzalita 2 blízkých událostí<br/>*(do 10 ms)*
+- odpojení zařízení a opětovné zapojení do sítě
+
+---
+<!-- footer: ""
+header: "" -->
+
+![bg](measure-set.jpg)
+
+---
+
+<!--
+footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ"
+header: "![w:200](CVUT-logo.jpg)"
+ -->
+
+
+# Budoucnost projektu
+
+- webový server
+- robustnější distribuce logů
+- podsítě
+- mechanické tlačítko
+
+---
+
+<!-- footer: "Petr Kučera | kucerp28@fel.cvut.cz | [github.com/petrkucerak/rafting-button](https://github.com/petrkucerak/rafting-button)" -->
+
+## Distribuovaný systém IoT zařízení řešící problém konsenzu
+![w:220](qr.png)
