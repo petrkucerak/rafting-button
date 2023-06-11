@@ -47,7 +47,7 @@ int main(int argc, char const *argv[])
 
    // ****** START OF SIMULATION CONFIG ******
    // set up simulation parametrs
-   simulation->deadline = 10 * 60 * 1000000; // 10 min (max value is UINT64_MAX)
+   simulation->deadline = 2 * 60 * 1000000; // 10 min (max value is UINT64_MAX)
    simulation->nodes_count = 4;
    simulation->time = 0;
    // ****** END OF SIMULATION CONFIG ******
