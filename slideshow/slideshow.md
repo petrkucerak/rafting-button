@@ -17,10 +17,10 @@ style: |
     background-image: url("background.jpg");
     background-size: 112%;
     background-position: top left;
-    padding-top: 160px;
-    padding-bottom: 120px;
-    padding-left: 125px;
-    padding-right: 125px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
   }
   code {
    font-family: 'Roboto Mono', monospace;
@@ -45,7 +45,8 @@ style: |
     margin: 0;
   }
   header{
-    top: 10px;
+    top: 50px;
+    left: 24px;
     height: 200px;
   }
   footer {
@@ -53,6 +54,9 @@ style: |
   }
   footer strong {
     color: black;
+  }
+  section::after {
+    content: attr(data-marpit-pagination) '/' attr(data-marpit-pagination-total);
   }
 
 
@@ -64,11 +68,14 @@ size: 4:3
 
 ---
 
-# Distribuovaný systém IoT zařízení řešící problém konsenzu
+# Distribuovaný systém<br>IoT zařízení řešící<br>problém konsenzu
 ## Bakalářská práce
 
 ---
-<!-- backgroundColor: "#FFF" -->
+<!--
+backgroundColor: "#FFF"
+header: ""
+ -->
 
 # Postup
 1. Rešerše
@@ -76,25 +83,20 @@ size: 4:3
 3. Síťová infrastruktura
 4. Algoritmické řešení
 5. Realizace a testování
----
 
-# Rešerše
-
-- trendy
-- úspora energie
-- hirearchická struktura
-
-<!-- footer: "**REŠERŠE** | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
+![bg right:40%](UX.png)
 
 ---
 
-# Požadavky
+# Požadavky<br>na systém
 
-- určení pořadí
-- variabilita prostředí
-- autonomní a distribuovaný systém
+- řešení určení pořadí
+- autonomnost zařízení
+- distribuovaný systém
 - přesnost 1 ms
 - bezdrátová komunikace
+
+![bg right:40%](push.png)
 
 <!-- footer: "REŠERŠE | **POŽADAVKY** | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
 
@@ -104,7 +106,7 @@ size: 4:3
 
 - volba vhodného modulu
 
-![w:690](moduly.png)
+![w:850](moduly.png)
 
 <!-- footer: "REŠERŠE | POŽADAVKY | **SÍŤOVÁ INFRA** | ALGORITMUS | REALIZCE A MĚŘENÍ" -->
 
@@ -114,55 +116,40 @@ size: 4:3
 
 - 2. vrstva ISO/OSI modelu
 - *callback* funkce, broad/unicast 
-
-![w:690](callbacks.png)
-
----
-
-# Protokol ESP-NOW
-
 - limity protokolu
-  - 250 bajtů
-  - 10 zařízení
-  - ESP-IDF / Arduino Framework
-  - nekvalitní dokumentace
+
+![w:850](callbacks.png)
 
 ---
 
-# Protokol ESP-NOW
-
-- modifikovatelnost
-
-![w:700](infra.png)
-
----
+<!--
 
 # Protokol ESP-NOW
 
 - měření
   - vzdálenost => chybovost
   - velikost => rychlost přenosu
+-->
 
----
-
-![w:700](infra-measurement.png)
+![bg 95%](infra-measurement.png)
 
 ---
 
 <!-- footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | **ALGORITMUS** | REALIZCE A MĚŘENÍ" -->
 
-# Algoritmus
+<!-- # Algoritmus
 
 - požadavky
   - koncenzus - shoda na uspořádání
 - distribuovaný systém (DS)
 - kauzalita a čas, konsenzus
 
----
+--- -->
 
 # Rozbor problému
 
-- kauzalita / **časová značka**
+- určení pořadí událostí
+  → kauzalita / **časová značka**
 - dílčí problémy
   - synchronizace času DS
   - distribuce logů
@@ -172,47 +159,61 @@ size: 4:3
 
 # Synchronizace času
 
-- ideální situace
+- výpočet doby přenosu $D$
+- $D = {RTT\over 2}$
 
-$$
-T_A = T_B + D_n + O_n,\:\:\: D_n = {RTT\over 2}
-$$
+![w:850](rtt.png)
 
-- realita (předpoklad symetrie)
+<!-- ---
 
-$$
-T_A = T_B + \bar{D} + \bar{O}
-$$
+# Synchronizace času
+
+## Odeslání času -->
+- $T_M = T_S + \bar{D} + O$
+
+<!-- ![w:850](time.png) -->
+
 
 ---
 
-![w:700](time-simulation.png)
+## Simulace
+
+![bg 90%](time-simulation.png)
+
+---
+
+## Reálný hardware
+
+![bg 90%](time-wrong.png)
 
 ---
 
 # Synchronizace času
 
-- reálný hardware
-  - časová značka
-  - změna výpočtu
+- na reálném zařízení negativní vliv velikých chyb a provozu FreeRTOS
+<!-- - zlepšeno řešeno časovou značkou -->
+- změna algoritmu:
+  1. ze začátku prováděj synchronizaci tradičně
+  2. jakmile je chyba $O$ malá, upravuj čas pouze o konstantu $K$
 
-$$
-T = T \pm K
-$$
-
----
-
-![w:700](time-measure.png)
+<!-- konstanta K je chyba způsobená nepřeností osciálátoru 25 µs -->
 
 ---
+
+## Reálný hardware
+
+![bg 90%](time-measure.png)
+
+<!-- chyba způsobena tím, že MASTER hodiny jsou rychlejší -->
+
+<!-- ---
 
 # Distribuce logů
 
-$$
-L= N(N-1) \:\: | \:\: L=2(N-1)
-$$
+![w:850](distribution.png)
 
-![w:726](distribution.png)
+- bez MASTER uzlu: $L= N(N-1)$
+- s MASTER uzlem: $L=2(N-1)$ -->
 
 ---
 
@@ -220,7 +221,7 @@ $$
 
 1. Registrace zařízení do DS
 2. Běžný chod (epochy)
-   1. volby
+   1. volby lídra
    2. běžný provoz (logy, čas)
 3. Terminace zařízení z DS
 
@@ -228,43 +229,33 @@ $$
 
 <!-- footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | **REALIZCE A MĚŘENÍ**" -->
 
-# Zařízení z pohledu UX
-
-![w:650](UX.png)
-
----
-
 # Realizace
 
 - FreeRTOS, ESP-IDF
-- základem je *espnow_handler_task*
+- základem je stavový automat
 - unifikovaná velikost zprávy
 - Doxygen dokumentace
+  
 
 ---
 
-# Testované scénáře
+<!-- footer: "" -->
+
+<!-- # Testované scénáře
 - běžný chod
-- kauzalita 2 blízkých událostí<br/>*(do 10 ms)*
-- odpojení zařízení a opětovné zapojení do sítě
+- kauzalita 2 blízkých událostí<br/>*(do 1 ms)*
+- odpojení zařízení a opětovné zapojení do sítě -->
 
----
-<!-- footer: ""
-header: "" -->
 
 ![bg](measure-set.jpg)
 
 ---
 
-<!--
-footer: "REŠERŠE | POŽADAVKY | SÍŤOVÁ INFRA | ALGORITMUS | REALIZCE A MĚŘENÍ"
-header: "![w:200](CVUT-logo.jpg)"
- -->
 
 # Shrnutí
 
 - uspořádání dle časové značky
-- při testování splněna rozlišovací schopnost 1 ms
+- splněna rozlišovací schopnost 1 ms
 - ESP-NOW, ESP-IDF a FreeRTOS
 - poškození modulů a časová náročnost při práci s hardwarem
 
@@ -283,5 +274,5 @@ header: "![w:200](CVUT-logo.jpg)"
 backgroundColor: ""
 -->
 
-## Distribuovaný systém IoT zařízení řešící problém konsenzu
+# Distribuovaný systém IoT zařízení řešící problém konsenzu
 ![w:220](qr.png)
