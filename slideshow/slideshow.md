@@ -93,7 +93,7 @@ header: ""
 - řešení určení pořadí
 - autonomnost zařízení
 - distribuovaný systém
-- přesnost 1 ms
+- maximální chyba 1 ms
 - bezdrátová komunikace
 
 ![bg right:40%](push.png)
@@ -153,7 +153,7 @@ header: ""
 - dílčí problémy
   - synchronizace času DS
   - distribuce logů
-  - distribuce senzamu zařízení DS
+  - distribuce seznamu zařízení DS
 
 ---
 
@@ -194,7 +194,7 @@ header: ""
 <!-- - zlepšeno řešeno časovou značkou -->
 - změna algoritmu:
   1. ze začátku prováděj synchronizaci tradičně
-  2. jakmile je chyba $O$ malá, upravuj čas pouze o konstantu $K$
+  2. jakmile je chyba $O$ malá, upravuj čas maximálně o konstantu $K$
 
 <!-- konstanta K je chyba způsobená nepřeností osciálátoru 25 µs -->
 
@@ -255,7 +255,7 @@ header: ""
 # Shrnutí
 
 - uspořádání dle časové značky
-- splněna rozlišovací schopnost 1 ms
+- splněna maximální chyba 1 ms
 - ESP-NOW, ESP-IDF a FreeRTOS
 - poškození modulů a časová náročnost při práci s hardwarem
 
