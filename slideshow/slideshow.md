@@ -257,7 +257,7 @@ header: ""
 - uspořádání dle časové značky
 - splněna maximální chyba 1 ms
 - ESP-NOW, ESP-IDF a FreeRTOS
-- poškození modulů a časová náročnost při práci s hardwarem
+- poškození modulů a časová náročnost<br>při práci s hardwarem
 
 ---
 
@@ -266,7 +266,7 @@ header: ""
 - webový server
 - robustnější distribuce logů
 - podsítě
-- mechanický návrh tlačítka a celého zařízení
+- mechanický návrh tlačítka a celého<br>zařízení
 
 ---
 
