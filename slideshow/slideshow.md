@@ -193,8 +193,8 @@ header: ""
 - na reálném zařízení negativní vliv velikých chyb a provozu FreeRTOS
 <!-- - zlepšeno řešeno časovou značkou -->
 - změna algoritmu:
-  1. synchronizace je prováděna tradičně dokud není chyba $O$ menší než $O_{lim}$
-  2. jakmile je chyba $O$ minimalizovaná, upravuj čas maximálně o konstantu $K$
+  1. synchronizace je prováděna tradičně<br>dokud není chyba $O$ menší než $O_{lim}$
+  2. jakmile je chyba $O$ minimalizovaná,<br>upravuj čas maximálně o konstantu $K$
 
 <!-- konstanta K je chyba způsobená nepřeností osciálátoru 25 µs -->
 
