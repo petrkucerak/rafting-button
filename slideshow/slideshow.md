@@ -93,8 +93,8 @@ header: ""
 - řešení určení pořadí
 - autonomnost zařízení
 - distribuovaný systém
-- maximální chyba 1 ms
 - bezdrátová komunikace
+- maximální chyba 1 ms
 
 ![bg right:40%](push.png)
 
@@ -193,8 +193,8 @@ header: ""
 - na reálném zařízení negativní vliv velikých chyb a provozu FreeRTOS
 <!-- - zlepšeno řešeno časovou značkou -->
 - změna algoritmu:
-  1. ze začátku prováděj synchronizaci tradičně
-  2. jakmile je chyba $O$ malá, upravuj čas maximálně o konstantu $K$
+  1. synchronizace je prováděna tradičně dokud není chyba $O$ menší než $O_{lim}$
+  2. jakmile je chyba $O$ minimalizovaná, upravuj čas maximálně o konstantu $K$
 
 <!-- konstanta K je chyba způsobená nepřeností osciálátoru 25 µs -->
 
@@ -266,7 +266,7 @@ header: ""
 - webový server
 - robustnější distribuce logů
 - podsítě
-- mechanické tlačítko
+- mechanické návrh tlačítka a celého zařízení
 
 ---
 
