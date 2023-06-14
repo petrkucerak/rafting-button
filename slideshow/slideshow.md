@@ -266,7 +266,7 @@ header: ""
 - webový server
 - robustnější distribuce logů
 - podsítě
-- mechanické návrh tlačítka a celého zařízení
+- mechanický návrh tlačítka a celého zařízení
 
 ---
 
