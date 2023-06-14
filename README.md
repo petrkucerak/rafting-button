@@ -6,6 +6,10 @@ Výslednou softwarovou implementaci je možné nalézt ve složce [code/rafting-
 
 Dokumentace finální implementace je dostupná na adrese: https://petrkucerak.github.io/rafting-button/.
 
+Vyexportovanou prezentaci k obhajobě bakalářské práce je možné nalézt ve složce [assets/](/assets/slideshow.pdf).
+
+Vyexportovaná bakalářská práce je ve [standartním formátu](/assets/thesis.pdf) a ve [formátu určeném pro čtečky](/assets/thesis-ebook-size.pdf) ve složce [assets/](/assets/).
+
 ## O projektu
 ### Motivace
 Už od útlých dětských let jezdím na letní tábory a přes rok organizuji mládežnické akce. Na *Hudebním týdnu*, jedné z akcí pro mladé, tradičně hráváme hru, ve které jsou různé týmy, které mezi sebou soutěží. Cílem je se jako první přihlásit o slovo a zodpovědět otázku. Doposud se nám nepovedlo vymyslet efektivní způsob, jak určit pořadí týmů. Ve výsledku vždy použijeme zvoneček, který při odpovědí více týmů ve stejný čas není vhodným řešením.
