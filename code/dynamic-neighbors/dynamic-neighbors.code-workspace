@@ -26,7 +26,7 @@
           "${env:windir}\\System32\\cmd.exe"
         ],
         "icon": "tools",
-        "args": ["/k", "C:/Users/Petr.Kucera/Embeded/esp/esp-idf/export.bat"],
+        "args": ["/k", "C:/Users/trpe/esp/esp-idf/export.bat"],
         "overrideName": true
       },
       "PowerShell": {
