@@ -1,0 +1,98 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.profiles.linux": {
+      "esp-idf": {
+        "path": "bash",
+        "icon": "tools",
+        "args": ["--init-file", "../install-idf.sh"]
+      },
+      "bash": {
+        "path": "bash"
+      },
+      "python": {
+        "path": "python3",
+        "icon": "notebook"
+      }
+    },
+    "terminal.integrated.profiles.windows": {
+      "esp-idf": {
+        "path": [
+          "${env:windir}\\Sysnative\\cmd.exe",
+          "${env:windir}\\System32\\cmd.exe"
+        ],
+        "icon": "tools",
+        "args": ["/k", "C:/Users/Petr.Kucera/Embeded/esp/esp-idf/export.bat"],
+        "overrideName": true
+      },
+      "PowerShell": {
+        "source": "PowerShell",
+        "icon": "terminal-powershell"
+      },
+      "Command Prompt": {
+        "path": [
+          "${env:windir}\\Sysnative\\cmd.exe",
+          "${env:windir}\\System32\\cmd.exe"
+        ],
+        "args": [],
+        "icon": "terminal-cmd"
+      },
+      "Git Bash": {
+        "source": "Git Bash"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "esp-idf",
+    "terminal.integrated.defaultProfile.windows": "esp-idf",
+    "actionButtons": {
+      "commands": [
+        {
+          "name": "Build[M]",
+          "color": "white",
+          "command": "idf.py build"
+        },
+        {
+          "name": "Flash[MS]",
+          "color": "white",
+          "command": "idf.py -p /dev/ttyACM0 flash"
+        },
+        {
+          "name": "Flash[MB]",
+          "color": "orange",
+          "command": "idf.py -p /dev/ttyUSB0 flash"
+        },
+        {
+          "name": "Monitor[M]",
+          "color": "white",
+          "command": "idf.py monitor"
+        },
+        {
+          "name": "All[MS]",
+          "color": "yellow",
+          "command": "idf.py build && idf.py -p /dev/ttyACM0 flash && idf.py monitor"
+        },
+        {
+          "name": "All[MB]",
+          "color": "orange",
+          "command": "idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py monitor"
+        }
+      ]
+    },
+    "files.associations": {
+      "rafting-button.h": "c",
+      "esp_now.h": "c",
+      "espnow.h": "c",
+      "espnow_utils.h": "c",
+      "esp_err.h": "c",
+      "esp_wifi_types.h": "c",
+      "assert.h": "c",
+      "sdkconfig.h": "c",
+      "stdlib.h": "c",
+      "inttypes.h": "c",
+      "esp_mac.h": "c"
+    }
+  }
+}
