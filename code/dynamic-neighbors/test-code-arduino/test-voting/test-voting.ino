@@ -1,8 +1,8 @@
-#define DEVICE_1 2
-#define DEVICE_2 3
-#define DEVICE_3 4
-// #define DEVICE_4 5
-#define DEVICE_5 6
+#define DEVICE_1 3
+#define DEVICE_2 4
+#define DEVICE_3 5
+#define DEVICE_4 6
+#define DEVICE_5 7
 
 
 void pushButton(uint8_t device) {
