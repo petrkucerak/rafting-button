@@ -15,9 +15,10 @@
 
 /// @brief Size of the array used for calculating round trip time.
 #define BALANCER_SIZE 100
-/// @brief The count of possible used devices is 10, therefore the count of
-/// neighbors is 9 devices.
-#define NEIGHBORS_COUNT 9
+/// @brief The count of possible used devices is 20 (esp-now limitation).
+#define NEIGHBORS_MAX_COUNT 20
+/// @brief The count of possible send by one message is 10
+#define NEIGHBORS_MAX_MESSAGE_COUNT 10
 /// @brief Size of the array used for storing logs with DS events.
 #define EVENT_HISTORY 50
 
@@ -261,13 +262,32 @@ typedef struct message_data {
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
    /// @brief DS event task
    ds_task_t event_task;
-   /// @brief Array of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   /// @brief Neighbor check 1 - NOT_INITIALIZED, 100 - INACTIVE, 10000 - ACTIVE
+   uint32_t neighbor_check;
    /// @brief Message payload
    /// @note The message payload fills all remaining bytes after the data with
    /// random values.
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
+
+/**
+ * @brief Structure defining a specific neighbor message.
+ *
+ */
+typedef struct message_neighbor_data {
+   /// @brief ESP-NOW message type
+   message_type_t type;
+   /// @brief Epoch ID
+   uint32_t epoch_id;
+   /// @brief Epoch ID
+   uint8_t neighbor_count;
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
+   /// @brief Message payload
+   /// @note The message payload fills all remaining bytes after the data with
+   /// random values.
+   uint8_t payload[0];
+} __attribute__((packed)) message_neighbor_data_t;
 
 /**
  * @brief Structure defining parameters for ESP-NOW message transmission.
@@ -282,7 +302,7 @@ typedef struct espnow_send_param {
    /// @brief Epoch ID
    uint32_t epoch_id;
    /// @brief Array of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   neighbor_t neighbor[NEIGHBORS_COUNT // TODO];
    /// @brief DS event type
    ds_event_t event_type;
    /// @brief DS event MAC address
@@ -296,6 +316,28 @@ typedef struct espnow_send_param {
    /// @brief Target (destination) MAC address
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
+
+/**
+ * @brief Structure defining parameters for ESP-NOW message neighbor type
+ * transmission.
+ *
+ */
+typedef struct espnow_send_neighbor_param {
+   /// @brief ESP-NOW message type
+   message_type_t type;
+   /// @brief Epoch ID
+   uint32_t epoch_id;
+   /// @brief Epoch ID
+   uint8_t neighbor_count;
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
+   /// @brief Data length
+   int data_len;
+   /// @brief Data buffer
+   uint8_t *buf;
+   /// @brief Target (destination) MAC address
+   uint8_t dest_mac[ESP_NOW_ETH_ALEN];
+} espnow_send_neighbor_param_t;
 
 /**
  * @brief Structure representing a distributed system (DS) event.
@@ -334,9 +376,9 @@ typedef struct node_info {
    /// @brief Average deviation value
    int32_t deviation_avg;
    /// @brief List of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   neighbor_t neighbor[NEIGHBORS_MAX_COUNT];
    /// @brief Counts of unsuccessful message sends to neighbor devices
-   uint8_t neighbor_error_count[NEIGHBORS_COUNT];
+   uint8_t neighbor_error_count[NEIGHBORS_MAX_COUNT];
    /// @brief Epoch ID of the device
    uint32_t epoch_id;
    /// @brief Title of the device
