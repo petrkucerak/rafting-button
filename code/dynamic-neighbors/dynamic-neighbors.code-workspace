@@ -92,7 +92,11 @@
       "sdkconfig.h": "c",
       "stdlib.h": "c",
       "inttypes.h": "c",
-      "esp_mac.h": "c"
+      "esp_mac.h": "c",
+      "esp_random.h": "c",
+      "esp_log.h": "c",
+      "xutility": "c",
+      "filesystem": "c"
     }
   }
 }
