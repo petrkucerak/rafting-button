@@ -7,8 +7,11 @@ Cílem této implementace je změnit statický počet sousedů na počet dynamic
 
 ## Návrh realizace
 
-1. **ukládání**: V podstatě jsou 2 možnosti pro ukládání dat do paměti - statická nebo dynamická cesta. Statická by znamenalo mít neustále alokováno 20 x 16 bytes, kde by se do pole zapisovala aktuální zařízení. Druhým způsobem je paměť dynamická - např. linked list. Limitací technologie ESP-NOW jsem zvolil první možnost, tedy statický styl ukládání a to z důvodu bezpečnější implemtnace (resp. méně náchylné na chybu) a z důvodu menší výpočetní zátěže pro práci s paměti. 
-2. **změna struktury packetu**: Součástí každé zprávy momenátlně byl i seznam sousedů. To nyní změním a to z důvodu omezení paměti. Místo části paměti, kde doteď byly uložení sousedé (neighbor), uložím pouze součet sousedů, který bude sloužit jako jednoduchý checksum. V budoucnosti by bylo hezké rozšířit o něco sofistikovanějšího.
+1. **ukládání**: V podstatě jsou 2 možnosti pro ukládání dat do paměti - statická nebo dynamická cesta. Statická by znamenalo mít neustále alokováno $20$ x $16$ bytes, kde by se do pole zapisovala aktuální zařízení. Druhým způsobem je paměť dynamická - např. linked list. Limitací technologie ESP-NOW jsem zvolil první možnost, tedy statický styl ukládání a to z důvodu bezpečnější implemtnace (resp. méně náchylné na chybu) a z důvodu menší výpočetní zátěže pro práci s paměti. 
+2. **změna struktury packetu**: Součástí každé zprávy momenátlně byl i seznam sousedů. To nyní změním a to z důvodu omezení paměti. Místo části framu, kde doteď byli uložení sousedé (neighbor), uložím jednoduchý checksum, který bude typu `uint32_t` a bude preprezentovat sousedy následujícím způsobem. Za každý node ve stavu
+   - `NOT_INITIALIZED` bude přičtena hodnota $1$
+   - `INACTIVE` bude přičtena hodnota $100$
+   - `ACTIVE` bude přičtena hodnota $10 000$
 3. **nový typ zprávy**: Vytvořím nový typ zprávy, který bude odesílát seznam sousedů. Jelikož je velikost zprávy maximálně 250 bytes, budu muset seznam rozdělit do dvou zpráv. To ale ničemu nevadí. Tato zpráva se bude odesílat vždy, po:
    - změně datové struktury se sousedy
    - zachycení zprávy `HELLO_DS`

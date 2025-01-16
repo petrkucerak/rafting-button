@@ -302,7 +302,7 @@ typedef struct espnow_send_param {
    /// @brief Epoch ID
    uint32_t epoch_id;
    /// @brief Array of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT // TODO];
+   uint32_t neighbor_check;
    /// @brief DS event type
    ds_event_t event_type;
    /// @brief DS event MAC address
