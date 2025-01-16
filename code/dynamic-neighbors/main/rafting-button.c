@@ -292,7 +292,7 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    *content = buf->content;
    *epoch_id = buf->epoch_id;
 
-   // DS event varibales
+   // DS event variables
    // *event->mac_addr = buf->event_mac_addr;
    memcpy(event->mac_addr, buf->event_mac_addr, ESP_NOW_ETH_ALEN);
    event->task = buf->event_task;
@@ -406,7 +406,7 @@ void espnow_handler_task(void)
                       COUNT_ERROR_MESSAGE_TO_INACTIVE) {
                      // mark as inactive
                      node.neighbor[i].status = INACTIVE;
-                     // send this infromation into all DS
+                     // send this information into all DS
                      send_param->type = NEIGHBORS;
                      memcpy(&send_param->neighbor[0], &node.neighbor[0],
                             sizeof(neighbor_t) * NEIGHBORS_COUNT);
