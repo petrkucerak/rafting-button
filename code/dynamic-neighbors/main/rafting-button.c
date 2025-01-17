@@ -371,6 +371,7 @@ void espnow_handler_task(void)
    log_event_t event;
    int ret;
 
+   // Allocate memory for `espnow_send_param_t`
    espnow_send_param_t *send_param = NULL;
    send_param = malloc(sizeof(espnow_send_param_t));
    if (send_param == NULL) {
@@ -387,6 +388,24 @@ void espnow_handler_task(void)
    if (send_param->buf == NULL) {
       ESP_LOGE(TAG, "Malloc send buffer fail");
       free(send_param);
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+
+   // Allocate memory for `espnow_send_neighbor_param_t`
+   espnow_send_neighbor_param_t *send_neighbor_param = NULL;
+   send_neighbor_param = malloc(sizeof(espnow_send_neighbor_param_t));
+   if (send_neighbor_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+   memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
+   send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_neighbor_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_neighbor_param);
       vSemaphoreDelete(espnow_queue);
       return;
    }
@@ -430,6 +449,7 @@ void espnow_handler_task(void)
                      //       handle_espnow_send_error(ret);
                      //    }
                      // }
+                     send_param->type = NEIGHBORS;
                   }
                }
             }
