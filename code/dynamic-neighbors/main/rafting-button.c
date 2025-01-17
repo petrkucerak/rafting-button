@@ -319,6 +319,19 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
 
+void espnow_data_neighbor_prepare(espnow_send_neighbor_param_t *send_param)
+{
+   message_neighbor_data_t *buf = (message_neighbor_data_t *)send_param->buf;
+
+   send_param->data_len = sizeof(message_neighbor_data_t);
+   buf->type = send_param->type;
+   buf->epoch_id = send_param->epoch_id;
+   memcpy(&buf->neighbor[0], &send_param->neighbor[0],
+          sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+   /* Fill all remaining bytes after the data with random values */
+   esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
+}
+
 void handle_espnow_send_error(esp_err_t code)
 {
    if (code == ESP_OK)
@@ -430,26 +443,28 @@ void espnow_handler_task(void)
                      node.neighbor[i].status = INACTIVE;
                      // send this information into all DS
                      // TODO: update - implement custom message sending
-                     // send_param->type = NEIGHBORS;
-                     // memcpy(&send_param->neighbor[0], &node.neighbor[0],
-                     //        sizeof(neighbor_t) * NEIGHBORS_COUNT // TODO);
-                     // for (uint8_t j = 0; j < NEIGHBORS_COUNT // TODO; ++j) {
-                     //    if (node.neighbor[j].status == ACTIVE) {
-                     //    send_param->epoch_id = node.epoch_id;
-                     //    memcpy(send_param->dest_mac,
-                     //    &node.neighbor[j].mac_addr,
-                     //           ESP_NOW_ETH_ALEN);
-                     //    espnow_data_prepare(send_param);
+                     send_neighbor_param->type = NEIGHBORS;
 
-                     //    ret =
-                     //        esp_now_send(send_param->dest_mac,
-                     //        send_param->buf,
-                     //                     send_param->data_len);
-                     //    if (ret != ESP_OK)
-                     //       handle_espnow_send_error(ret);
-                     //    }
-                     // }
-                     send_param->type = NEIGHBORS;
+                     // Send first 10 addresses
+                     memcpy(&send_neighbor_param->neighbor[0],
+                            &node.neighbor[0],
+                            sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+                     // Send to all active neighbors
+                     for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
+                        if (node.neighbor[j].status == ACTIVE) {
+                           send_param->epoch_id = node.epoch_id;
+                           memcpy(send_param->dest_mac,
+                                  &node.neighbor[j].mac_addr, ESP_NOW_ETH_ALEN);
+                           espnow_data_prepare(send_param);
+
+                           ret = esp_now_send(send_param->dest_mac,
+                                              send_param->buf,
+                                              send_param->data_len);
+                           if (ret != ESP_OK)
+                              handle_espnow_send_error(ret);
+                        }
+                     }
+                     send_neighbor_param->type = NEIGHBORS;
                   }
                }
             }

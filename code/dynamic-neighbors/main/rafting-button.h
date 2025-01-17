@@ -518,6 +518,17 @@ message_type_t get_message_type(uint8_t *data, int data_len);
 void espnow_data_prepare(espnow_send_param_t *send_param);
 
 /**
+ * @brief Prepare ESP-NOW data for sending special NEIGHBOR function.
+ *
+ * This function prepares the ESP-NOW data to be sent by populating the
+ * send_param structure. It sets the message type, epoch ID and neighbor list in
+ * the data buffer.
+ *
+ * @param send_param Pointer to the espnow_send_neighbor_param_t structure.
+ */
+void espnow_data_neighbor_prepare(espnow_send_neighbor_param_t *send_param);
+
+/**
  * @brief Handle ESP-NOW send error.
  *
  * This function handles the ESP-NOW send error by logging an appropriate error
