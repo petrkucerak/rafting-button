@@ -442,7 +442,6 @@ void espnow_handler_task(void)
                      // mark as inactive
                      node.neighbor[i].status = INACTIVE;
                      // send this information into all DS
-                     // TODO: update - implement custom message sending
                      send_neighbor_param->type = NEIGHBORS;
 
                      // Send first 10 addresses
@@ -455,7 +454,7 @@ void espnow_handler_task(void)
                            send_param->epoch_id = node.epoch_id;
                            memcpy(send_param->dest_mac,
                                   &node.neighbor[j].mac_addr, ESP_NOW_ETH_ALEN);
-                           espnow_data_prepare(send_param);
+                           espnow_data_neighbor_prepare(send_param);
 
                            ret = esp_now_send(send_param->dest_mac,
                                               send_param->buf,
@@ -464,7 +463,25 @@ void espnow_handler_task(void)
                               handle_espnow_send_error(ret);
                         }
                      }
-                     send_neighbor_param->type = NEIGHBORS;
+                     // Send second 10 addresses
+                     memcpy(&send_neighbor_param->neighbor[0],
+                            &node.neighbor[10],
+                            sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+                     // Send to all active neighbors
+                     for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
+                        if (node.neighbor[j].status == ACTIVE) {
+                           send_param->epoch_id = node.epoch_id;
+                           memcpy(send_param->dest_mac,
+                                  &node.neighbor[j].mac_addr, ESP_NOW_ETH_ALEN);
+                           espnow_data_neighbor_prepare(send_param);
+
+                           ret = esp_now_send(send_param->dest_mac,
+                                              send_param->buf,
+                                              send_param->data_len);
+                           if (ret != ESP_OK)
+                              handle_espnow_send_error(ret);
+                        }
+                     }
                   }
                }
             }
