@@ -623,7 +623,7 @@ void send_hello_ds_message(void);
  * @note The function handles memory allocation errors and ensures cleanup
  *       if any allocation fails.
  */
-void send_neighbor_message(void);
+void send_neighbor_message_to_all(void);
 
 /**
  * @brief Sends an RTT_CAL_MASTER message.

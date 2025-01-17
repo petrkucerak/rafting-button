@@ -465,7 +465,7 @@ void espnow_handler_task(void)
                       COUNT_ERROR_MESSAGE_TO_INACTIVE) {
                      // mark as inactive
                      node.neighbor[i].status = INACTIVE;
-                     send_neighbor_message();
+                     send_neighbor_message_to_all();
                   }
                }
             }
@@ -608,6 +608,8 @@ void espnow_handler_task(void)
                // print_neighbors();
                // send back: neighbor list, epoch id
                // ESP_LOGI(TAG, "Send neighbor message");
+               // send back neighbor message
+               send_neighbor_message_to_all(); // TODO: komu to mam poslat?
                send_param->type = NEIGHBORS;
                send_param->epoch_id = node.epoch_id;
                memcpy(send_param->dest_mac, recv_cb->mac_addr,
@@ -890,7 +892,7 @@ void espnow_handler_task(void)
          free(send_param);
       }
 
-      void send_neighbor_message(void)
+      void send_neighbor_message_to_all(void)
       {
          // ESP_LOGI(TAG, "Send NEIGHBOR");
          // Allocate memory for `espnow_send_neighbor_param_t`
