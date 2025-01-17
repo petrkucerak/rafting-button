@@ -96,7 +96,24 @@
       "esp_random.h": "c",
       "esp_log.h": "c",
       "xutility": "c",
-      "filesystem": "c"
+      "filesystem": "c",
+      "array": "c",
+      "ranges": "c",
+      "span": "c",
+      "vector": "c",
+      "xstring": "c",
+      "compare": "c",
+      "format": "c",
+      "functional": "c",
+      "future": "c",
+      "memory": "c",
+      "ratio": "c",
+      "regex": "c",
+      "tuple": "c",
+      "type_traits": "c",
+      "utility": "c",
+      "xmemory": "c",
+      "xtr1common": "c"
     }
   }
 }
