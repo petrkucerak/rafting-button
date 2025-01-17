@@ -314,8 +314,7 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->event_task = send_param->event_task;
    buf->event_type = send_param->event_type;
    memcpy(buf->event_mac_addr, send_param->event_mac_addr, ESP_NOW_ETH_ALEN);
-   memcpy(&buf->neighbor[0], &send_param->neighbor[0],
-          sizeof(neighbor_t) * NEIGHBORS_COUNT // TODO);
+   buf->neighbor_check = send_param->neighbor_check;
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
