@@ -421,7 +421,7 @@ void espnow_handler_task(void)
    uint64_t content = 0;
    message_type_t type;
    uint32_t epoch_id;
-   neighbor_t neighbors[NEIGHBORS_MAX_COUNT];
+   neighbor_t neighbors[NEIGHBORS_MAX_MESSAGE_COUNT];
    uint32_t neighbor_check;
    log_event_t event;
    int ret;
@@ -488,17 +488,91 @@ void espnow_handler_task(void)
          if (income_type == NEIGHBORS) {
             ESP_LOGI(TAG, "Receive neighbor message");
             // parse incoming message
-            ret = espnow_data_neighbor_prepare
-                // save neighbors from peer_list
-                for (uint8_t j = 0; j < NEIG)
+            ret = espnow_data_neighbor_parse(recv_cb->data, recv_cb->data_len,
+                                             &type, &epoch_id, &neighbors);
+            free(recv_cb);
+
+            // Check epoch ID and if it lower than actual, ignore this message
+            if (epoch_id < node.epoch_id) {
+               ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
+               continue;
+            } else if (epoch_id > node.epoch_id)
+               node.epoch_id = epoch_id;
+
+            // save neighbors from peer_list
+            for (uint8_t j = 0; j < NEIGHBORS_MAX_MESSAGE_COUNT; ++j) {
+               if (neighbors[j].status != NOT_INITIALIZED) {
+                  if (!is_device_mac(&neighbors[j].mac_addr)) {
+                     if (!esp_now_is_peer_exist(&neighbors[j].mac_addr)) {
+                        uint8_t i = 0;
+                        while (node.neighbor[i].status != NOT_INITIALIZED) {
+                           ++i;
+                           if (i >= NEIGHBORS_MAX_COUNT) {
+                              ESP_LOGE(TAG,
+                                       "Not empty space for more neighbors");
+                           }
+                        }
+                        esp_now_peer_info_t peer_info = {};
+                        memcpy(&peer_info.peer_addr, &neighbors[j].mac_addr,
+                               ESP_NOW_ETH_ALEN);
+                        ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+                        node.neighbor[i].status = neighbors[j].status;
+                        node.neighbor[i].title = neighbors[j].title;
+                        memcpy(&node.neighbor[i].mac_addr,
+                               &neighbors[j].mac_addr, ESP_NOW_ETH_ALEN);
+                     } else {
+                        for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+                           if (memcmp(&node.neighbor[i].mac_addr,
+                                      &neighbors[j].mac_addr,
+                                      ESP_NOW_ETH_ALEN) == 0) {
+                              node.neighbor[i].status = neighbors[j].status;
+                              node.neighbor[i].title = neighbors[j].title;
+                              // ESP_LOGI(TAG, "Set %d. neighbor as INACTIVE",
+                              // i);
+                              break;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            // save sender peer_info
+            if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
+               uint8_t i = 0;
+               while (node.neighbor[i].status != NOT_INITIALIZED) {
+                  ++i;
+                  if (i >= NEIGHBORS_MAX_COUNT) {
+                     ESP_LOGE(TAG, "Not empty space for more neighbors");
+                  }
+               }
+               esp_now_peer_info_t peer_info = {};
+               memcpy(&peer_info.peer_addr, recv_cb->mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+               node.neighbor[i].status = ACTIVE;
+               node.neighbor[i].title = SLAVE;
+               memcpy(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
+                      ESP_NOW_ETH_ALEN);
+            } else {
+               for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+                  if (memcmp(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
+                             ESP_NOW_ETH_ALEN) == 0) {
+                     node.neighbor[i].status = ACTIVE;
+                     break;
+                  }
+               }
+            }
          } else {
             ret =
                 espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
                                   &content, &epoch_id, &neighbor_check, &event);
             free(recv_cb->data);
-            if (epoch_id < node.epoch_id)
+            if (epoch_id < node.epoch_id) {
+               // Check epoch ID and if it lower than actual, ignore this
+               // message
                ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
-            else if (epoch_id > node.epoch_id)
+               continue; // TODO: test it
+            } else if (epoch_id > node.epoch_id)
                node.epoch_id = epoch_id;
             switch (ret) {
             case HELLO_DS: {
@@ -552,11 +626,13 @@ void espnow_handler_task(void)
                // parser type
                //             // ESP_LOGI(TAG, "Receive neighbor message");
                //             // save neighbors from peer_list
-               //             for (uint8_t j = 0; j < NEIGHBORS_COUNT // TODO;
+               //             for (uint8_t j = 0; j < NEIGHBORS_COUNT //
+               //             TODO;
                //             ++j)
                //             {
-               //                if (neighbors[j].status != NOT_INITIALIZED) {
-               //                if (!is_device_mac(&neighbors[j].mac_addr)) {
+               //                if (neighbors[j].status != NOT_INITIALIZED)
+               //                { if
+               //                (!is_device_mac(&neighbors[j].mac_addr)) {
                //                   if
                //                   (!esp_now_is_peer_exist(&neighbors[j].mac_addr))
                //                   {
@@ -564,7 +640,8 @@ void espnow_handler_task(void)
                //                      while (node.neighbor[i].status !=
                //                      NOT_INITIALIZED) {
                //                         ++i;
-               //                            if (i >= NEIGHBORS_COUNT // TODO) {
+               //                            if (i >= NEIGHBORS_COUNT //
+               //                            TODO) {
                //                               ESP_LOGE(TAG,
                //                                        "Not empty space for
                //                                        more neighbors");
@@ -576,8 +653,9 @@ void espnow_handler_task(void)
                //                          ESP_NOW_ETH_ALEN);
                //                   ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
                //                   node.neighbor[i].status =
-               //                   neighbors[j].status; node.neighbor[i].title
-               //                   = neighbors[j].title;
+               //                   neighbors[j].status;
+               //                   node.neighbor[i].title =
+               //                   neighbors[j].title;
                //                   memcpy(&node.neighbor[i].mac_addr,
                //                   &neighbors[j].mac_addr,
                //                          ESP_NOW_ETH_ALEN);
@@ -588,7 +666,8 @@ void espnow_handler_task(void)
                //                            if
                //                            (memcmp(&node.neighbor[i].mac_addr,
                //                                       &neighbors[j].mac_addr,
-               //                                       ESP_NOW_ETH_ALEN) == 0)
+               //                                       ESP_NOW_ETH_ALEN) ==
+               //                                       0)
                //                                       {
                //                      node.neighbor[i].status =
                //                      neighbors[j].status;
@@ -607,12 +686,13 @@ void espnow_handler_task(void)
                //          // save sender peer_info
                //          if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
                //             uint8_t i = 0;
-               //             while (node.neighbor[i].status != NOT_INITIALIZED)
+               //             while (node.neighbor[i].status !=
+               //             NOT_INITIALIZED)
                //             {
                //                ++i;
                //                   if (i >= NEIGHBORS_COUNT // TODO) {
-               //                      ESP_LOGE(TAG, "Not empty space for more
-               //                      neighbors");
+               //                      ESP_LOGE(TAG, "Not empty space for
+               //                      more neighbors");
                //             }
                //          }
                //          esp_now_peer_info_t peer_info = {};
@@ -621,7 +701,8 @@ void espnow_handler_task(void)
                //          ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
                //          node.neighbor[i].status = ACTIVE;
                //          node.neighbor[i].title = SLAVE;
-               //          memcpy(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
+               //          memcpy(&node.neighbor[i].mac_addr,
+               //          recv_cb->mac_addr,
                //                 ESP_NOW_ETH_ALEN);
                //       }
                //       else
@@ -867,7 +948,7 @@ void espnow_handler_task(void)
                   handle_espnow_send_error(ret);
             }
          }
-         // free(send_neighbor_param->buf); // TODO: test with it!
+         free(send_neighbor_param->buf); // TODO: test with it!
          free(send_neighbor_param);
       }
 
@@ -959,14 +1040,14 @@ void espnow_handler_task(void)
          }
          node.timeout_vote = esp_timer_get_time();
          while (1) {
-            // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů
-            // a stane se novým lídrem nebo přijme zprávu synchronizující čas
-            // TIME, novým lídrem se stalo
+            // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních
+            // sousedů a stane se novým lídrem nebo přijme zprávu
+            // synchronizující čas TIME, novým lídrem se stalo
             if (node.title != CANDIDATE) {
                break;
             }
-            // nebo budou volby neúspěšné do timeoutu, volby skončí neúspěchem a
-            // začne nová epocha
+            // nebo budou volby neúspěšné do timeoutu, volby skončí
+            // neúspěchem a začne nová epocha
             if (esp_timer_get_time() - node.timeout_vote > VOTE_TIMEOUT) {
                node.title = SLAVE;
                break;
