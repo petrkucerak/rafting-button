@@ -580,6 +580,26 @@ void espnow_handler_task(void);
 void send_hello_ds_message(void);
 
 /**
+ * @brief Sends neighbor information using ESP-NOW protocol in two batches.
+ *
+ * This function prepares and sends the information about neighbors
+ * over the ESP-NOW protocol. The neighbor data is divided into two
+ * batches of `NEIGHBORS_MAX_MESSAGE_COUNT` neighbors each. The function
+ * allocates the required memory, prepares the data, and sends it to
+ * all active neighbors.
+ *
+ * Steps performed by the function:
+ * 1. Allocates memory for the `espnow_send_neighbor_param_t` structure.
+ * 2. Allocates a buffer for the data to be sent.
+ * 3. Prepares and sends the first batch of neighbor data (first 10 neighbors).
+ * 4. Prepares and sends the second batch of neighbor data (next 10 neighbors).
+ *
+ * @note The function handles memory allocation errors and ensures cleanup
+ *       if any allocation fails.
+ */
+void send_neighbor_message(void);
+
+/**
  * @brief Sends an RTT_CAL_MASTER message.
  * This function runs as a task and continuously sends the message to active
  * neighbors.
