@@ -539,6 +539,22 @@ void espnow_data_neighbor_prepare(espnow_send_neighbor_param_t *send_param);
 void handle_espnow_send_error(esp_err_t code);
 
 /**
+ * @brief Compute a simple checksum to represent the state of neighbors.
+ *
+ * This function calculates a checksum of type `uint32_t` based on the state
+ * of each node in the given neighbor structure. The checksum is computed
+ * as follows:
+ * - For each node in the `NOT_INITIALIZED` state, a value of 1 is added.
+ * - For each node in the `INACTIVE` state, a value of 100 is added.
+ * - For each node in the `ACTIVE` state, a value of 10,000 is added.
+ *
+ * @param neighbor A pointer to the neighbor structure containing the nodes.
+ * @return uint32_t The calculated checksum representing the states of the
+ * neighbors.
+ */
+uint32_t get_neighbor_check(neighbor_t *neighbor);
+
+/**
  * @brief Handle ESP-NOW add peer error.
  *
  * This function handles the ESP-NOW add peer error by logging an appropriate

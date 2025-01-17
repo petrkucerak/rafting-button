@@ -332,6 +332,25 @@ void espnow_data_neighbor_prepare(espnow_send_neighbor_param_t *send_param)
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
 
+uint32_t get_neighbor_check(neighbor_t *neighbor)
+{
+   uint32_t ret = 0;
+   for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+      switch (neighbor[i]->status) {
+      case NOT_INITIALIZED:
+         ret += 1;
+         break;
+      case INACTIVE:
+         ret += 100;
+         break;
+      case ACTIVE:
+         ret += 10000;
+         break;
+      }
+   }
+   return ret;
+}
+
 void handle_espnow_send_error(esp_err_t code)
 {
    if (code == ESP_OK)
@@ -515,7 +534,7 @@ void espnow_handler_task(void)
          switch (ret) {
          case HELLO_DS: {
             // TODO: implement new neighbor parsing and new send NEIGHBOR method
-            // ESP_LOGI(TAG, "Receive HELLO_DS");
+            ESP_LOGI(TAG, "Receive HELLO_DS");
             // add device to my list or make it ACTIVE
             //    if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
             //       uint8_t i = 0;
