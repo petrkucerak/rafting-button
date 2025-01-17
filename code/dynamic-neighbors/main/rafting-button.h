@@ -496,6 +496,15 @@ void handle_isr_event_task(void);
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
                       neighbor_t *neighbor, log_event_t *event);
+/**
+ * @brief Get the message type from incoming message and return it as a enum
+ * type message_type_t.
+ *
+ * @param data The received ESP-NOW data.
+ * @param data_len The length of the received data.
+ * @return message_type_t The type of received message.
+ */
+message_type_t get_message_type(uint8_t *data, int data_len);
 
 /**
  * @brief Prepare ESP-NOW data for sending.
