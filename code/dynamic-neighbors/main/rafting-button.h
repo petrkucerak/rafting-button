@@ -279,8 +279,6 @@ typedef struct message_neighbor_data {
    message_type_t type;
    /// @brief Epoch ID
    uint32_t epoch_id;
-   /// @brief Epoch ID
-   uint8_t neighbor_count;
    /// @brief Array of device neighbors
    neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
    /// @brief Message payload
@@ -327,8 +325,6 @@ typedef struct espnow_send_neighbor_param {
    message_type_t type;
    /// @brief Epoch ID
    uint32_t epoch_id;
-   /// @brief Epoch ID
-   uint8_t neighbor_count;
    /// @brief Array of device neighbors
    neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
    /// @brief Data length
@@ -491,11 +487,41 @@ void handle_isr_event_task(void);
  * @param epoch_id Pointer to a variable to store the epoch ID.
  * @param neighbor Pointer to an array to store the neighbor list.
  * @param event Pointer to a log_event_t variable to store the log event.
- * @return The message type extracted from the data.
+ * @return The message type extracted from the data, or -1 if the data length is
+ * invalid.
+ *
+ * @note The function checks if the length of the received data is sufficient to
+ * contain the expected structure. If the data is too short, an error is logged
+ * and the function returns -1.
  */
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
                       neighbor_t *neighbor, log_event_t *event);
+
+/**
+ * @brief Parse ESP-NOW data and extract neighbor information.
+ *
+ * This function parses the received ESP-NOW data specific to neighbor messages.
+ * It extracts the message type, epoch ID, and neighbor list, and populates
+ * the provided variables with the extracted data.
+ *
+ * @param data Pointer to the received ESP-NOW data.
+ * @param data_len The length of the received data.
+ * @param type Pointer to a variable to store the message type.
+ * @param epoch_id Pointer to a variable to store the epoch ID.
+ * @param neighbor Pointer to an array to store the neighbor list. The array
+ * should have space for at least `NEIGHBORS_MAX_MESSAGE_COUNT` elements.
+ * @return The message type extracted from the data, or -1 if the data length is
+ * invalid.
+ *
+ * @note The function checks if the length of the received data is sufficient to
+ * contain the expected structure. If the data is too short, an error is logged
+ * and the function returns -1.
+ */
+int espnow_data_neighbor_parse(uint8_t *data, int data_len,
+                               message_type_t *type, uint32_t *epoch_id,
+                               neighbor_t *neighbor);
+
 /**
  * @brief Get the message type from incoming message and return it as a enum
  * type message_type_t.
