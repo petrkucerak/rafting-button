@@ -114,6 +114,9 @@
       "utility": "c",
       "xmemory": "c",
       "xtr1common": "c"
-    }
+    },
+    "cSpell.words": [
+      "espnow"
+    ]
   }
 }
