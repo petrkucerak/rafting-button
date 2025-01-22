@@ -455,7 +455,7 @@ void espnow_handler_task(void)
       vSemaphoreDelete(espnow_queue);
       return;
    }
-   memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
+   memset(send_neighbor_param, 0, sizeof(espnow_send_neighbor_param_t));
    send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
    send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
    if (send_neighbor_param->buf == NULL) {
@@ -841,7 +841,7 @@ void send_neighbor_message_to_all(void)
       vSemaphoreDelete(espnow_queue);
       return;
    }
-   memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
+   memset(send_neighbor_param, 0, sizeof(espnow_send_neighbor_param_t));
    send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
    send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
    if (send_neighbor_param->buf == NULL) {
