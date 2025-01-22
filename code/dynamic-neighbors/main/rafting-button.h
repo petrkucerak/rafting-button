@@ -477,7 +477,7 @@ void handle_isr_event_task(void);
  * @brief Parse ESP-NOW data and extract information.
  *
  * This function parses the received ESP-NOW data and extracts information such
- * as message type, content, epoch ID, neighbor list, and log event. It
+ * as message type, content, epoch ID, neighbor check value, and log event. It
  * populates the provided variables with the extracted data.
  *
  * @param data The received ESP-NOW data.
@@ -485,18 +485,18 @@ void handle_isr_event_task(void);
  * @param type Pointer to a variable to store the message type.
  * @param content Pointer to a variable to store the content.
  * @param epoch_id Pointer to a variable to store the epoch ID.
- * @param neighbor Pointer to an array to store the neighbor list.
+ * @param neighbor_check Pointer to a variable to store the neighbor check value.
  * @param event Pointer to a log_event_t variable to store the log event.
  * @return The message type extracted from the data, or -1 if the data length is
  * invalid.
  *
  * @note The function checks if the length of the received data is sufficient to
- * contain the expected structure. If the data is too short, an error is logged
+ * contain the expected structure. If the data is too short, an error is logged,
  * and the function returns -1.
  */
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      neighbor_t *neighbor, log_event_t *event);
+                      uint32_t *neighbor_check, log_event_t *event);
 
 /**
  * @brief Parse ESP-NOW data and extract neighbor information.

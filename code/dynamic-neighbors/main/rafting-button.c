@@ -581,6 +581,7 @@ void espnow_handler_task(void)
                }
             }
          } else {
+            // TODO: handle neighbor checksum
             ret =
                 espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
                                   &content, &epoch_id, &neighbor_check, &event);
