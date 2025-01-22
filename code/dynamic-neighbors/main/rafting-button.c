@@ -520,8 +520,8 @@ void espnow_handler_task(void)
             // save neighbors from peer_list
             for (uint8_t j = 0; j < NEIGHBORS_MAX_MESSAGE_COUNT; ++j) {
                if (neighbors[j].status != NOT_INITIALIZED) {
-                  if (!is_device_mac(&neighbors[j].mac_addr)) {
-                     if (!esp_now_is_peer_exist(&neighbors[j].mac_addr)) {
+                  if (!is_device_mac(neighbors[j].mac_addr)) {
+                     if (!esp_now_is_peer_exist(neighbors[j].mac_addr)) {
                         uint8_t i = 0;
                         while (node.neighbor[i].status != NOT_INITIALIZED) {
                            ++i;
