@@ -113,7 +113,9 @@
       "type_traits": "c",
       "utility": "c",
       "xmemory": "c",
-      "xtr1common": "c"
+      "xtr1common": "c",
+      "iomanip": "c",
+      "xloctime": "c"
     },
     "cSpell.words": [
       "espnow"
