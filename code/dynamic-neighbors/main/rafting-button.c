@@ -167,7 +167,7 @@ static void IRAM_ATTR gpio_handler_isr(void *arg)
 {
    log_event_t data;
    data.timestamp = get_time();
-   ESP_ERROR_CHECK(esp_read_mac(&data.mac_addr, ESP_MAC_BASE));
+   ESP_ERROR_CHECK(esp_read_mac(data.mac_addr, ESP_MAC_BASE));
    xQueueSendFromISR(isr_event, &data, NULL);
 }
 
