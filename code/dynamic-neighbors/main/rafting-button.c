@@ -779,143 +779,144 @@ void espnow_handler_task(void)
                         ret);
             } break;
             }
-            break;
          }
+         break;
+      }
       default:
          ESP_LOGE(TAG, "Callback type error: %d", evt.id);
          break;
       }
-      }
-      /* Free memory */
-      free(send_neighbor_param->buf);
-      free(send_neighbor_param);
+   }
+   /* Free memory */
+   free(send_neighbor_param->buf);
+   free(send_neighbor_param);
 
-      free(send_param->buf);
+   free(send_param->buf);
+   free(send_param);
+   vSemaphoreDelete(espnow_queue);
+}
+
+void send_hello_ds_message(void)
+{
+   // ESP_LOGI(TAG, "Send HELLO_DS");
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parameter fail [Hello DS]");
+      return;
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+
+   // type | epoch ID | target
+   send_param->epoch_id = node.epoch_id;
+   memcpy(send_param->dest_mac, s_broadcast_mac, ESP_NOW_ETH_ALEN);
+   send_param->type = HELLO_DS;
+
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail [Hello DS]");
       free(send_param);
+      return;
+   }
+   esp_err_t ret;
+   espnow_data_prepare(send_param);
+   ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                      send_param->data_len);
+   if (ret != ESP_OK)
+      handle_espnow_send_error(ret);
+   // free(send_param->buff); // is missing?
+   free(send_param);
+}
+
+void send_neighbor_message_to_all(void)
+{
+   // ESP_LOGI(TAG, "Send NEIGHBOR");
+   // Allocate memory for `espnow_send_neighbor_param_t`
+   espnow_send_neighbor_param_t *send_neighbor_param = NULL;
+   send_neighbor_param = malloc(sizeof(espnow_send_neighbor_param_t));
+   if (send_neighbor_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
       vSemaphoreDelete(espnow_queue);
+      return;
    }
-
-   void send_hello_ds_message(void)
-   {
-      // ESP_LOGI(TAG, "Send HELLO_DS");
-      espnow_send_param_t *send_param = NULL;
-      send_param = malloc(sizeof(espnow_send_param_t));
-      if (send_param == NULL) {
-         ESP_LOGE(TAG, "Malloc send parameter fail [Hello DS]");
-         return;
-      }
-      memset(send_param, 0, sizeof(espnow_send_param_t));
-
-      // type | epoch ID | target
-      send_param->epoch_id = node.epoch_id;
-      memcpy(send_param->dest_mac, s_broadcast_mac, ESP_NOW_ETH_ALEN);
-      send_param->type = HELLO_DS;
-
-      send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-      send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-      if (send_param->buf == NULL) {
-         ESP_LOGE(TAG, "Malloc send buffer fail [Hello DS]");
-         free(send_param);
-         return;
-      }
-      esp_err_t ret;
-      espnow_data_prepare(send_param);
-      ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                         send_param->data_len);
-      if (ret != ESP_OK)
-         handle_espnow_send_error(ret);
-      // free(send_param->buff); // is missing?
-      free(send_param);
-   }
-
-   void send_neighbor_message_to_all(void)
-   {
-      // ESP_LOGI(TAG, "Send NEIGHBOR");
-      // Allocate memory for `espnow_send_neighbor_param_t`
-      espnow_send_neighbor_param_t *send_neighbor_param = NULL;
-      send_neighbor_param = malloc(sizeof(espnow_send_neighbor_param_t));
-      if (send_neighbor_param == NULL) {
-         ESP_LOGE(TAG, "Malloc send parametr fail");
-         vSemaphoreDelete(espnow_queue);
-         return;
-      }
-      memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
-      send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-      send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-      if (send_neighbor_param->buf == NULL) {
-         ESP_LOGE(TAG, "Malloc send buffer fail");
-         free(send_neighbor_param);
-         vSemaphoreDelete(espnow_queue);
-         return;
-      }
-
-      // send this information into all DS
-      send_neighbor_param->type = NEIGHBORS;
-
-      // Send first 10 addresses
-      memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[0],
-             sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
-      // Send to all active neighbors
-      for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
-         if (node.neighbor[j].status == ACTIVE) {
-            send_neighbor_param->epoch_id = node.epoch_id;
-            memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            espnow_data_neighbor_prepare(send_neighbor_param);
-
-            ret = esp_now_send(send_neighbor_param->dest_mac,
-                               send_neighbor_param->buf,
-                               send_neighbor_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
-         }
-      }
-      // Send second 10 addresses
-      memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[10],
-             sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
-      // Send to all active neighbors
-      for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
-         if (node.neighbor[j].status == ACTIVE) {
-            send_neighbor_param->epoch_id = node.epoch_id;
-            memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            espnow_data_neighbor_prepare(send_neighbor_param);
-
-            ret = esp_now_send(send_neighbor_param->dest_mac,
-                               send_neighbor_param->buf,
-                               send_neighbor_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
-         }
-      }
-      free(send_neighbor_param->buf); // TODO: test with it!
+   memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
+   send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_neighbor_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
       free(send_neighbor_param);
+      vSemaphoreDelete(espnow_queue);
+      return;
    }
 
-   void send_rtt_cal_master_task(void)
-   {
-      espnow_send_param_t *send_param = NULL;
-      send_param = malloc(sizeof(espnow_send_param_t));
-      if (send_param == NULL) {
-         ESP_LOGE(TAG, "Malloc send parameter fail");
-         vTaskDelete(NULL);
+   // send this information into all DS
+   send_neighbor_param->type = NEIGHBORS;
+
+   // Send first 10 addresses
+   memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[0],
+          sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+   // Send to all active neighbors
+   for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
+      if (node.neighbor[j].status == ACTIVE) {
+         send_neighbor_param->epoch_id = node.epoch_id;
+         memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
+                ESP_NOW_ETH_ALEN);
+         espnow_data_neighbor_prepare(send_neighbor_param);
+
+         ret = esp_now_send(send_neighbor_param->dest_mac,
+                            send_neighbor_param->buf,
+                            send_neighbor_param->data_len);
+         if (ret != ESP_OK)
+            handle_espnow_send_error(ret);
       }
-      memset(send_param, 0, sizeof(espnow_send_param_t));
-      send_param->content = 0;
-      // send_param->dest_mac;
-      send_param->type = RTT_CAL_MASTER;
-      send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
-      send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
-      if (send_param->buf == NULL) {
-         ESP_LOGE(TAG, "Malloc send buffer fail");
-         free(send_param);
-         vTaskDelete(NULL);
+   }
+   // Send second 10 addresses
+   memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[10],
+          sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+   // Send to all active neighbors
+   for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
+      if (node.neighbor[j].status == ACTIVE) {
+         send_neighbor_param->epoch_id = node.epoch_id;
+         memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
+                ESP_NOW_ETH_ALEN);
+         espnow_data_neighbor_prepare(send_neighbor_param);
+
+         ret = esp_now_send(send_neighbor_param->dest_mac,
+                            send_neighbor_param->buf,
+                            send_neighbor_param->data_len);
+         if (ret != ESP_OK)
+            handle_espnow_send_error(ret);
       }
-      esp_err_t ret;
-      while (1) {
-         if (node.title == MASTER) {
-            // ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
-         for (uint8_t i = 0; i < NEIGHBORS_COUNT // TODO; ++i) {
+   }
+   free(send_neighbor_param->buf); // TODO: test with it!
+   free(send_neighbor_param);
+}
+
+void send_rtt_cal_master_task(void)
+{
+   espnow_send_param_t *send_param = NULL;
+   send_param = malloc(sizeof(espnow_send_param_t));
+   if (send_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parameter fail");
+      vTaskDelete(NULL);
+   }
+   memset(send_param, 0, sizeof(espnow_send_param_t));
+   send_param->content = 0;
+   // send_param->dest_mac;
+   send_param->type = RTT_CAL_MASTER;
+   send_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_param);
+      vTaskDelete(NULL);
+   }
+   esp_err_t ret;
+   while (1) {
+      if (node.title == MASTER) {
+         // ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
+         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
@@ -965,40 +966,41 @@ void send_request_vote_task(void)
          node.count_of_vote = 0;
          node.title = CANDIDATE;
          // send give request vote
-         for (uint8_t i = 0; i < NEIGHBORS_COUNT // TODO; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
-            memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            send_param->epoch_id = node.epoch_id;
-            espnow_data_prepare(send_param);
+               memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               send_param->epoch_id = node.epoch_id;
+               espnow_data_prepare(send_param);
 
-            ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                               send_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
             }
-      }
-      node.timeout_vote = esp_timer_get_time();
-      while (1) {
-         // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních
-         // sousedů a stane se novým lídrem nebo přijme zprávu
-         // synchronizující čas TIME, novým lídrem se stalo
-         if (node.title != CANDIDATE) {
-            break;
          }
-         // nebo budou volby neúspěšné do timeoutu, volby skončí
-         // neúspěchem a začne nová epocha
-         if (esp_timer_get_time() - node.timeout_vote > VOTE_TIMEOUT) {
-            node.title = SLAVE;
-            break;
+         node.timeout_vote = esp_timer_get_time();
+         while (1) {
+            // The device gets confirmation from the majority of active
+            // GIVE_VOTE neighbors and becomes the new leader, or it receives
+            // a message synchronizing the time TIME; a new leader has been
+            // elected.
+            if (node.title != CANDIDATE) {
+               break;
+            }
+            // Or the election fails due to a timeout; the election ends
+            // in failure, and a new epoch begins.
+            if (esp_timer_get_time() - node.timeout_vote > VOTE_TIMEOUT) {
+               node.title = SLAVE;
+               break;
+            }
+            vTaskDelay(100 / portTICK_PERIOD_MS);
          }
-         vTaskDelay(100 / portTICK_PERIOD_MS);
       }
+      vTaskDelay(2000 / portTICK_PERIOD_MS);
    }
-   vTaskDelay(2000 / portTICK_PERIOD_MS);
-}
-free(send_param);
-vTaskDelete(NULL);
+   free(send_param);
+   vTaskDelete(NULL);
 }
 
 void send_time_task(void)
@@ -1024,25 +1026,25 @@ void send_time_task(void)
    while (1) {
       if (node.title == MASTER) {
          // ESP_LOGI(TAG, "Send TIME");
-         for (uint8_t i = 0; i < NEIGHBORS_COUNT // TODO; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
-            memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            send_param->epoch_id = node.epoch_id;
-            send_param->content = esp_timer_get_time();
-            espnow_data_prepare(send_param);
+               memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               send_param->epoch_id = node.epoch_id;
+               send_param->content = esp_timer_get_time();
+               espnow_data_prepare(send_param);
 
-            ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                               send_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
             }
+         }
       }
+      vTaskDelay(500 / portTICK_PERIOD_MS);
    }
-   vTaskDelay(500 / portTICK_PERIOD_MS);
-}
-free(send_param);
-vTaskDelete(NULL);
+   free(send_param);
+   vTaskDelete(NULL);
 }
 
 void handle_ds_event_task(void)
@@ -1066,8 +1068,9 @@ void handle_ds_event_task(void)
    }
    esp_err_t ret;
    log_event_t data;
-   // neni idelani implementace, bude se muset prerovnavat, mam ale taky, dam
-   // jen nizkou prioritu
+   // Not an ideal implementation; it will need reordering. However, I also
+   // have it, so I’ll just assign it a low priority.
+
    while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
       uint8_t i;
       print_log_event(data);
@@ -1120,7 +1123,7 @@ void handle_ds_event_task(void)
             break;
       }
 
-      // data disitribution
+      // data distribution
       switch (data.task) {
       case SEND:
          send_param->epoch_id = node.epoch_id;
@@ -1128,28 +1131,28 @@ void handle_ds_event_task(void)
          send_param->event_type = data.type;
          send_param->content = data.timestamp;
          send_param->type = LOG;
-         for (uint8_t i = 0; i < NEIGHBORS_COUNT // TODO; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
-            memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
-                   ESP_NOW_ETH_ALEN);
-            espnow_data_prepare(send_param);
+               memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
+                      ESP_NOW_ETH_ALEN);
+               espnow_data_prepare(send_param);
 
-            ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                               send_param->data_len);
-            if (ret != ESP_OK)
-               handle_espnow_send_error(ret);
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
             }
+         }
+         break;
+      case SAVE:
+         // do nothing
+         break;
+      default:
+         ESP_LOGE(TAG, "Unknown task type");
+         break;
       }
-      break;
-   case SAVE:
-      // do nothing
-      break;
-   default:
-      ESP_LOGE(TAG, "Unknown task type");
-      break;
    }
-}
-vTaskDelete(NULL);
+   vTaskDelete(NULL);
 }
 
 void app_main(void)
@@ -1199,64 +1202,65 @@ void app_main(void)
    node.epoch_id = 0;
    node.is_time_synced = 0;
    node.title = SLAVE;
-   for (uint8_t i = 0; i < NEIGHBORS_COUNT // TODO; ++i) {
+   for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
       node.neighbor[i].status = NOT_INITIALIZED;
       node.neighbor_error_count[i] = 0;
-}
-for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
-   node.events[i].type = EMPTY;
-}
+   }
+   for (uint8_t i = 0; i < EVENT_HISTORY; ++i) {
+      node.events[i].type = EMPTY;
+   }
 
-// Create a broadcast peer
-memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
-if (!esp_now_is_peer_exist(s_broadcast_mac)) {
-   ESP_ERROR_CHECK(esp_now_add_peer(&broadcast_peer));
-}
+   // Create a broadcast peer
+   memcpy(&broadcast_peer.peer_addr, s_broadcast_mac, 6);
+   if (!esp_now_is_peer_exist(s_broadcast_mac)) {
+      ESP_ERROR_CHECK(esp_now_add_peer(&broadcast_peer));
+   }
 
-espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
-log_event = xQueueCreate(LOG_QUEUE_SIZE, sizeof(log_event_t));
-isr_event = xQueueCreate(ISR_QUEUE_SIZE, sizeof(log_event_t));
+   espnow_queue = xQueueCreate(ESPNOW_QUEUE_SIZE, sizeof(espnow_event_t));
+   log_event = xQueueCreate(LOG_QUEUE_SIZE, sizeof(log_event_t));
+   isr_event = xQueueCreate(ISR_QUEUE_SIZE, sizeof(log_event_t));
 
-BaseType_t handler_task;
-handler_task =
-    xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
-                STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
-BaseType_t send_rtt_cal_master_task_v;
-send_rtt_cal_master_task_v = xTaskCreate(
-    (TaskFunction_t)send_rtt_cal_master_task, "send_rtt_cal_master_task",
-    STACK_SIZE, NULL, PRIORITY_RTT_START, NULL);
+   BaseType_t handler_task;
+   handler_task =
+       xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
+                   STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
+   BaseType_t send_rtt_cal_master_task_v;
+   send_rtt_cal_master_task_v = xTaskCreate(
+       (TaskFunction_t)send_rtt_cal_master_task, "send_rtt_cal_master_task",
+       STACK_SIZE, NULL, PRIORITY_RTT_START, NULL);
 
-BaseType_t send_time_task_v;
-send_time_task_v = xTaskCreate((TaskFunction_t)send_time_task, "send_time_task",
-                               STACK_SIZE, NULL, PRIORITY_TIME_START, NULL);
+   BaseType_t send_time_task_v;
+   send_time_task_v =
+       xTaskCreate((TaskFunction_t)send_time_task, "send_time_task", STACK_SIZE,
+                   NULL, PRIORITY_TIME_START, NULL);
 
-BaseType_t send_request_vote_task_v;
-send_request_vote_task_v = xTaskCreate((TaskFunction_t)send_request_vote_task,
-                                       "send_request_vote_task", STACK_SIZE,
-                                       NULL, PRIORITY_REQUEST_TASK, NULL);
+   BaseType_t send_request_vote_task_v;
+   send_request_vote_task_v = xTaskCreate(
+       (TaskFunction_t)send_request_vote_task, "send_request_vote_task",
+       STACK_SIZE, NULL, PRIORITY_REQUEST_TASK, NULL);
 
-BaseType_t handle_ds_event_task_v;
-handle_ds_event_task_v =
-    xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
-                STACK_SIZE, NULL, PRIORITY_HANDLE_DS_EVENT, NULL);
+   BaseType_t handle_ds_event_task_v;
+   handle_ds_event_task_v =
+       xTaskCreate((TaskFunction_t)handle_ds_event_task, "handle_ds_event_task",
+                   STACK_SIZE, NULL, PRIORITY_HANDLE_DS_EVENT, NULL);
 
-BaseType_t handle_isr_event_task_v;
-handle_isr_event_task_v =
-    xTaskCreate((TaskFunction_t)handle_isr_event_task, "handle_isr_event_task",
-                STACK_SIZE, NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
+   BaseType_t handle_isr_event_task_v;
+   handle_isr_event_task_v = xTaskCreate((TaskFunction_t)handle_isr_event_task,
+                                         "handle_isr_event_task", STACK_SIZE,
+                                         NULL, PRIORITY_HANDLE_ISR_EVENT, NULL);
 
-send_hello_ds_message();
+   send_hello_ds_message();
 
-vTaskDelay(1000 / portTICK_PERIOD_MS);
+   vTaskDelay(1000 / portTICK_PERIOD_MS);
 
-while (1) {
-   print_neighbors();
-   print_log();
-   vTaskDelay(5000 / portTICK_PERIOD_MS);
-}
+   while (1) {
+      print_neighbors();
+      print_log();
+      vTaskDelay(5000 / portTICK_PERIOD_MS);
+   }
 
-// Ending rutine
-printf("Restarting now!\n");
-fflush(stdout);
-esp_restart();
+   // Ending rutine
+   printf("Restarting now!\n");
+   fflush(stdout);
+   esp_restart();
 }
