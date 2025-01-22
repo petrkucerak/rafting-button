@@ -513,7 +513,6 @@ void espnow_handler_task(void)
             // Check epoch ID and if it lower than actual, ignore this message
             if (epoch_id < node.epoch_id) {
                ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
-               continue;
             } else if (epoch_id > node.epoch_id)
                node.epoch_id = epoch_id;
 
@@ -590,7 +589,6 @@ void espnow_handler_task(void)
                // Check epoch ID and if it lower than actual, ignore this
                // message
                ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
-               continue; // TODO: test it
             } else if (epoch_id > node.epoch_id)
                node.epoch_id = epoch_id;
             switch (ret) {
@@ -624,7 +622,7 @@ void espnow_handler_task(void)
                      }
                   }
                }
-               // print_neighbors();
+               print_neighbors();
                // send back: neighbor list, epoch id
                ESP_LOGI(TAG, "Send neighbor message");
                // send back neighbor message
