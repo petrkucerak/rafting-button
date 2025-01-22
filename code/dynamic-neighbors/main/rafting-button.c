@@ -447,6 +447,24 @@ void espnow_handler_task(void)
       return;
    }
 
+   // Allocate memory for `espnow_send_neighbor_param_t`
+   espnow_send_neighbor_param_t *send_neighbor_param = NULL;
+   send_neighbor_param = malloc(sizeof(espnow_send_neighbor_param_t));
+   if (send_neighbor_param == NULL) {
+      ESP_LOGE(TAG, "Malloc send parametr fail");
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+   memset(send_neighbor_param, 0, sizeof(send_neighbor_param_t));
+   send_neighbor_param->data_len = CONFIG_ESPNOW_SEND_LEN;
+   send_neighbor_param->buf = malloc(CONFIG_ESPNOW_SEND_LEN);
+   if (send_neighbor_param->buf == NULL) {
+      ESP_LOGE(TAG, "Malloc send buffer fail");
+      free(send_neighbor_param);
+      vSemaphoreDelete(espnow_queue);
+      return;
+   }
+
    while (xQueueReceive(espnow_queue, &evt, portMAX_DELAY) == pdTRUE) {
       switch (evt.id) {
       case ESPNOW_SEND_CB: {
@@ -607,21 +625,34 @@ void espnow_handler_task(void)
                }
                // print_neighbors();
                // send back: neighbor list, epoch id
-               // ESP_LOGI(TAG, "Send neighbor message");
+               ESP_LOGI(TAG, "Send neighbor message");
                // send back neighbor message
-               send_neighbor_message_to_all(); // TODO: komu to mam poslat?
-               send_param->type = NEIGHBORS;
-               send_param->epoch_id = node.epoch_id;
-               memcpy(send_param->dest_mac, recv_cb->mac_addr,
+               send_neighbor_param->type = NEIGHBORS;
+               send_neighbor_param->epoch_id = node.epoch_id;
+               // Copy receiver MAC address
+               memcpy(send_neighbor_param->dest_mac, recv_cb->mac_addr,
                       ESP_NOW_ETH_ALEN);
-               memcpy(&send_param->neighbor[0], &node.neighbor[0],
-                      sizeof(neighbor_t) * NEIGHBORS_COUNT // TODO);
-               espnow_data_prepare(send_param);
 
-               ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                                  send_param->data_len);
+               // Send first 10 addresses
+               memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[0],
+                      sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+               espnow_data_neighbor_prepare(send_neighbor_param);
+               ret = esp_now_send(send_neighbor_param->dest_mac,
+                                  send_neighbor_param->buf,
+                                  send_neighbor_param->data_len);
                if (ret != ESP_OK)
                   handle_espnow_send_error(ret);
+
+               // Send second 10 addresses
+               memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[10],
+                      sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
+               espnow_data_neighbor_prepare(send_neighbor_param);
+               ret = esp_now_send(send_neighbor_param->dest_mac,
+                                  send_neighbor_param->buf,
+                                  send_neighbor_param->data_len);
+               if (ret != ESP_OK)
+                  handle_espnow_send_error(ret);
+
             } break;
             case NEIGHBORS: {
                // TODO: move this implementation into the specific NEIGHBORS
@@ -854,6 +885,10 @@ void espnow_handler_task(void)
             break;
          }
       }
+         /* Free memory */
+         free(send_neighbor_param->buf);
+         free(send_neighbor_param);
+
          free(send_param->buf);
          free(send_param);
          vSemaphoreDelete(espnow_queue);
@@ -922,13 +957,14 @@ void espnow_handler_task(void)
          // Send to all active neighbors
          for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
             if (node.neighbor[j].status == ACTIVE) {
-               send_param->epoch_id = node.epoch_id;
-               memcpy(send_param->dest_mac, &node.neighbor[j].mac_addr,
+               send_neighbor_param->epoch_id = node.epoch_id;
+               memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
                       ESP_NOW_ETH_ALEN);
-               espnow_data_neighbor_prepare(send_param);
+               espnow_data_neighbor_prepare(send_neighbor_param);
 
-               ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                                  send_param->data_len);
+               ret = esp_now_send(send_neighbor_param->dest_mac,
+                                  send_neighbor_param->buf,
+                                  send_neighbor_param->data_len);
                if (ret != ESP_OK)
                   handle_espnow_send_error(ret);
             }
@@ -939,13 +975,14 @@ void espnow_handler_task(void)
          // Send to all active neighbors
          for (uint8_t j = 0; j < NEIGHBORS_MAX_COUNT; ++j) {
             if (node.neighbor[j].status == ACTIVE) {
-               send_param->epoch_id = node.epoch_id;
-               memcpy(send_param->dest_mac, &node.neighbor[j].mac_addr,
+               send_neighbor_param->epoch_id = node.epoch_id;
+               memcpy(send_neighbor_param->dest_mac, &node.neighbor[j].mac_addr,
                       ESP_NOW_ETH_ALEN);
-               espnow_data_neighbor_prepare(send_param);
+               espnow_data_neighbor_prepare(send_neighbor_param);
 
-               ret = esp_now_send(send_param->dest_mac, send_param->buf,
-                                  send_param->data_len);
+               ret = esp_now_send(send_neighbor_param->dest_mac,
+                                  send_neighbor_param->buf,
+                                  send_neighbor_param->data_len);
                if (ret != ESP_OK)
                   handle_espnow_send_error(ret);
             }
