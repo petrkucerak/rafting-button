@@ -359,7 +359,7 @@ uint32_t get_neighbor_check(neighbor_t *neighbor)
 {
    uint32_t ret = 0;
    for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
-      switch (neighbor[i]->status) {
+      switch (neighbor[i].status) {
       case NOT_INITIALIZED:
          ret += 1;
          break;
