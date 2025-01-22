@@ -507,7 +507,7 @@ void espnow_handler_task(void)
             ESP_LOGI(TAG, "Receive neighbor message");
             // parse incoming message
             ret = espnow_data_neighbor_parse(recv_cb->data, recv_cb->data_len,
-                                             &type, &epoch_id, &neighbors);
+                                             &type, &epoch_id, neighbors);
             free(recv_cb);
 
             // Check epoch ID and if it lower than actual, ignore this message
