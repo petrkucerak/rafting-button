@@ -832,6 +832,7 @@ void send_hello_ds_message(void)
 
 void send_neighbor_message_to_all(void)
 {
+   esp_err_t ret;
    // ESP_LOGI(TAG, "Send NEIGHBOR");
    // Allocate memory for `espnow_send_neighbor_param_t`
    espnow_send_neighbor_param_t *send_neighbor_param = NULL;
