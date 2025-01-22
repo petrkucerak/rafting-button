@@ -594,7 +594,7 @@ void espnow_handler_task(void)
                node.epoch_id = epoch_id;
             switch (ret) {
             case HELLO_DS: {
-               // TODO: implement new neighbor parsing and new send NEIGHBOR
+               // TODO: test this message type
                // method
                ESP_LOGI(TAG, "Receive HELLO_DS");
                // add device to my list or make it ACTIVE
