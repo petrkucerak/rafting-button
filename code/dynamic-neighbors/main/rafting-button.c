@@ -508,7 +508,7 @@ void espnow_handler_task(void)
             // parse incoming message
             ret = espnow_data_neighbor_parse(recv_cb->data, recv_cb->data_len,
                                              &type, &epoch_id, neighbors);
-            free(recv_cb);
+            free(recv_cb->data);
 
             // Check epoch ID and if it lower than actual, ignore this message
             if (epoch_id < node.epoch_id) {
