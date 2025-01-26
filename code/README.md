@@ -2,6 +2,7 @@ Softwarová implementace.
 
 ## Seznam projektů
 
+- `dynamic-neighbors` - implementac v rámci předmětu DSV, která umožňuje dynamický počet sousedů
 - `esp-now-parameters` - měření latence ESP-NOW na ESP32
 - `hello-world` - testovací kód na ESP32S2
 - `measure-esp-now` - měření síťové infratruktury na ESP32S2
