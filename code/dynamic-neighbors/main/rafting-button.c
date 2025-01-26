@@ -278,7 +278,7 @@ static void espnow_recv_cb(const esp_now_recv_info_t *esp_now_info,
 
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      uint32_t *neighbor_check, log_event_t *event)
+                      neighbor_t *neighbor, log_event_t *event)
 {
    message_data_t *buf = (message_data_t *)data;
 
@@ -291,15 +291,18 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
    *type = buf->type;
    *content = buf->content;
    *epoch_id = buf->epoch_id;
-   *neighbor_check = buf->neighbor_check;
 
-   // DS event variables
+   // DS event varibales
    // *event->mac_addr = buf->event_mac_addr;
    memcpy(event->mac_addr, buf->event_mac_addr, ESP_NOW_ETH_ALEN);
    event->task = buf->event_task;
    event->type = buf->event_type;
    event->timestamp = buf->content;
 
+   // Neighbor list
+   for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
+      neighbor[i] = buf->neighbor[i];
+   }
    return buf->type;
 }
 
@@ -337,7 +340,8 @@ void espnow_data_prepare(espnow_send_param_t *send_param)
    buf->event_task = send_param->event_task;
    buf->event_type = send_param->event_type;
    memcpy(buf->event_mac_addr, send_param->event_mac_addr, ESP_NOW_ETH_ALEN);
-   buf->neighbor_check = send_param->neighbor_check;
+   memcpy(&buf->neighbor[0], &send_param->neighbor[0],
+          sizeof(neighbor_t) * NEIGHBORS_COUNT);
    /* Fill all remaining bytes after the data with random values */
    esp_fill_random(buf->payload, send_param->data_len - sizeof(message_data_t));
 }
@@ -580,28 +584,24 @@ void espnow_handler_task(void)
                }
             }
          } else {
-            // TODO: handle neighbor checksum
-            ret =
-                espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
-                                  &content, &epoch_id, &neighbor_check, &event);
+            // handle recv
+            espnow_event_recv_cb_t *recv_cb = &evt.info.recv_cb;
+            ret = espnow_data_parse(recv_cb->data, recv_cb->data_len, &type,
+                                    &content, &epoch_id, neighbors, &event);
             free(recv_cb->data);
-            if (epoch_id < node.epoch_id) {
-               // Check epoch ID and if it lower than actual, ignore this
-               // message
+            if (epoch_id < node.epoch_id)
                ESP_LOGE(TAG, "Wrong number of epoch ID in income message");
-            } else if (epoch_id > node.epoch_id)
+            else if (epoch_id > node.epoch_id)
                node.epoch_id = epoch_id;
             switch (ret) {
             case HELLO_DS: {
-               // TODO: test this message type
-               // method
-               ESP_LOGI(TAG, "Receive HELLO_DS");
+               // ESP_LOGI(TAG, "Receive HELLO_DS");
                // add device to my list or make it ACTIVE
                if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
                   uint8_t i = 0;
                   while (node.neighbor[i].status != NOT_INITIALIZED) {
                      ++i;
-                     if (i >= NEIGHBORS_MAX_COUNT) {
+                     if (i >= NEIGHBORS_COUNT) {
                         ESP_LOGE(TAG, "Not empty space for more neighbors");
                      }
                   }
@@ -614,7 +614,7 @@ void espnow_handler_task(void)
                   memcpy(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
                          ESP_NOW_ETH_ALEN);
                } else {
-                  for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+                  for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
                      if (memcmp(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
                                 ESP_NOW_ETH_ALEN) == 0) {
                         node.neighbor[i].status = ACTIVE;
@@ -622,36 +622,89 @@ void espnow_handler_task(void)
                      }
                   }
                }
-               print_neighbors();
+               // print_neighbors();
                // send back: neighbor list, epoch id
-               ESP_LOGI(TAG, "Send neighbor message");
-               // send back neighbor message
-               send_neighbor_param->type = NEIGHBORS;
-               send_neighbor_param->epoch_id = node.epoch_id;
-               // Copy receiver MAC address
-               memcpy(send_neighbor_param->dest_mac, recv_cb->mac_addr,
+               // ESP_LOGI(TAG, "Send neighbor message");
+               send_param->type = NEIGHBORS;
+               send_param->epoch_id = node.epoch_id;
+               memcpy(send_param->dest_mac, recv_cb->mac_addr,
                       ESP_NOW_ETH_ALEN);
+               memcpy(&send_param->neighbor[0], &node.neighbor[0],
+                      sizeof(neighbor_t) * NEIGHBORS_COUNT);
+               espnow_data_prepare(send_param);
 
-               // Send first 10 addresses
-               memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[0],
-                      sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
-               espnow_data_neighbor_prepare(send_neighbor_param);
-               ret = esp_now_send(send_neighbor_param->dest_mac,
-                                  send_neighbor_param->buf,
-                                  send_neighbor_param->data_len);
+               ret = esp_now_send(send_param->dest_mac, send_param->buf,
+                                  send_param->data_len);
                if (ret != ESP_OK)
                   handle_espnow_send_error(ret);
 
-               // Send second 10 addresses
-               memcpy(&send_neighbor_param->neighbor[0], &node.neighbor[10],
-                      sizeof(neighbor_t) * NEIGHBORS_MAX_MESSAGE_COUNT);
-               espnow_data_neighbor_prepare(send_neighbor_param);
-               ret = esp_now_send(send_neighbor_param->dest_mac,
-                                  send_neighbor_param->buf,
-                                  send_neighbor_param->data_len);
-               if (ret != ESP_OK)
-                  handle_espnow_send_error(ret);
-
+            } break;
+            case NEIGHBORS: {
+               // ESP_LOGI(TAG, "Receive neighbor message");
+               // save neighbors from peer_list
+               for (uint8_t j = 0; j < NEIGHBORS_COUNT; ++j) {
+                  if (neighbors[j].status != NOT_INITIALIZED) {
+                     if (!is_device_mac(neighbors[j].mac_addr)) {
+                        if (!esp_now_is_peer_exist(neighbors[j].mac_addr)) {
+                           uint8_t i = 0;
+                           while (node.neighbor[i].status != NOT_INITIALIZED) {
+                              ++i;
+                              if (i >= NEIGHBORS_COUNT) {
+                                 ESP_LOGE(TAG,
+                                          "Not empty space for more neighbors");
+                              }
+                           }
+                           esp_now_peer_info_t peer_info = {};
+                           memcpy(&peer_info.peer_addr, &neighbors[j].mac_addr,
+                                  ESP_NOW_ETH_ALEN);
+                           ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+                           node.neighbor[i].status = neighbors[j].status;
+                           node.neighbor[i].title = neighbors[j].title;
+                           memcpy(&node.neighbor[i].mac_addr,
+                                  &neighbors[j].mac_addr, ESP_NOW_ETH_ALEN);
+                        } else {
+                           for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
+                              if (memcmp(&node.neighbor[i].mac_addr,
+                                         &neighbors[j].mac_addr,
+                                         ESP_NOW_ETH_ALEN) == 0) {
+                                 node.neighbor[i].status = neighbors[j].status;
+                                 node.neighbor[i].title = neighbors[j].title;
+                                 // ESP_LOGI(TAG, "Set %d. neighbor as
+                                 // INACTIVE", i);
+                                 break;
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+               // save sender peer_info
+               if (!esp_now_is_peer_exist(recv_cb->mac_addr)) {
+                  uint8_t i = 0;
+                  while (node.neighbor[i].status != NOT_INITIALIZED) {
+                     ++i;
+                     if (i >= NEIGHBORS_COUNT) {
+                        ESP_LOGE(TAG, "Not empty space for more neighbors");
+                     }
+                  }
+                  esp_now_peer_info_t peer_info = {};
+                  memcpy(&peer_info.peer_addr, recv_cb->mac_addr,
+                         ESP_NOW_ETH_ALEN);
+                  ESP_ERROR_CHECK(esp_now_add_peer(&peer_info));
+                  node.neighbor[i].status = ACTIVE;
+                  node.neighbor[i].title = SLAVE;
+                  memcpy(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
+                         ESP_NOW_ETH_ALEN);
+               } else {
+                  for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
+                     if (memcmp(&node.neighbor[i].mac_addr, recv_cb->mac_addr,
+                                ESP_NOW_ETH_ALEN) == 0) {
+                        node.neighbor[i].status = ACTIVE;
+                        break;
+                     }
+                  }
+               }
+               // print_neighbors();
             } break;
             case RTT_CAL_MASTER: {
                // ESP_LOGI(TAG, "Receive RTT_CAL_MASTER");
@@ -801,7 +854,7 @@ void send_hello_ds_message(void)
    espnow_send_param_t *send_param = NULL;
    send_param = malloc(sizeof(espnow_send_param_t));
    if (send_param == NULL) {
-      ESP_LOGE(TAG, "Malloc send parameter fail [Hello DS]");
+      ESP_LOGE(TAG, "Malloc send parametr fail [Hello DS]");
       return;
    }
    memset(send_param, 0, sizeof(espnow_send_param_t));
@@ -824,7 +877,6 @@ void send_hello_ds_message(void)
                       send_param->data_len);
    if (ret != ESP_OK)
       handle_espnow_send_error(ret);
-   // free(send_param->buff); // is missing?
    free(send_param);
 }
 
@@ -889,7 +941,7 @@ void send_neighbor_message_to_all(void)
             handle_espnow_send_error(ret);
       }
    }
-   free(send_neighbor_param->buf); // TODO: test with it!
+   free(send_neighbor_param->buf);
    free(send_neighbor_param);
 }
 
@@ -898,7 +950,7 @@ void send_rtt_cal_master_task(void)
    espnow_send_param_t *send_param = NULL;
    send_param = malloc(sizeof(espnow_send_param_t));
    if (send_param == NULL) {
-      ESP_LOGE(TAG, "Malloc send parameter fail");
+      ESP_LOGE(TAG, "Malloc send parametr fail");
       vTaskDelete(NULL);
    }
    memset(send_param, 0, sizeof(espnow_send_param_t));
@@ -915,13 +967,12 @@ void send_rtt_cal_master_task(void)
    esp_err_t ret;
    while (1) {
       if (node.title == MASTER) {
-         ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
-         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+         // ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
+         for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                send_param->epoch_id = node.epoch_id;
-               send_param->neighbor_check = 0x0;
                send_param->content = esp_timer_get_time();
                espnow_data_prepare(send_param);
 
@@ -967,7 +1018,7 @@ void send_request_vote_task(void)
          node.count_of_vote = 0;
          node.title = CANDIDATE;
          // send give request vote
-         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
@@ -982,15 +1033,14 @@ void send_request_vote_task(void)
          }
          node.timeout_vote = esp_timer_get_time();
          while (1) {
-            // The device gets confirmation from the majority of active
-            // GIVE_VOTE neighbors and becomes the new leader, or it receives
-            // a message synchronizing the time TIME; a new leader has been
-            // elected.
+            // zařízení dostane potvrzení od většiny GIVE_VOTE aktivních sousedů
+            // a stane se novým lídrem nebo přijme zprávu synchronizující čas
+            // TIME, novým lídrem se stalo
             if (node.title != CANDIDATE) {
                break;
             }
-            // Or the election fails due to a timeout; the election ends
-            // in failure, and a new epoch begins.
+            // nebo budou volby neúspěšné do timeoutu, volby skončí neúspěchem a
+            // začne nová epocha
             if (esp_timer_get_time() - node.timeout_vote > VOTE_TIMEOUT) {
                node.title = SLAVE;
                break;
@@ -1027,7 +1077,7 @@ void send_time_task(void)
    while (1) {
       if (node.title == MASTER) {
          // ESP_LOGI(TAG, "Send TIME");
-         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
@@ -1069,9 +1119,8 @@ void handle_ds_event_task(void)
    }
    esp_err_t ret;
    log_event_t data;
-   // Not an ideal implementation; it will need reordering. However, I also
-   // have it, so I’ll just assign it a low priority.
-
+   // neni idelani implementace, bude se muset prerovnavat, mam ale taky, dam
+   // jen nizkou prioritu
    while (xQueueReceive(log_event, &data, portMAX_DELAY) == pdTRUE) {
       uint8_t i;
       print_log_event(data);
@@ -1124,7 +1173,7 @@ void handle_ds_event_task(void)
             break;
       }
 
-      // data distribution
+      // data disitribution
       switch (data.task) {
       case SEND:
          send_param->epoch_id = node.epoch_id;
@@ -1132,7 +1181,7 @@ void handle_ds_event_task(void)
          send_param->event_type = data.type;
          send_param->content = data.timestamp;
          send_param->type = LOG;
-         for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+         for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
@@ -1203,7 +1252,7 @@ void app_main(void)
    node.epoch_id = 0;
    node.is_time_synced = 0;
    node.title = SLAVE;
-   for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
+   for (uint8_t i = 0; i < NEIGHBORS_COUNT; ++i) {
       node.neighbor[i].status = NOT_INITIALIZED;
       node.neighbor_error_count[i] = 0;
    }
@@ -1224,7 +1273,7 @@ void app_main(void)
    BaseType_t handler_task;
    handler_task =
        xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
-                   8192, NULL, PRIORITY_HANDLER, NULL);
+                   STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
    BaseType_t send_rtt_cal_master_task_v;
    send_rtt_cal_master_task_v = xTaskCreate(
        (TaskFunction_t)send_rtt_cal_master_task, "send_rtt_cal_master_task",

@@ -115,7 +115,9 @@
       "xmemory": "c",
       "xtr1common": "c",
       "iomanip": "c",
-      "xloctime": "c"
+      "xloctime": "c",
+      "xlocale": "c",
+      "system_error": "c"
     },
     "cSpell.words": [
       "espnow"

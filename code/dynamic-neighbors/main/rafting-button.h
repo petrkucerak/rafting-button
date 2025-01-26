@@ -19,6 +19,9 @@
 #define NEIGHBORS_MAX_COUNT 20
 /// @brief The count of possible send by one message is 10
 #define NEIGHBORS_MAX_MESSAGE_COUNT 10
+/// @brief The count of possible used devices is 10, therefore the count of
+/// neighbors is 9 devices.
+#define NEIGHBORS_COUNT 9
 /// @brief Size of the array used for storing logs with DS events.
 #define EVENT_HISTORY 50
 
@@ -262,8 +265,8 @@ typedef struct message_data {
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
    /// @brief DS event task
    ds_task_t event_task;
-   /// @brief Neighbor check 1 - NOT_INITIALIZED, 100 - INACTIVE, 10000 - ACTIVE
-   uint32_t neighbor_check;
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_COUNT];
    /// @brief Message payload
    /// @note The message payload fills all remaining bytes after the data with
    /// random values.
@@ -300,7 +303,7 @@ typedef struct espnow_send_param {
    /// @brief Epoch ID
    uint32_t epoch_id;
    /// @brief Array of device neighbors
-   uint32_t neighbor_check;
+   neighbor_t neighbor[NEIGHBORS_COUNT];
    /// @brief DS event type
    ds_event_t event_type;
    /// @brief DS event MAC address
@@ -372,9 +375,9 @@ typedef struct node_info {
    /// @brief Average deviation value
    int32_t deviation_avg;
    /// @brief List of device neighbors
-   neighbor_t neighbor[NEIGHBORS_MAX_COUNT];
+   neighbor_t neighbor[NEIGHBORS_COUNT];
    /// @brief Counts of unsuccessful message sends to neighbor devices
-   uint8_t neighbor_error_count[NEIGHBORS_MAX_COUNT];
+   uint8_t neighbor_error_count[NEIGHBORS_COUNT];
    /// @brief Epoch ID of the device
    uint32_t epoch_id;
    /// @brief Title of the device
@@ -477,7 +480,7 @@ void handle_isr_event_task(void);
  * @brief Parse ESP-NOW data and extract information.
  *
  * This function parses the received ESP-NOW data and extracts information such
- * as message type, content, epoch ID, neighbor check value, and log event. It
+ * as message type, content, epoch ID, neighbor list, and log event. It
  * populates the provided variables with the extracted data.
  *
  * @param data The received ESP-NOW data.
@@ -485,18 +488,13 @@ void handle_isr_event_task(void);
  * @param type Pointer to a variable to store the message type.
  * @param content Pointer to a variable to store the content.
  * @param epoch_id Pointer to a variable to store the epoch ID.
- * @param neighbor_check Pointer to a variable to store the neighbor check value.
+ * @param neighbor Pointer to an array to store the neighbor list.
  * @param event Pointer to a log_event_t variable to store the log event.
- * @return The message type extracted from the data, or -1 if the data length is
- * invalid.
- *
- * @note The function checks if the length of the received data is sufficient to
- * contain the expected structure. If the data is too short, an error is logged,
- * and the function returns -1.
+ * @return The message type extracted from the data.
  */
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      uint32_t *neighbor_check, log_event_t *event);
+                      neighbor_t *neighbor, log_event_t *event);
 
 /**
  * @brief Parse ESP-NOW data and extract neighbor information.
