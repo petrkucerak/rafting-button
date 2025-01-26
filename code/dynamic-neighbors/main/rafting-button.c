@@ -915,12 +915,13 @@ void send_rtt_cal_master_task(void)
    esp_err_t ret;
    while (1) {
       if (node.title == MASTER) {
-         // ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
+         ESP_LOGI(TAG, "Send RTT_CAL_MASTER");
          for (uint8_t i = 0; i < NEIGHBORS_MAX_COUNT; ++i) {
             if (node.neighbor[i].status == ACTIVE) {
                memcpy(send_param->dest_mac, &node.neighbor[i].mac_addr,
                       ESP_NOW_ETH_ALEN);
                send_param->epoch_id = node.epoch_id;
+               send_param->neighbor_check = 0x0;
                send_param->content = esp_timer_get_time();
                espnow_data_prepare(send_param);
 
@@ -1223,7 +1224,7 @@ void app_main(void)
    BaseType_t handler_task;
    handler_task =
        xTaskCreate((TaskFunction_t)espnow_handler_task, "espnow_handler_task",
-                   STACK_SIZE, NULL, PRIORITY_HANDLER, NULL);
+                   8192, NULL, PRIORITY_HANDLER, NULL);
    BaseType_t send_rtt_cal_master_task_v;
    send_rtt_cal_master_task_v = xTaskCreate(
        (TaskFunction_t)send_rtt_cal_master_task, "send_rtt_cal_master_task",
