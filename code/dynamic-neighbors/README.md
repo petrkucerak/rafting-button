@@ -1,20 +1,74 @@
-### Rafting button with dynamic neighbors count
-
-Cílem této implementace je změnit statický počet sousedů na počet dynamický a umožnit zapojit tak do sítě až 20 zařízení, což je limit daný technologií ESP-NOW (konkrétně funkcí `esp_now_add_peer()`).
+# Hlasovací zařízení řešící koncenzus v distribuovaném systému
 
 > [!NOTE]
-> Při určité konfiguraci by určitě bylo možné vymyslet alternativní řešení pro využití více sousedů, např. vytvořit více subsíti. Pro tuto aplikaci to ovšem nedává smysl, proto jsem se rozhodl respektovat tento limit a zohlednit ho při následném výpočtu paměťové náročnosti.
+> Generovano pomoc chatGPT z report.pdf
 
-## Návrh realizace
+## Úvod
 
-1. **ukládání**: V podstatě jsou 2 možnosti pro ukládání dat do paměti - statická nebo dynamická cesta. Statická by znamenalo mít neustále alokováno $20$ x $16$ bytes, kde by se do pole zapisovala aktuální zařízení. Druhým způsobem je paměť dynamická - např. linked list. Limitací technologie ESP-NOW jsem zvolil první možnost, tedy statický styl ukládání a to z důvodu bezpečnější implemtnace (resp. méně náchylné na chybu) a z důvodu menší výpočetní zátěže pro práci s paměti. 
-2. **změna struktury packetu**: Součástí každé zprávy momenátlně byl i seznam sousedů. To nyní změním a to z důvodu omezení paměti. Místo části framu, kde doteď byli uložení sousedé (neighbor), uložím jednoduchý checksum, který bude typu `uint32_t` a bude preprezentovat sousedy následujícím způsobem. Za každý node ve stavu
-   - `NOT_INITIALIZED` bude přičtena hodnota $1$
-   - `INACTIVE` bude přičtena hodnota $100$
-   - `ACTIVE` bude přičtena hodnota $10 000$
-3. **nový typ zprávy**: Vytvořím nový typ zprávy, který bude odesílát seznam sousedů. Jelikož je velikost zprávy maximálně 250 bytes, budu muset seznam rozdělit do dvou zpráv. To ale ničemu nevadí. Tato zpráva se bude odesílat vždy, po:
-   - změně datové struktury se sousedy
-   - zachycení zprávy `HELLO_DS`
-   - přijmutí chybného čísla počtu sousedů
-   - naktivním zařízení
-4. **aktualizace sezanamu sousedů**: Je třeba implementovat, resp. aktualizovat funkci pro příjem počtu sousedů. Vždy vyhrává zpráva, která má nojvější číslo epochy.
+Cílem projektu bylo zrobustnit algoritmus, který obsluhuje distribuovanou síť tvořenou hlasovacími zařízeními. Konkrétně bylo cílem ošetřit chybové stavy a navrhnout a implementovat přístup, který zajistí, že v síti bude moci být připojeno 1–N zařízení.
+
+Síť je postavena na zařízeních ESP32, která jsou propojena pomocí protokolu ESP-NOW. Tento protokol spojuje horních pět vrstev OSI modelu do jedné, zvané ESP-NOW. Protokol má určité limity, jako je počet sousedů (maximálně 20 nešifrovaných) a velikost zprávy (maximálně 250 B). Tyto limity bylo nutné zohlednit při návrhu a implementaci.
+
+
+## Algoritmus a implementace
+
+Algoritmus tvoří tři základní komponenty: 
+
+1. Registrace zařízení do distribuované sítě (DS)
+2. Běžný chod a terminace zařízení
+3. Synchronizace času, distribuce logů a seznamu zařízení
+
+### Registrace zařízení
+
+Po spuštění zařízení odešle broadcast zprávu typu `HELLO_DS`. Ostatní zařízení v síti si jej přidají do seznamu sousedů a odešlou zprávu typu `NEIGHBOURS` s informacemi o DS (např. ID epochy). Pokud zařízení obdrží více než polovinu odpovědí, přechází do další fáze – běžného chodu DS.
+
+### Běžný chod
+
+Každá epocha má dvě fáze:
+
+1. **Volba lídra**: Probíhá podobně jako v algoritmu Raft. Lídr synchronizuje čas pomocí zpráv typu `TIME`. Pokud zařízení neobdrží zprávu do určitého timeoutu, spustí nové volby.
+2. **Běžný provoz**: Lídr distribuuje logy, seznamy sousedů a synchronizační zprávy. Pokud dojde k selhání zařízení, uživatel je informován o stavu.
+
+#### Role zařízení
+
+- **Lídr (MASTER)**: Rozesílá logy, seznamy sousedů a synchronizuje čas.
+- **Následovník (SLAVE)**: Pasivní zařízení.
+- **Kandidát**: Přechodná role během volby lídra.
+
+### Terminace zařízení
+
+Zařízení, které nepřijme více než tři zprávy úspěšně, je označeno jako neaktivní a terminováno z DS. Tato informace je poté rozeslána do celé sítě.
+
+### Přizpůsobení dynamickému počtu sousedů
+
+- **Ukládání dat**: Použit statický způsob ukládání sousedů (20 × 16 bytes) kvůli menší chybovosti a nižší výpočetní zátěži.
+- **Struktura packetu**: Přidán checksum typu `uint32_t`, reprezentující stav sousedů.
+- **Nový typ zprávy**: Zpráva obsahující seznam sousedů rozdělena na dvě části kvůli limitu velikosti zprávy.
+
+![Ukázka testování provozu](measure-set.jpg)
+
+
+## Spuštění kódu
+
+Pro spuštění kódu je třeba mít nainstalovaný framework `esp-idf`.
+
+```bash
+# Klonování repozitáře esp-idf
+git clone https://github.com/espressif/esp-idf.git
+# Přepnutí na vhodný release (testováno na v5.4)
+cd esp-idf
+./install.bat  # Nebo jiný vhodný instalátor pro použitý systém
+```
+
+### Kompilace a flashování
+
+Pro kompilaci a flashování kódu:
+
+```bash
+idf.py reconfigure  # Stažení a instalace komponent ESP-NOW
+idf.py build
+idf.py flash
+idf.py monitor
+```
+
+Doporučuje se nastavit automatické spuštění exportu. Při použití připraveného VSCode prostředí a správné konfiguraci cesty k esp-idf knihovně se export spustí automaticky při otevření terminálu.
