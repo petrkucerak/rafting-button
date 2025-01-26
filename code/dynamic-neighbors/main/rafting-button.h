@@ -15,9 +15,10 @@
 
 /// @brief Size of the array used for calculating round trip time.
 #define BALANCER_SIZE 100
-/// @brief The count of possible used devices is 10, therefore the count of
-/// neighbors is 9 devices.
-#define NEIGHBORS_COUNT 9
+/// @brief The count of possible used devices is 20 (esp-now limitation).
+#define NEIGHBORS_MAX_COUNT 20
+/// @brief The count of possible send by one message is 10
+#define NEIGHBORS_MAX_MESSAGE_COUNT 10
 /// @brief Size of the array used for storing logs with DS events.
 #define EVENT_HISTORY 50
 
@@ -261,13 +262,30 @@ typedef struct message_data {
    uint8_t event_mac_addr[ESP_NOW_ETH_ALEN];
    /// @brief DS event task
    ds_task_t event_task;
-   /// @brief Array of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   /// @brief Neighbor check 1 - NOT_INITIALIZED, 100 - INACTIVE, 10000 - ACTIVE
+   uint32_t neighbor_check;
    /// @brief Message payload
    /// @note The message payload fills all remaining bytes after the data with
    /// random values.
    uint8_t payload[0];
 } __attribute__((packed)) message_data_t;
+
+/**
+ * @brief Structure defining a specific neighbor message.
+ *
+ */
+typedef struct message_neighbor_data {
+   /// @brief ESP-NOW message type
+   message_type_t type;
+   /// @brief Epoch ID
+   uint32_t epoch_id;
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
+   /// @brief Message payload
+   /// @note The message payload fills all remaining bytes after the data with
+   /// random values.
+   uint8_t payload[0];
+} __attribute__((packed)) message_neighbor_data_t;
 
 /**
  * @brief Structure defining parameters for ESP-NOW message transmission.
@@ -282,7 +300,7 @@ typedef struct espnow_send_param {
    /// @brief Epoch ID
    uint32_t epoch_id;
    /// @brief Array of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   uint32_t neighbor_check;
    /// @brief DS event type
    ds_event_t event_type;
    /// @brief DS event MAC address
@@ -296,6 +314,26 @@ typedef struct espnow_send_param {
    /// @brief Target (destination) MAC address
    uint8_t dest_mac[ESP_NOW_ETH_ALEN];
 } espnow_send_param_t;
+
+/**
+ * @brief Structure defining parameters for ESP-NOW message neighbor type
+ * transmission.
+ *
+ */
+typedef struct espnow_send_neighbor_param {
+   /// @brief ESP-NOW message type
+   message_type_t type;
+   /// @brief Epoch ID
+   uint32_t epoch_id;
+   /// @brief Array of device neighbors
+   neighbor_t neighbor[NEIGHBORS_MAX_MESSAGE_COUNT];
+   /// @brief Data length
+   int data_len;
+   /// @brief Data buffer
+   uint8_t *buf;
+   /// @brief Target (destination) MAC address
+   uint8_t dest_mac[ESP_NOW_ETH_ALEN];
+} espnow_send_neighbor_param_t;
 
 /**
  * @brief Structure representing a distributed system (DS) event.
@@ -334,9 +372,9 @@ typedef struct node_info {
    /// @brief Average deviation value
    int32_t deviation_avg;
    /// @brief List of device neighbors
-   neighbor_t neighbor[NEIGHBORS_COUNT];
+   neighbor_t neighbor[NEIGHBORS_MAX_COUNT];
    /// @brief Counts of unsuccessful message sends to neighbor devices
-   uint8_t neighbor_error_count[NEIGHBORS_COUNT];
+   uint8_t neighbor_error_count[NEIGHBORS_MAX_COUNT];
    /// @brief Epoch ID of the device
    uint32_t epoch_id;
    /// @brief Title of the device
@@ -439,7 +477,7 @@ void handle_isr_event_task(void);
  * @brief Parse ESP-NOW data and extract information.
  *
  * This function parses the received ESP-NOW data and extracts information such
- * as message type, content, epoch ID, neighbor list, and log event. It
+ * as message type, content, epoch ID, neighbor check value, and log event. It
  * populates the provided variables with the extracted data.
  *
  * @param data The received ESP-NOW data.
@@ -447,13 +485,52 @@ void handle_isr_event_task(void);
  * @param type Pointer to a variable to store the message type.
  * @param content Pointer to a variable to store the content.
  * @param epoch_id Pointer to a variable to store the epoch ID.
- * @param neighbor Pointer to an array to store the neighbor list.
+ * @param neighbor_check Pointer to a variable to store the neighbor check value.
  * @param event Pointer to a log_event_t variable to store the log event.
- * @return The message type extracted from the data.
+ * @return The message type extracted from the data, or -1 if the data length is
+ * invalid.
+ *
+ * @note The function checks if the length of the received data is sufficient to
+ * contain the expected structure. If the data is too short, an error is logged,
+ * and the function returns -1.
  */
 int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
                       uint64_t *content, uint32_t *epoch_id,
-                      neighbor_t *neighbor, log_event_t *event);
+                      uint32_t *neighbor_check, log_event_t *event);
+
+/**
+ * @brief Parse ESP-NOW data and extract neighbor information.
+ *
+ * This function parses the received ESP-NOW data specific to neighbor messages.
+ * It extracts the message type, epoch ID, and neighbor list, and populates
+ * the provided variables with the extracted data.
+ *
+ * @param data Pointer to the received ESP-NOW data.
+ * @param data_len The length of the received data.
+ * @param type Pointer to a variable to store the message type.
+ * @param epoch_id Pointer to a variable to store the epoch ID.
+ * @param neighbor Pointer to an array to store the neighbor list. The array
+ * should have space for at least `NEIGHBORS_MAX_MESSAGE_COUNT` elements.
+ * @return The message type extracted from the data, or -1 if the data length is
+ * invalid.
+ *
+ * @note The function checks if the length of the received data is sufficient to
+ * contain the expected structure. If the data is too short, an error is logged
+ * and the function returns -1.
+ */
+int espnow_data_neighbor_parse(uint8_t *data, int data_len,
+                               message_type_t *type, uint32_t *epoch_id,
+                               neighbor_t *neighbor);
+
+/**
+ * @brief Get the message type from incoming message and return it as a enum
+ * type message_type_t.
+ *
+ * @param data The received ESP-NOW data.
+ * @param data_len The length of the received data.
+ * @return message_type_t The type of received message.
+ */
+message_type_t get_message_type(uint8_t *data, int data_len);
 
 /**
  * @brief Prepare ESP-NOW data for sending.
@@ -467,6 +544,17 @@ int espnow_data_parse(uint8_t *data, int data_len, message_type_t *type,
 void espnow_data_prepare(espnow_send_param_t *send_param);
 
 /**
+ * @brief Prepare ESP-NOW data for sending special NEIGHBOR function.
+ *
+ * This function prepares the ESP-NOW data to be sent by populating the
+ * send_param structure. It sets the message type, epoch ID and neighbor list in
+ * the data buffer.
+ *
+ * @param send_param Pointer to the espnow_send_neighbor_param_t structure.
+ */
+void espnow_data_neighbor_prepare(espnow_send_neighbor_param_t *send_param);
+
+/**
  * @brief Handle ESP-NOW send error.
  *
  * This function handles the ESP-NOW send error by logging an appropriate error
@@ -475,6 +563,22 @@ void espnow_data_prepare(espnow_send_param_t *send_param);
  * @param code The ESP-NOW error code.
  */
 void handle_espnow_send_error(esp_err_t code);
+
+/**
+ * @brief Compute a simple checksum to represent the state of neighbors.
+ *
+ * This function calculates a checksum of type `uint32_t` based on the state
+ * of each node in the given neighbor structure. The checksum is computed
+ * as follows:
+ * - For each node in the `NOT_INITIALIZED` state, a value of 1 is added.
+ * - For each node in the `INACTIVE` state, a value of 100 is added.
+ * - For each node in the `ACTIVE` state, a value of 10,000 is added.
+ *
+ * @param neighbor A pointer to the neighbor structure containing the nodes.
+ * @return uint32_t The calculated checksum representing the states of the
+ * neighbors.
+ */
+uint32_t get_neighbor_check(neighbor_t *neighbor);
 
 /**
  * @brief Handle ESP-NOW add peer error.
@@ -500,6 +604,26 @@ void espnow_handler_task(void);
  * @brief Sends a HELLO_DS message.
  */
 void send_hello_ds_message(void);
+
+/**
+ * @brief Sends neighbor information using ESP-NOW protocol in two batches.
+ *
+ * This function prepares and sends the information about neighbors
+ * over the ESP-NOW protocol. The neighbor data is divided into two
+ * batches of `NEIGHBORS_MAX_MESSAGE_COUNT` neighbors each. The function
+ * allocates the required memory, prepares the data, and sends it to
+ * all active neighbors.
+ *
+ * Steps performed by the function:
+ * 1. Allocates memory for the `espnow_send_neighbor_param_t` structure.
+ * 2. Allocates a buffer for the data to be sent.
+ * 3. Prepares and sends the first batch of neighbor data (first 10 neighbors).
+ * 4. Prepares and sends the second batch of neighbor data (next 10 neighbors).
+ *
+ * @note The function handles memory allocation errors and ensures cleanup
+ *       if any allocation fails.
+ */
+void send_neighbor_message_to_all(void);
 
 /**
  * @brief Sends an RTT_CAL_MASTER message.
